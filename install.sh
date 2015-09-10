@@ -6,6 +6,10 @@ info() {
     echo "=> $1"
 }
 
+help() {
+    echo "$0 [tmux|git|vim|all]"
+}
+
 config_vim() {
     info "Config vim:"
     curl https://raw.githubusercontent.com/Xuyuanp/vimrc/master/install.sh | sh
@@ -55,6 +59,9 @@ else
                 ;;
             git)
                 config_git
+                ;;
+            help)
+                help
                 ;;
             *)
                 info "$name Didn't match anything"
