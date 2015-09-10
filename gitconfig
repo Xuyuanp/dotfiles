@@ -1,0 +1,25 @@
+[alias]
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    lds = log --pretty=format:'%C(yellow)%h %ad%Cred%d %Creset%s%Cblue [%cn]' --decorate --date=short
+    cmv = commit -v
+    s = status
+    co = checkout
+	d = difftool
+[core]
+	autocrlf = input
+	quotepath = false
+[filter "media"]
+	clean = git-media-clean %f
+	smudge = git-media-smudge %f
+[diff]
+	tool = vimdiff
+[difftool "vimdiff"]
+    cmd = /usr/bin/env vimdiff \"$LOCAL\" \"$REMOTE\"
+[difftool]
+	prompt = false
+[color]
+	diff = auto
+[filter "lfs"]
+	clean = git-lfs clean %f
+	smudge = git-lfs smudge %f
+	required = true
