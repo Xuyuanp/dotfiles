@@ -1,4 +1,4 @@
-#! /usr/bin/env sh
+#! /usr/bin/env bash
 
 export NOW=`date "+%m%d%H%M%Y"`
 
@@ -7,31 +7,31 @@ bold() {
 }
 
 info() {
-    echo "\033[32m==>\033[0m $(bold $*)"
+    echo -e "\033[32m==>\033[0m $(bold $*)"
 }
 
 warn() {
-    echo "\033[33m==>\033[0m $(bold $*)"
+    echo -e "\033[33m==>\033[0m $(bold $*)"
 }
 
 error() {
-    echo "\033[31m==>\033[0m $(bold $*)"
+    echo -e "\033[31m==>\033[0m $(bold $*)"
 }
 
 help() {
-    echo $(bold "Usage:") 
-    echo "    $0 [tmux|git|vim|all]"
+    echo -e `bold "Usage:"`
+    echo -e "    $0 [tmux|git|vim|all]"
 }
 
 config_vim() {
     info "Config vim:"
-    curl https://raw.githubusercontent.com/Xuyuanp/vimrc/master/install.sh | sh && info "Done."
+    curl https://raw.githubusercontent.com/Xuyuanp/vimrc/master/install.sh | sh && info "Done." && return
     error "Failed"
 }
 
 config_git() {
     info "Config git"
-    git configabc --global include.path $PWD/gitconfig && info "Done." && return
+    git config --global include.path $PWD/gitconfig && info "Done." && return
     error "Failed."
 }
 
