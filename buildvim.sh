@@ -17,8 +17,8 @@ sudo ln -s /usr/include/lua5.1/*.h /usr/include/lua5.1/include/
 sudo ln -s /usr/lib/x86_64-linux-gnu/liblua5.1.so /usr/include/lua5.1/lib/liblua.so
  
 cd ~
-wget ftp://ftp.vim.org/pub/vim/unix/vim-7.4.tar.bz2 vim.tar.bz2
-tar jxf vim.tar.bz2
+wget ftp://ftp.vim.org/pub/vim/unix/vim-7.4.tar.bz2
+tar jxf vim-7.4.tar.bz2
 cd vim74
 ./configure --with-features=huge \
             --enable-rubyinterp \
