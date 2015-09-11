@@ -2,36 +2,43 @@
 
 export NOW=`date "+%m%d%H%M%Y"`
 
+bold() {
+    echo "\033[01m$*\033[0m"
+}
+
 info() {
-    echo "=> $1"
+    echo "\033[32m==>\033[0m $(bold $*)"
+}
+
+warn() {
+    echo "\033[33m==>\033[0m $(bold $*)"
+}
+
+error() {
+    echo "\033[31m==>\033[0m $(bold $*)"
 }
 
 help() {
-    echo "$0 [tmux|git|vim|all]"
+    echo $(bold "Usage:") 
+    echo "    $0 [tmux|git|vim|all]"
 }
 
 config_vim() {
     info "Config vim:"
-    curl https://raw.githubusercontent.com/Xuyuanp/vimrc/master/install.sh | sh
-    info "Done."
+    curl https://raw.githubusercontent.com/Xuyuanp/vimrc/master/install.sh | sh && info "Done."
+    error "Failed"
 }
 
 config_git() {
     info "Config git"
-    if [ -e $HOME/.gitconfig ]; then
-        info ".gitconfig already exists"
-        info "Backup .gitconfig to .gitconfig.bak.$NOW"
-        mv $HOME/.gitconfig $HOME/.gitconfig.bak.$NOW
-    fi
-    info "Link gitconfig"
-    ln -s $PWD/gitconfig $HOME/.gitconfig
-    info "Done."
+    git configabc --global include.path $PWD/gitconfig && info "Done." && return
+    error "Failed."
 }
 
 config_tmux() {
     info "Config tmux:"
     if [ -e $HOME/.tmux.conf ]; then
-        info ".tmux.conf already exists"
+        warn ".tmux.conf already exists"
         info "Backup .tmux.conf to .tmux.conf.bak.$NOW"
         mv $HOME/.tmux.conf $HOME/.tmux.conf.bak.$NOW
     fi
@@ -64,7 +71,7 @@ else
                 help
                 ;;
             *)
-                info "$name Didn't match anything"
+                error "$name Didn't match anything"
         esac
     done
 fi
