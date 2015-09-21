@@ -16,6 +16,7 @@ warn() {
 
 error() {
     echo -e "\033[31m==>\033[0m $(bold $*)"
+    exit 1
 }
 
 help() {
@@ -25,7 +26,12 @@ help() {
 
 config_vim() {
     info "Config vim:"
-    curl https://raw.githubusercontent.com/Xuyuanp/vimrc/master/install.sh | sh && info "Done." && return
+    if [ -e $HOME/.vim/.42 ]; then
+        info "vimrc repo found, just update it"
+        cd ~/.vim && source update.sh && info "Done" && return
+    else
+        curl https://raw.githubusercontent.com/Xuyuanp/vimrc/master/install.sh | sh && info "Done." && return
+    fi
     error "Failed"
 }
 
