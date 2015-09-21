@@ -3,19 +3,33 @@
 export NOW=`date "+%m%d%H%M%Y"`
 
 bold() {
-    echo "\033[01m$*\033[0m"
+    echo -e "\033[01m$*\033[0m"
 }
 
+green() {
+    echo -e "\033[32m$*\033[0m"
+}
+
+yellow() {
+    echo -e "\033[33m$*\033[0m"
+}
+
+red() {
+    echo -e "\033[31m$*\033[0m"
+}
+
+prefix='==>'
+
 info() {
-    echo -e "\033[32m==>\033[0m $(bold $*)"
+    echo -e "$(green $prefix) $(bold $*)"
 }
 
 warn() {
-    echo -e "\033[33m==>\033[0m $(bold $*)"
+    echo -e "$(yellow $prefix) $(bold $*)"
 }
 
 error() {
-    echo -e "\033[31m==>\033[0m $(bold $*)"
+    echo -e "$(red $prefix) $(bold $*)"
     exit 1
 }
 
