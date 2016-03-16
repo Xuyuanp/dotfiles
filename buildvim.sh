@@ -1,8 +1,6 @@
 #! /usr/bin/env bash
 
 # for linux
-sudo apt-get remove -y --purge vim vim-runtime vim-gnome vim-tiny vim-common vim-gui-common
-
 sudo apt-get build-dep
  
 sudo apt-get install -y lua5.1 liblua5.1-dev python-dev ruby-dev libperl-dev mercurial libncurses5-dev
@@ -32,4 +30,7 @@ cd vim74
             --with-lua-prefix=/usr/include/lua5.1 \
             --enable-cscope 
 make 
+
+sudo apt-get remove -y --purge vim vim-runtime vim-gnome vim-tiny vim-common vim-gui-common
+
 sudo make install
