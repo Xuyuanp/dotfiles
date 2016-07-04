@@ -1,5 +1,7 @@
 #! /usr/bin/env sh
 
+# Install golang tools under the fucking GFW
+
 BASE=${GOPATH}/src/golang.org/x
 mkdir -p $BASE && cd $BASE
 
