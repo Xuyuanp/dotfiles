@@ -12,7 +12,7 @@ GOLANG_GITHUB_URL=https://github.com/golang/
 for repo in "${TOOLS[@]}"; do
     if [ ! -d $repo ]; then
         echo "clone $repo"
-        git clone $GOLANG_GITHUB_URL$repo.git
+        git clone --depth=1 $GOLANG_GITHUB_URL$repo.git
     fi
 done
 
