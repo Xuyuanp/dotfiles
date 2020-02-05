@@ -57,6 +57,8 @@ config_git() {
 
 config_tmux() {
     info "Config tmux:"
+    info "installing tpm"
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
     if [ -e $HOME/.tmux.conf ]; then
         warn ".tmux.conf already exists"
         info "Backup .tmux.conf to .tmux.conf.bak.$NOW"
@@ -67,17 +69,10 @@ config_tmux() {
     info "Done."
 }
 
-config_go() {
-    info "Config go tools:"
-    source gotools.sh
-    info "Done"
-}
-
 config_all() {
     config_git
     config_tmux
     config_vim
-    config_go
 }
 
 if [ $# -eq 0 ] || [ "$1" =  "all" ]; then
@@ -93,9 +88,6 @@ else
                 ;;
             git)
                 config_git
-                ;;
-            go)
-                config_go
                 ;;
             help)
                 help
