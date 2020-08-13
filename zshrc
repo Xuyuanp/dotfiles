@@ -10,12 +10,8 @@ fi
 
 source ${ZINIT_HOME_DIR}/bin/zinit.zsh
 
-# Two regular plugins loaded without investigating.
 zinit light zsh-users/zsh-autosuggestions
 zinit light zdharma/fast-syntax-highlighting
-
-# Plugin history-search-multi-word loaded with investigating.
-zinit load zdharma/history-search-multi-word
 
 zinit snippet OMZP::colored-man-pages
 zinit snippet OMZL::clipboard.zsh
@@ -28,8 +24,36 @@ zinit light trapd00r/LS_COLORS
 zinit wait lucid atload"zicompinit; zicdreplay" blockf for \
     zsh-users/zsh-completions
 
-zplugin ice from"gh-r" as"program" atload'!eval $(starship init zsh)' pick'**/starship'
-zplugin load starship/starship
+zinit ice from"gh-r" as"program" atload'!eval $(starship init zsh)' pick'**/starship'
+zinit load starship/starship
+
+zinit ice as"program" pick"$ZPFX/bin/git-*" make"PREFIX=$ZPFX" nocompile
+zinit light tj/git-extras
+
+zinit ice as"program" atclone'perl Makefile.PL PREFIX=$ZPFX' \
+    atpull'%atclone' make'install' pick"$ZPFX/bin/git-cal"
+zinit light k4rthik/git-cal
+
+zinit ice as"program" pick"bin/git-dsf"
+zinit light zdharma/zsh-diff-so-fancy
+
+zinit as"program" make'!' atclone'./direnv hook zsh > zhook.zsh' \
+    atpull'%atclone' pick"direnv" src"zhook.zsh" for \
+    direnv/direnv
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    zinit ice as"program" pick"yank" make"YANKCMD=pbcopy"
+else
+    zinit ice as"program" pick"yank" make
+fi
+zinit light mptre/yank
+
+zinit ice wait lucid as=program pick="bin/(fzf|fzf-tmux)" \
+    atclone="./install --bin" \
+    atpull='%atclone' \
+    multisrc='shell/*.zsh'
+zinit light junegunn/fzf
+
 # ================================ zinit end ================================= #
 
 bindkey -v
@@ -71,3 +95,8 @@ export GPG_TTY=$(tty)
 
 export EDITOR=nvim
 export VISUAL=nvim
+
+export FZF_DEFAULT_OPTS='
+--color fg:#ebdbb2,bg:#282828,hl:#fabd2f,fg+:#ebdbb2,bg+:#3c3836,hl+:#fabd2f
+--color info:#83a598,prompt:#bdae93,spinner:#fabd2f,pointer:#83a598,marker:#fe8019,header:#665c54
+'
