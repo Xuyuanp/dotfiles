@@ -16,6 +16,12 @@ zinit light zdharma/fast-syntax-highlighting
 zinit snippet OMZP::colored-man-pages
 zinit snippet OMZL::clipboard.zsh
 
+zinit ice as"command" make"PREFIX=$ZPFX install" \
+    atclone"cp contrib/fzy-* $ZPFX/bin/" \
+    atpull='%atclone' \
+    pick"$ZPFX/bin/fzy*"
+zinit load jhawthorn/fzy
+
 zinit load b4b4r07/enhancd
 
 zinit ice atclone"dircolors -b LS_COLORS > c.zsh" atpull'%atclone' pick"c.zsh" nocompile'!'
