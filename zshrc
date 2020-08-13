@@ -43,8 +43,12 @@ zinit light k4rthik/git-cal
 zinit ice as"program" pick"bin/git-dsf"
 zinit light zdharma/zsh-diff-so-fancy
 
-zinit as"program" make'!' atclone'./direnv hook zsh > zhook.zsh' \
-    atpull'%atclone' pick"direnv" src"zhook.zsh" for \
+zinit ice as'program' make'build' pick'bin/go-md2man'
+zinit light cpuguy83/go-md2man
+
+zinit as"program" make'DESTDIR=$ZPFX install' atclone='direnv hook zsh > zhook.zsh' \
+    atpull='%atclone' \
+    pick"direnv" src'zhook.zsh' for \
     direnv/direnv
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
