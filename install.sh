@@ -41,10 +41,9 @@ help() {
 config_vim() {
     info "Config vim:"
     if [ -e $HOME/.vim/.42 ]; then
-        info "vimrc repo found, just update it"
-        cd ~/.vim && source update.sh && info "Done" && return
+        info "vimrc repo already exists"
     else
-        curl https://raw.githubusercontent.com/Xuyuanp/vimrc/master/install.sh | sh && info "Done." && return
+        git clone https://github.com/Xuyuanp/vimrc ~/.vim && info "Done." && return
     fi
     error "Failed"
 }
