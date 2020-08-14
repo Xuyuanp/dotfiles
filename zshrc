@@ -1,3 +1,4 @@
+[ -f ~/.zshrc.before ] && source ~/.zshrc.before
 # =============================== zinit start ================================ #
 export ZINIT_HOME_DIR=${ZINIT_HOME_DIR:-$HOME/.zinit}
 if [[ ! -d ${ZINIT_HOME_DIR} ]]; then
@@ -33,7 +34,10 @@ zinit wait lucid atload"zicompinit; zicdreplay" blockf for \
 zinit ice from"gh-r" as"program" atload'!eval $(starship init zsh)' pick'**/starship'
 zinit load starship/starship
 
-zinit ice as"program" pick"$ZPFX/bin/git-*" make"PREFIX=$ZPFX" nocompile
+zinit ice as"program" pick"$ZPFX/bin/git-*" \
+    make"PREFIX=$ZPFX" \
+    nocompile \
+    src'etc/git-extras-completion.zsh'
 zinit light tj/git-extras
 
 zinit ice as"program" atclone'perl Makefile.PL PREFIX=$ZPFX' \
@@ -46,9 +50,10 @@ zinit light zdharma/zsh-diff-so-fancy
 zinit ice as'program' make'build' pick'bin/go-md2man'
 zinit light cpuguy83/go-md2man
 
-zinit as"program" make'DESTDIR=$ZPFX install' atclone='direnv hook zsh > zhook.zsh' \
-    atpull='%atclone' \
-    pick"direnv" src'zhook.zsh' for \
+zinit as"program" atclone'DESTDIR=$ZPFX make install; direnv hook zsh > zhook.zsh' \
+    atpull'%atclone' \
+    pick"$ZPFX/bin/direnv" \
+    src'zhook.zsh' for \
     direnv/direnv
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -110,3 +115,5 @@ export FZF_DEFAULT_OPTS='
 --color fg:#ebdbb2,bg:#282828,hl:#fabd2f,fg+:#ebdbb2,bg+:#3c3836,hl+:#fabd2f
 --color info:#83a598,prompt:#bdae93,spinner:#fabd2f,pointer:#83a598,marker:#fe8019,header:#665c54
 '
+
+[ -f ~/.zshrc.after ] && source ~/.zshrc.after
