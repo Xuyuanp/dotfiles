@@ -1,44 +1,43 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 [ -f ~/.zshrc.before ] && source ~/.zshrc.before
+
 # =============================== zinit start ================================ #
 export ZINIT_HOME_DIR=${ZINIT_HOME_DIR:-$HOME/.zinit}
 if [[ ! -d ${ZINIT_HOME_DIR} ]]; then
     print -P "%F{33}▓▒░ %F{220}Installing zinit…%f"
     command mkdir -p ${ZINIT_HOME_DIR}
-    command git clone https://github.com/zdharma/zinit.git ${ZINIT_HOME_DIR}/bin && \
+    command git clone --depth=1 https://github.com/zdharma/zinit.git ${ZINIT_HOME_DIR}/bin && \
         print -P "%F{33}▓▒░ %F{34}Installation successful.%F" || \
         print -P "%F{160}▓▒░ The clone has failed.%F"
 fi
 
 source ${ZINIT_HOME_DIR}/bin/zinit.zsh
 
-zinit light zsh-users/zsh-autosuggestions
-zinit light zdharma/fast-syntax-highlighting
+zinit light-mode for \
+    zsh-users/zsh-autosuggestions \
+    zdharma/fast-syntax-highlighting
 
-zinit snippet OMZP::colored-man-pages
-zinit snippet OMZL::clipboard.zsh
+zinit light-mode for \
+    hlissner/zsh-autopair \
+    skywind3000/z.lua
 
-zinit ice as"command" make"PREFIX=$ZPFX install" \
-    atclone"cp contrib/fzy-* $ZPFX/bin/" \
-    atpull='%atclone' \
-    pick"$ZPFX/bin/fzy*"
-zinit load jhawthorn/fzy
+zinit light-mode for \
+    blockf \
+    zsh-users/zsh-completions \
+    atclone="dircolors -b LS_COLORS > c.zsh" atpull='%atclone' pick='c.zsh' \
+    trapd00r/LS_COLORS
 
-zinit load b4b4r07/enhancd
-
-zinit ice atclone"dircolors -b LS_COLORS > c.zsh" atpull'%atclone' pick"c.zsh" nocompile'!'
-zinit light trapd00r/LS_COLORS
-
-zinit wait lucid atload"zicompinit; zicdreplay" blockf for \
-    zsh-users/zsh-completions
-
-zinit ice from"gh-r" as"program" atload'!eval $(starship init zsh)' pick'**/starship'
-zinit load starship/starship
-
-zinit ice as"program" pick"$ZPFX/bin/git-*" \
-    make"PREFIX=$ZPFX" \
-    nocompile \
-    src'etc/git-extras-completion.zsh'
-zinit light tj/git-extras
+zinit for \
+    OMZ::lib/clipboard.zsh \
+    OMZ::lib/git.zsh \
+    OMZ::plugins/colored-man-pages/colored-man-pages.plugin.zsh \
+    OMZ::plugins/git-extras/git-extras.plugin.zsh
 
 zinit ice as"program" atclone'perl Makefile.PL PREFIX=$ZPFX' \
     atpull'%atclone' make'install' pick"$ZPFX/bin/git-cal"
@@ -47,29 +46,22 @@ zinit light k4rthik/git-cal
 zinit ice as"program" pick"bin/git-dsf"
 zinit light zdharma/zsh-diff-so-fancy
 
-zinit ice as'program' make'build' pick'bin/go-md2man'
-zinit light cpuguy83/go-md2man
-
-zinit as"program" atclone'DESTDIR=$ZPFX make install; direnv hook zsh > zhook.zsh' \
-    atpull'%atclone' \
-    pick"$ZPFX/bin/direnv" \
-    src'zhook.zsh' for \
-    direnv/direnv
-
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    zinit ice as"program" pick"yank" make"YANKCMD=pbcopy"
-else
-    zinit ice as"program" pick"yank" make
-fi
-zinit light mptre/yank
-
-zinit ice wait lucid as=program pick="bin/(fzf|fzf-tmux)" \
-    atclone="./install --bin" \
+zinit ice wait lucid as=program pick="$ZPFX/bin/(fzf|fzf-tmux)" \
+    atclone="./install --bin; cp bin/(fzf|fzf-tmux) $ZPFX/bin" \
     atpull='%atclone' \
     multisrc='shell/*.zsh'
 zinit light junegunn/fzf
 
+zinit ice as'program' pick'$ZPFX/bin/git-secret' \
+    make'PREFIX=$ZPFX build install'
+zinit light sobolevn/git-secret
+
+zinit ice depth=1
+zinit light romkatv/powerlevel10k
+
 # ================================ zinit end ================================= #
+
+zpcompinit; zpcdreplay
 
 bindkey -v
 
@@ -117,3 +109,6 @@ export FZF_DEFAULT_OPTS='
 '
 
 [ -f ~/.zshrc.after ] && source ~/.zshrc.after
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
