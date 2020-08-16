@@ -52,10 +52,6 @@ zinit ice wait lucid as=program pick="$ZPFX/bin/(fzf|fzf-tmux)" \
     multisrc='shell/*.zsh'
 zinit light junegunn/fzf
 
-zinit ice as'program' pick'$ZPFX/bin/git-secret' \
-    make'PREFIX=$ZPFX build install'
-zinit light sobolevn/git-secret
-
 zinit ice depth=1
 zinit light romkatv/powerlevel10k
 
@@ -98,7 +94,8 @@ alias llh='ls -lh'
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
-export GPG_TTY=$(tty)
+# https://github.com/romkatv/powerlevel10k/issues/524
+export GPG_TTY=$TTY
 
 export EDITOR=nvim
 export VISUAL=nvim
