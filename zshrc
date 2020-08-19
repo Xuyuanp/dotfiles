@@ -33,11 +33,11 @@ zinit light-mode for \
     atclone="dircolors -b LS_COLORS > c.zsh" atpull='%atclone' pick='c.zsh' \
     trapd00r/LS_COLORS
 
-zinit for \
-    OMZ::lib/clipboard.zsh \
-    OMZ::lib/git.zsh \
-    OMZ::plugins/colored-man-pages/colored-man-pages.plugin.zsh \
-    OMZ::plugins/git-extras/git-extras.plugin.zsh
+zinit snippet OMZL::clipboard.zsh
+zinit snippet OMZL::git.zsh
+zinit snippet OMZP::colored-man-pages
+zinit snippet OMZP::git-extras
+zinit snippet OMZP::dotenv
 
 zinit ice as"program" atclone'perl Makefile.PL PREFIX=$ZPFX' \
     atpull'%atclone' make'install' pick"$ZPFX/bin/git-cal"
