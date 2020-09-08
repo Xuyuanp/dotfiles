@@ -105,6 +105,8 @@ export FZF_DEFAULT_OPTS='
 --color info:#83a598,prompt:#bdae93,spinner:#fabd2f,pointer:#83a598,marker:#fe8019,header:#665c54
 '
 
+export MANPAGER="nvim -c 'set ft=man' -"
+
 [ -f ~/.zshrc.after ] && source ~/.zshrc.after
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
