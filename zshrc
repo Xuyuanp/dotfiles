@@ -100,10 +100,12 @@ export GPG_TTY=$TTY
 export EDITOR=nvim
 export VISUAL=nvim
 
-export FZF_DEFAULT_OPTS='
---color fg:#ebdbb2,bg:#282828,hl:#fabd2f,fg+:#ebdbb2,bg+:#3c3836,hl+:#fabd2f
---color info:#83a598,prompt:#bdae93,spinner:#fabd2f,pointer:#83a598,marker:#fe8019,header:#665c54
-'
+export FZF_DEFAULT_OPTS="
+--black
+--pointer ➤
+--exact
+--info=inline
+"
 
 export MANPAGER="nvim -c 'set ft=man' -"
 
@@ -111,3 +113,5 @@ export MANPAGER="nvim -c 'set ft=man' -"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+export BAT_THEME='gruvbox-dark'
