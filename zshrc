@@ -34,10 +34,10 @@ zinit light-mode for \
     trapd00r/LS_COLORS
 
 zinit snippet OMZL::clipboard.zsh
-zinit snippet OMZL::git.zsh
+zinit snippet OMZL::completion.zsh
 zinit snippet OMZP::colored-man-pages
-zinit snippet OMZP::git-extras
 zinit snippet OMZP::dotenv
+zinit snippet OMZP::gitignore
 
 zinit ice as"program" atclone'perl Makefile.PL PREFIX=$ZPFX' \
     atpull'%atclone' make'install' pick"$ZPFX/bin/git-cal"
@@ -80,25 +80,60 @@ setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording en
 setopt HIST_VERIFY               # Don't execute immediately upon history expansion.
 setopt HIST_BEEP                 # Beep when accessing nonexistent history.
 
-# case-insensitive TAB completion
-zstyle ':completion:*' matcher-list 'm:{[:lower:]}={[:upper:]}'
+_exists() { (( $+commands[$1])) }
 
-# Customize to your needs...
-[ -f ~/.shared_profile.zsh ] && source ~/.shared_profile.zsh
+_exists exa     && alias ls='exa'
+_exists htop    && alias top='htop'
+_exists less    && export PAGER=less
+_exists clang   && export CC=clang
+_exists clang++ && export CXX=clang++
+
+if _exists nvim; then
+    export EDITOR=nvim
+    export VISUAL=nvim
+    export MANPAGER="nvim -c 'set ft=man' -"
+    alias vim='nvim'
+    alias vi='nvim'
+fi
+
+unfunction _exists
 
 # alias
-alias ls='ls --color=auto'
+# alias ls='ls --color=auto'
 alias ll='ls -l'
 alias llh='ls -lh'
+
+alias cpwd='pwd | clipcopy'
+
+alias free='free -m'
+
+alias dis="docker images | sort -k7 -h"
+
+alias piplist="pip freeze | awk -F'==' '{print \$1}'"
+
+alias genpass="date +%s | sha256sum | base64 | head -c 14"
+
+alias kubesys='kubectl --namespace kube-system'
+alias kubemini='kubectl --context minikube'
+
+function mkcd() {
+    mkdir -p "$1" && cd "$1"
+}
+
+function log() {
+    echo "$(date +'%Y-%m-%d %H:%M:%S'):" $*
+}
+
+export PIP_INDEX_URL=https://mirrors.aliyun.com/pypi/simple
+export PIPENV_PYPI_MIRROR=${PIP_INDEX_URL}
+
+export BAT_THEME='gruvbox-dark'
 
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
 # https://github.com/romkatv/powerlevel10k/issues/524
 export GPG_TTY=$TTY
-
-export EDITOR=nvim
-export VISUAL=nvim
 
 export FZF_DEFAULT_OPTS="
 --black
@@ -107,11 +142,10 @@ export FZF_DEFAULT_OPTS="
 --info=inline
 "
 
-export MANPAGER="nvim -c 'set ft=man' -"
+# Customize to your needs...
+[ -f ~/.shared_profile.zsh ] && source ~/.shared_profile.zsh
 
 [ -f ~/.zshrc.after ] && source ~/.zshrc.after
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-export BAT_THEME='gruvbox-dark'
