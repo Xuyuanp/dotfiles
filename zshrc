@@ -142,6 +142,40 @@ export FZF_DEFAULT_OPTS="
 --info=inline
 "
 
+function tgo() {
+    tmp="$(mktemp -p /tmp -d "tgo_$(date +%Y%m%d)_XXXXXXXX")"
+    cat > "${tmp}/main.go" << EOL
+package main
+
+func main() {
+}
+EOL
+
+    cat > "${tmp}/main_test.go" << EOL
+package main_test
+
+import "testing"
+
+func TestMain(t *testing.T) {
+
+}
+
+func BenchmarkMain(b *testing.B) {
+    // b.ReportAllocs()
+    // for n := 0; n < b.N; n++ {
+
+    // }
+}
+EOL
+
+    printf 'module %s\n' "$(basename "${tmp}")" > "${tmp}/go.mod"
+    (
+        cd ${tmp}
+        vim -p main.go main_test.go
+        echo ${tmp}
+    )
+}
+
 # Customize to your needs...
 [ -f ~/.shared_profile.zsh ] && source ~/.shared_profile.zsh
 
