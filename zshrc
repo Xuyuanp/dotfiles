@@ -84,7 +84,7 @@ unfunction _exists
 [ -f ~/.startup.py ] && export PYTHONSTARTUP=${HOME}/.startup.py
 
 # alias
-# alias ls='ls --color=auto'
+alias ls='ls --color=auto'
 alias ll='ls -l'
 alias llh='ls -lh'
 
@@ -169,3 +169,14 @@ EOL
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+export BAT_THEME='gruvbox-dark'
+
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init --path)"
+
+export PATH=${HOME}/.cargo/bin:${PATH}
+
+export GOPATH=${HOME}/go
+export PATH=${GOPATH}/bin:${PATH}
