@@ -66,10 +66,10 @@ _exists() { (( $+commands[$1])) }
 
 _exists exa     && alias ls='exa'
 _exists htop    && alias top='htop'
-_exists fdfind  && alias fd=fdfind
+_exists fdfind  && alias fd='fdfind'
+_exists batcat  && alias bat='batcat'
 _exists less    && export PAGER=less
-_exists clang   && export CC=clang
-_exists clang++ && export CXX=clang++
+_exists kubectl && alias kubesys='kubectl --namespace kube-system'
 
 if _exists nvim; then
     export EDITOR=nvim
@@ -80,6 +80,8 @@ if _exists nvim; then
 fi
 
 unfunction _exists
+
+[ -f ~/.startup.py ] && export PYTHONSTARTUP=${HOME}/.startup.py
 
 # alias
 # alias ls='ls --color=auto'
@@ -95,9 +97,6 @@ alias dis="docker images | sort -k7 -h"
 alias piplist="pip freeze | awk -F'==' '{print \$1}'"
 
 alias genpass="date +%s | sha256sum | base64 | head -c 14"
-
-alias kubesys='kubectl --namespace kube-system'
-alias kubemini='kubectl --context minikube'
 
 function mkcd() {
     mkdir -p "$1" && cd "$1"
@@ -130,7 +129,7 @@ export FZF_DEFAULT_OPTS="
 "
 
 function tgo() {
-    tmp="$(mktemp -p /tmp -d "tgo_$(date +%Y%m%d)_XXXXXXXX")"
+    tmp="$(mktemp -p ${HOME}/.tmp -d "tgo_$(date +%Y%m%d)_XXXXXXXX")"
     cat > "${tmp}/main.go" << EOL
 package main
 
@@ -148,10 +147,10 @@ func TestMain(t *testing.T) {
 }
 
 func BenchmarkMain(b *testing.B) {
-    // b.ReportAllocs()
-    // for n := 0; n < b.N; n++ {
+    b.ReportAllocs()
+    for n := 0; n < b.N; n++ {
 
-    // }
+    }
 }
 EOL
 
