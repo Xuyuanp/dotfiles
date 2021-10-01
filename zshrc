@@ -39,6 +39,7 @@ zinit snippet OMZL::history.zsh
 zinit snippet OMZP::colored-man-pages
 zinit snippet OMZP::dotenv
 zinit snippet OMZP::gitignore
+zinit snippet OMZP::pyenv
 
 zinit ice as"program" atclone'perl Makefile.PL PREFIX=$ZPFX' \
     atpull'%atclone' make'install' pick"$ZPFX/bin/git-cal"
@@ -74,7 +75,7 @@ _exists kubectl && alias kubesys='kubectl --namespace kube-system'
 if _exists nvim; then
     export EDITOR=nvim
     export VISUAL=nvim
-    export MANPAGER="nvim -c 'set ft=man' -"
+    export MANPAGER="nvim +Man!"
     alias vim='nvim'
     alias vi='nvim'
 fi
@@ -90,7 +91,7 @@ alias llh='ls -lh'
 
 alias cpwd='pwd | clipcopy'
 
-alias free='free -m'
+alias freem='free -m'
 
 alias dis="docker images | sort -k7 -h"
 
