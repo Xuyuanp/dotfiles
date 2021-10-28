@@ -65,10 +65,11 @@ bindkey -v
 
 _exists() { (( $+commands[$1])) }
 
-_exists exa     && alias ls='exa'
+_exists exa     && alias ls='exa --icons --git'
 _exists htop    && alias top='htop'
 _exists fdfind  && alias fd='fdfind'
 _exists batcat  && alias bat='batcat'
+_exists free    && alias free='free -h'
 _exists less    && export PAGER=less
 _exists kubectl && alias kubesys='kubectl --namespace kube-system'
 
@@ -90,8 +91,6 @@ alias ll='ls -l'
 alias llh='ls -lh'
 
 alias cpwd='pwd | clipcopy'
-
-alias freem='free -m'
 
 alias dis="docker images | sort -k7 -h"
 
