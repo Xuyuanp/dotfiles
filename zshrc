@@ -39,7 +39,6 @@ zinit snippet OMZL::history.zsh
 zinit snippet OMZP::colored-man-pages
 zinit snippet OMZP::dotenv
 zinit snippet OMZP::gitignore
-zinit snippet OMZP::pyenv
 
 zinit ice as"program" atclone'perl Makefile.PL PREFIX=$ZPFX' \
     atpull'%atclone' make'install' pick"$ZPFX/bin/git-cal"
@@ -86,7 +85,6 @@ unfunction _exists
 [ -f ~/.startup.py ] && export PYTHONSTARTUP=${HOME}/.startup.py
 
 # alias
-alias ls='ls --color=auto'
 alias ll='ls -l'
 alias llh='ls -lh'
 
