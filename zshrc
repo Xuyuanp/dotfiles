@@ -12,7 +12,7 @@ export ZINIT_HOME_DIR=${ZINIT_HOME_DIR:-$HOME/.zinit}
 if [[ ! -d ${ZINIT_HOME_DIR} ]]; then
     print -P "%F{33}▓▒░ %F{220}Installing zinit…%f"
     command mkdir -p ${ZINIT_HOME_DIR}
-    command git clone --depth=1 https://github.com/zdharma/zinit.git ${ZINIT_HOME_DIR}/bin && \
+    command git clone --depth=1 https://github.com/zdharma-continuum/zinit.git ${ZINIT_HOME_DIR}/bin && \
         print -P "%F{33}▓▒░ %F{34}Installation successful.%F" || \
         print -P "%F{160}▓▒░ The clone has failed.%F"
 fi
@@ -21,7 +21,7 @@ source ${ZINIT_HOME_DIR}/bin/zinit.zsh
 
 zinit light-mode for \
     zsh-users/zsh-autosuggestions \
-    zdharma/fast-syntax-highlighting
+    zdharma-continuum/fast-syntax-highlighting
 
 zinit light-mode for \
     hlissner/zsh-autopair \
@@ -45,7 +45,7 @@ zinit ice as"program" atclone'perl Makefile.PL PREFIX=$ZPFX' \
 zinit light k4rthik/git-cal
 
 zinit ice as"program" pick"bin/git-dsf"
-zinit light zdharma/zsh-diff-so-fancy
+zinit light Xuyuanp/zsh-diff-so-fancy
 
 zinit ice wait lucid as=program pick="$ZPFX/bin/(fzf|fzf-tmux)" \
     atclone="./install --bin; cp bin/(fzf|fzf-tmux) $ZPFX/bin" \
