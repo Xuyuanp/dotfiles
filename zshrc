@@ -1,3 +1,7 @@
+if [[ ! -v TMUX ]]; then
+    tmux attach || tmux
+fi
+
 if [ $(uname) = 'Darwin' ] && ! [ -x "$(command -v brew)" ]; then
     bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     brew bundle install --file ~/.dotfiles/Brewfile
