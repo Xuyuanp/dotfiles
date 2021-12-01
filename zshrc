@@ -76,6 +76,8 @@ _exists batcat  && alias bat='batcat'
 _exists free    && alias free='free -h'
 _exists less    && export PAGER=less
 _exists kubectl && alias kubesys='kubectl --namespace kube-system'
+_exists ag      && alias grep='ag'
+_exists rg      && alias grep='rg'
 
 if _exists nvim; then
     export EDITOR=nvim
