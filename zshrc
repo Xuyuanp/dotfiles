@@ -182,8 +182,12 @@ EOL
 export BAT_THEME='gruvbox-dark'
 
 export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init --path)"
+if [[ -d "${PYENV_ROOT}" ]]; then
+    export PATH="${PYENV_ROOT}/bin:$PATH"
+    eval "$(pyenv init --path)"
+else
+    unset PYENV_ROOT
+fi
 
 export PATH=${HOME}/.cargo/bin:${PATH}
 
