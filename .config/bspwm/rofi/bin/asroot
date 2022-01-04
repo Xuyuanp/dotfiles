@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+## Copyright (C) 2020-2021 Aditya Shakya <adi1090x@gmail.com>
+## Everyone is permitted to copy and distribute copies of this file under GNU-GPL3
+
+DIR="$HOME/.config/bspwm"
+
+# rofi_command="rofi -theme $DIR/rofi/themes/asroot.rasi"
+rofi_command="rofi -theme $DIR/rofi/themes/powermenu.rasi"
+
+# Apps
+terminal=" Terminal"
+files=" Pcmanfm"
+editor=" Geany"
+clifm=" Ranger"
+lpad=" Leafpad"
+vim=" Neovide"
+nvidia=" Nvidia"
+
+# Variable passed to rofi
+# options="$terminal\n$files\n$editor\n$clifm\n$lpad\n$vim\n$nvidia"
+options="$terminal\n$nvidia"
+
+# Functions
+
+chosen="$(echo -e "$options" | $rofi_command -p "Run apps as root" -dmenu -selected-row 0)"
+case $chosen in
+    $terminal)
+        apps_as_root 'kitty'
+        ;;
+    $nvidia)
+        apps_as_root nvidia-settings
+        ;;
+esac
+
+

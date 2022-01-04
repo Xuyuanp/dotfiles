@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+
+## Default
+DIR=${HOME}/.config/bspwm/rofi
+THEMES=${DIR}/themes
+
+rofi_command="rofi -theme ${THEMES}/powermenu.rasi"
+
+uptime=$(uptime -p | sed -e 's/up //g')
+
+shutdown=" Shutdown"
+reboot=" Restart"
+lock=" Lock"
+suspend=" Sleep"
+logout=" Logout"
+
+# Variable passed to rofi
+options="$lock\n$suspend\n$logout\n$reboot\n$shutdown"
+
+chosen="$(echo -e "$options" | $rofi_command -mesg "UP - $uptime" -dmenu -i -selected-row 0)"
+case $chosen in
+    $shutdown)
+		ans=$(${DIR}/bin/confirm &)
+		if [[ $ans == "yes" ]] || [[ $ans == "YES" ]] || [[ $ans == "y" ]]; then
+			systemctl poweroff
+        else
+			exit
+        fi
+        ;;
+    $reboot)
+		ans=$(${DIR}/bin/confirm &)
+		if [[ $ans == "yes" ]] || [[ $ans == "YES" ]] || [[ $ans == "y" ]]; then
+			systemctl reboot
+        else
+			exit
+        fi
+        ;;
+    $lock)
+        bsplock
+        ;;
+    $suspend)
+		ans=$(${DIR}/bin/confirm &)
+		if [[ $ans == "yes" ]] || [[ $ans == "YES" ]] || [[ $ans == "y" ]]; then
+			mpc -q pause
+			amixer set Master mute
+			betterlockscreen --suspend
+        else
+			exit
+        fi
+        ;;
+    $logout)
+		ans=$(${DIR}/bin/confirm &)
+		if [[ $ans == "yes" ]] || [[ $ans == "YES" ]] || [[ $ans == "y" ]]; then
+			bspwm --exit
+        else
+			exit
+        fi
+        ;;
+esac
+
