@@ -11,6 +11,6 @@
 - link:
     ~/.tmux.conf: tmux.conf
     ~/.zshrc: zshrc
-    ~/.config/kitty: .config/kitty
-    ~/.config/bspwm: .config/bspwm
-    ~/.config/sxhkd: .config/sxhkd
+    ~/.config/kitty: config/kitty
+    ~/.config/bspwm: config/bspwm
+    ~/.config/sxhkd: config/sxhkd
