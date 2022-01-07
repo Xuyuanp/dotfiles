@@ -57,12 +57,22 @@ launch_bar() {
     # Wait until the processes have been shut down
     while pgrep -u $UID -x polybar >/dev/null; do sleep 1; done
 
-    # Launch the bar
-    polybar -q main -c "$DIR"/config.ini &
+    IFS_BAK=$IFS
+    IFS=$'\n'
+    for connected in $(xrandr -q | grep -w connected); do
+        monitor=$(echo $connected | cut -d ' ' -f1)
+        if [[ $connected == *primary* ]]; then
+            bar=main
+        else
+            bar=sub
+        fi
+        MONITOR=$monitor polybar -q $bar -c "$DIR"/config.ini &
+    done
+    IFS=$IFS_BAK
 
-    if [[ $(polybar -m | grep DP-2) ]]; then
-        polybar -q sub -c "$DIR"/config.ini &
-    fi
+    # Launch the bar
+    # polybar -q main -c "$DIR"/config.ini &
+    # polybar -q sub -c "$DIR"/config.ini &
 
 	# if [[ ! `pidof polybar` ]]; then
 	# 	polybar -q main -c "$DIR"/config.ini &
