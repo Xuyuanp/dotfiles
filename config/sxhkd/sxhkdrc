@@ -149,8 +149,12 @@ super + {Tab,grave}
     bspc {node,desktop} -f last
 
 # Send focused window to another workspace
-super + {_,shift + }{1-9,0}
-    bspc {desktop -f,node -d} '^{1-9,10}' --follow
+super + shift + {1-9,0}
+    bspc node -d '^{1-9,10}' --follow
+
+# Switch to desktop
+super + {1-9,0}
+    bspc desktop -f '^{1-9,10}'
 
 # Expanding windows
 super + control + {Left,Right,Up,Down}

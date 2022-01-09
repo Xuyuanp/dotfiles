@@ -20,40 +20,40 @@ options="$lock\n$suspend\n$logout\n$reboot\n$shutdown"
 chosen="$(echo -e "$options" | $rofi_command -mesg "UP - $uptime" -dmenu -i -selected-row 0)"
 case $chosen in
     $shutdown)
-		ans=$(${DIR}/bin/confirm &)
-		if [[ $ans == "yes" ]] || [[ $ans == "YES" ]] || [[ $ans == "y" ]]; then
-			systemctl poweroff
+        ans=$(${DIR}/bin/confirm &)
+        if [[ $ans == "yes" ]] || [[ $ans == "YES" ]] || [[ $ans == "y" ]]; then
+            systemctl poweroff
         else
-			exit
+            exit
         fi
         ;;
     $reboot)
-		ans=$(${DIR}/bin/confirm &)
-		if [[ $ans == "yes" ]] || [[ $ans == "YES" ]] || [[ $ans == "y" ]]; then
-			systemctl reboot
+        ans=$(${DIR}/bin/confirm &)
+        if [[ $ans == "yes" ]] || [[ $ans == "YES" ]] || [[ $ans == "y" ]]; then
+            systemctl reboot
         else
-			exit
+            exit
         fi
         ;;
     $lock)
         bsplock
         ;;
     $suspend)
-		ans=$(${DIR}/bin/confirm &)
-		if [[ $ans == "yes" ]] || [[ $ans == "YES" ]] || [[ $ans == "y" ]]; then
-			mpc -q pause
-			amixer set Master mute
-			betterlockscreen --suspend
+        ans=$(${DIR}/bin/confirm &)
+        if [[ $ans == "yes" ]] || [[ $ans == "YES" ]] || [[ $ans == "y" ]]; then
+            mpc -q pause
+            amixer set Master mute
+            betterlockscreen --suspend
         else
-			exit
+            exit
         fi
         ;;
     $logout)
-		ans=$(${DIR}/bin/confirm &)
-		if [[ $ans == "yes" ]] || [[ $ans == "YES" ]] || [[ $ans == "y" ]]; then
-			bspwm --exit
+        ans=$(${DIR}/bin/confirm &)
+        if [[ $ans == "yes" ]] || [[ $ans == "YES" ]] || [[ $ans == "y" ]]; then
+            bspc quit
         else
-			exit
+            exit
         fi
         ;;
 esac
