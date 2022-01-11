@@ -5,17 +5,17 @@ configuration {
     font:                           "Iosevka 10";
     show-icons:                     false;
     disable-history:                false;
-	click-to-exit: 					true;
+    click-to-exit:                  true;
 }
 
 @import "colors.rasi"
 
 window {
     transparency:                   "real";
-    background-color:               @background;
-    text-color:                     @foreground;
-    border:                  		1px;
-    border-color:                  	@selected;
+    background-color:               @BG;
+    text-color:                     @FG;
+    border:                         1px;
+    border-color:                   @SEL;
     border-radius:                  0px;
     width:                          400px;
     location:                       center;
@@ -25,33 +25,33 @@ window {
 }
 
 prompt {
-    enabled: 						true;
-	margin: 						0px 0px 0px 8px;
-    padding:    					6px 0px 6px 0px;
-	background-color: 				@background;
-	text-color: 					@foreground;
-    border:                  		0px 0px 1px 0px;
-    border-color:                  	@selected;
+    enabled:                        true;
+    margin:                         0px 0px 0px 8px;
+    padding:                        6px 0px 6px 0px;
+    background-color:               @BG;
+    text-color:                     @FG;
+    border:                         0px 0px 1px 0px;
+    border-color:                   @SEL;
     border-radius:                  0px;
 }
 
 textbox-prompt-colon {
-	expand: 						false;
-	str: 							"直";
+    expand:                         false;
+    str:                            "直";
     border-radius:                  0px;
     background-color:               @highlight;
-    text-color:                     @background;
-    padding:    					6px 10px 6px 10px;
-	font:							"Iosevka Nerd Font 10";
+    text-color:                     @BG;
+    padding:                        6px 10px 6px 10px;
+    font:                           "Iosevka Nerd Font Complete Mono 10";
 }
 
 entry {
-    background-color:               @background;
-    text-color:                     @foreground;
-    border:                  		0px 0px 1px 0px;
+    background-color:               @BG;
+    text-color:                     @FG;
+    border:                         0px 0px 1px 0px;
     border-radius:                  0px;
-    border-color:                  	@selected;
-    placeholder-color:              @foreground;
+    border-color:                   @SEL;
+    placeholder-color:              @FG;
     placeholder:                    "";
     expand:                         true;
     horizontal-align:               0;
@@ -60,10 +60,10 @@ entry {
 }
 
 inputbar {
-	children: 						[ textbox-prompt-colon, prompt, entry ];
+    children:                       [ textbox-prompt-colon, prompt, entry ];
     spacing:                        0;
-    background-color:               @background;
-    text-color:                     @foreground;
+    background-color:               @BG;
+    text-color:                     @FG;
     expand:                         false;
     margin:                         0px 0px 0px 0px;
     padding:                        0px;
@@ -71,16 +71,16 @@ inputbar {
 }
 
 case-indicator {
-    background-color:               @background;
-    text-color:                     @foreground;
+    background-color:               @BG;
+    text-color:                     @FG;
     spacing:                        0;
 }
 
 
 listview {
-    background-color:               @background;
+    background-color:               @BG;
     columns:                        1;
-    lines:							7;
+    lines:                          7;
     spacing:                        4px;
     cycle:                          true;
     dynamic:                        true;
@@ -88,23 +88,23 @@ listview {
 }
 
 mainbox {
-    background-color:               @background;
+    background-color:               @BG;
     children:                       [ inputbar, listview ];
-    spacing:                       	10px;
+    spacing:                        10px;
     padding:                        10px;
 }
 
 element {
-    background-color:               @background;
-    text-color:                     @foreground;
+    background-color:               @BG;
+    text-color:                     @FG;
     orientation:                    horizontal;
     border-radius:                  0px;
     padding:                        5px;
 }
 
 element-icon {
-    background-color: 				inherit;
-    text-color:       				inherit;
+    background-color:               inherit;
+    text-color:                     inherit;
     horizontal-align:               0.5;
     vertical-align:                 0.5;
     size:                           0px;
@@ -112,8 +112,8 @@ element-icon {
 }
 
 element-text {
-    background-color: 				inherit;
-    text-color:       				inherit;
+    background-color:               inherit;
+    text-color:                     inherit;
     expand:                         true;
     horizontal-align:               0;
     vertical-align:                 0;
@@ -122,31 +122,31 @@ element-text {
 
 element normal.urgent,
 element alternate.urgent {
-    background-color:               @urgent;
-    text-color:                     @foreground;
+    background-color:               @UGT;
+    text-color:                     @FG;
     border-radius:                  0px;
 }
 
 element normal.active,
 element alternate.active {
-    background-color:               @background;
-    text-color:                     @foreground;
+    background-color:               @BG;
+    text-color:                     @FG;
 }
 
 element selected {
-    background-color:               @selected;
-    text-color:                     @background;
-    border:                  		0px;
+    background-color:               @SEL;
+    text-color:                     @BG;
+    border:                         0px;
     border-radius:                  0px;
-    border-color:                  	@selected;
+    border-color:                   @SEL;
 }
 
 element selected.urgent {
-    background-color:               @urgent;
-    text-color:                     @foreground;
+    background-color:               @UGT;
+    text-color:                     @FG;
 }
 
 element selected.active {
-    background-color:               @background;
-    color:                          @foreground;
+    background-color:               @BG;
+    color:                          @FG;
 }

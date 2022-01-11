@@ -179,6 +179,6 @@ super + shift + s : {h,j,k,l}
     bspc node -z $(echo "right -$STEP 0,top 0 $STEP,bottom 0 -$STEP,left $STEP 0" | cut -d',' -f$SELECTION)
 
 # Show clipmenu
-alt + shift + c
-    rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}'
+super + shift + c
+    rofi -modi "clipboard:greenclip print" -show clipboard -theme ~/.config/bspwm/rofi/themes/cliphist.rasi -run-command '{cmd}'
 ##---------- EOF ----------##

@@ -26,9 +26,9 @@ status="$(mpc status)"
 
 # Defines the Play / Pause option content
 if [[ $status == *"[playing]"* ]]; then
-	toggle="$button_pause"
+    toggle="$button_pause"
 else
-	toggle="$button_play"
+    toggle="$button_play"
 fi
 
 # Display if repeat mode is on / off

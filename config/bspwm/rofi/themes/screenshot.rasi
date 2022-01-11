@@ -2,24 +2,26 @@
 /* Everyone is permitted to copy and distribute copies of this file under GNU-GPL3 */
 
 configuration {
-    font:                           "Iosevka 10";
     show-icons:                     false;
-    display-drun: 					"";
+    display-drun:                   "";
     drun-display-format:            "{icon} {name}";
     disable-history:                false;
-	click-to-exit: 					true;
+    click-to-exit:                  true;
 }
 
+@import "font.rasi"
 @import "colors.rasi"
+
+/* Line Responsible For Button Layouts */
+/* BUTTON = FALSE */
 
 window {
     transparency:                   "real";
-    background-color:               @background;
-    text-color:                     @foreground;
-    border:                  		1px;
-    border-color:                  	@selected;
-    border-radius:                  0px;
-    width:                          416px;
+    background-color:               @BG;
+    text-color:                     @FG;
+    border:                         2px;
+    border-radius:                  10px;
+    width:                          300px;
     location:                       center;
     anchor:                         center;
     x-offset:                       0;
@@ -27,130 +29,128 @@ window {
 }
 
 prompt {
-    enabled: 						true;
-	margin: 						0px 0px 0px 8px;
-    padding:    					6px 0px 6px 0px;
-	background-color: 				@background;
-	text-color: 					@foreground;
-    border:                  		0px 0px 0px 0px;
-    border-color:                  	@selected;
-    border-radius:                  0px;
+    enabled:                        true;
+    margin:                         0px 0px 0px 8px;
+    padding:                        8px;
+    background-color:               @BGA;
+    text-color:                     @FG;
+    border:                         0px 0px 2px 0px;
+    border-color:                   @BDR;
+    border-radius:                  10px;
 }
 
 textbox-prompt-colon {
-	expand: 						false;
-	str: 							"";
-    border-radius:                  0px;
-    background-color:               @selected;
-    text-color:                     @background;
-    padding:    					6px 10px 6px 10px;
-	font:							"Iosevka Nerd Font 10";
+    expand:                         false;
+    str:                            "";
+    border-radius:                  100%;
+    background-color:               @SEL;
+    text-color:                     @BG;
+    padding:                        8px 12px 8px 12px;
+    font:                           "FiraCode Nerd Font Mono 10";
 }
 
 entry {
-    background-color:               @background;
-    text-color:                     @background;
-    placeholder-color:              @background;
-    placeholder:                    "";
+    background-color:               @BGA;
+    text-color:                     @FG;
+    placeholder-color:              @FG;
     expand:                         true;
     horizontal-align:               0;
-    blink:                          false;
-    padding:                        6px;
+    placeholder:                    "Search actions...";
+    blink:                          true;
+    border:                         0px 0px 0px 0px;
+    border-color:                   @BDR;
+    border-radius:                  10px;
+    padding:                        8px;
 }
 
 inputbar {
-	children: 						[ textbox-prompt-colon, prompt ];
-    spacing:                        0;
-    background-color:               @background;
-    text-color:                     @foreground;
-    border:                  		0px 0px 1px 0px;
-    border-radius:                  0px;
-    border-color:                  	@selected;
+    children:                       [ textbox-prompt-colon, entry ];
+    background-color:               @BGA;
+    text-color:                     @FG;
     expand:                         false;
+    border:                         0px 0px 0px 0px;
+    border-radius:                  100%;
+    border-color:                   @BDR;
     margin:                         0px 0px 0px 0px;
     padding:                        0px;
     position:                       center;
 }
 
 case-indicator {
-    background-color:               @background;
-    text-color:                     @foreground;
+    background-color:               @BG;
+    text-color:                     @FG;
     spacing:                        0;
 }
 
 
 listview {
-    background-color:               @background;
+    background-color:               @BG;
     columns:                        1;
-    lines:							5;
-    spacing:                        10px;
+    lines:                          5;
+    spacing:                        4px;
     cycle:                          true;
     dynamic:                        true;
-    layout:                         horizontal;
+    layout:                         vertical;
 }
 
 mainbox {
-    background-color:               @background;
+    background-color:               @BG;
     children:                       [ inputbar, listview ];
-    spacing:                       	10px;
-    padding:                        10px;
+    spacing:                        15px;
+    padding:                        15px;
 }
 
 element {
-    background-color:               @background;
-    text-color:                     @foreground;
+    background-color:               @BG;
+    text-color:                     @FG;
     orientation:                    horizontal;
-    border:                  		1px;
-    border-radius:                  0px;
-    border-color:                  	@selected;
-    padding:                        23.5px 25px 23.5px 25px;
+    border-radius:                  10px;
+    padding:                        6px 6px 6px 6px;
 }
 
 element-icon {
-    background-color: 				inherit;
-    text-color:       				inherit;
-    horizontal-align:               0.5;
-    vertical-align:                 0.5;
+    background-color:               inherit;
+    text-color:                     inherit;
     size:                           0px;
     border:                         0px;
 }
 
 element-text {
-    background-color: 				inherit;
-    text-color:       				inherit;
-	font:							"feather 14";
+    background-color:               inherit;
+    text-color:                     inherit;
     expand:                         true;
-    horizontal-align:               0.5;
+    horizontal-align:               0;
     vertical-align:                 0.5;
-    margin:                         0px 0px 0px 0px;
+    margin:                         2px 0px 2px 6px;
 }
 
 element selected {
-    background-color:               @selected;
-    text-color:                     @background;
-    border:                  		0px;
-    border-radius:                  0px;
-    border-color:                  	@selected;
+    background-color:               @BGA;
+    text-color:                     @SEL;
+    border:                         0px 0px 0px 0px;
+    border-radius:                  10px;
+    border-color:                   @BDR;
 }
 
 element.active,
 element.selected.urgent {
-  background-color: @on;
-  text-color: @background;
-  border-color: @on;
+  background-color: @ON;
+  text-color: @BG;
+  border-color: @ON;
 }
 
 element.selected.urgent {
-  border-color: @selected;
+  border-color: @BDR;
 }
 
 element.urgent,
 element.selected.active {
-  background-color: @off;
-  text-color: @background;
-  border-color: @off;
+  background-color: @OFF;
+  text-color: @BG;
+  border-color: @OFF;
 }
 
 element.selected.active {
-  border-color: @selected;
+  border-color: @BDR;
 }
+

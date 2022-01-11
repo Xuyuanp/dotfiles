@@ -2,12 +2,12 @@
 /* Everyone is permitted to copy and distribute copies of this file under GNU-GPL3 */
 
 configuration {
-    font:                           "Iosevka 10";
     show-icons:                     true;
-    window-format:                  "{w}  ·  {c}  ·  {t}";
+    display-drun:                   "";
+    drun-display-format:            "{icon} {name}";
     disable-history:                false;
     click-to-exit:                  true;
-    localtion:                      1;
+    location:                       1;
 }
 
 @import "font.rasi"
@@ -36,7 +36,7 @@ prompt {
 
 textbox-prompt-colon {
     expand:                         false;
-    str:                            "缾";
+    str:                            "";
     border-radius:                  100%;
     background-color:               @SEL;
     text-color:                     @BG;
@@ -50,7 +50,7 @@ entry {
     placeholder-color:              @FG;
     expand:                         true;
     horizontal-align:               0;
-    placeholder:                    "Search windows...";
+    placeholder:                    "Search clip history...";
     blink:                          true;
     border:                         0px 0px 0px 0px;
     border-color:                   @BDR;
@@ -151,5 +151,4 @@ element selected.active {
     background-color:               @BGA;
     color:                          @FG;
 }
-
 

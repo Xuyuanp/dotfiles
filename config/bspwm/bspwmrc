@@ -157,7 +157,7 @@ xsettingsd &
 
 # polkit agent
 if [[ ! `pidof xfce-polkit` ]]; then
-	/usr/lib/xfce-polkit/xfce-polkit &
+    /usr/lib/xfce-polkit/xfce-polkit &
 fi
 
 # Lauch keybindings daemon
