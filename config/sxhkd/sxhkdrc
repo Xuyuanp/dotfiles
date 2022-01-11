@@ -25,7 +25,7 @@ super + shift + Return
 
 # Rofi Menus/Applets(launcher, windows, mpd, powermenu, asroot, screenshot)
 super + {a,w,m,x,r,s}
-    sh ~/.config/bspwm/rofi/bin/{launcher,windows,mpd,powermenu,asroot,screenshot}
+    ~/.config/bspwm/rofi/bin/{launcher,windows,mpd,powermenu,asroot,screenshot}
 
 # Open chrome
 super + b
@@ -33,7 +33,7 @@ super + b
 
 # Show keykindings
 super + slash
-    sh ~/.config/sxhkd/scripts/help.sh
+    ~/.config/sxhkd/scripts/help.sh
 
 ##---------- Applications ----------##
 
@@ -149,8 +149,12 @@ super + {Tab,grave}
     bspc {node,desktop} -f last
 
 # Send focused window to another workspace
-super + {_,shift + }{1-9,0}
-    bspc {desktop -f,node -d} '^{1-9,10}' --follow
+super + shift + {1-9,0}
+    bspc node -d '^{1-9,10}' --follow
+
+# Switch to desktop
+super + {1-9,0}
+    bspc desktop -f '^{1-9,10}'
 
 # Expanding windows
 super + control + {Left,Right,Up,Down}
