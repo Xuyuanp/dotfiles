@@ -80,36 +80,36 @@ bspc config focus_follows_pointer false
 bspc rule -r *:*
 
 # 1 > terminal
-declare -a terms=(kitty Alacritty Xfce4-terminal)
-for i in ${terms[@]}; do
-    bspc rule -a $i desktop='^1' follow=on focus=on
-done
+# declare -a terms=(kitty Alacritty Xfce4-terminal)
+# for i in ${terms[@]}; do
+#     bspc rule -a $i desktop='^1' follow=on focus=on
+# done
 
 # 2 > web
-declare -a browsers=(Google-chrome firefox chromium)
-for i in ${browsers[@]}; do
-    bspc rule -a $i desktop='^2' follow=on focus=on
-done
+# declare -a browsers=(Google-chrome firefox chromium)
+# for i in ${browsers[@]}; do
+#     bspc rule -a $i desktop='^2' follow=on focus=on
+# done
 
 # 3 > files
-declare -a files=(Pcmanfm Thunar qBittorrent)
-for i in ${files[@]}; do
-   bspc rule -a $i desktop='^3' follow=on focus=on;
-done
+# declare -a files=(Pcmanfm Thunar qBittorrent)
+# for i in ${files[@]}; do
+#    bspc rule -a $i desktop='^3' follow=on focus=on;
+# done
 
 # 4 > code
-declare -a code=(Geany code-oss code)
-for i in ${code[@]}; do
-   bspc rule -a $i desktop='^4' follow=on focus=on;
-done
+# declare -a code=(Geany code-oss code)
+# for i in ${code[@]}; do
+#    bspc rule -a $i desktop='^4' follow=on focus=on;
+# done
 
 # 5 > all others
-declare -a office=(Gucharmap Atril Evince \
-libreoffice-writer libreoffice-calc libreoffice-impress \
-libreoffice-startcenter libreoffice Soffice *:libreofficedev *:soffice)
-for i in ${office[@]}; do
-   bspc rule -a $i desktop='^5' follow=on focus=on;
-done
+# declare -a office=(Gucharmap Atril Evince \
+# libreoffice-writer libreoffice-calc libreoffice-impress \
+# libreoffice-startcenter libreoffice Soffice *:libreofficedev *:soffice)
+# for i in ${office[@]}; do
+#    bspc rule -a $i desktop='^5' follow=on focus=on;
+# done
 
 declare -a comm=(Thunderbird TelegramDesktop Hexchat)
 for i in ${comm[@]}; do
@@ -132,7 +132,7 @@ done
 
 # special rules
 declare -a floating=(alacritty-float Pcmanfm Onboard Yad 'Firefox:Places' \
-Viewnior feh Nm-connection-editor Nvidia-settings)
+Viewnior feh Nm-connection-editor Nvidia-settings zoom)
 for i in ${floating[@]}; do
    bspc rule -a $i state=floating follow=on focus=on;
 done
@@ -160,6 +160,11 @@ if [[ ! `pidof xfce-polkit` ]]; then
     /usr/lib/xfce-polkit/xfce-polkit &
 fi
 
+# start fcitx
+if [[ ! `pidof fcitx5` ]]; then
+    systemctl --user start fcitx.service
+fi
+
 # Lauch keybindings daemon
 sxhkd &
 
@@ -168,7 +173,7 @@ ksuperkey -e 'Super_L=Alt_L|F1' &
 ksuperkey -e 'Super_R=Alt_L|F1' &
 
 # Enable power management
-xfce4-power-manager &
+# xfce4-power-manager &
 
 # Fix cursor
 xsetroot -cursor_name left_ptr
@@ -178,13 +183,6 @@ bash $HOME/.fehbg
 
 # Start mpd
 # exec mpd &
-
-# Start fcitx
-export GTK_IM_MODULE=fcitx
-export QT_IM_MODULE=fcitx
-export XMODIFIERS=@im=fcitx
-
-fcitx-autostart &
 
 # Start bspwm scripts
 bspcolors

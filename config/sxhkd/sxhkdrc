@@ -35,6 +35,10 @@ super + b
 super + slash
     ~/.config/sxhkd/scripts/help.sh
 
+# Show calculator
+super + c
+    rofi -show calc -modi calc -no-show-match -no-sort
+
 ##---------- Applications ----------##
 
 # Terminal Apps

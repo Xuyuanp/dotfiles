@@ -69,20 +69,6 @@ launch_bar() {
         MONITOR=$monitor polybar -q $bar -c "$DIR"/config.ini &
     done
     IFS=$IFS_BAK
-
-    # Launch the bar
-    # polybar -q main -c "$DIR"/config.ini &
-    # polybar -q sub -c "$DIR"/config.ini &
-
-    # if [[ ! `pidof polybar` ]]; then
-    #     polybar -q main -c "$DIR"/config.ini &
-    #
-    #     if [[ $(polybar -m | grep DP-2) ]]; then
-    #         polybar -q sub -c "$DIR"/config.ini &
-    #     fi
-    # else
-    #     polybar-msg cmd restart
-    # fi
 }
 
 # Execute functions
