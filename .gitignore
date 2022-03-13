@@ -1,0 +1,5 @@
+.cache/
+.plugged/
+autoload/plug.vim
+.luacheckcache
+plugin/packer_compiled.vim
