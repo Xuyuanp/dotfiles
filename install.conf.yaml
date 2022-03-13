@@ -6,8 +6,8 @@
 
 - shell:
   - git config --global include.path ${PWD}/gitconfig
-  - if [ ! -d ~/.config/nvim ]; then git clone https://github.com/Xuyuanp/vimrc ~/.config/nvim; fi
 
 - link:
     ~/.tmux.conf: tmux.conf
     ~/.zshrc: zshrc
+    ~/.config/nvim: nvim
