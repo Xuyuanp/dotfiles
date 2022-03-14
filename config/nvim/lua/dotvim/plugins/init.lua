@@ -7,20 +7,34 @@ end
 
 local std_data_path = vfn.stdpath('data')
 
-local install_path = std_data_path .. '/site/pack/packer/start/packer.nvim'
+local install_path = std_data_path .. '/site/pack/packer/opt/packer.nvim'
 local compile_path = std_data_path .. '/site/plugin/packer_compiled.vim'
+local packer_repo = "https://github.com/wbthomason/packer.nvim"
 
+command("silent! packadd packer.nvim")
 local ok, packer = pcall(require, 'packer')
 
 if not ok then
     print('Installing packer...')
-    local output = vfn.system({ 'git', 'clone', 'https://github.com/wbthomason/packer.nvim', install_path })
+    vfn.delete(install_path, "rf")
+    local output = vfn.system({
+        'git',
+        'clone',
+        packer_repo,
+        install_path
+    })
     if vim.v.shell_error ~= 0 then
-        vim.notify(output, 'Error')
-        command('quitall')
+        error(output)
     end
 
-    packer = require('packer')
+    command("packadd packer.nvim")
+    ok, packer = pcall(require, 'packer')
+
+    if ok then
+        print("Installed packer.nvim successfully.")
+    else
+        error("Installed packer.nvim failed:!")
+    end
 end
 
 local M = {}
@@ -62,6 +76,7 @@ function M.setup()
 
         config = {
             compile_path = compile_path,
+            compile_on_sync = true,
             auto_clean = true,
             max_jobs = 8,
             display = {
