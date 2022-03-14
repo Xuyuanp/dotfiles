@@ -2,9 +2,9 @@ name: lint
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   luacheck:
@@ -19,7 +19,7 @@ jobs:
           sudo luarocks install luacheck
       - name: check
         run: |
-          luacheck --no-color .
+          luacheck --no-color config/nvim
   stylua:
     name: Stylua
     runs-on: ubuntu-20.04
@@ -28,4 +28,4 @@ jobs:
       - uses: JohnnyMorganz/stylua-action@1.0.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          args: --color always --check lua/
+          args: --color always --check config/nvim/lua/
