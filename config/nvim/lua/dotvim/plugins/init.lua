@@ -9,31 +9,31 @@ local std_data_path = vfn.stdpath('data')
 
 local install_path = std_data_path .. '/site/pack/packer/opt/packer.nvim'
 local compile_path = std_data_path .. '/site/plugin/packer_compiled.vim'
-local packer_repo = "https://github.com/wbthomason/packer.nvim"
+local packer_repo = 'https://github.com/wbthomason/packer.nvim'
 
-command("silent! packadd packer.nvim")
+command('silent! packadd packer.nvim')
 local ok, packer = pcall(require, 'packer')
 
 if not ok then
     print('Installing packer...')
-    vfn.delete(install_path, "rf")
+    vfn.delete(install_path, 'rf')
     local output = vfn.system({
         'git',
         'clone',
         packer_repo,
-        install_path
+        install_path,
     })
     if vim.v.shell_error ~= 0 then
         error(output)
     end
 
-    command("packadd packer.nvim")
+    command('packadd packer.nvim')
     ok, packer = pcall(require, 'packer')
 
     if ok then
-        print("Installed packer.nvim successfully.")
+        print('Installed packer.nvim successfully.')
     else
-        error("Installed packer.nvim failed:!")
+        error('Installed packer.nvim failed:!')
     end
 end
 
