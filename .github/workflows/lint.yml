@@ -5,6 +5,10 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+    
+defaults:
+  run:
+    working-directory: config/nvim
 
 jobs:
   luacheck:
@@ -19,7 +23,7 @@ jobs:
           sudo luarocks install luacheck
       - name: check
         run: |
-          luacheck --no-color config/nvim
+          luacheck --no-color .
   stylua:
     name: Stylua
     runs-on: ubuntu-20.04
@@ -28,4 +32,4 @@ jobs:
       - uses: JohnnyMorganz/stylua-action@1.0.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          args: --color always --check config/nvim/lua/
+          args: --color always --check lua/
