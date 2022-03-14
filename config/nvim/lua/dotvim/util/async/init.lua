@@ -1,15 +1,19 @@
 local M = {}
 
+local function nop() end
+
 function M.execute(async_func, callback, ...)
     local thread = coroutine.create(async_func)
     local cont
+
+    callback = callback or nop
 
     cont = function(...)
         local ok, next_or_res = coroutine.resume(thread, ...)
         assert(ok, next_or_res)
 
         if coroutine.status(thread) == 'dead' then
-            (callback or function() end)(next_or_res)
+            callback(next_or_res)
         else
             next_or_res(cont)
         end
