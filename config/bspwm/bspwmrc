@@ -156,9 +156,9 @@ dunst \
 xsettingsd &
 
 # polkit agent
-if [[ ! `pidof xfce-polkit` ]]; then
-    /usr/lib/xfce-polkit/xfce-polkit &
-fi
+# if [[ ! `pidof xfce-polkit` ]]; then
+#     /usr/lib/xfce-polkit/xfce-polkit &
+# fi
 
 # start fcitx
 if [[ ! `pidof fcitx5` ]]; then
