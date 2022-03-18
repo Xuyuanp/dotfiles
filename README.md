@@ -9,4 +9,4 @@ dotfiles
 
 `cd ~/.dotfiles`
 
-`./install.sh help` for details.
+`./install`
