@@ -10,15 +10,15 @@ RFILE="$DIR/.module"
 
 # Fix backlight and network modules
 fix_modules() {
-	if [[ -z "$CARD" ]]; then
-		sed -i -e 's/backlight/bna/g' "$DIR"/config.ini
-	elif [[ "$CARD" != *"intel_"* ]]; then
-		sed -i -e 's/backlight/brightness/g' "$DIR"/config.ini
-	fi
+    if [[ -z "$CARD" ]]; then
+        sed -i -e 's/backlight/bna/g' "$DIR"/config.ini
+    elif [[ "$CARD" != *"intel_"* ]]; then
+        sed -i -e 's/backlight/brightness/g' "$DIR"/config.ini
+    fi
 
-	if [[ "$INTERFACE" == e* ]]; then
-		sed -i -e 's/network/ethernet/g' "$DIR"/config.ini
-	fi
+    if [[ "$INTERFACE" == e* ]]; then
+        sed -i -e 's/network/ethernet/g' "$DIR"/config.ini
+    fi
 }
 
 # Launch the bar
@@ -39,7 +39,7 @@ launch_bar() {
 
 # Execute functions
 if [[ ! -f "$RFILE" ]]; then
-	fix_modules
-	touch "$RFILE"
+    fix_modules
+    touch "$RFILE"
 fi
 launch_bar
