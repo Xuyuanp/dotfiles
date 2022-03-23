@@ -14,3 +14,5 @@
     ~/.config/bspwm: config/bspwm
     ~/.config/sxhkd: config/sxhkd
     ~/.config/nvim: config/nvim
+    ~/.Xresources: config/Xresources
+    ~/.Xresources.d: config/Xresources.d

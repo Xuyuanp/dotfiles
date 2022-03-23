@@ -1,0 +1,7 @@
+#include ".Xresources.d/colors"
+
+Xft.antialias: 1
+Xft.rgba: rgb
+Xft.autohint: 1
+Xft.hintstyle: hintfull
+Xft.hinting: 1
