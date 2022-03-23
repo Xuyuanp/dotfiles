@@ -189,7 +189,7 @@ function M.setup()
         },
         filters = {
             function(name)
-                local patterns = { '^%.git$', '%.pyc', '^__pycache__$', '^%.idea$', '^%.iml$', '^%.DS_Store$', '%.o$', '%.d$' }
+                local patterns = { '^%.git$', '%.pyc', '^__pycache__$', '^%.idea$', '^%.iml$', '^%.DS_Store$', '%.o$' }
                 for _, pat in ipairs(patterns) do
                     if string.find(name, pat) then
                         return true
