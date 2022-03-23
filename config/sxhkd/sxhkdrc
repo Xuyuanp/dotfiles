@@ -25,7 +25,7 @@ super + shift + Return
 
 # Rofi Menus/Applets(launcher, windows, mpd, powermenu, asroot, screenshot)
 super + {a,w,m,x,r,s}
-    sh ~/.config/bspwm/rofi/bin/{launcher,windows,mpd,powermenu,asroot,screenshot}
+    ~/.config/bspwm/rofi/bin/{launcher,windows,mpd,powermenu,asroot,screenshot}
 
 # Open chrome
 super + b
@@ -33,7 +33,11 @@ super + b
 
 # Show keykindings
 super + slash
-    sh ~/.config/sxhkd/scripts/help.sh
+    ~/.config/sxhkd/scripts/help.sh
+
+# Show calculator
+super + c
+    rofi -show calc -modi calc -no-show-match -no-sort
 
 ##---------- Applications ----------##
 
@@ -179,6 +183,6 @@ super + shift + s : {h,j,k,l}
     bspc node -z $(echo "right -$STEP 0,top 0 $STEP,bottom 0 -$STEP,left $STEP 0" | cut -d',' -f$SELECTION)
 
 # Show clipmenu
-alt + shift + c
-    rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}'
+super + shift + c
+    rofi -modi "clipboard:greenclip print" -show clipboard -theme ~/.config/bspwm/rofi/themes/cliphist.rasi -run-command '{cmd}'
 ##---------- EOF ----------##

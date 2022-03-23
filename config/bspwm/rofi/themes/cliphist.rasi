@@ -2,20 +2,24 @@
 /* Everyone is permitted to copy and distribute copies of this file under GNU-GPL3 */
 
 configuration {
-    show-icons:          false;
+    show-icons:          true;
     display-drun:        "";
     drun-display-format: "{icon} {name}";
     disable-history:     false;
     click-to-exit:       true;
+    location:            1;
 }
 
 @import "common.rasi"
 
 textbox-prompt-colon {
-    str:  "";
-    font: "FiraCode Nerd Font Mono 10";
+    str: "";
 }
 
 entry {
-    placeholder: "Search actions...";
+    placeholder: "Search clip history...";
+}
+
+window {
+    width: 800px;
 }

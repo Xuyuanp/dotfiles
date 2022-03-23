@@ -4,6 +4,6 @@
 /* Text Font */
 
 * {
-    font:				 	"Iosevka 10";
+    font:                     "Iosevka 10";
 }
 
