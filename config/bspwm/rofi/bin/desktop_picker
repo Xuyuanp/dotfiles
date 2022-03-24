@@ -1,0 +1,20 @@
+#!/usr/bin/env zsh
+
+declare -a desktops=()
+
+for m in $(bspc query --monitors --names); do
+    for d in $(bspc query --desktops --names --monitor $m); do
+        desktops+="$m\t$d"
+    done
+done
+
+chosen=($(print -l $desktops | rofi -dmenu -i | tr "\t" "\n"))
+
+if [[ ${#chosen} == 0 ]]; then
+    exit
+fi
+
+# monitor=${chosen[1]}
+desktop=${chosen[2]}
+
+bspc node -d $desktop --follow

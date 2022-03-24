@@ -1,3 +1,20 @@
+trace_file=~/.startup.log
+[ -f $trace_file ] && rm $trace_file
+
+function trace() {
+    echo "$(date --rfc-3339=ns):" $* >> $trace_file
+}
+
+trace 'start'
+
+[ -f ~/.zshrc.before ] && source ~/.zshrc.before
+
+trace 'zshrc.before'
+
+if [[ $FORCE_TMUX == '1' ]] && [[ ! -v TMUX ]]; then
+    tmux attach || tmux
+fi
+
 if [ $(uname) = 'Darwin' ] && ! [ -x "$(command -v brew)" ]; then
     bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     brew bundle install --file ~/.dotfiles/Brewfile
@@ -9,8 +26,6 @@ fi
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
-
-[ -f ~/.zshrc.before ] && source ~/.zshrc.before
 
 # =============================== zinit start ================================ #
 export ZINIT_HOME_DIR=${ZINIT_HOME_DIR:-$HOME/.zinit}
@@ -38,13 +53,6 @@ zinit light-mode for \
     atclone="dircolors -b LS_COLORS > c.zsh" atpull='%atclone' pick='c.zsh' \
     trapd00r/LS_COLORS
 
-zinit snippet OMZL::clipboard.zsh
-zinit snippet OMZL::completion.zsh
-zinit snippet OMZL::history.zsh
-zinit snippet OMZP::colored-man-pages
-zinit snippet OMZP::dotenv
-zinit snippet OMZP::gitignore
-
 zinit ice as"program" atclone'perl Makefile.PL PREFIX=$ZPFX' \
     atpull'%atclone' make'install' pick"$ZPFX/bin/git-cal"
 zinit light k4rthik/git-cal
@@ -61,9 +69,27 @@ zinit light junegunn/fzf
 zinit ice depth=1
 zinit light romkatv/powerlevel10k
 
+zinit snippet OMZL::clipboard.zsh
+zinit snippet OMZL::completion.zsh
+zinit snippet OMZL::history.zsh
+zinit snippet OMZP::colored-man-pages
+zinit snippet OMZP::gitignore
+
+zinit ice as"completion"
+zinit snippet OMZP::docker/_docker
+
+trace 'zinit'
+
 # ================================ zinit end ================================= #
 
-zpcompinit; zpcdreplay
+# zpcompinit; zpcdreplay
+autoload -U compinit
+for dump in ~/.zcompdump(N.mh+24); do
+  compinit
+done
+compinit -C
+
+trace 'compinit'
 
 bindkey -v
 
@@ -75,9 +101,12 @@ _exists fdfind  && alias fd='fdfind'
 _exists batcat  && alias bat='batcat'
 _exists free    && alias free='free -h'
 _exists less    && export PAGER=less
+_exists less    && alias more='less'
 _exists kubectl && alias kubesys='kubectl --namespace kube-system'
 _exists ag      && alias grep='ag'
 _exists rg      && alias grep='rg'
+export DIRENV_LOG_FORMAT=
+_exists direnv  && eval "$(direnv hook zsh)"
 
 if _exists nvim; then
     export EDITOR=nvim
@@ -105,10 +134,6 @@ alias genpass="date +%s | sha256sum | base64 | head -c 14"
 
 function mkcd() {
     mkdir -p "$1" && cd "$1"
-}
-
-function log() {
-    echo "$(date +'%Y-%m-%d %H:%M:%S'):" $*
 }
 
 export PIP_INDEX_URL=https://mirrors.aliyun.com/pypi/simple
@@ -167,15 +192,21 @@ EOL
     )
 }
 
+trace 'base'
+
 # Customize to your needs...
 [ -f ~/.shared_profile.zsh ] && source ~/.shared_profile.zsh
 
+trace 'shared_profile'
+
 [ -f ~/.zshrc.after ] && source ~/.zshrc.after
+
+trace 'zshrc.after'
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-export BAT_THEME='gruvbox-dark'
+trace 'p10k'
 
 export PYENV_ROOT="$HOME/.pyenv"
 if [[ -d "${PYENV_ROOT}" ]]; then
@@ -186,6 +217,8 @@ if [[ -d "${PYENV_ROOT}" ]]; then
 else
     unset PYENV_ROOT
 fi
+
+trace 'pyenv'
 
 export PATH=${HOME}/.cargo/bin:${PATH}
 

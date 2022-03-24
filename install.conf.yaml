@@ -16,3 +16,4 @@
     ~/.config/nvim: config/nvim
     ~/.Xresources: config/Xresources
     ~/.Xresources.d: config/Xresources.d
+    ~/.fonts: fonts

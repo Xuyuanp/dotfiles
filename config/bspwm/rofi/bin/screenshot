@@ -4,7 +4,7 @@
 ## Everyone is permitted to copy and distribute copies of this file under GNU-GPL3
 
 DIR="$HOME/.config/bspwm"
-rofi_command="rofi -theme $DIR/rofi/themes/screenshot.rasi"
+rofi_command="rofi -i -theme $DIR/rofi/themes/screenshot.rasi"
 
 time=`date +%Y-%m-%d-%I-%M-%S`
 geometry=`xrandr | head -n1 | cut -d',' -f2 | tr -d '[:blank:],current'`
@@ -21,16 +21,16 @@ inten=""
 # notify
 notify_user () {
     if [[ -e "$dir/$file" ]]; then
-        dunstify -u low --replace=699 -i /usr/share/archcraft/icons/dunst/picture.png "Saved in $dir"
+        dunstify -u low --replace=699 -i ~/.dotfiles/icons/dunst/picture.png "Saved in $dir"
     else
-        dunstify -u low --replace=699 -i /usr/share/archcraft/icons/dunst/picture.png "Screenshot Deleted."
+        dunstify -u low --replace=699 -i ~/.dotfiles/icons/dunst/picture.png "Screenshot Deleted."
     fi
 }
 
 # countdown
 countdown () {
     for sec in `seq $1 -1 1`; do
-        dunstify -t 1000 --replace=699 -i /usr/share/archcraft/icons/dunst/timer.png "Taking shot in : $sec"
+        dunstify -t 1000 --replace=699 -i ~/.dotfiles/icons/dunst/timer.png "Taking shot in : $sec"
         sleep 1
     done
 }
