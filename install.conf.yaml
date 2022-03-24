@@ -14,3 +14,5 @@
     ~/.config/kitty: config/kitty
     ~/.config/bspwm: config/bspwm
     ~/.config/sxhkd: config/sxhkd
+    ~/.Xresources: config/Xresources
+    ~/.Xresources.d: config/Xresources.d

@@ -50,7 +50,7 @@ case $chosen in
             nmcli radio wifi off
         else
             nmcli radio wifi on
-        fi 
+        fi
         ;;
     $bmon)
         alacritty --class 'alacritty-float,alacritty-float' --config-file ~/.config/bspwm/alacritty/alacritty.yml -e bmon
