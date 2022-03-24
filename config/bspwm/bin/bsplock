@@ -55,6 +55,7 @@ i3lock \
 --date-size=18                                                    \
 --greeter-text="${TOTD}"            \
 --greeter-color=${CYAN}                \
+--greeter-pos=ix:iy+200                \
 --verif-text="verifying..."            \
 --wrong-text="wrong!"                \
 --noinput-text="Empty"                \
