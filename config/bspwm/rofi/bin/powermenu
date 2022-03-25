@@ -8,15 +8,14 @@ rofi_command="rofi -theme ${THEMES}/powermenu.rasi"
 
 uptime=$(uptime -p | sed -e 's/up //g')
 
-shutdown="襤 Shutdown"
-reboot="累 Restart"
-lock=" Lock"
-# suspend="⏾ Sleep"
-logout=" Logout"
+shutdown="  Shutdown"
+reboot="  Restart"
+lock="  Lock"
+suspend="  Sleep"
+logout="  Logout"
 
 # Variable passed to rofi
-# options="$lock\n$suspend\n$logout\n$reboot\n$shutdown"
-options="$lock\n$logout\n$reboot\n$shutdown"
+options="$lock\n$suspend\n$logout\n$reboot\n$shutdown"
 
 chosen="$(echo -e "$options" | $rofi_command -mesg "UP - $uptime" -dmenu -i -selected-row 0)"
 case $chosen in

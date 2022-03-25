@@ -19,3 +19,7 @@ textbox-prompt-colon {
 entry {
     placeholder: "Search actions...";
 }
+
+window {
+    width: 300px;
+}

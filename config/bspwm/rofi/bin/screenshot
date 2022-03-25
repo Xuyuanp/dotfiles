@@ -12,30 +12,25 @@ dir="`xdg-user-dir PICTURES`/Screenshots"
 file="Screenshot_${time}_${geometry}.png"
 
 # Buttons
-# screen=""
-# area="麗"
-# window=""
-# infive="V"
-# inten="X"
-screen=" Screen"
-area="麗 Area"
-window=" Window"
-infive="V In 5s"
-inten="X In 10s"
+screen="  Take screen"
+area="  Take area"
+window="  Take window"
+infive="  Take in 5s"
+inten="  Take in 10s"
 
 # notify
 notify_user () {
     if [[ -e "$dir/$file" ]]; then
-        dunstify -u low --replace=699 "Saved in $dir"
+        dunstify -u low --replace=699 -i ~/.dotfiles/icons/dunst/picture.png "Saved in $dir"
     else
-        dunstify -u low --replace=699 "Screenshot Deleted."
+        dunstify -u low --replace=699 -i ~/.dotfiles/icons/dunst/picture.png "Screenshot Deleted."
     fi
 }
 
 # countdown
 countdown () {
     for sec in `seq $1 -1 1`; do
-        dunstify -t 1000 --replace=699 "Taking shot in : $sec"
+        dunstify -t 1000 --replace=699 -i ~/.dotfiles/icons/dunst/timer.png "Taking shot in : $sec"
         sleep 1
     done
 }
