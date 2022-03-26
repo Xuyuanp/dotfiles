@@ -13,9 +13,12 @@ configuration {
 
 textbox-prompt-colon {
     str:  "";
-    font: "FiraCode Nerd Font Mono 10";
 }
 
 entry {
     placeholder: "Search actions...";
+}
+
+window {
+    width: 300px;
 }

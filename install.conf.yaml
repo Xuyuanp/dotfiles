@@ -6,14 +6,17 @@
 
 - shell:
   - git config --global include.path ${PWD}/gitconfig
+  - cp -R fonts/* ~/.fonts/
+  - fc-cache
 
 - link:
     ~/.tmux.conf: tmux.conf
     ~/.zshrc: zshrc
-    ~/.config/kitty: config/kitty
     ~/.config/bspwm: config/bspwm
-    ~/.config/sxhkd: config/sxhkd
+    ~/.config/dunst: config/dunst
+    ~/.config/kitty: config/kitty
+    ~/.config/networkmanager-dmenu: config/networkmanager-dmenu
     ~/.config/nvim: config/nvim
+    ~/.config/sxhkd: config/sxhkd
     ~/.Xresources: config/Xresources
     ~/.Xresources.d: config/Xresources.d
-    ~/.fonts: fonts

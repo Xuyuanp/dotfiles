@@ -29,7 +29,6 @@ textbox-prompt-colon {
     background-color:               @SEL;
     text-color:                     @BG;
     padding:                        8px 12px 8px 12px;
-    font:                           "Iosevka Nerd Font Complete Mono 10";
 }
 
 entry {
@@ -103,6 +102,7 @@ element-icon {
 element-text {
     background-color:               inherit;
     text-color:                     inherit;
+    font:                           "feather";
     expand:                         true;
     horizontal-align:               0;
     vertical-align:                 0.5;
