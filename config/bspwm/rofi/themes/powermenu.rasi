@@ -22,3 +22,7 @@ entry {
 window {
     width: 300px;
 }
+
+element-text {
+    font: "feather 10";
+}

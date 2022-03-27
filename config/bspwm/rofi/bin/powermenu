@@ -43,7 +43,7 @@ case $chosen in
         if [[ $ans == "yes" ]] || [[ $ans == "YES" ]] || [[ $ans == "y" ]]; then
             mpc -q pause
             amixer set Master mute
-            betterlockscreen --suspend
+            systemctl suspend
         else
             exit
         fi
