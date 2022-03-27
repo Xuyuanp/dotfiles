@@ -131,7 +131,7 @@ killall -9 xsettingsd sxhkd dunst ksuperkey xfce4-power-manager
 
 # Lauch notification daemon
 dunst \
--geom "280x50-10+42" -frame_width "1" -font "Iosevka Custom 9" \
+-geom "280x50-10+42" -frame_width "1" -font "FiraCode Nerd Font Mono 9" \
 -lb "$BACKGROUND" -lf "$FOREGROUND" -lfr "$BLUE" \
 -nb "$BACKGROUND" -nf "$FOREGROUND" -nfr "$BLUE" \
 -cb "$BACKGROUND" -cf "$RED" -cfr "$RED" &
@@ -140,7 +140,7 @@ dunst \
 xsettingsd &
 
 # polkit agent
-if [[ ! `pidof xfce-polkit` ]]; then
+if [[ -x $(command -v xfce-polkit) ]] && [[ ! `pidof xfce-polkit` ]]; then
     /usr/lib/xfce-polkit/xfce-polkit &
 fi
 
@@ -152,7 +152,9 @@ ksuperkey -e 'Super_L=Alt_L|F1' &
 ksuperkey -e 'Super_R=Alt_L|F1' &
 
 # Enable power management
-xfce4-power-manager &
+if [[ -x $(command -v xfce4-power-manager) ]]; then
+    xfce4-power-manager &
+fi
 
 # Fix cursor
 xsetroot -cursor_name left_ptr
@@ -162,13 +164,6 @@ bash $HOME/.fehbg
 
 # Start mpd
 # exec mpd &
-
-# Start fcitx
-export GTK_IM_MODULE=fcitx
-export QT_IM_MODULE=fcitx
-export XMODIFIERS=@im=fcitx
-
-fcitx-autostart &
 
 # Start bspwm scripts
 bspcolors
