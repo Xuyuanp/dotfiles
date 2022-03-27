@@ -38,8 +38,4 @@ launch_bar() {
 }
 
 # Execute functions
-if [[ ! -f "$RFILE" ]]; then
-    fix_modules
-    touch "$RFILE"
-fi
 launch_bar

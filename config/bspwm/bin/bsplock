@@ -20,6 +20,8 @@ WHITE="$(xrdb -query | grep 'color7:'| awk '{print $NF}')"
 
 TOTD=`fortune -n 90 -s | head -n 1`
 
+GREETER_FONT='Kalam'
+
 ## Exec    -----------------
 i3lock       \
 --color="${BG}D9"                      \
@@ -62,8 +64,8 @@ i3lock       \
 --greeter-pos=ix:iy+230                \
 --{layout,verif,wrong}-size=18 \
 --{time,date,layout,verif,wrong}-font="FiraCode Nerd Font Mono"    \
---greeter-size=68 \
---greeter-font="Adine Kirnberg"    \
+--greeter-size=58 \
+--greeter-font="${GREETER_FONT}"    \
 --verif-text="verifying..." \
 --wrong-text="wrong!"       \
 --noinput-text="Empty"      \
