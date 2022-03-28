@@ -5,17 +5,16 @@
 
 DIR="$HOME/.config/bspwm"
 
-# rofi_command="rofi -theme $DIR/rofi/themes/asroot.rasi"
-rofi_command="rofi -theme $DIR/rofi/themes/powermenu.rasi"
+rofi_command="rofi -i -theme $DIR/rofi/themes/asroot.rasi"
 
 # Apps
-terminal=" Terminal"
-files=" Pcmanfm"
-editor=" Geany"
-clifm=" Ranger"
-lpad=" Leafpad"
-vim=" Neovide"
-nvidia=" Nvidia"
+terminal="  Terminal"
+files="  Pcmanfm"
+editor="  Geany"
+clifm="  Ranger"
+lpad="  Leafpad"
+vim="  Neovide"
+nvidia="  Nvidia"
 
 # Variable passed to rofi
 # options="$terminal\n$files\n$editor\n$clifm\n$lpad\n$vim\n$nvidia"

@@ -14,25 +14,36 @@ get_values() {
     CARD=$(light -L | grep 'backlight' | head -n1 | cut -d'/' -f3)
     BATTERY=$(upower -i `upower -e | grep 'BAT'` | grep 'native-path' | cut -d':' -f2 | tr -d '[:blank:]')
     ADAPTER=$(upower -i `upower -e | grep 'AC'` | grep 'native-path' | cut -d':' -f2 | tr -d '[:blank:]')
+    INTERFACES=$(lshw -class network -json 2>/dev/null)
+    INTERFACE_WIRED=$(echo ${INTERFACES}  | jq '. | map(select(.description == "Ethernet interface")) | .[0]?.logicalname' -r)
+    INTERFACE_WIRELESS=$(echo ${INTERFACES}  | jq '. | map(select(.description == "Wireless interface")) | .[0]?.logicalname' -r)
 }
 
 ## Write values to `system` file
 set_values() {
+    echo '[system]' > $SFILE
+
     if [[ "$ADAPTER" ]]; then
-        sed -i -e "s/adapter = .*/adapter = $ADAPTER/g"                         ${SFILE}
+        echo "adapter = ${ADAPTER}" >> ${SFILE}
     fi
     if [[ "$BATTERY" ]]; then
-        sed -i -e "s/battery = .*/battery = $BATTERY/g"                         ${SFILE}
+        echo "battery = ${BATTERY}" >> ${SFILE}
     fi
     if [[ "$CARD" ]]; then
-        sed -i -e "s/graphics_card = .*/graphics_card = $CARD/g"                ${SFILE}
+        echo "graphics_card = ${CARD}" >> ${SFILE}
+    fi
+
+    if [[ "$INTERFACE_WIRED" ]]; then
+        echo "network_interface_wired = ${INTERFACE_WIRED}" >> ${SFILE}
+    fi
+    if [[ "$INTERFACE_WIRELESS" ]]; then
+        echo "network_interface_wireless = ${INTERFACE_WIRELESS}" >> ${SFILE}
     fi
 }
 
 ## Launch Polybar with selected style
 launch_bar() {
     CARD=$(light -L | grep 'backlight' | head -n1 | cut -d'/' -f3)
-    INTERFACE=$(ip link | awk '/state UP/ {print $2}' | tr -d :)
 
     if [[ ! -f "$MFILE" ]]; then
         if [[ -z "$CARD" ]]; then
@@ -43,9 +54,6 @@ launch_bar() {
 
         touch "$MFILE"
     fi
-
-    export INTERFACE_WIRED=$(lshw -class network -json 2>/dev/null  | jq '. | map(select(.description == "Ethernet interface")) | .[0]?.logicalname' -r)
-    export INTERFACE_WIRELESS=$(lshw -class network -json 2>/dev/null  | jq '. | map(select(.description == "Wireless interface")) | .[0]?.logicalname' -r)
 
     # Terminate already running bar instances
     killall -q polybar
