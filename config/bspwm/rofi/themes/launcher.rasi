@@ -13,7 +13,7 @@ configuration {
 @import "common.rasi"
 
 textbox-prompt-colon {
-    str: "";
+    str: "異";
 }
 
 entry {

@@ -13,7 +13,6 @@ configuration {
 
 textbox-prompt-colon {
     str:  "";
-    font: "FiraCode Nerd Font Mono 10";
 }
 
 entry {
@@ -22,4 +21,8 @@ entry {
 
 window {
     width: 300px;
+}
+
+element-text {
+    font: "feather 10";
 }

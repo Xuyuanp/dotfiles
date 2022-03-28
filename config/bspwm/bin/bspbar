@@ -14,11 +14,23 @@ get_values() {
     CARD=$(light -L | grep 'backlight' | head -n1 | cut -d'/' -f3)
     BATTERY=$(upower -i `upower -e | grep 'BAT'` | grep 'native-path' | cut -d':' -f2 | tr -d '[:blank:]')
     ADAPTER=$(upower -i `upower -e | grep 'AC'` | grep 'native-path' | cut -d':' -f2 | tr -d '[:blank:]')
-    INTERFACE=$(ip link | awk '/state UP/ {print $2}' | tr -d :)
+    INTERFACE_WIRED=$(lshw -class network -json 2>/dev/null  | jq '. | map(select(.description == "Ethernet interface")) | .[0]?.logicalname' -r)
+    INTERFACE_WIRELESS=$(lshw -class network -json 2>/dev/null  | jq '. | map(select(.description == "Wireless interface")) | .[0]?.logicalname' -r)
 }
 
 ## Write values to `system` file
 set_values() {
+    if [[ ! -f "$SFILE" ]]; then
+        cat > $SFILE <<EOF
+[system]
+adapter = AC
+battery = BAT0
+graphics_card = intel_backlight
+network_interface_wired = eth0
+network_interface_wireless = wlan0
+EOF
+    fi
+
     if [[ "$ADAPTER" ]]; then
         sed -i -e "s/adapter = .*/adapter = $ADAPTER/g"                         ${SFILE}
     fi
@@ -28,15 +40,18 @@ set_values() {
     if [[ "$CARD" ]]; then
         sed -i -e "s/graphics_card = .*/graphics_card = $CARD/g"                ${SFILE}
     fi
-    if [[ "$INTERFACE" ]]; then
-        sed -i -e "s/network_interface = .*/network_interface = $INTERFACE/g"   ${SFILE}
+
+    if [[ "$INTERFACE_WIRED" ]]; then
+        sed -i -e "s/network_interface_wired = .*/network_interface_wired = $INTERFACE_WIRED/g"            ${SFILE}
+    fi
+    if [[ "$INTERFACE_WIRELESS" ]]; then
+        sed -i -e "s/network_interface_wireless = .*/network_interface_wireless = $INTERFACE_WIRELESS/g"   ${SFILE}
     fi
 }
 
 ## Launch Polybar with selected style
 launch_bar() {
     CARD=$(light -L | grep 'backlight' | head -n1 | cut -d'/' -f3)
-    INTERFACE=$(ip link | awk '/state UP/ {print $2}' | tr -d :)
 
     if [[ ! -f "$MFILE" ]]; then
         if [[ -z "$CARD" ]]; then
@@ -45,11 +60,11 @@ launch_bar() {
             sed -i -e 's/backlight/brightness/g' "$DIR"/config
         fi
 
-        if [[ "$INTERFACE" == e* ]]; then
-            sed -i -e 's/network/ethernet/g' "$DIR"/config
-        fi
         touch "$MFILE"
     fi
+
+    # export INTERFACE_WIRED=$(lshw -class network -json 2>/dev/null  | jq '. | map(select(.description == "Ethernet interface")) | .[0]?.logicalname' -r)
+    # export INTERFACE_WIRELESS=$(lshw -class network -json 2>/dev/null  | jq '. | map(select(.description == "Wireless interface")) | .[0]?.logicalname' -r)
 
     # Terminate already running bar instances
     killall -q polybar

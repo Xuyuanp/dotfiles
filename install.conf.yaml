@@ -8,12 +8,15 @@
   - git config --global include.path ${PWD}/gitconfig
   - if [ ! -d ~/.config/nvim ]; then git clone https://github.com/Xuyuanp/vimrc ~/.config/nvim; fi
   - cp -R fonts/* ~/.fonts/
+  - fc-cache
 
 - link:
     ~/.tmux.conf: tmux.conf
     ~/.zshrc: zshrc
-    ~/.config/kitty: config/kitty
     ~/.config/bspwm: config/bspwm
+    ~/.config/dunst: config/dunst
+    ~/.config/kitty: config/kitty
+    ~/.config/networkmanager-dmenu: config/networkmanager-dmenu
     ~/.config/sxhkd: config/sxhkd
     ~/.Xresources: config/Xresources
     ~/.Xresources.d: config/Xresources.d

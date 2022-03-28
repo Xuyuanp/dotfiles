@@ -138,13 +138,8 @@ dunst \
 xsettingsd &
 
 # polkit agent
-# if [[ ! `pidof xfce-polkit` ]]; then
-#     /usr/lib/xfce-polkit/xfce-polkit &
-# fi
-
-# start fcitx
-if [[ ! `pidof fcitx5` ]]; then
-    systemctl --user start fcitx.service
+if [[ -x $(command -v xfce-polkit) ]] && [[ ! `pidof xfce-polkit` ]]; then
+    /usr/lib/xfce-polkit/xfce-polkit &
 fi
 
 # Lauch keybindings daemon
@@ -155,7 +150,9 @@ ksuperkey -e 'Super_L=Alt_L|F1' &
 ksuperkey -e 'Super_R=Alt_L|F1' &
 
 # Enable power management
-# xfce4-power-manager &
+if [[ -x $(command -v xfce4-power-manager) ]]; then
+    xfce4-power-manager &
+fi
 
 # Fix cursor
 xsetroot -cursor_name left_ptr
