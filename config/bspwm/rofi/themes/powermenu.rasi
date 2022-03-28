@@ -12,8 +12,7 @@ configuration {
 @import "common.rasi"
 
 textbox-prompt-colon {
-    str: "";
-    font: "feather 10";
+    str: "";
 }
 
 entry {

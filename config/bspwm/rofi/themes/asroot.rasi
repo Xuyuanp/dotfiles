@@ -1,1 +1,29 @@
-powermenu.rasi
+/* Copyright (C) 2020-2021 Aditya Shakya <adi1090x@gmail.com> */
+/* Everyone is permitted to copy and distribute copies of this file under GNU-GPL3 */
+
+configuration {
+    show-icons:                     false;
+    display-drun:                   "";
+    drun-display-format:            "{icon} {name}";
+    disable-history:                false;
+    click-to-exit:                  true;
+}
+
+@import "common.rasi"
+
+textbox-prompt-colon {
+    str: "";
+    font: "feather 10";
+}
+
+entry {
+    placeholder: "Search actions...";
+}
+
+window {
+    width: 300px;
+}
+
+element-text {
+    font: "feather 10";
+}
