@@ -47,15 +47,6 @@ zinit light-mode for \
     hlissner/zsh-autopair \
     skywind3000/z.lua
 
-zinit snippet OMZL::clipboard.zsh
-zinit snippet OMZL::completion.zsh
-zinit snippet OMZL::history.zsh
-zinit snippet OMZP::colored-man-pages
-zinit snippet OMZP::gitignore
-
-zinit ice as"completion"
-zinit snippet OMZP::docker/_docker
-
 zinit light-mode for \
     blockf \
     zsh-users/zsh-completions \
@@ -77,6 +68,15 @@ zinit light junegunn/fzf
 
 zinit ice depth=1
 zinit light romkatv/powerlevel10k
+
+zinit snippet OMZL::clipboard.zsh
+zinit snippet OMZL::completion.zsh
+zinit snippet OMZL::history.zsh
+zinit snippet OMZP::colored-man-pages
+zinit snippet OMZP::gitignore
+
+zinit ice as"completion"
+zinit snippet OMZP::docker/_docker
 
 trace 'zinit'
 
