@@ -71,7 +71,9 @@ return {
             'hrsh7th/cmp-path',
             'hrsh7th/cmp-calc',
             'hrsh7th/cmp-vsnip',
+            'hrsh7th/cmp-cmdline',
             'Saecki/crates.nvim',
+            'petertriho/cmp-git',
         },
         config = function()
             require('dotvim.complete').setup()
