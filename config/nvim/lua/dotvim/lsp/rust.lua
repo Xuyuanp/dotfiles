@@ -16,19 +16,9 @@ function M.setup(server)
 
             executor = require('rust-tools.executors').termopen,
 
-            runnables = {
-                -- whether to use telescope for selection menu or not
-                use_telescope = true,
-
-                -- rest of the opts are forwarded to telescope
-            },
-
-            debuggables = {
-                -- whether to use telescope for selection menu or not
-                use_telescope = true,
-
-                -- rest of the opts are forwarded to telescope
-            },
+            on_initialized = function(status)
+                vim.notify('rust_analyzer started: ' .. status.health, 'INFO')
+            end,
 
             -- These apply to the default RustSetInlayHints command
             inlay_hints = {
@@ -45,6 +35,10 @@ function M.setup(server)
 
                 -- wheter to show parameter hints with the inlay hints or not
                 show_parameter_hints = true,
+
+                -- whether to show variable name before type hints with the inlay hints or not
+                -- default: false
+                show_variable_name = false,
 
                 -- prefix for parameter hints
                 parameter_hints_prefix = '<- ',
