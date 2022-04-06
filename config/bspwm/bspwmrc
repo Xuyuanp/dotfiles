@@ -4,9 +4,13 @@
 ## Everyone is permitted to copy and distribute copies of this file under GNU-GPL3
 
 ## Environtment
-export PATH="${PATH}:$HOME/.config/bspwm/bin"
+DIR="${HOME}/.config/bspwm"
+export PATH="${PATH}:${DIR}/bin"
+CUSTOM_CONF="${DIR}/custom_conf"
 
-autorandr --load default
+if [[ -f "${CUSTOM_CONF}" ]]; then
+    source ${CUSTOM_CONF}
+fi
 
 ## Get colors from .Xresources -------------------------------#
 xrdb ~/.Xresources
@@ -26,7 +30,11 @@ getcolors
 
 ## Configurations --------------------------------------------#
 workspaces() {
-    monitors=$(xrandr -q | grep -w connected | cut -d ' ' -f1 | tac)
+    if [[ "${REVERSE_MONITOR}" == "true" ]]; then
+        monitors=$(xrandr -q | grep -w connected | cut -d ' ' -f1 | tac)
+    else
+        monitors=$(xrandr -q | grep -w connected | cut -d ' ' -f1)
+    fi
     monitors_connected=$(echo $monitors | wc -w)
 
     bspc wm --reorder-monitors $monitors
