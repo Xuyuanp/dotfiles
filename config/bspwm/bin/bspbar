@@ -1,13 +1,9 @@
 #!/usr/bin/env bash
 
-## Copyright (C) 2020-2021 Aditya Shakya <adi1090x@gmail.com>
-## Everyone is permitted to copy and distribute copies of this file under GNU-GPL3
-
 ## Files and Directories
 DIR="$HOME/.config/bspwm/polybar"
 SFILE="$DIR/system.ini"
 RFILE="$DIR/.system"
-MFILE="$DIR/.module"
 
 ## Get system variable values for various modules
 get_values() {
@@ -44,16 +40,19 @@ set_values() {
 ## Launch Polybar with selected style
 launch_bar() {
     CARD=$(light -L | grep 'backlight' | head -n1 | cut -d'/' -f3)
+    BATTERY=$(upower -i `upower -e | grep 'BAT'` | grep 'native-path' | cut -d':' -f2 | tr -d '[:blank:]')
 
-    if [[ ! -f "$MFILE" ]]; then
-        if [[ -z "$CARD" ]]; then
-            sed -i -e 's/backlight/bna/g' "$DIR"/config
-        elif [[ "$CARD" != *"intel_"* ]]; then
-            sed -i -e 's/backlight/brightness/g' "$DIR"/config
-        fi
-
-        touch "$MFILE"
+    declare -a mainbar_right_modules=()
+    if [[ ${CARD} ]]; then
+        mainbar_right_modules+=(backlight)
     fi
+    mainbar_right_modules+=(volume net-wired net-wireless)
+    if [[ ${BATTERY} ]]; then
+        mainbar_right_modules+=(battery)
+    fi
+    seperator=' dot '
+    joined_modules=$(printf "${seperator}%s" ${mainbar_right_modules[@]})
+    export MAINBAR_RIGHT="${joined_modules:${#seperator}} dot-alt LD sysmenu RD"
 
     # Terminate already running bar instances
     killall -q polybar
