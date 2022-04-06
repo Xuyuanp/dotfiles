@@ -39,6 +39,8 @@
 
 	# status
     s = status                        # status
+
+    dft = difftool
 [format]
     pretty = format:%C(blue)%ad%Creset %C(yellow)%h%C(green)%d%Creset %C(blue)%s %C(magenta) [%an]%Creset
 [color]
@@ -58,10 +60,13 @@
 [filter "media"]
     clean = git-media-clean %f
     smudge = git-media-smudge %f
+
 [diff]
-    tool = vimdiff
+    tool = difftastic
 [difftool "vimdiff"]
     cmd = /usr/bin/env vimdiff \"$LOCAL\" \"$REMOTE\"
+[difftool "difftastic"]
+    cmd = difft "$LOCAL" "$REMOTE"
 [difftool]
     prompt = false
 [color]
@@ -70,3 +75,6 @@
     clean = git-lfs clean %f
     smudge = git-lfs smudge %f
     required = true
+
+[pager]
+    difftool = true
