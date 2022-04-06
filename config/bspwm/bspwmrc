@@ -66,69 +66,7 @@ bspc config focus_follows_pointer false
 
 ## Window rules ----------------------------------------------#
 
-# remove all rules first
-bspc rule -r *:*
-
-# 1 > terminal
-# declare -a terms=(kitty Alacritty Xfce4-terminal)
-# for i in ${terms[@]}; do
-#     bspc rule -a $i desktop='^1' follow=on focus=on
-# done
-
-# 2 > web
-# declare -a browsers=(Google-chrome firefox chromium)
-# for i in ${browsers[@]}; do
-#     bspc rule -a $i desktop='^2' follow=on focus=on
-# done
-
-# 3 > files
-# declare -a files=(Pcmanfm Thunar qBittorrent)
-# for i in ${files[@]}; do
-#    bspc rule -a $i desktop='^3' follow=on focus=on;
-# done
-
-# 4 > code
-# declare -a code=(Geany code-oss code)
-# for i in ${code[@]}; do
-#    bspc rule -a $i desktop='^4' follow=on focus=on;
-# done
-
-# 5 > all others
-# declare -a office=(Gucharmap Atril Evince \
-# libreoffice-writer libreoffice-calc libreoffice-impress \
-# libreoffice-startcenter libreoffice Soffice *:libreofficedev *:soffice)
-# for i in ${office[@]}; do
-#    bspc rule -a $i desktop='^5' follow=on focus=on;
-# done
-
-declare -a comm=(Thunderbird TelegramDesktop Hexchat)
-for i in ${comm[@]}; do
-   bspc rule -a $i desktop='^5' follow=on focus=on;
-done
-
-declare -a media=(Audacity Music MPlayer Lxmusic Inkscape Gimp-2.10 obs Netease-cloud-music-gtk Steam)
-for i in ${media[@]}; do
-   bspc rule -a $i desktop='^5' state=floating follow=on focus=on;
-done
-
-bspc rule -a 'VirtualBox Manager' desktop='^5' follow=on focus=on
-bspc rule -a GParted desktop='^5' follow=on focus=on
-declare -a settings=(Lxappearance Lxtask Lxrandr Arandr \
-System-config-printer.py Pavucontrol Exo-helper-1 \
-Xfce4-power-manager-settings)
-for i in ${settings[@]}; do
-   bspc rule -a $i desktop='^5' state=floating follow=on focus=on;
-done
-
-# special rules
-declare -a floating=(alacritty-float Pcmanfm Onboard Yad 'Firefox:Places' \
-Viewnior feh Nm-connection-editor Nvidia-settings zoom)
-for i in ${floating[@]}; do
-   bspc rule -a $i state=floating follow=on focus=on;
-done
-
-bspc rule -a Conky state=floating manage=off
-bspc rule -a stalonetray state=floating manage=off
+source "${DIR}/rules"
 
 ## Autostart -------------------------------------------------#
 
