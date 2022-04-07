@@ -11,6 +11,8 @@ local install_path = std_data_path .. '/site/pack/packer/opt/packer.nvim'
 local compile_path = std_data_path .. '/site/plugin/packer_compiled.vim'
 local packer_repo = 'https://github.com/wbthomason/packer.nvim'
 
+local bootstrap = false
+
 command('silent! packadd packer.nvim')
 local ok, packer = pcall(require, 'packer')
 
@@ -35,20 +37,21 @@ if not ok then
     else
         error('Installed packer.nvim failed:!')
     end
+
+    bootstrap = true
+end
+
+local ok, impatient = pcall(require, 'impatient')
+if ok then
+    impatient.enable_profile()
 end
 
 local M = {}
 
 local function startup_fn(use)
-    use({
-        'lewis6991/impatient.nvim',
-        rocks = 'mpack',
-        config = function()
-            require('impatient')
-        end,
-    })
+    use('lewis6991/impatient.nvim')
 
-    use('wbthomason/packer.nvim')
+    use({ 'wbthomason/packer.nvim', opt = true })
 
     local groups = {
         'dotvim.plugins.base',
@@ -63,6 +66,10 @@ local function startup_fn(use)
         for _, plug in ipairs(require(group)) do
             use(plug)
         end
+    end
+
+    if bootstrap then
+        packer.sync()
     end
 
     if vfn.empty(vfn.glob(compile_path)) > 0 then
