@@ -89,6 +89,12 @@ local function show_lens()
         return
     end
 
+    if bufnr ~= api.nvim_get_current_buf() then
+        return
+    end
+
+    api.nvim_buf_clear_namespace(bufnr, ns_id, 0, -1)
+
     api.nvim_buf_set_extmark(bufnr, ns_id, cursor[1] - 1, 0, {
         virt_text = { { text, 'GitLens' } },
         hl_mode = 'combine',
