@@ -37,7 +37,7 @@ workspaces() {
     fi
     monitors_connected=$(echo $monitors | wc -w)
 
-    bspc wm --reorder-monitors $monitors
+    bspc wm --reset-monitors $monitors
 
     start_from=1
     per_monitor=$((10 / monitors_connected))
