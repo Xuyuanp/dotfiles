@@ -10,9 +10,6 @@ get_values() {
     CARD=$(light -L | grep 'backlight' | head -n1 | cut -d'/' -f3)
     BATTERY=$(upower -i `upower -e | grep 'BAT'` | grep 'native-path' | cut -d':' -f2 | tr -d '[:blank:]')
     ADAPTER=$(upower -i `upower -e | grep 'AC'` | grep 'native-path' | cut -d':' -f2 | tr -d '[:blank:]')
-    INTERFACES=$(lshw -class network -json 2>/dev/null)
-    INTERFACE_WIRED=$(echo ${INTERFACES}  | jq '. | map(select(.description == "Ethernet interface")) | .[0]?.logicalname' -r)
-    INTERFACE_WIRELESS=$(echo ${INTERFACES}  | jq '. | map(select(.description == "Wireless interface")) | .[0]?.logicalname' -r)
 }
 
 ## Write values to `system` file
@@ -27,13 +24,6 @@ set_values() {
     fi
     if [[ "$CARD" ]]; then
         echo "graphics_card = ${CARD}" >> ${SFILE}
-    fi
-
-    if [[ "$INTERFACE_WIRED" ]]; then
-        echo "network_interface_wired = ${INTERFACE_WIRED}" >> ${SFILE}
-    fi
-    if [[ "$INTERFACE_WIRELESS" ]]; then
-        echo "network_interface_wireless = ${INTERFACE_WIRELESS}" >> ${SFILE}
     fi
 }
 
