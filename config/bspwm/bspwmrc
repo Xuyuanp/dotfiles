@@ -37,7 +37,7 @@ workspaces() {
     fi
     monitors_connected=$(echo $monitors | wc -w)
 
-    bspc wm --reset-monitors $monitors
+    bspc wm --reorder-monitors $monitors
 
     start_from=1
     per_monitor=$((10 / monitors_connected))
@@ -81,7 +81,9 @@ dunst \
 -cb "$BACKGROUND" -cf "$RED" -cfr "$RED" &
 
 # Lauch xsettingsd daemon
-xsettingsd &
+if [[ -x $(command -v xsettingsd) ]]; then
+    xsettingsd &
+fi
 
 # polkit agent
 if [[ -x $(command -v xfce-polkit) ]] && [[ ! `pidof xfce-polkit` ]]; then
@@ -92,8 +94,10 @@ fi
 sxhkd &
 
 # Enable Super Keys For Menu
-ksuperkey -e 'Super_L=Alt_L|F1' &
-ksuperkey -e 'Super_R=Alt_L|F1' &
+if [[ -x $(command -v ksuperkey) ]]; then
+    ksuperkey -e 'Super_L=Alt_L|F1' &
+    ksuperkey -e 'Super_R=Alt_L|F1' &
+fi
 
 # Enable power management
 if [[ -x $(command -v xfce4-power-manager) ]]; then
