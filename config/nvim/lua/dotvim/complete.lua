@@ -83,7 +83,6 @@ function M.setup()
             { name = 'path' },
             { name = 'tmux', keyword_length = 5 },
             { name = 'calc' },
-            { name = 'crates' },
         }, {
             { name = 'vsnip' },
         }),
@@ -130,6 +129,19 @@ function M.setup()
             { name = 'vsnip' },
         }),
     })
+
+    local crates = vim.F.npcall(require, 'crates')
+    if crates then
+        crates.setup()
+        cmp.setup.filetype('toml', {
+            sources = cmp.config.sources({
+                { name = 'crates' },
+            }, {
+                { name = 'buffer' },
+                { name = 'vsnip' },
+            }),
+        })
+    end
 
     local autopair_cmp = vim.F.npcall(require, 'nvim-autopairs.completion.cmp')
     if autopair_cmp then
