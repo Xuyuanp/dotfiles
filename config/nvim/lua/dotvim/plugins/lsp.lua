@@ -25,16 +25,12 @@ return {
                 hint_enable = false,
                 use_lspsaga = false,
                 handler_opts = {
-                    border = 'single',
+                    border = 'rounded',
                 },
             })
         end,
     },
 
-    {
-        'nvim-lua/lsp_extensions.nvim',
-        requires = { 'lspconfig' },
-    },
 
     {
         'nvim-lua/lsp-status.nvim',

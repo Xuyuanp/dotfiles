@@ -17,12 +17,6 @@ function M.setup()
         local kind2 = entry2:get_kind()
         kind2 = kind2 == types.lsp.CompletionItemKind.Text and 100 or kind2
         if kind1 ~= kind2 then
-            -- if kind1 == types.lsp.CompletionItemKind.Snippet then
-            --     return true
-            -- end
-            -- if kind2 == types.lsp.CompletionItemKind.Snippet then
-            --     return false
-            -- end
             local diff = kind1 - kind2
             if diff < 0 then
                 return true
@@ -31,8 +25,6 @@ function M.setup()
             end
         end
     end
-
-    local WIDE_HEIGHT = 80
 
     cmp.setup({
         snippet = {
@@ -68,12 +60,12 @@ function M.setup()
                 end
             end,
         },
-        documentation = {
-            border = 'single',
-            winhighlight = 'NormalFloat:NormalFloat,FloatBorder:NormalFloat',
-            maxwidth = math.floor((WIDE_HEIGHT * 2) * (vim.o.columns / (WIDE_HEIGHT * 2 * 16 / 9))),
-            maxheight = math.floor(WIDE_HEIGHT * (WIDE_HEIGHT / vim.o.lines)),
-            zindex = 50,
+        window = {
+            documentation = {
+                border = 'rounded',
+                winhighlight = 'Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:Visual,Search:None',
+                zindex = 1001,
+            },
         },
         formatting = {
             format = (function()
