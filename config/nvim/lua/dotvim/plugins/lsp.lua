@@ -31,7 +31,6 @@ return {
         end,
     },
 
-
     {
         'nvim-lua/lsp-status.nvim',
         before = {
