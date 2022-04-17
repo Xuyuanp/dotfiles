@@ -71,10 +71,6 @@ local function startup_fn(use)
     if bootstrap then
         packer.sync()
     end
-
-    if vfn.empty(vfn.glob(compile_path)) > 0 then
-        packer.compile()
-    end
 end
 
 function M.setup()
