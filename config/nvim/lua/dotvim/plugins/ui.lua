@@ -167,7 +167,6 @@ return {
 
     {
         'nvim-treesitter/nvim-treesitter',
-        -- branch = '0.5-compat',
         requires = {
             'nvim-treesitter/playground',
             'romgrk/nvim-treesitter-context',
@@ -175,12 +174,36 @@ return {
         },
         run = ':TSUpdate',
         config = function()
-            require('dotvim.treesitter')
+            require('dotvim.treesitter').setup()
         end,
     },
 
     {
         'haringsrob/nvim_context_vt',
+        requires = { 'nvim-treesitter/nvim-treesitter' },
+        config = function()
+            require('nvim_context_vt').setup({
+                -- Enable by default. You can disable and use :NvimContextVtToggle to maually enable.
+                -- Default: true
+                enabled = true,
+
+                -- Disable virtual text for given filetypes
+                -- Default: { 'markdown' }
+                disable_ft = { 'markdown' },
+
+                -- Disable display of virtual text below blocks for indentation based languages like Python
+                -- Default: false
+                disable_virtual_lines = false,
+
+                -- Same as above but only for spesific filetypes
+                -- Default: {}
+                disable_virtual_lines_ft = { 'yaml', 'python' },
+
+                -- How many lines required after starting position to show virtual text
+                -- Default: 1 (equals two lines total)
+                min_rows = 80,
+            })
+        end,
     },
 
     {
