@@ -110,15 +110,18 @@ function M.setup()
         },
     })
 
-    cmp.setup.filetype('gitcommit', {
-        sources = cmp.config.sources({
-            { name = 'cmp_git' },
-        }, {
-            { name = 'buffer' },
-            { name = 'vsnip' },
-        }),
-    })
-    require('cmp_git').setup()
+    local cmp_git = vim.F.npcall(require, 'cmp_git')
+    if cmp_git then
+        cmp_git.setup()
+        cmp.setup.filetype('gitcommit', {
+            sources = cmp.config.sources({
+                { name = 'cmp_git' },
+            }, {
+                { name = 'buffer' },
+                { name = 'vsnip' },
+            }),
+        })
+    end
 
     cmp.setup.filetype('lua', {
         sources = cmp.config.sources({
