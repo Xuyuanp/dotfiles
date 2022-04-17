@@ -1,6 +1,11 @@
 local vfn = vim.fn
 local command = vim.api.nvim_command
 
+local ok, impatient = pcall(require, 'impatient')
+if ok then
+    impatient.enable_profile()
+end
+
 if vfn.has('osx') then
     vfn.setenv('MACOSX_DEPLOYMENT_TARGET', '10.8')
 end
@@ -39,11 +44,6 @@ if not ok then
     end
 
     bootstrap = true
-end
-
-local ok, impatient = pcall(require, 'impatient')
-if ok then
-    impatient.enable_profile()
 end
 
 local M = {}
@@ -90,6 +90,7 @@ function M.setup()
                 open_fn = function()
                     return require('packer.util').float({ border = 'rounded' })
                 end,
+                prompt_border = 'rounded',
             },
         },
     })
