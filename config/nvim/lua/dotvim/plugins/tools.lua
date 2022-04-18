@@ -42,7 +42,12 @@ return {
         'bronson/vim-trailing-whitespace',
         config = function()
             vim.api.nvim_set_keymap('n', '<leader><space>', ':FixWhitespace<CR>', { noremap = true, silent = true })
-            vim.cmd([[autocmd BufWritePre * silent! FixWhitespace]])
+
+            vim.api.nvim_create_autocmd('BufWritePre', {
+                group = vim.api.nvim_create_augroup('dotvim_fix_whitespaces', { clear = true }),
+                pattern = '*',
+                command = 'FixWhitespace',
+            })
         end,
     },
 
@@ -117,17 +122,14 @@ return {
         config = function()
             vim.notify = require('notify')
 
-            _G.dotvim_reset_notify_colors = function()
-                package.loaded['notify.config.highlights'] = nil
-                require('notify.config.highlights')
-            end
-
-            vim.cmd([[
-            augroup dotvim_notify
-                autocmd!
-                autocmd ColorScheme * lua dotvim_reset_notify_colors()
-            augroup END
-            ]])
+            vim.api.nvim_create_autocmd({ 'ColorScheme' }, {
+                group = vim.api.nvim_create_augroup('dotvim_notify', { clear = true }),
+                pattern = '*',
+                callback = function()
+                    package.loaded['notify.config.highlights'] = nil
+                    require('notify.config.highlights')
+                end,
+            })
         end,
     },
 

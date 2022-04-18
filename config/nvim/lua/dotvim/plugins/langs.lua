@@ -150,13 +150,17 @@ return {
     {
         'towolf/vim-helm',
         config = function()
-            vim.cmd([[
-            augroup dotvim_helm
-                autocmd!
-                autocmd BufReadPre _helpers.tpl setlocal nomodeline
-                autocmd BufReadPost _helpers.tpl set filetype=helm
-            augroup END
-            ]])
+            local group_id = vim.api.nvim_create_augroup('dotvim_helm', { clear = true })
+            vim.api.nvim_create_autocmd({ 'BufReadPre' }, {
+                group = group_id,
+                pattern = '_helpers.tpl',
+                command = 'setlocal nomodeline',
+            })
+            vim.api.nvim_create_autocmd({ 'BufReadPost' }, {
+                group = group_id,
+                pattern = '_helpers.tpl',
+                command = 'set filetype=helm',
+            })
         end,
     },
 

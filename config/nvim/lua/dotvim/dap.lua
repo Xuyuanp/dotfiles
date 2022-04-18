@@ -157,12 +157,14 @@ function ui.setup()
         dapui.close()
     end
 
-    vim.cmd([[
-        augroup dotvim_dap_ui
-            autocmd!
-            autocmd ColorScheme * silent! lua require('dapui.config.highlights').setup()
-        augroup END
-    ]])
+    vim.api.nvim_create_autocmd({ 'ColorScheme' }, {
+        group = vim.api.nvim_create_augroup('dotvim_dap_ui', { clear = true }),
+        desc = 'Auto setup highlights of dap ui',
+        pattern = { '*' },
+        callback = function()
+            require('dapui.config.highlights').setup()
+        end,
+    })
 end
 
 M.ui = ui

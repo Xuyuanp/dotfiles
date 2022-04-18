@@ -85,20 +85,19 @@ function M.update()
 end
 
 function M.enable_auto_update()
-    vim.cmd([[
-    augroup dotvim_colorscheme
-        autocmd!
-        autocmd ColorScheme * lua require('dotvim.colors').update()
-    augroup END
-    ]])
+    local group_id = vim.api.nvim_create_augroup('dotvim_colorscheme', { clear = true })
+    vim.api.nvim_create_autocmd({ 'ColorScheme' }, {
+        group = group_id,
+        desc = 'Auto update colorscheme',
+        pattern = { '*' },
+        callback = function()
+            require('dotvim.colors').update()
+        end,
+    })
 end
 
 function M.disable_auto_update()
-    vim.cmd([[
-    augroup dotvim_colorscheme
-        autocmd!
-    augroup END
-    ]])
+    vim.api.nvim_create_augroup('dotvim_colorscheme', { clear = true })
 end
 
 return M

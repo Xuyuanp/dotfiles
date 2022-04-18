@@ -102,8 +102,20 @@ function M.floating_window(bufnr)
     }
     local winnr = api.nvim_open_win(bufnr, true, win_opts)
 
-    api.nvim_command(string.format([[autocmd BufWipeout <buffer> execute "silent bwipeout! %d"]], border_bufnr))
-    api.nvim_command(string.format([[autocmd WinClosed  <buffer> execute "%dwincmd w" | execute "%dwincmd w"]], altwinnr_bak, winnr_bak))
+    api.nvim_create_autocmd({ 'BufWipeout' }, {
+        buffer = bufnr,
+        callback = function()
+            vim.cmd(string.format([[silent bwipeout! %d]], border_bufnr))
+        end,
+    })
+    api.nvim_create_autocmd({ 'WinClosed' }, {
+        buffer = bufnr,
+        callback = function()
+            print('fuck')
+            vim.cmd(string.format([[%dwincmd w]], altwinnr_bak))
+            vim.cmd(string.format([[%dwincmd w]], winnr_bak))
+        end,
+    })
 
     api.nvim_buf_set_keymap(bufnr, 'n', 'q', ':q<CR>', { nowait = true, noremap = false, silent = false })
     api.nvim_buf_set_keymap(bufnr, 'n', '<ESC><ESC>', ':q<CR>', { nowait = true, noremap = false, silent = false })

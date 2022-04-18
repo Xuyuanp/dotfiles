@@ -21,8 +21,22 @@ return {
             local execute = vim.api.nvim_command
 
             execute([[ nmap <C-e> :YanilToggle<CR> ]])
-            execute([[ autocmd BufEnter Yanil if len(nvim_list_wins()) == 1 | q | endif ]])
-            execute([[ autocmd FocusGained * lua require('yanil/git').update() ]])
+
+            local group_id = vim.api.nvim_create_augroup('dotvim_yanil', { clear = true })
+            vim.api.nvim_create_autocmd({ 'BufEnter' }, {
+                group = group_id,
+                desc = 'Auto quit yanil',
+                pattern = { 'Yanil' },
+                command = 'if len(nvim_list_wins()) ==1 | q | endif',
+            })
+            vim.api.nvim_create_autocmd({ 'FocusGained' }, {
+                group = group_id,
+                desc = 'Auto refresh git status of yanil',
+                pattern = { '*' },
+                callback = function()
+                    require('yanil/git').update()
+                end,
+            })
         end,
     },
 
@@ -87,14 +101,24 @@ return {
                 tail = '⍒',
             }
 
-            local execute = vim.api.nvim_command
+            local group_id = vim.api.nvim_create_augroup('dotvim_scrollbar', { clear = true })
 
-            require('dotvim.util').Augroup('dotvim_scrollbar', function()
-                execute([[ autocmd BufEnter * silent! lua require('scrollbar').show() ]])
-                execute([[ autocmd BufLeave * silent! lua require('scrollbar').clear() ]])
-                execute([[ autocmd WinScrolled * silent! lua require('scrollbar').show() ]])
-                execute([[ autocmd VimResized  * silent! lua require('scrollbar').show() ]])
-            end)
+            vim.api.nvim_create_autocmd({ 'BufEnter', 'WinScrolled', 'VimResized' }, {
+                group = group_id,
+                desc = 'Show or refresh scrollbar',
+                pattern = { '*' },
+                callback = function()
+                    require('scrollbar').show()
+                end,
+            })
+            vim.api.nvim_create_autocmd({ 'BufLeave' }, {
+                group = group_id,
+                desc = 'Clear scrollbar',
+                pattern = { '*' },
+                callback = function()
+                    require('scrollbar').clear()
+                end,
+            })
         end,
     },
 
@@ -296,12 +320,16 @@ return {
             set_keymap('n', '<leader>S', ':lua require("spectre").open()<CR>', opts)
             set_keymap('n', '<leader>Sc', 'viw:lua require("spectre").open_file_search()<CR>', opts)
 
-            vim.cmd([[
-            augroup dotvim_spectre
-                autocmd!
-                autocmd FileType spectre_panel setlocal nofoldenable | nnoremap <buffer>q <cmd>q<CR>
-            augroup END
-            ]])
+            local group_id = vim.api.nvim_create_augroup('dotvim_spectre', { clear = true })
+
+            vim.api.nvim_create_autocmd({ 'FileType' }, {
+                group = group_id,
+                pattern = { 'spectre_panel' },
+                callback = function()
+                    vim.cmd('setlocal nofoldenable')
+                    vim.keymap.set('n', 'q', '<cmd>q<cr>', { silent = true, buffer = true })
+                end,
+            })
         end,
     },
 

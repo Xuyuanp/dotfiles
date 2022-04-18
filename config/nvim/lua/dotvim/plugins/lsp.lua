@@ -153,13 +153,14 @@ return {
             lint.linters_by_ft.vim = { 'vint' }
             -- lint.linters_by_ft.python = { 'pylint', 'flake8' }
 
-            vim.cmd([[
-            augroup dotvim_lint
-                autocmd!
-                autocmd BufWritePost * lua require('lint').try_lint()
-                autocmd InsertLeave * lua require('lint').try_lint()
-            augroup END
-            ]])
+            local group_id = vim.api.nvim_create_augroup('dotvim_lint', { clear = true })
+            vim.api.nvim_create_autocmd({ 'InsertLeave', 'BufWritePost' }, {
+                group = group_id,
+                pattern = '*',
+                callback = function()
+                    require('lint').try_lint()
+                end,
+            })
         end,
     },
 }

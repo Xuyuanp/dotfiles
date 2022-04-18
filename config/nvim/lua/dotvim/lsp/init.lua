@@ -3,7 +3,6 @@ local api = vim.api
 local vfn = vim.fn
 
 local handlers = require('dotvim.lsp.handlers')
-local util = require('dotvim.util')
 local dotcolors = require('dotvim.colors')
 
 local lsp_status = require('lsp-status')
@@ -27,10 +26,21 @@ local on_attach = function(client, bufnr)
     end
 
     if server_capabilities.documentHighlightProvider and client.name ~= 'rust_analyzer' then
-        util.Augroup('dotvim_lsp_init_on_attach', function()
-            api.nvim_command(string.format('autocmd CursorHold <buffer=%d> lua vim.lsp.buf.document_highlight()', bufnr))
-            api.nvim_command(string.format('autocmd CursorMoved <buffer=%d> lua vim.lsp.buf.clear_references()', bufnr))
-        end)
+        local group_id = api.nvim_create_augroup('dotvim_lsp_init_on_attach', { clear = true })
+        api.nvim_create_autocmd({ 'CursorHold' }, {
+            group = group_id,
+            buffer = bufnr,
+            callback = function()
+                vim.lsp.buf.document_highlight()
+            end,
+        })
+        api.nvim_create_autocmd({ 'CursorMoved' }, {
+            group = group_id,
+            buffer = bufnr,
+            callback = function()
+                vim.lsp.buf.clear_references()
+            end,
+        })
     end
 
     local buf_set_keymap = api.nvim_buf_set_keymap

@@ -47,13 +47,4 @@ return {
             set_keymap('n', '<A-m>', ':Commands<CR>', { silent = true, noremap = true })
         end,
     },
-
-    {
-        'kyazdani42/nvim-web-devicons',
-        as = 'devicons',
-        disable = true,
-        config = function()
-            vim.api.nvim_command([[ autocmd ColorScheme * lua require('nvim-web-devicons').setup() ]])
-        end,
-    },
 }
