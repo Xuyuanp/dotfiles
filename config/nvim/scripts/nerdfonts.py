@@ -13,15 +13,8 @@ def main():
         col.find('div', attrs={'class': 'class-name'}).text,
     ) for col in columns]
 
-    print('-- stylua: ignore')
-    print('return {')
     for code, name in icons:
-        print('   {')
-        print(f"        code = '{code}',")
-        print(f"        icon = '{chr(int(code, 16))}',")
-        print(f"        name = '{name}',")
-        print('   },')
-    print('}')
+        print(f'{code} {chr(int(code, 16))} {name}')
 
 
 if __name__ == "__main__":

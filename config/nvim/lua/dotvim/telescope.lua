@@ -21,19 +21,27 @@ function M.setup()
 end
 
 M.nerdfonts = a.wrap(function()
-    local items = require('dotvim.util.nerdfonts')
+    local uv = a.uv()
+
+    local path = vim.fn.stdpath('config') .. '/lua/dotvim/util/nerdfonts.txt'
+    local err, data = uv.read_file(path)
+    assert(not err, err)
+
+    local items = vim.split(data, '\n')
+
+    a.schedule().await()
 
     local item = a.ui.select(items, {
         prompt = 'Pick icon',
-        format_item = function(item)
-            return string.format('%s %s %s', item.icon, item.code, item.name)
-        end,
     }).await()
 
     if not item then
         return
     end
-    vim.fn.setreg(vim.v.register, item.icon)
+
+    local fields = vim.split(item, ' ')
+    local ICON = 2
+    vim.fn.setreg(vim.v.register, fields[ICON])
 end)
 
 return M

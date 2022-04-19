@@ -16,13 +16,6 @@ M.fzf_wrap = function(name, spec, fullscreen)
     return wrapped
 end
 
-function M.Augroup(group, fn)
-    api.nvim_command('augroup ' .. group)
-    api.nvim_command('autocmd!')
-    fn()
-    api.nvim_command('augroup end')
-end
-
 local border_symbols = {
     vertical = '┃',
     horizontal = '━',

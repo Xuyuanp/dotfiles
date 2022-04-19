@@ -135,9 +135,6 @@ function M.setup()
     -- Set completeopt to have a better completion experience
     vim.o.completeopt = 'menuone,noinsert,noselect'
 
-    vim.g.python3_host_prog = vim.env.HOME .. '/.pyenv/versions/neovim3/bin/python'
-    vim.g.loaded_python_provider = false
-
     if vim.fn.has('gui') then
         vim.o.guifont = 'FiraCode Nerd Font Mono:h13'
 
@@ -147,7 +144,9 @@ function M.setup()
         vim.g.neovide_cursor_antialiasing = true
     end
 
-    vim.cmd([[ command! Nerdfonts lua require('dotvim.telescope').nerdfonts() ]])
+    vim.api.nvim_create_user_command('Nerdfonts', function()
+        require('dotvim.telescope').nerdfonts()
+    end, {})
 end
 
 return M

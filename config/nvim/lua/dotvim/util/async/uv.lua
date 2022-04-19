@@ -151,34 +151,57 @@ local simple_job_plenary = a.async(function(opts, callback)
     require('plenary.job'):new(job_desc):start()
 end)
 
-if pcall(require, 'plenary.job') then
-    M.simple_job = simple_job_plenary
-else
-    vim.notify('[dotvim.util.async.uv] plenary not found, using native job', 'DEBUG')
-    M.simple_job = simple_job_native
+function M.simple_job(opts)
+    if pcall(require, 'plenary.job') then
+        return simple_job_plenary(opts)
+    else
+        vim.notify_once('[dotvim.util.async.uv] plenary not found, using native job', 'DEBUG')
+        return simple_job_native(opts)
+    end
+end
+
+function M.read_file(path)
+    local err, fd = M.fs_open(path, 'r', 438).await()
+    if err then
+        return err
+    end
+
+    local err, stat = M.fs_fstat(fd).await()
+    if err then
+        M.fs_close(fd).await()
+        return err
+    end
+
+    local err, data = M.fs_read(fd, stat.size, 0).await()
+    if err then
+        M.fs_close(fd).await()
+        return err
+    end
+
+    M.fs_close(fd).await()
+
+    return nil, data
 end
 
 -- require('dotvim.util.async.uv').example_read_file('/path/to/file')
 M.example_read_file = a.wrap(function(path)
-    local auv = require('dotvim.util.async.uv')
+    local start = M.now() -- call sync function
 
-    local start = auv.now() -- call sync function
-
-    local err, fd = auv.fs_open(path, 'r', 438).await()
+    local err, fd = M.fs_open(path, 'r', 438).await()
     assert(not err, err)
 
-    local err, stat = auv.fs_fstat(fd).await()
+    local err, stat = M.fs_fstat(fd).await()
     assert(not err, err)
 
-    local err, data = auv.fs_read(fd, stat.size, 0).await()
+    local err, data = M.fs_read(fd, stat.size, 0).await()
     assert(not err, err)
 
     print(data)
 
-    local err = auv.fs_close(fd).await()
+    local err = M.fs_close(fd).await()
     assert(not err, err)
 
-    print('cost: ', auv.now() - start, 'ms')
+    print('cost: ', M.now() - start, 'ms')
 end)
 
 return setmetatable(M, {
