@@ -48,10 +48,12 @@ end
 
 local M = {}
 
-local function startup_fn(use)
+local function startup_fn(use, use_rocks)
     use('lewis6991/impatient.nvim')
 
     use({ 'wbthomason/packer.nvim', opt = true })
+
+    use_rocks({ 'lyaml', server = 'http://rocks.moonscript.org ' })
 
     local groups = {
         'dotvim.plugins.base',
