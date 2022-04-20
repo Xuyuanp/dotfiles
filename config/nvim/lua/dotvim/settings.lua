@@ -145,7 +145,7 @@ function M.setup()
     end
 
     vim.api.nvim_create_user_command('Nerdfonts', function()
-        require('dotvim.telescope').nerdfonts()
+        require('dotvim.util.nerdfonts').pick()
     end, {})
 end
 
