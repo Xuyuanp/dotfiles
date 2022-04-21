@@ -146,11 +146,11 @@ function M.setup()
         })
     end
 
-    cmp.register_source('helm', require('dotvim.cmp.helm'))
+    cmp.register_source('helm', require('dotvim.complete.helm').new())
     cmp.setup.filetype('helm', {
         sources = cmp.config.sources({
-            { name = 'helm' }
-        })
+            { name = 'helm' },
+        }),
     })
 
     local autopair_cmp = vim.F.npcall(require, 'nvim-autopairs.completion.cmp')
