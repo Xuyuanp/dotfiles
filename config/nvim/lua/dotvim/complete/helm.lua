@@ -4,6 +4,8 @@ local api = a.api
 
 local yaml = require('lyaml')
 
+local types_lsp = require('cmp.types.lsp')
+
 local Chart = {}
 
 function Chart.new(root)
@@ -109,8 +111,8 @@ source.complete = a.wrap(function(self, params, callback)
 
     if prefix == '.' then
         callback({
-            { label = 'Values' },
-            { label = 'Chart' },
+            { label = 'Values', kind = types_lsp.CompletionItemKind.Module },
+            { label = 'Chart', kind = types_lsp.CompletionItemKind.Module },
         })
         return
     end
@@ -120,8 +122,21 @@ source.complete = a.wrap(function(self, params, callback)
     if type(obj) == 'table' then
         if not vim.tbl_islist(obj) then
             local items = {}
-            for key, _ in pairs(obj) do
-                table.insert(items, { label = key })
+            for key, value in pairs(obj) do
+                table.insert(items, {
+                    label = key,
+                    kind = types_lsp.CompletionItemKind.Field,
+                    documentation = {
+                        value = (function()
+                            if type(value) == 'table' then
+                                local markdown = string.format('```yaml\n%s\n```', yaml.dump({ value }))
+                                return markdown
+                            end
+                            return tostring(value)
+                        end)(),
+                        kind = types_lsp.MarkupKind.Markdown,
+                    },
+                })
             end
             callback(items)
             return
