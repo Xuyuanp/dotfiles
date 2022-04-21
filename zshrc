@@ -105,6 +105,7 @@ _exists less    && alias more='less'
 _exists kubectl && alias kubesys='kubectl --namespace kube-system'
 _exists ag      && alias grep='ag'
 _exists rg      && alias grep='rg'
+_exists curlie  && alias curl=curlie
 export DIRENV_LOG_FORMAT=
 _exists direnv  && eval "$(direnv hook zsh)"
 
