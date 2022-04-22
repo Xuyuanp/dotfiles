@@ -2,22 +2,67 @@ local a = require('dotvim.util.async')
 local uv = a.uv()
 local api = a.api
 
-local yaml = require('lyaml')
+local singleflight = require('dotvim.util.singleflight')
 
+local yaml = require('lyaml')
 local types_lsp = require('cmp.types.lsp')
+local notify = vim.F.npcall(require, 'notify') or vim.notify
 
 local Chart = {}
 
-function Chart.new(root)
-    local chart = setmetatable({ root = root }, { __index = Chart })
-    chart:load()
+function Chart.new(opt)
+    local chart = setmetatable(opt, { __index = Chart })
+    chart:init()
     return chart
+end
+
+function Chart:init()
+    self.singleflight = singleflight.new()
+    self:load()
+end
+
+function Chart:watch_file(path, callback)
+    local watcher = uv.new_fs_event()
+    watcher:start(path, {}, function(err, _filename, events)
+        if err then
+            notify(string.format('watching file %s failed: %s', path, tostring(err)), 'ERROR')
+            watcher:stop()
+            return
+        end
+        if events.change then
+            self.singleflight:run(path, function()
+                callback(path)
+            end)
+        end
+    end)
 end
 
 local function load_yaml(path)
     local err, data = uv.read_file(path)
     assert(not err, err)
-    return yaml.load(data)
+
+    local ok, res_or_err = pcall(yaml.load, data)
+    if not ok then
+        notify(tostring(res_or_err), 'WARN', {
+            title = 'load yaml ' .. path .. ' failed',
+        })
+        return
+    end
+    return res_or_err
+end
+
+function Chart:load_values(path)
+    local res = load_yaml(path)
+    if res then
+        self.values = res
+    end
+end
+
+function Chart:load_meta(path)
+    local res = load_yaml(path)
+    if res then
+        self.meta = res
+    end
 end
 
 function Chart:load()
@@ -25,16 +70,27 @@ function Chart:load()
     local chart_file = self.root .. '/Chart.yaml'
     local values_file = self.root .. '/values.yaml'
 
-    self.values = load_yaml(values_file)
-    self.meta = load_yaml(chart_file)
+    self:load_meta(chart_file)
+    self:load_values(values_file)
+
+    if self.watch then
+        self:watch_file(chart_file, function(filename)
+            notify('reloading file ' .. filename)
+            self:load_meta(filename)
+        end)
+        self:watch_file(values_file, function(filename)
+            notify('reloading file ' .. filename)
+            self:load_values(filename)
+        end)
+    end
 end
 
 function Chart:complete(prefix)
     local obj
 
-    if vim.startswith(prefix, '.Values.') then
+    if vim.startswith(prefix, '.Values.') or vim.startswith(prefix, '$.Values.') then
         obj = self.values
-    elseif vim.startswith(prefix, '.Chart.') then
+    elseif vim.startswith(prefix, '.Chart.') or vim.startswith(prefix, '$.Chart.') then
         obj = self.meta
     else
         return
@@ -73,7 +129,10 @@ function source.new()
     local self = setmetatable({
         charts = setmetatable({}, {
             __index = function(t, root)
-                t[root] = Chart.new(root)
+                t[root] = Chart.new({
+                    root = root,
+                    watch = true,
+                })
                 return t[root]
             end,
         }),
@@ -109,7 +168,7 @@ source.complete = a.wrap(function(self, params, callback)
 
     local prefix = get_prefix(ctx.cursor_before_line)
 
-    if prefix == '.' then
+    if prefix == '.' or prefix == '$.' then
         callback({
             { label = 'Values', kind = types_lsp.CompletionItemKind.Module },
             { label = 'Chart', kind = types_lsp.CompletionItemKind.Module },
