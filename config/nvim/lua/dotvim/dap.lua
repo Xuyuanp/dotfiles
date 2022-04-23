@@ -60,40 +60,47 @@ end
 function M.setup()
     setup_go()
 
-    local set_keymap = vim.api.nvim_set_keymap
     local sign_define = vim.fn.sign_define
 
-    _G.dotvim_dap_close = function()
+    local function close_dap()
         local dap = require('dap')
         dap.disconnect()
         dap.close()
-        local ok, ui = pcall(require, 'dapui')
-        if ok then
+        local ui = vim.F.npcall(require, 'dapui')
+        if ui then
             ui.close()
         end
-        local ok1, vt = pcall(require, 'nvim-dap-virtual-text.virtual_text')
-        if ok1 then
+        local vt = vim.F.npcall(require, 'nvim-dap-virtual-text.virtual_text')
+        if vt then
             vt.clear_virtual_text()
         end
     end
 
+    local dap = require('dap')
+
     local km_opts = { noremap = false, silent = true }
 
-    set_keymap('n', '<F5>', "<cmd>lua require('dap').continue()<CR>", km_opts)
-    set_keymap('n', '<F6>', "<cmd>lua require('dap').run_to_cursor()<CR>", km_opts)
-    set_keymap('n', '<F9>', '<cmd>lua dotvim_dap_close()<CR>', km_opts)
-    set_keymap('n', '<F10>', "<cmd>lua require('dap').step_over()<CR>", km_opts)
-    set_keymap('n', '<F11>', "<cmd>lua require('dap').step_into()<CR>", km_opts)
-    set_keymap('n', '<F12>', "<cmd>lua require('dap').step_out()<CR>", km_opts)
-    set_keymap('n', '<leader>b', "<cmd>lua require('dap').toggle_breakpoint()<CR>", km_opts)
+    local set_keymap = vim.keymap.set
+    set_keymap('n', '<F5>', dap.continue, km_opts)
+    set_keymap('n', '<F6>', dap.run_to_cursor, km_opts)
+    set_keymap('n', '<F9>', close_dap, km_opts)
+    set_keymap('n', '<F10>', dap.step_over, km_opts)
+    set_keymap('n', '<F11>', dap.step_into, km_opts)
+    set_keymap('n', '<F12>', dap.step_out, km_opts)
+    set_keymap('n', '<leader>b', dap.toggle_breakpoint, km_opts)
+    set_keymap('n', '<leader>dr', dap.repl.open, km_opts)
+    set_keymap('n', '<leader>dl', dap.run_last, km_opts)
     set_keymap('n', '<leader>B', "<cmd>lua require('dap').set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>", km_opts)
     set_keymap('n', '<leader>lp', "<cmd>lua require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>", km_opts)
-    set_keymap('n', '<leader>dr', "<cmd>lua require('dap').repl_open()<CR>", km_opts)
-    set_keymap('n', '<leader>dl', "<cmd>lua require('dap').run_last()<CR>", km_opts)
 
-    vim.cmd([[
-        autocmd! FileType dap-repl lua require('dap.ext.autocompl').attach()
-    ]])
+    vim.api.nvim_create_autocmd({ 'FileType' }, {
+        group = vim.api.nvim_create_augroup('dotvim_dap_cmp', { clear = true }),
+        pattern = { 'dap-repl' },
+        callback = function()
+            require('dap.ext.autocompl').attach()
+        end,
+    })
+
     require('dotvim.colors').add_highlight('DapCustomPC', { bg = '#928374' })
     sign_define('DapStopped', {
         text = '',

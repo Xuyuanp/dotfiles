@@ -186,8 +186,8 @@ source.complete = a.wrap(function(self, params, callback)
     local prefixes = get_prefixes(ctx.cursor_before_line)
     local prefix = prefixes[#prefixes]
 
-    if prefix == "" then
-        if prefixes[#prefixes-1] == "include" or prefixes[#prefixes-1] == "template" then
+    if prefix == '' then
+        if prefixes[#prefixes - 1] == 'include' or prefixes[#prefixes - 1] == 'template' then
             local items = {}
             for _, key in ipairs(chart.helpers) do
                 table.insert(items, {
@@ -199,8 +199,8 @@ source.complete = a.wrap(function(self, params, callback)
             return
         end
         callback({
-            {label='include', kind=ItemKind.Keyword},
-            {label='template', kind=ItemKind.Keyword},
+            { label = 'include', kind = ItemKind.Keyword },
+            { label = 'template', kind = ItemKind.Keyword },
         })
         return
     end

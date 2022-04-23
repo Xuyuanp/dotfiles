@@ -127,7 +127,8 @@ return {
         -- requires = 'kyazdani42/nvim-web-devicons',
         event = 'BufEnter',
         config = function()
-            require('bufferline').setup({
+            local bufferline = require('bufferline')
+            bufferline.setup({
                 options = {
                     diagnostics = 'nvim_lsp',
                     show_buffer_icons = true,
@@ -140,7 +141,7 @@ return {
                 },
             })
 
-            local set_keymap = vim.api.nvim_set_keymap
+            local set_keymap = vim.keymap.set
             local keymaps = {
                 -- Magic buffer-picking mode
                 ['<A-s>'] = ':BufferLinePick<CR>',
@@ -163,7 +164,11 @@ return {
                 set_keymap(
                     'n',
                     string.format('<A-%d>', i),
-                    string.format(':lua require("bufferline").go_to_buffer(%d)<CR>', i),
+                    (function(idx)
+                        return function()
+                            bufferline.go_to_buffer(idx)
+                        end
+                    end)(i),
                     { silent = true, noremap = false }
                 )
             end
@@ -238,10 +243,10 @@ return {
                 border = 'rounded',
             })
 
-            local set_keymap = vim.api.nvim_set_keymap
             local opts = { noremap = false, silent = true }
-            set_keymap('n', '<A-o>', '<cmd>lua require("FTerm").toggle()<CR>', opts)
-            set_keymap('t', '<A-o>', '<C-\\><C-n><cmd>lua require("FTerm").toggle()<CR>', opts)
+            vim.keymap.set({ 'n', 't' }, '<A-o>', function()
+                require('FTerm').toggle()
+            end, opts)
         end,
     },
 

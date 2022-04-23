@@ -40,7 +40,7 @@ return {
                     .. '})))'
             )
 
-            local set_keymap = vim.api.nvim_set_keymap
+            local set_keymap = vim.keymap.set
             set_keymap('n', '<leader>ag', ':Ag<CR>', { silent = true, noremap = true })
             set_keymap('n', '<leader>rg', ':Rg<CR>', { silent = true, noremap = true })
             set_keymap('n', '<leader>af', ':AF<CR>', { silent = true, noremap = true })

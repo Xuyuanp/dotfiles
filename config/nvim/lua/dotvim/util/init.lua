@@ -104,14 +104,14 @@ function M.floating_window(bufnr)
     api.nvim_create_autocmd({ 'WinClosed' }, {
         buffer = bufnr,
         callback = function()
-            print('fuck')
             vim.cmd(string.format([[%dwincmd w]], altwinnr_bak))
             vim.cmd(string.format([[%dwincmd w]], winnr_bak))
         end,
     })
 
-    api.nvim_buf_set_keymap(bufnr, 'n', 'q', ':q<CR>', { nowait = true, noremap = false, silent = false })
-    api.nvim_buf_set_keymap(bufnr, 'n', '<ESC><ESC>', ':q<CR>', { nowait = true, noremap = false, silent = false })
+    local key_opts = { nowait = true, noremap = false, silent = false, buffer = bufnr }
+    vim.keymap.set('n', 'q', ':q<CR>', key_opts)
+    vim.keymap.set('n', '<ESC><ESC>', ':q<CR>', key_opts)
 
     return winnr
 end

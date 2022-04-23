@@ -64,7 +64,7 @@ return {
     {
         'junegunn/vim-easy-align',
         config = function()
-            local set_keymap = vim.api.nvim_set_keymap
+            local set_keymap = vim.keymap.set
             set_keymap('v', '<CR><Space>', ':EasyAlign\\<CR>', { noremap = true })
             set_keymap('v', '<CR>2<Space>', ':EasyAlign2\\<CR>', { noremap = true })
             set_keymap('v', '<CR>-<Space>', ':EasyAlign-\\<CR>', { noremap = true })
