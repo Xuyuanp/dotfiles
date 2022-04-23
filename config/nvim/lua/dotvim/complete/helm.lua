@@ -5,8 +5,10 @@ local api = a.api
 local singleflight = require('dotvim.util.singleflight')
 
 local yaml = require('lyaml')
-local types_lsp = require('cmp.types.lsp')
 local notify = vim.F.npcall(require, 'notify') or vim.notify
+
+local types_lsp = require('cmp.types.lsp')
+local ItemKind = types_lsp.CompletionItemKind
 
 local Chart = {}
 
@@ -65,13 +67,24 @@ function Chart:load_meta(path)
     end
 end
 
+function Chart:load_helpers(path)
+    local err, data = uv.read_file(path)
+    assert(not err, err)
+    local helpers = {}
+    for help in string.gmatch(data, [[{{%-?%s+define%s+([^}]*)%s+%-?}}]]) do
+        table.insert(helpers, help)
+    end
+    self.helpers = helpers
+end
+
 function Chart:load()
-    -- local helpers_file = self.root .. '/templates/_helpers.tpl'
+    local helpers_file = self.root .. '/templates/_helpers.tpl'
     local chart_file = self.root .. '/Chart.yaml'
     local values_file = self.root .. '/values.yaml'
 
     self:load_meta(chart_file)
     self:load_values(values_file)
+    self:load_helpers(helpers_file)
 
     if self.watch then
         self:watch_file(chart_file, function(filename)
@@ -81,6 +94,10 @@ function Chart:load()
         self:watch_file(values_file, function(filename)
             notify('reloading file ' .. filename)
             self:load_values(filename)
+        end)
+        self:watch_file(helpers_file, function(filename)
+            notify('reloading file ' .. filename)
+            self:load_helpers(filename)
         end)
     end
 end
@@ -141,12 +158,12 @@ function source.new()
 end
 
 function source:get_trigger_characters()
-    return { '.' }
+    return { '.', ' ' }
 end
 
-local function get_prefix(str)
-    local fields = vim.split(str, ' ', { plain = true })
-    return fields[#fields]
+local function get_prefixes(str)
+    local fields = vim.split(str, '%s')
+    return fields
 end
 
 source.complete = a.wrap(function(self, params, callback)
@@ -166,12 +183,32 @@ source.complete = a.wrap(function(self, params, callback)
 
     local chart = self.charts[root]
 
-    local prefix = get_prefix(ctx.cursor_before_line)
+    local prefixes = get_prefixes(ctx.cursor_before_line)
+    local prefix = prefixes[#prefixes]
+
+    if prefix == "" then
+        if prefixes[#prefixes-1] == "include" or prefixes[#prefixes-1] == "template" then
+            local items = {}
+            for _, key in ipairs(chart.helpers) do
+                table.insert(items, {
+                    label = key,
+                    kind = ItemKind.Reference,
+                })
+            end
+            callback(items)
+            return
+        end
+        callback({
+            {label='include', kind=ItemKind.Keyword},
+            {label='template', kind=ItemKind.Keyword},
+        })
+        return
+    end
 
     if prefix == '.' or prefix == '$.' then
         callback({
-            { label = 'Values', kind = types_lsp.CompletionItemKind.Module },
-            { label = 'Chart', kind = types_lsp.CompletionItemKind.Module },
+            { label = 'Values', kind = ItemKind.Module },
+            { label = 'Chart', kind = ItemKind.Module },
         })
         return
     end
@@ -184,7 +221,7 @@ source.complete = a.wrap(function(self, params, callback)
             for key, value in pairs(obj) do
                 table.insert(items, {
                     label = key,
-                    kind = types_lsp.CompletionItemKind.Field,
+                    kind = ItemKind.Field,
                     documentation = {
                         value = (function()
                             if type(value) == 'table' then
