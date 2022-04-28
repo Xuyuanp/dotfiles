@@ -1,5 +1,9 @@
 return {
     {
+        'Xuyuanp/helmls',
+        run = 'cargo build --release',
+    },
+    {
         'williamboman/nvim-lsp-installer',
         as = 'lsp-installer',
     },

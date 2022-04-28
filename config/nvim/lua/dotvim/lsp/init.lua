@@ -167,3 +167,5 @@ lsp_inst.on_server_ready(function(server)
     end
     vim.cmd([[do User LspAttachBuffers]])
 end)
+
+require('lspconfig').helmls.setup(default_config)

@@ -149,6 +149,7 @@ function M.setup()
     cmp.register_source('helm', require('dotvim.complete.helm').new())
     cmp.setup.filetype('helm', {
         sources = cmp.config.sources({
+            { name = 'nvim_lsp' },
             { name = 'helm' },
         }),
     })
