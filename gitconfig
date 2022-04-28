@@ -78,3 +78,6 @@
 
 [pager]
     difftool = true
+
+[url "git@github.com:Xuyuanp"]
+        insteadOf = https://github.com/Xuyuanp
