@@ -154,7 +154,7 @@ local langs = {
     },
 }
 
-lsp_inst.on_server_ready(function(server)
+for _, server in ipairs(lsp_inst.get_installed_servers()) do
     local cfg = default_config
     if langs[server.name] then
         cfg = vim.tbl_deep_extend('force', cfg, langs[server.name])
@@ -166,6 +166,6 @@ lsp_inst.on_server_ready(function(server)
         server:setup(cfg)
     end
     vim.cmd([[do User LspAttachBuffers]])
-end)
+end
 
 require('lspconfig').helmls.setup(default_config)
