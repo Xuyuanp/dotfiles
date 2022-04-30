@@ -90,7 +90,6 @@ local default_config = {
         ['workspace/symbol'] = handlers.symbol_handler,
         ['textDocument/references'] = handlers.references,
         ['textDocument/documentSymbol'] = handlers.symbol_handler,
-        ['textDocument/codeAction'] = handlers.code_action,
         ['textDocument/definition'] = handlers.gen_location_handler('Definition'),
         ['textDocument/typeDefinition'] = handlers.gen_location_handler('TypeDefinition'),
         ['textDocument/implementation'] = handlers.gen_location_handler('Implementation'),
