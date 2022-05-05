@@ -11,7 +11,7 @@ lsp_status.register_progress()
 
 local group_id = api.nvim_create_augroup('dotvim_lsp_init_on_attach', { clear = true })
 
-local function set_lsp_keymaps(bufnr)
+local function set_lsp_keymaps(_client, bufnr)
     local key_opts = { noremap = false, silent = true, buffer = bufnr }
     local set_keymap = vim.keymap.set
     local keymaps = {
@@ -36,17 +36,9 @@ local function set_lsp_keymaps(bufnr)
     end
 end
 
-local on_attach = function(client, bufnr)
-    bufnr = bufnr or vim.api.nvim_get_current_buf()
-    lsp_status.on_attach(client)
-
-    local server_capabilities = client.server_capabilities
-    if server_capabilities.signatureHelpProvider then
-        server_capabilities.signatureHelpProvider.triggerCharacters = { '(', ',', ' ' }
-    end
-
+local function set_lsp_autocmd(client, bufnr)
     if client.supports_method('textDocument/formating') then
-        api.nvim_create_autocmd({'BufWritePre'}, {
+        api.nvim_create_autocmd({ 'BufWritePre' }, {
             group = group_id,
             buffer = bufnr,
             desc = '[lsp] auto format',
@@ -54,11 +46,11 @@ local on_attach = function(client, bufnr)
                 if not vim.g.lsp_disable_auto_format then
                     vim.lsp.buf.formatting_sync()
                 end
-            end
+            end,
         })
     end
 
-    if server_capabilities.documentHighlightProvider and client.name ~= 'rust_analyzer' then
+    if client.supports_method('textDocument/documentHighlight') and client.name ~= 'rust_analyzer' then
         api.nvim_create_autocmd({ 'CursorHold' }, {
             group = group_id,
             buffer = bufnr,
@@ -74,8 +66,19 @@ local on_attach = function(client, bufnr)
             end,
         })
     end
+end
 
-    set_lsp_keymaps(bufnr)
+local on_attach = function(client, bufnr)
+    bufnr = bufnr or vim.api.nvim_get_current_buf()
+    lsp_status.on_attach(client)
+
+    local server_capabilities = client.server_capabilities
+    if server_capabilities.signatureHelpProvider then
+        server_capabilities.signatureHelpProvider.triggerCharacters = { '(', ',', ' ' }
+    end
+
+    set_lsp_autocmd(client, bufnr)
+    set_lsp_keymaps(client, bufnr)
 end
 
 vfn.sign_define('DiagnosticSignError', { text = '', texthl = 'DiagnosticSignError' })
@@ -85,8 +88,8 @@ vfn.sign_define('DiagnosticSignHint', { text = '', texthl = 'DiagnosticSignHi
 
 local default_capabilities = lsp_status.capabilities
 
-local ok, cmp_lsp = pcall(require, 'cmp_nvim_lsp')
-if ok then
+local cmp_lsp = vim.F.npcall(require, 'cmp_nvim_lsp')
+if cmp_lsp then
     default_capabilities = cmp_lsp.update_capabilities(default_capabilities)
 end
 
@@ -172,7 +175,6 @@ for _, server in ipairs(lsp_inst.get_installed_servers()) do
     else
         server:setup(cfg)
     end
-    vim.cmd([[do User LspAttachBuffers]])
 end
 
 require('lspconfig').helmls.setup(default_config)
