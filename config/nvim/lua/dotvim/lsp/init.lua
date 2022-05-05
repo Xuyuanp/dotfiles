@@ -9,7 +9,7 @@ local lsp_inst = require('nvim-lsp-installer')
 
 lsp_status.register_progress()
 
-local enable_auto_format = vfn['dotvim#lsp#EnableAutoFormat']
+local group_id = api.nvim_create_augroup('dotvim_lsp_init_on_attach', { clear = true })
 
 local function set_lsp_keymaps(bufnr)
     local key_opts = { noremap = false, silent = true, buffer = bufnr }
@@ -45,12 +45,20 @@ local on_attach = function(client, bufnr)
         server_capabilities.signatureHelpProvider.triggerCharacters = { '(', ',', ' ' }
     end
 
-    if server_capabilities.documentFormattingProvider then
-        enable_auto_format()
+    if client.supports_method('textDocument/formating') then
+        api.nvim_create_autocmd({'BufWritePre'}, {
+            group = group_id,
+            buffer = bufnr,
+            desc = '[lsp] auto format',
+            callback = function()
+                if not vim.g.lsp_disable_auto_format then
+                    vim.lsp.buf.formatting_sync()
+                end
+            end
+        })
     end
 
     if server_capabilities.documentHighlightProvider and client.name ~= 'rust_analyzer' then
-        local group_id = api.nvim_create_augroup('dotvim_lsp_init_on_attach', { clear = true })
         api.nvim_create_autocmd({ 'CursorHold' }, {
             group = group_id,
             buffer = bufnr,
