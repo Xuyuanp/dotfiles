@@ -167,6 +167,8 @@ return {
     {
         'Fymyte/rasi.vim',
         ft = 'rasi',
-        requires = { 'ap/vim-css-color' },
+        requires = {
+            { 'ap/vim-css-color', ft = 'rasi' },
+        },
     },
 }
