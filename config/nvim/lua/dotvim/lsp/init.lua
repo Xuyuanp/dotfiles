@@ -89,18 +89,12 @@ local default_config = {
     },
 }
 
-local function detect_lua_library()
-    local library = {}
-
-    local cwd = vfn.getcwd()
-    local paths = vim.api.nvim_list_runtime_paths()
-    for _, path in ipairs(paths) do
-        if not vim.startswith(cwd, path) and vfn.isdirectory(path .. '/lua') > 0 then
-            library[path] = true
-        end
-    end
-
-    return library
+local function get_runtime_path()
+    local runtime_path = vim.split(package.path, ';')
+    table.insert(runtime_path, 'lua/?.lua')
+    table.insert(runtime_path, 'lua/?/init.lua')
+    table.insert(runtime_path, vim.env.VIM .. '/sysinit.lua')
+    return runtime_path
 end
 
 local langs = {
@@ -133,9 +127,10 @@ local langs = {
                 },
                 runtime = {
                     version = 'LuaJIT',
+                    path = get_runtime_path(),
                 },
                 workspace = {
-                    library = detect_lua_library(),
+                    library = vim.api.nvim_get_runtime_file('', true),
                     ignoreDir = {
                         '.cache',
                     },
