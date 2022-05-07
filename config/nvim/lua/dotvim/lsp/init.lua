@@ -11,22 +11,19 @@ local group_id = api.nvim_create_augroup('dotvim_lsp_init_on_attach', { clear = 
 local function set_lsp_keymaps(_client, bufnr)
     local key_opts = { noremap = false, silent = true, buffer = bufnr }
     local set_keymap = vim.keymap.set
+    -- stylua: ignore
     local keymaps = {
-        gd = vim.lsp.buf.definition,
-        K = vim.lsp.buf.hover,
-        gi = vim.lsp.buf.implementation,
-        gk = vim.lsp.buf.signature_help,
+        gd  = vim.lsp.buf.definition,
+        K   = vim.lsp.buf.hover,
+        gi  = vim.lsp.buf.implementation,
+        gk  = vim.lsp.buf.signature_help,
         gtd = vim.lsp.buf.type_definition,
-        gR = vim.lsp.buf.references,
+        gR  = vim.lsp.buf.references,
         grr = vim.lsp.buf.rename,
         gds = vim.lsp.buf.document_symbol,
         gws = vim.lsp.buf.workspace_symbol,
         gca = vim.lsp.buf.code_action,
-        go = vim.lsp.buf.outgoing_calls,
-
-        [']d'] = vim.diagnostic.goto_next,
-        ['[d'] = vim.diagnostic.goto_prev,
-        ['<leader>sd'] = vim.diagnostic.open_float,
+        go  = vim.lsp.buf.outgoing_calls,
     }
     for key, action in pairs(keymaps) do
         set_keymap('n', key, action, key_opts)
@@ -66,22 +63,9 @@ local function set_lsp_autocmd(client, bufnr)
 end
 
 local on_attach = function(client, bufnr)
-    bufnr = bufnr or vim.api.nvim_get_current_buf()
-    -- lsp_status.on_attach(client)
-
-    local server_capabilities = client.server_capabilities
-    if server_capabilities.signatureHelpProvider then
-        server_capabilities.signatureHelpProvider.triggerCharacters = { '(', ',', ' ' }
-    end
-
     set_lsp_autocmd(client, bufnr)
     set_lsp_keymaps(client, bufnr)
 end
-
-vfn.sign_define('DiagnosticSignError', { text = '', texthl = 'DiagnosticSignError' })
-vfn.sign_define('DiagnosticSignWarn', { text = '', texthl = 'DiagnosticSignWarn' })
-vfn.sign_define('DiagnosticSignInfo', { text = '', texthl = 'DiagnosticSignInfo' })
-vfn.sign_define('DiagnosticSignHint', { text = '', texthl = 'DiagnosticSignHint' })
 
 local default_capabilities = vim.lsp.protocol.make_client_capabilities()
 

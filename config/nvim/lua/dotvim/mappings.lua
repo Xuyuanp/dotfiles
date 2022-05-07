@@ -51,6 +51,12 @@ local function setup()
 
     set_keymap('n', '<leader>p', '"+p', opts)
     ---]]
+
+    ---[[ Diagnostics
+    set_keymap('n', ']d', vim.diagnostic.goto_next, opts)
+    set_keymap('n', '[d', vim.diagnostic.goto_prev, opts)
+    set_keymap('n', '<leader>sd', vim.diagnostic.open_float, opts)
+    ---]]
 end
 
 return {
