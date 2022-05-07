@@ -16,9 +16,9 @@ function M.setup(server)
 
             executor = require('rust-tools.executors').termopen,
 
-            on_initialized = function(status)
-                vim.notify('rust_analyzer started: ' .. status.health, 'INFO')
-            end,
+            -- on_initialized = function(status)
+            --     vim.notify('rust_analyzer started: ' .. status.health, 'INFO')
+            -- end,
 
             -- These apply to the default RustSetInlayHints command
             inlay_hints = {

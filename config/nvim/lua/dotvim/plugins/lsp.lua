@@ -8,6 +8,12 @@ return {
         as = 'lsp-installer',
     },
     {
+        'j-hui/fidget.nvim',
+        config = function()
+            require('fidget').setup({})
+        end,
+    },
+    {
         'neovim/nvim-lspconfig',
         requires = {
             'lsp-installer',
@@ -33,13 +39,6 @@ return {
                 },
             })
         end,
-    },
-
-    {
-        'nvim-lua/lsp-status.nvim',
-        before = {
-            'lsp-installer',
-        },
     },
 
     {

@@ -4,10 +4,7 @@ local vfn = vim.fn
 
 local handlers = require('dotvim.lsp.handlers')
 
-local lsp_status = require('lsp-status')
 local lsp_inst = require('nvim-lsp-installer')
-
-lsp_status.register_progress()
 
 local group_id = api.nvim_create_augroup('dotvim_lsp_init_on_attach', { clear = true })
 
@@ -70,7 +67,7 @@ end
 
 local on_attach = function(client, bufnr)
     bufnr = bufnr or vim.api.nvim_get_current_buf()
-    lsp_status.on_attach(client)
+    -- lsp_status.on_attach(client)
 
     local server_capabilities = client.server_capabilities
     if server_capabilities.signatureHelpProvider then
@@ -86,7 +83,7 @@ vfn.sign_define('DiagnosticSignWarn', { text = '', texthl = 'DiagnosticSignWa
 vfn.sign_define('DiagnosticSignInfo', { text = '', texthl = 'DiagnosticSignInfo' })
 vfn.sign_define('DiagnosticSignHint', { text = '', texthl = 'DiagnosticSignHint' })
 
-local default_capabilities = lsp_status.capabilities
+local default_capabilities = vim.lsp.protocol.make_client_capabilities()
 
 local cmp_lsp = vim.F.npcall(require, 'cmp_nvim_lsp')
 if cmp_lsp then

@@ -146,10 +146,6 @@ end
 
 local space = printer(' ')
 
-local lsp_messages = function()
-    return require('dotvim.lsp.status').get_messages()
-end
-
 local lsp_icon = function()
     if require('dotvim.lsp.status').get_name() == '' then
         return ''
@@ -327,13 +323,6 @@ section.left = {
 } -- section.left
 
 section.right = {
-    {
-        LspMessages = {
-            provider = { lsp_messages },
-            highlight = { _HEX_COLORS.text, _HEX_COLORS.bar.middle },
-        },
-    },
-
     {
         RightBegin = {
             provider = space,
