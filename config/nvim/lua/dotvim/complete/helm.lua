@@ -1,10 +1,14 @@
+local yaml = vim.F.npcall(require, 'lyaml')
+if not yaml then
+    return
+end
+
 local a = require('dotvim.util.async')
 local uv = a.uv()
 local api = a.api
 
 local singleflight = require('dotvim.util.singleflight')
 
-local yaml = require('lyaml')
 local notify = vim.F.npcall(require, 'notify') or vim.notify
 
 local types_lsp = require('cmp.types.lsp')

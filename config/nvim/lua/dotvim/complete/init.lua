@@ -146,13 +146,16 @@ function M.setup()
         })
     end
 
-    cmp.register_source('helm', require('dotvim.complete.helm').new())
-    cmp.setup.filetype('helm', {
-        sources = cmp.config.sources({
-            { name = 'nvim_lsp' },
-            { name = 'helm' },
-        }),
-    })
+    local cmp_helm = require('dotvim.complete.helm')
+    if cmp_helm then
+        cmp.register_source('helm', cmp_helm.new())
+        cmp.setup.filetype('helm', {
+            sources = cmp.config.sources({
+                { name = 'nvim_lsp' },
+                { name = 'helm' },
+            }),
+        })
+    end
 
     local autopair_cmp = vim.F.npcall(require, 'nvim-autopairs.completion.cmp')
     if autopair_cmp then
