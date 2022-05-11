@@ -77,12 +77,13 @@ end
 local default_config = {
     on_attach = on_attach,
     capabilities = default_capabilities,
+    -- stylua: ignore
     handlers = {
-        ['textDocument/hover'] = handlers.hover,
-        ['workspace/symbol'] = handlers.symbol_handler,
-        ['textDocument/references'] = handlers.references,
+        ['textDocument/hover']          = handlers.hover,
+        ['workspace/symbol']            = handlers.symbol_handler,
+        ['textDocument/references']     = handlers.references,
         ['textDocument/documentSymbol'] = handlers.symbol_handler,
-        ['textDocument/definition'] = handlers.gen_location_handler('Definition'),
+        ['textDocument/definition']     = handlers.gen_location_handler('Definition'),
         ['textDocument/typeDefinition'] = handlers.gen_location_handler('TypeDefinition'),
         ['textDocument/implementation'] = handlers.gen_location_handler('Implementation'),
         ['callHierarchy/outgoingCalls'] = handlers.outgoing_calls,
@@ -99,9 +100,12 @@ end
 
 local langs = {
     gopls = {
+        filetypes = { 'go', 'gomod', 'gotmpl', 'helm' },
         settings = {
             gopls = {
                 usePlaceholders = false,
+                gofumpt = true,
+                templateExtensions = { 'tpl', 'yaml' },
             },
         },
     },
