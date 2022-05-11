@@ -74,10 +74,10 @@ if cmp_lsp then
     default_capabilities = cmp_lsp.update_capabilities(default_capabilities)
 end
 
+-- stylua: ignore
 local default_config = {
     on_attach = on_attach,
     capabilities = default_capabilities,
-    -- stylua: ignore
     handlers = {
         ['textDocument/hover']          = handlers.hover,
         ['workspace/symbol']            = handlers.symbol_handler,
