@@ -92,15 +92,12 @@ function Chart:load()
 
     if self.watch then
         self:watch_file(chart_file, function(filename)
-            notify('reloading file ' .. filename)
             self:load_meta(filename)
         end)
         self:watch_file(values_file, function(filename)
-            notify('reloading file ' .. filename)
             self:load_values(filename)
         end)
         self:watch_file(helpers_file, function(filename)
-            notify('reloading file ' .. filename)
             self:load_helpers(filename)
         end)
     end
