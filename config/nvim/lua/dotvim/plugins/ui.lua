@@ -159,18 +159,14 @@ return {
             for k, a in pairs(keymaps) do
                 set_keymap('n', k, a, { silent = true, noremap = true })
             end
+            local function gen_goto(idx)
+                return function()
+                    bufferline.go_to_buffer(idx)
+                end
+            end
             -- Goto buffer in position...
             for i = 1, 10, 1 do
-                set_keymap(
-                    'n',
-                    string.format('<A-%d>', i),
-                    (function(idx)
-                        return function()
-                            bufferline.go_to_buffer(idx)
-                        end
-                    end)(i),
-                    { silent = true, noremap = false }
-                )
+                set_keymap('n', string.format('<A-%d>', i), gen_goto(i), { silent = true, noremap = false })
             end
         end,
     },
@@ -239,14 +235,14 @@ return {
         'numToStr/FTerm.nvim',
         keys = { '<A-o>' },
         config = function()
-            require('FTerm').setup({
+            local fterm = require('FTerm')
+            fterm.setup({
                 border = 'rounded',
+                blend = 10,
             })
 
             local opts = { noremap = false, silent = true }
-            vim.keymap.set({ 'n', 't' }, '<A-o>', function()
-                require('FTerm').toggle()
-            end, opts)
+            vim.keymap.set({ 'n', 't' }, '<A-o>', fterm.toggle, opts)
         end,
     },
 
