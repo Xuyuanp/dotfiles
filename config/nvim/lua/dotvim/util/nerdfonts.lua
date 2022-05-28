@@ -6,7 +6,7 @@ M.pick = a.wrap(function()
     local uv = a.uv()
 
     if not M.nerdfonts then
-        local path = vim.fn.stdpath('config') .. '/lua/dotvim/util/nerdfonts.txt'
+        local path = vim.fn.stdpath('config') .. '/misc/nerdfonts.txt'
         local err, data = uv.read_file(path)
         assert(not err, err)
 
