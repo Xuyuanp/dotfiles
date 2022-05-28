@@ -22,6 +22,7 @@ inten="  Take in 10s"
 notify_user () {
     if [[ -e "$dir/$file" ]]; then
         dunstify -u low --replace=699 -i ~/.dotfiles/icons/dunst/picture.png "Saved in $dir"
+        xclip -selection clipboard -t image/png  "${dir}/${file}"
     else
         dunstify -u low --replace=699 -i ~/.dotfiles/icons/dunst/picture.png "Screenshot Deleted."
     fi
@@ -88,4 +89,3 @@ case $chosen in
         shot10
         ;;
 esac
-
