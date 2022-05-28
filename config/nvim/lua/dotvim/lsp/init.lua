@@ -1,10 +1,20 @@
 local vim = vim
 local api = vim.api
-local vfn = vim.fn
 
 local handlers = require('dotvim.lsp.handlers')
 
 local lsp_inst = require('nvim-lsp-installer')
+
+local nlspsettings = vim.F.npcall(require, 'nlspsettings')
+if nlspsettings then
+    nlspsettings.setup({
+        config_home = vim.fn.stdpath('config') .. '/nlsp-settings',
+        local_settings_dir = '.nlsp-settings',
+        local_settings_root_markers = { '.git' },
+        append_default_schemas = true,
+        loader = 'json',
+    })
+end
 
 local group_id = api.nvim_create_augroup('dotvim_lsp_init_on_attach', { clear = true })
 
@@ -110,10 +120,6 @@ local langs = {
         },
     },
     sumneko_lua = {
-        root_dir = function(fname)
-            -- default is git find_git_ancestor or home dir
-            return require('lspconfig.util').find_git_ancestor(fname) or vfn.fnamemodify(fname, ':p:h')
-        end,
         settings = {
             -- https://github.com/sumneko/vscode-lua/blob/master/setting/schema.json
             Lua = {
