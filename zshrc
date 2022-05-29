@@ -1,3 +1,6 @@
+export PATH="${HOME}/.local/bin:${PATH}"
+export PATH="${HOME}/.cargo/bin:${PATH}"
+
 trace_file=~/.startup.log
 [ -f $trace_file ] && rm $trace_file
 
@@ -82,12 +85,8 @@ trace 'zinit'
 
 # ================================ zinit end ================================= #
 
-# zpcompinit; zpcdreplay
-autoload -U compinit
-for dump in ~/.zcompdump(N.mh+24); do
-  compinit
-done
-compinit -C
+autoload -Uz compinit
+compinit -i
 
 trace 'compinit'
 
@@ -193,6 +192,10 @@ EOL
     )
 }
 
+function toppy () {
+        omz_history | awk '{CMD[$2]++;count++;}END { for (a in CMD)print CMD[a] " " CMD[a]/count*100 "% " a;}' | rg -v "./" | column -c3 -s " " -t | sort -nr | nl | head -n 21
+}
+
 trace 'base'
 
 # Customize to your needs...
@@ -220,8 +223,6 @@ else
 fi
 
 trace 'pyenv'
-
-export PATH=${HOME}/.cargo/bin:${PATH}
 
 export GOPATH=${HOME}/go
 export PATH=${GOPATH}/bin:${PATH}
