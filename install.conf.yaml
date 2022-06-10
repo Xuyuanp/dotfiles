@@ -15,6 +15,7 @@
     ~/.config/bspwm: config/bspwm
     ~/.config/dunst: config/dunst
     ~/.config/kitty: config/kitty
+    ~/.config/zellij: config/zellij
     ~/.config/networkmanager-dmenu: config/networkmanager-dmenu
     ~/.config/nvim: config/nvim
     ~/.config/sxhkd: config/sxhkd
