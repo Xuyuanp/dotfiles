@@ -258,6 +258,10 @@ return {
             fterm.setup({
                 border = 'rounded',
                 blend = 10,
+                dimensions = {
+                    height = 0.9,
+                    widgets = 0.9,
+                },
             })
 
             local opts = { noremap = false, silent = true }
