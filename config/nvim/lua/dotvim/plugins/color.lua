@@ -5,19 +5,19 @@ return {
             local colors = require('kanagawa.colors').setup()
 
             local overrides = {
-                YanilTreeDirectory = { fg = colors.springGreen, style = 'bold' },
+                YanilTreeDirectory = { fg = colors.springGreen, bold = true },
                 YanilTreeFile = { fg = colors.fujiWhite },
             }
 
             local kanagawa = require('kanagawa')
             kanagawa.setup({
                 undercurl = true, -- enable undercurls
-                commentStyle = 'NONE',
-                functionStyle = 'NONE',
-                keywordStyle = 'italic,bold',
-                statementStyle = 'bold',
-                typeStyle = 'NONE',
-                variablebuiltinStyle = 'italic',
+                commentStyle = { italic = false },
+                -- functionStyle = {},
+                keywordStyle = { italic = true, bold = true },
+                statementStyle = { bold = true },
+                -- typeStyle = {},
+                variablebuiltinStyle = { italic = true },
                 specialReturn = true, -- special highlight for the return keyword
                 specialException = true, -- special highlight for exception handling keywords
                 transparent = false,
