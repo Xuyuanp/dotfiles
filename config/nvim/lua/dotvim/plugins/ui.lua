@@ -130,13 +130,32 @@ return {
             local bufferline = require('bufferline')
             bufferline.setup({
                 options = {
+                    themable = true,
+                    numbers = function(opts)
+                        return string.format('%s', opts.raise(opts.ordinal))
+                    end,
                     diagnostics = 'nvim_lsp',
                     show_buffer_icons = true,
                     separator_style = 'slant',
                     always_show_bufferline = true,
+                    show_buffer_close_icons = false,
                     offsets = {
                         { filetype = 'Yanil', text = 'File Explorer', text_align = 'left' },
                         { filetype = 'vista_kind', text = 'Vista', text_align = 'right' },
+                    },
+                },
+                highlights = {
+                    fill = {
+                        guibg = '#282828',
+                    },
+                    separator_selected = {
+                        guifg = '#282828',
+                    },
+                    separator_visible = {
+                        guifg = '#282828',
+                    },
+                    separator = {
+                        guifg = '#282828',
                     },
                 },
             })
