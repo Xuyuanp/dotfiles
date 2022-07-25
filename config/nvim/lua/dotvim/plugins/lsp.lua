@@ -1,9 +1,5 @@
 return {
     {
-        'williamboman/nvim-lsp-installer',
-        as = 'lsp-installer',
-    },
-    {
         'j-hui/fidget.nvim',
         config = function()
             require('fidget').setup({
@@ -22,6 +18,17 @@ return {
         as = 'lspconfig',
         config = function()
             require('dotvim.lsp')
+        end,
+    },
+    {
+        'williamboman/mason.nvim',
+        requires = {
+            'lspconfig',
+            'williamboman/mason-lspconfig.nvim',
+        },
+        config = function()
+            require('mason').setup({})
+            require('mason-lspconfig').setup({})
         end,
     },
 

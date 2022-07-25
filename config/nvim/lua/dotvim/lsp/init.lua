@@ -3,7 +3,12 @@ local api = vim.api
 
 local handlers = require('dotvim.lsp.handlers')
 
-local lsp_inst = require('nvim-lsp-installer')
+local mason_lspcfg = vim.F.npcall(require, 'mason-lspconfig')
+if not mason_lspcfg then
+    vim.notify_once('mason not installed', 'ERROR')
+    return
+end
+local lspconfig = require('lspconfig')
 
 local nlspsettings = vim.F.npcall(require, 'nlspsettings')
 if nlspsettings then
@@ -150,15 +155,16 @@ local langs = {
     },
 }
 
-for _, server in ipairs(lsp_inst.get_installed_servers()) do
-    local cfg = default_config
-    if langs[server.name] then
-        cfg = vim.tbl_deep_extend('force', cfg, langs[server.name])
-    end
-    if server.name == 'rust_analyzer' then
-        local opts = server:get_default_options()
-        require('dotvim.lsp.rust').setup(vim.tbl_deep_extend('force', opts, cfg))
-    else
-        server:setup(cfg)
-    end
-end
+mason_lspcfg.setup_handlers({
+    function(server_name)
+        local cfg = default_config
+        if langs[server_name] then
+            cfg = vim.tbl_deep_extend('force', cfg, langs[server_name])
+        end
+        if server_name == 'rust_analyzer' then
+            require('dotvim.lsp.rust').setup(cfg)
+        else
+            lspconfig[server_name].setup(cfg)
+        end
+    end,
+})
