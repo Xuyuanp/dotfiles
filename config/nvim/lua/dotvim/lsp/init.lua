@@ -162,5 +162,3 @@ for _, server in ipairs(lsp_inst.get_installed_servers()) do
         server:setup(cfg)
     end
 end
-
-require('lspconfig').helmls.setup(default_config)
