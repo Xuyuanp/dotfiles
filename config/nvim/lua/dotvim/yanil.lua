@@ -170,6 +170,26 @@ local delete_node = a.wrap(function(tree, node)
     git.update(tree.cwd)
 end)
 
+local icon_decorator
+if (vim.env.YANIL_BUBBLE or '0') == '1' then
+    icon_decorator = function(node)
+        if not node.parent then
+            local text = ''
+            return text, 'YanilTreeDirectory'
+        end
+
+        if node:is_dir() then
+            local text = node.is_open and '' or ''
+            return text, node:is_link() and 'YanilTreeLink' or 'YanilTreeDirectory'
+        end
+
+        local _, hl = devicons.get(node.name, node.extension)
+        return '', hl
+    end
+else
+    icon_decorator = devicons.decorator()
+end
+
 function M.setup()
     yanil.setup()
 
@@ -179,7 +199,7 @@ function M.setup()
         draw_opts = {
             decorators = {
                 decorators.pretty_indent_with_git,
-                devicons.decorator(),
+                icon_decorator,
                 decorators.space,
                 decorators.default,
                 decorators.executable,
