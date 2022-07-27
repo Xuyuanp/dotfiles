@@ -79,19 +79,6 @@ return {
     'tomtom/tcomment_vim',
     'tpope/vim-scriptease',
 
-    {
-        'bronson/vim-trailing-whitespace',
-        config = function()
-            vim.api.nvim_set_keymap('n', '<leader><space>', ':FixWhitespace<CR>', { noremap = true, silent = true })
-
-            vim.api.nvim_create_autocmd('BufWritePre', {
-                group = vim.api.nvim_create_augroup('dotvim_fix_whitespaces', { clear = true }),
-                pattern = '*',
-                command = 'FixWhitespace',
-            })
-        end,
-    },
-
     'dstein64/vim-startuptime',
 
     {
@@ -198,7 +185,43 @@ return {
         'max397574/colortils.nvim',
         cmd = 'Colortils',
         config = function()
-            require('colortils').setup()
+            require('colortils').setup({})
+        end,
+    },
+
+    {
+        'mhartington/formatter.nvim',
+        config = function()
+            local fmt = require('formatter')
+            fmt.setup({
+                logging = true,
+                log_level = vim.log.levels.WARN,
+                filetype = {
+                    lua = require('formatter.filetypes.lua').stylua,
+                    python = {
+                        require('formatter.filetypes.python').black,
+                        require('formatter.filetypes.python').isort,
+                    },
+                    proto = function()
+                        return {
+                            exe = 'buf',
+                            args = {
+                                'format',
+                            },
+                            stdin = true,
+                        }
+                    end,
+                    ['*'] = {
+                        require('formatter.filetypes.any').remove_trailing_whitespace,
+                    },
+                },
+            })
+
+            vim.api.nvim_create_autocmd('BufWritePost', {
+                group = vim.api.nvim_create_augroup('dotvim_format', { clear = true }),
+                pattern = '*',
+                command = 'FormatWrite',
+            })
         end,
     },
 }
