@@ -12,7 +12,6 @@ return {
     {
         'neovim/nvim-lspconfig',
         requires = {
-            'lsp-installer',
             'tamago324/nlsp-settings.nvim',
         },
         as = 'lspconfig',

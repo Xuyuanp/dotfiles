@@ -153,6 +153,11 @@ local langs = {
             },
         },
     },
+    sourcery = {
+        init_options = {
+            token = vim.env.SOURCERY_TOKEN,
+        },
+    },
 }
 
 mason_lspcfg.setup_handlers({
