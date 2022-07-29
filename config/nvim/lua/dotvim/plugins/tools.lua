@@ -193,6 +193,7 @@ return {
         'mhartington/formatter.nvim',
         config = function()
             local fmt = require('formatter')
+            local util = require('formatter.util')
             fmt.setup({
                 logging = true,
                 log_level = vim.log.levels.WARN,
@@ -207,6 +208,7 @@ return {
                             exe = 'buf',
                             args = {
                                 'format',
+                                util.get_current_buffer_file_path(),
                             },
                             stdin = true,
                         }
