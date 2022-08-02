@@ -15,9 +15,11 @@ M.pick = a.wrap(function()
 
     a.schedule().await()
 
-    local item = a.ui.select(M.nerdfonts, {
-        prompt = 'Pick icon',
-    }).await()
+    local item = a.ui
+        .select(M.nerdfonts, {
+            prompt = 'Pick icon',
+        })
+        .await()
 
     if not item then
         return

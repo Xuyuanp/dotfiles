@@ -132,16 +132,8 @@ function M.references(_err, references, ctx)
         local fname = vim.uri_to_fname(ref.uri)
         local start_line = ref.range.start.line + 1
         local end_line = ref.range['end'].line + 1
-        local line = string.format(
-            '%s\t%d\t%d\t%d\t%s |%d ~ %d|',
-            fname,
-            start_line,
-            end_line,
-            i,
-            vim.fn.fnamemodify(fname, ':~:.'),
-            start_line,
-            end_line
-        )
+        local line =
+            string.format('%s\t%d\t%d\t%d\t%s |%d ~ %d|', fname, start_line, end_line, i, vim.fn.fnamemodify(fname, ':~:.'), start_line, end_line)
         table.insert(source, line)
     end
 
@@ -217,16 +209,8 @@ function M.gen_location_handler(name)
             local range = ref.range or ref.targetRange
             local start_line = range.start.line + 1
             local end_line = range['end'].line + 1
-            local line = string.format(
-                '%s\t%d\t%d\t%d\t%s |%d ~ %d|',
-                fname,
-                start_line,
-                end_line,
-                i,
-                vim.fn.fnamemodify(fname, ':~:.'),
-                start_line,
-                end_line
-            )
+            local line =
+                string.format('%s\t%d\t%d\t%d\t%s |%d ~ %d|', fname, start_line, end_line, i, vim.fn.fnamemodify(fname, ':~:.'), start_line, end_line)
             table.insert(source, line)
         end
 

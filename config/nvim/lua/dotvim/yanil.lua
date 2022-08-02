@@ -83,9 +83,11 @@ end)
 
 local create_node = a.wrap(function(tree, node)
     node = node:is_dir() and node or node.parent
-    local name = a.ui.input({
-        prompt = node.abs_path,
-    }).await()
+    local name = a.ui
+        .input({
+            prompt = node.abs_path,
+        })
+        .await()
     if not name or name == '' then
         return
     end
@@ -144,10 +146,12 @@ local delete_node = a.wrap(function(tree, node)
     end
 
     if node:is_dir() and #node.entries > 0 then
-        local answer = a.ui.input({
-            prompt = 'Directory is not empty. Are you sure? ',
-            default = 'No',
-        }).await()
+        local answer = a.ui
+            .input({
+                prompt = 'Directory is not empty. Are you sure? ',
+                default = 'No',
+            })
+            .await()
         if not answer or answer:lower() ~= 'yes' then
             return
         end
