@@ -141,11 +141,6 @@ return {
     },
 
     {
-        'ckipp01/stylua-nvim',
-        ft = 'lua',
-    },
-
-    {
         'rcarriga/nvim-notify',
         config = function()
             vim.notify = require('notify')

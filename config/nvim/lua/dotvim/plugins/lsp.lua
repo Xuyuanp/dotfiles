@@ -168,7 +168,8 @@ return {
                 group = group_id,
                 pattern = '*',
                 callback = function()
-                    require('lint').try_lint()
+                    lint.try_lint()
+                    lint.try_lint({ 'codespell' })
                 end,
             })
         end,
