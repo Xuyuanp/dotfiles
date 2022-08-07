@@ -67,7 +67,7 @@ function M.setup()
     vim.o.showcmd = true
 
     vim.o.cmdheight = 1
-    vim.o.laststatus = 2
+    vim.o.laststatus = 3
 
     -- Turn on wild menu, try typing :h and press <Tab>
     vim.o.wildmenu = true
