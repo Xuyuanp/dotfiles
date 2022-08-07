@@ -162,6 +162,10 @@ return {
             lint.linters_by_ft.lua = { 'luacheck' }
             lint.linters_by_ft.vim = { 'vint' }
             -- lint.linters_by_ft.python = { 'pylint', 'flake8' }
+            local codespell = vim.tbl_deep_extend('force', lint.linters.codespell, {
+                args = { '--config', vim.env.HOME .. '/.config/codespell/config.toml' },
+                name = 'codespell',
+            })
 
             local group_id = vim.api.nvim_create_augroup('dotvim_lint', { clear = true })
             vim.api.nvim_create_autocmd({ 'InsertLeave', 'BufWritePost' }, {
@@ -169,7 +173,7 @@ return {
                 pattern = '*',
                 callback = function()
                     lint.try_lint()
-                    lint.try_lint({ 'codespell' })
+                    lint.lint(codespell)
                 end,
             })
         end,
