@@ -183,6 +183,7 @@ return {
                     bufferline.go_to_buffer(idx)
                 end
             end
+
             -- Goto buffer in position...
             for i = 1, 10, 1 do
                 set_keymap('n', string.format('<A-%d>', i), gen_goto(i), { silent = true, noremap = false })
@@ -493,6 +494,14 @@ return {
             vim.keymap.set('n', '#', [[#<Cmd>lua require('hlslens').start()<CR>]], kopts)
             vim.keymap.set('n', 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]], kopts)
             vim.keymap.set('n', 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], kopts)
+        end,
+    },
+
+    {
+        'm-demare/hlargs.nvim',
+        requires = { 'nvim-treesitter/nvim-treesitter' },
+        config = function()
+            require('hlargs').setup({})
         end,
     },
 }
