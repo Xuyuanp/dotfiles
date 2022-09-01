@@ -1,6 +1,6 @@
 local M = {}
 
-local extension_path = vim.env.HOME .. '/.vscode/extensions/vadimcn.vscode-lldb-1.6.10/'
+local extension_path = vim.fn.stdpath('data') .. '/mason/packages/codelldb/extension'
 local codelldb_path = extension_path .. 'adapter/codelldb'
 local liblldb_path = extension_path .. 'lldb/lib/liblldb.so'
 
@@ -12,7 +12,7 @@ function M.setup(server)
 
             -- Whether to show hover actions inside the hover window
             -- This overrides the default hover handler
-            hover_with_actions = true,
+            -- hover_with_actions = true,
 
             executor = require('rust-tools.executors').termopen,
 
@@ -22,18 +22,12 @@ function M.setup(server)
 
             -- These apply to the default RustSetInlayHints command
             inlay_hints = {
+                auto = true,
 
                 -- Only show inlay hints for the current line
                 only_current_line = false,
 
-                -- Event which triggers a refersh of the inlay hints.
-                -- You can make this "CursorMoved" or "CursorMoved,CursorMovedI" but
-                -- not that this may cause  higher CPU usage.
-                -- This option is only respected when only_current_line and
-                -- autoSetHints both are true.
-                only_current_line_autocmd = 'CursorHold',
-
-                -- wheter to show parameter hints with the inlay hints or not
+                -- whether to show parameter hints with the inlay hints or not
                 show_parameter_hints = true,
 
                 -- whether to show variable name before type hints with the inlay hints or not
