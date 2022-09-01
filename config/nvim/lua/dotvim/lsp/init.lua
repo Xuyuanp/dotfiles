@@ -121,6 +121,12 @@ local langs = {
                 usePlaceholders = false,
                 gofumpt = true,
                 templateExtensions = { 'tpl', 'yaml' },
+                codelenses = {
+                    generate = true,
+                    test = true,
+                    tidy = true,
+                    upgrade_dependency = true,
+                },
             },
         },
     },
