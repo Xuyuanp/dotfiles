@@ -127,6 +127,12 @@ local langs = {
                     tidy = true,
                     upgrade_dependency = true,
                 },
+                analyses = {
+                    fieldaligment = true,
+                    nilness = true,
+                    shadow = true,
+                    unusedwrite = true,
+                },
             },
         },
     },
