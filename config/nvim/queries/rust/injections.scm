@@ -27,6 +27,6 @@
   (token_tree (raw_string_literal) @sql))
 
  (#eq? @_path "sqlx")
- (#eq? @_identifier "query")
+ (#match? @_identifier "^query")
  (#offset! @sql 1 0 0 0)
 )
