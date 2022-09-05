@@ -170,6 +170,9 @@ local langs = {
             token = vim.env.SOURCERY_TOKEN,
         },
     },
+    sqls = {
+        root_dir = lspconfig.util.root_pattern('.nlsp-settings/sqls.json'),
+    },
 }
 
 mason_lspcfg.setup_handlers({
