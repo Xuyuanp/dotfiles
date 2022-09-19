@@ -47,9 +47,18 @@ local format_dat_sql = function(bufnr)
                 writer = { result },
             })
 
-            local range = { node:range() }
+            j:start()
+            j:wait()
 
-            local formatted = j:sync()
+            if j.code ~= 0 then
+                local err = j:stderr_result()
+                vim.notify(string.format('format SQL failed:\n%s', table.concat(err, '\n')), 'ERROR')
+                return
+            end
+
+            local formatted = j:result()
+
+            local range = { node:range() }
             local rep = string.rep(' ', range[2])
             for idx, line in ipairs(formatted) do
                 formatted[idx] = rep .. line
