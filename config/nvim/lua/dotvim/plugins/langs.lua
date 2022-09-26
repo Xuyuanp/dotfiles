@@ -138,4 +138,9 @@ return {
             { 'ap/vim-css-color', ft = 'rasi' },
         },
     },
+
+    {
+        'NoahTheDuke/vim-just',
+        ft = { 'just' },
+    },
 }
