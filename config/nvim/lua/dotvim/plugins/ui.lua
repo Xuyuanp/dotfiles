@@ -124,6 +124,7 @@ return {
 
     {
         'akinsho/bufferline.nvim',
+        tag = 'v2.9.1',
         -- requires = 'kyazdani42/nvim-web-devicons',
         event = 'BufEnter',
         config = function()
