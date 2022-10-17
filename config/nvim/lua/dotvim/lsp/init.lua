@@ -21,6 +21,29 @@ if nlspsettings then
     })
 end
 
+--- copy from https://github.com/williamboman/nvim-config/blob/main/lua/wb/lsp/on-attach.lua
+local function find_and_run_codelens()
+    local bufnr = vim.api.nvim_get_current_buf()
+    local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+    local lenses = vim.lsp.codelens.get(bufnr)
+
+    lenses = vim.tbl_filter(function(lense)
+        return lense.range.start.line < row
+    end, lenses)
+
+    if #lenses == 0 then
+        return vim.api.nvim_echo({ { 'Could not find codelens to run.', 'WarningMsg' } }, false, {})
+    end
+
+    table.sort(lenses, function(a, b)
+        return a.range.start.line > b.range.start.line
+    end)
+
+    vim.api.nvim_win_set_cursor(0, { lenses[1].range.start.line + 1, lenses[1].range.start.character })
+    vim.lsp.codelens.run()
+    vim.api.nvim_win_set_cursor(0, { row, col }) -- restore cursor, TODO: also restore position
+end
+
 local group_id = api.nvim_create_augroup('dotvim_lsp_init_on_attach', { clear = true })
 
 local function set_lsp_keymaps(_client, bufnr)
@@ -39,6 +62,7 @@ local function set_lsp_keymaps(_client, bufnr)
         gws = vim.lsp.buf.workspace_symbol,
         gca = vim.lsp.buf.code_action,
         go  = vim.lsp.buf.outgoing_calls,
+        gcl = find_and_run_codelens,
     }
     for key, action in pairs(keymaps) do
         set_keymap('n', key, action, key_opts)
@@ -74,6 +98,15 @@ local function set_lsp_autocmd(client, bufnr)
                 vim.lsp.buf.clear_references()
             end,
         })
+    end
+
+    if client.supports_method('textDocument/codeLens') then
+        api.nvim_create_autocmd({ 'BufEnter', 'InsertLeave', 'BufWritePost', 'CursorHold' }, {
+            group = group_id,
+            buffer = bufnr,
+            callback = vim.lsp.codelens.refresh,
+        })
+        vim.schedule(vim.lsp.codelens.refresh)
     end
 end
 
