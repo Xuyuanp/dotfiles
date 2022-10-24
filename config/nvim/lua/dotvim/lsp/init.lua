@@ -119,7 +119,7 @@ local default_capabilities = vim.lsp.protocol.make_client_capabilities()
 
 local cmp_lsp = vim.F.npcall(require, 'cmp_nvim_lsp')
 if cmp_lsp then
-    default_capabilities = cmp_lsp.update_capabilities(default_capabilities)
+    default_capabilities = cmp_lsp.default_capabilities(default_capabilities)
 end
 
 -- stylua: ignore
