@@ -114,6 +114,7 @@ return {
                     delete = { hl = 'GitSignsDelete', text = '┃', numhl = '', linehl = '' },
                     topdelete = { hl = 'GitSignsDelete', text = '┃', numhl = '', linehl = '' },
                     changedelete = { hl = 'GitSignsChange', text = '┃', numhl = '', linehl = '' },
+                    untracked = { hl = 'GitSignsAdd', text = '┃', numhl = '', linehl = '' },
                 },
                 keymaps = {
                     noremap = true,
