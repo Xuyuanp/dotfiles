@@ -143,4 +143,9 @@ return {
         'NoahTheDuke/vim-just',
         ft = { 'just' },
     },
+
+    {
+        'imsnif/kdl.vim',
+        ft = { 'kdl' },
+    },
 }
