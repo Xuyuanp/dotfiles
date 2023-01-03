@@ -563,4 +563,8 @@ return {
             require('headlines').setup()
         end,
     },
+
+    {
+        'eandrju/cellular-automaton.nvim',
+    },
 }
