@@ -76,7 +76,7 @@ local function set_lsp_autocmd(client, bufnr)
             buffer = bufnr,
             desc = '[lsp] auto format',
             callback = function()
-                if not vim.g.lsp_disable_auto_format then
+                if not vim.b.lsp_disable_auto_format then
                     vim.lsp.buf.format({ async = false })
                 end
             end,

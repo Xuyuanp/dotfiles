@@ -190,14 +190,17 @@ return {
         config = function()
             local fmt = require('formatter')
             local util = require('formatter.util')
+            local python_formaters = require('formatter.filetypes.python')
             fmt.setup({
                 logging = true,
                 log_level = vim.log.levels.WARN,
                 filetype = {
                     lua = require('formatter.filetypes.lua').stylua,
                     python = {
-                        require('formatter.filetypes.python').black,
-                        require('formatter.filetypes.python').isort,
+                        python_formaters.black,
+                        python_formaters.isort,
+                        python_formaters.yapf,
+                        python_formaters.autopep8,
                     },
                     proto = function()
                         return {
