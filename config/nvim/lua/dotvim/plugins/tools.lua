@@ -202,6 +202,14 @@ return {
                         python_formaters.yapf,
                         python_formaters.autopep8,
                     },
+                    go = {
+                        function()
+                            return {
+                                exe = 'goimports-reviser',
+                                args = { '-set-alias', '-use-cache', '-rm-unused', '-output=file' },
+                            }
+                        end,
+                    },
                     proto = function()
                         return {
                             exe = 'buf',
