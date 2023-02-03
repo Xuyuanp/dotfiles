@@ -70,14 +70,14 @@ local function set_lsp_keymaps(_client, bufnr)
 end
 
 local function set_lsp_autocmd(client, bufnr)
-    if client.supports_method('textDocument/formating') then
+    if client.supports_method('textDocument/formatting') then
         api.nvim_create_autocmd({ 'BufWritePre' }, {
             group = group_id,
             buffer = bufnr,
-            desc = '[lsp] auto format',
+            desc = '[lsp] formatting',
             callback = function()
                 if not vim.b.lsp_disable_auto_format then
-                    vim.lsp.buf.format({ async = false })
+                    vim.lsp.buf.formatting_sync()
                 end
             end,
         })
@@ -87,6 +87,7 @@ local function set_lsp_autocmd(client, bufnr)
         api.nvim_create_autocmd({ 'CursorHold' }, {
             group = group_id,
             buffer = bufnr,
+            desc = '[lsp] document highlight',
             callback = function()
                 vim.lsp.buf.document_highlight()
             end,
@@ -94,6 +95,7 @@ local function set_lsp_autocmd(client, bufnr)
         api.nvim_create_autocmd({ 'CursorMoved' }, {
             group = group_id,
             buffer = bufnr,
+            desc = '[lsp] document highlight clear',
             callback = function()
                 vim.lsp.buf.clear_references()
             end,
@@ -104,6 +106,7 @@ local function set_lsp_autocmd(client, bufnr)
         api.nvim_create_autocmd({ 'BufEnter', 'InsertLeave', 'BufWritePost', 'CursorHold' }, {
             group = group_id,
             buffer = bufnr,
+            desc = '[lsp] code lens',
             callback = vim.lsp.codelens.refresh,
         })
         vim.schedule(vim.lsp.codelens.refresh)
