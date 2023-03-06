@@ -3,12 +3,11 @@ local mode = vim.fn.mode
 local galaxyline = require('galaxyline')
 local section = galaxyline.section
 local dotcolors = require('dotvim.colors').colors
-local colors = require('kanagawa').config.colors
+local colors = require('kanagawa.colors').setup()
 
 require('dotvim.git.head').lazy_load()
 
 --[[/* CONSTANTS */]]
-
 -- Defined in https://github.com/Iron-E/nvim-highlite
 local _COLORS = {
     bar = {
@@ -34,7 +33,7 @@ local _HEX_COLORS = setmetatable({
 local _BG = {
     file = _HEX_COLORS.bar.side,
     -- git = _HEX_COLORS.blue,
-    git = colors.katanaGray,
+    git = colors.palette.katanaGray,
     diagnostic = _HEX_COLORS.bar.middle,
 }
 
@@ -46,27 +45,26 @@ end
 
 -- stylua: ignore
 local _MODES = {
-    ['c']      = {'',        dotcolors.red},
-    ['ce']     = {'',        dotcolors.red_dark},
-    ['cv']     = {'EX',       dotcolors.red_light},
-    ['i']      = {'I',        dotcolors.green},
-    ['ic']     = {'IC',       dotcolors.green_light},
-    ['n']      = {'N',        dotcolors.purple_light},
-    ['no']     = {'OP',       dotcolors.purple},
-    ['r']      = {'CR',       dotcolors.cyan},
-    ['r?']     = {':CONFIRM', dotcolors.cyan},
-    ['rm']     = {'--MORE',   dotcolors.cyan},
-    ['R']      = {'R',        dotcolors.pink},
-    ['Rv']     = {'RV',       dotcolors.pink},
-    ['s']      = {'S',        dotcolors.turqoise},
-    ['S']      = {'S',        dotcolors.turqoise},
-    [t'<C-s>'] = {'S-L',      dotcolors.turqoise},
-    ['t']      = {'T',        dotcolors.orange},
-    ['v']      = {'V',        dotcolors.blue},
-    ['V']      = {'V-L',      dotcolors.blue},
-    [t'<C-v>'] = {'V-B',      dotcolors.blue},
-    ['!']      = {'SHELL',    dotcolors.yellow},
-
+    ['c']       = { '', dotcolors.red },
+    ['ce']      = { '', dotcolors.red_dark },
+    ['cv']      = { 'EX', dotcolors.red_light },
+    ['i']       = { 'I', dotcolors.green },
+    ['ic']      = { 'IC', dotcolors.green_light },
+    ['n']       = { 'N', dotcolors.purple_light },
+    ['no']      = { 'OP', dotcolors.purple },
+    ['r']       = { 'CR', dotcolors.cyan },
+    ['r?']      = { ':CONFIRM', dotcolors.cyan },
+    ['rm']      = { '--MORE', dotcolors.cyan },
+    ['R']       = { 'R', dotcolors.pink },
+    ['Rv']      = { 'RV', dotcolors.pink },
+    ['s']       = { 'S', dotcolors.turqoise },
+    ['S']       = { 'S', dotcolors.turqoise },
+    [t '<C-s>'] = { 'S-L', dotcolors.turqoise },
+    ['t']       = { 'T', dotcolors.orange },
+    ['v']       = { 'V', dotcolors.blue },
+    ['V']       = { 'V-L', dotcolors.blue },
+    [t '<C-v>'] = { 'V-B', dotcolors.blue },
+    ['!']       = { 'SHELL', dotcolors.yellow },
     -- libmodal
     ['TABS']    = dotcolors.tan,
     ['BUFFERS'] = dotcolors.teal,
@@ -77,7 +75,6 @@ local _ICONS = {
     Separators = {
         left = '',
         right = '',
-
         rounded = {
             left = '',
             right = '',
@@ -100,7 +97,6 @@ local _ICONS = {
 }
 
 --[[/* PROVIDERS */]]
-
 local function all(...)
     local args = { ... }
     return function()
@@ -159,7 +155,6 @@ local function git_branch()
 end
 
 --[[/* GALAXYLINE CONFIG */]]
-
 galaxyline.short_line_list = {
     'dbui',
     'diff',
@@ -376,7 +371,6 @@ section.right = {
             separator = ' ',
             separator_highlight = { _HEX_COLORS.bar.side, _HEX_COLORS.bar.side },
         },
-
         WhiteSpace = {
             provider = { space, space, 'WhiteSpace' }, -- why one more space is required?
             condition = function()
