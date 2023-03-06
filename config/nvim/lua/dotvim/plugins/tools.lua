@@ -220,6 +220,9 @@ return {
                             stdin = true,
                         }
                     end,
+                    graphql = {
+                        require('formatter.filetypes.graphql').prettierd,
+                    },
                     ['*'] = {
                         require('formatter.filetypes.any').remove_trailing_whitespace,
                     },
