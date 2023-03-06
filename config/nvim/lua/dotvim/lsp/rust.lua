@@ -16,6 +16,8 @@ function M.setup(server)
 
             executor = require('rust-tools.executors').termopen,
 
+            reload_workspace_from_cargo_toml = true,
+
             -- on_initialized = function(status)
             --     vim.notify('rust_analyzer started: ' .. status.health, 'INFO')
             -- end,
