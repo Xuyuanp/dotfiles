@@ -56,6 +56,7 @@ return {
 
     {
         'junegunn/vim-easy-align',
+        event = 'VeryLazy',
         config = function()
             local set_keymap = vim.keymap.set
             set_keymap('v', '<CR><Space>', ':EasyAlign\\<CR>', { noremap = true })
@@ -76,6 +77,7 @@ return {
 
     {
         'voldikss/vim-translator',
+        event = 'VeryLazy',
         init = function()
             vim.g.translator_history_enable = true
         end,
@@ -85,6 +87,7 @@ return {
 
     {
         'jbyuki/venn.nvim',
+        event = 'VeryLazy',
         config = function()
             vim.api.nvim_set_keymap('v', '<Leader>vb', ':VBox<CR>', { noremap = true })
         end,
@@ -133,6 +136,7 @@ return {
 
     {
         'rcarriga/nvim-notify',
+        event = 'VeryLazy',
         config = function()
             vim.notify = require('notify')
 
@@ -149,6 +153,7 @@ return {
 
     {
         'phaazon/hop.nvim',
+        event = 'VeryLazy',
         branch = 'v1', -- optional but strongly recommended
         config = function()
             -- you can configure Hop the way you like here; see :h hop-config
@@ -177,6 +182,7 @@ return {
 
     {
         'mhartington/formatter.nvim',
+        event = 'VeryLazy',
         config = function()
             local fmt = require('formatter')
             local util = require('formatter.util')

@@ -1,7 +1,6 @@
 local vim = vim
 
 return {
-
     {
         'nvim-telescope/telescope.nvim',
         name = 'telescope',
@@ -227,6 +226,7 @@ return {
 
     {
         'haringsrob/nvim_context_vt',
+        event = 'VeryLazy',
         dependencies = { 'nvim-treesitter/nvim-treesitter' },
         config = function()
             require('nvim_context_vt').setup({
@@ -239,7 +239,7 @@ return {
                 -- Disable display of virtual text below blocks for indentation based languages like Python
                 -- Default: false
                 disable_virtual_lines = false,
-                -- Same as above but only for spesific filetypes
+                -- Same as above but only for specific filetypes
                 -- Default: {}
                 disable_virtual_lines_ft = { 'yaml', 'python' },
                 -- How many lines required after starting position to show virtual text
@@ -333,6 +333,7 @@ return {
 
     {
         'windwp/nvim-spectre',
+        event = 'VeryLazy',
         dependencies = { 'plenary', 'popup' },
         config = function()
             require('spectre').setup({})
@@ -358,6 +359,7 @@ return {
 
     {
         'stevearc/dressing.nvim',
+        event = 'VeryLazy',
         config = function()
             require('dressing').setup({
                 input = {
@@ -468,6 +470,7 @@ return {
 
     {
         'kevinhwang91/nvim-hlslens',
+        event = 'VeryLazy',
         config = function()
             require('hlslens').setup()
             local kopts = { noremap = true, silent = true }
@@ -483,6 +486,7 @@ return {
 
     {
         'm-demare/hlargs.nvim',
+        event = 'VeryLazy',
         dependencies = { 'nvim-treesitter/nvim-treesitter' },
         config = function()
             require('hlargs').setup({})
@@ -491,6 +495,7 @@ return {
 
     {
         'folke/todo-comments.nvim',
+        event = 'VeryLazy',
         dependencies = 'plenary',
         config = function()
             require('todo-comments').setup({
@@ -550,7 +555,7 @@ return {
 
     {
         'akinsho/git-conflict.nvim',
-        tags = '*',
+        version = '*',
         config = function()
             require('git-conflict').setup({
                 default_mappings = {

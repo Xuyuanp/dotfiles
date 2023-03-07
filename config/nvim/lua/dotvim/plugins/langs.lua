@@ -153,9 +153,4 @@ return {
         'imsnif/kdl.vim',
         ft = { 'kdl' },
     },
-
-    {
-        'jparise/vim-graphql',
-        ft = { 'graphql' },
-    },
 }
