@@ -44,6 +44,7 @@
   "luv-vimdocs": { "branch": "main", "commit": "997b9338fd3ac91a53bbdc19110c127e3bea01c4" },
   "mason-lspconfig.nvim": { "branch": "main", "commit": "a31e011135a79d63c71254c250c9158e1056a1cb" },
   "mason.nvim": { "branch": "main", "commit": "add6d1d63d8b86af951ba64b4157fe6b0af173d4" },
+  "neodev.nvim": { "branch": "main", "commit": "749f933eab33fd4e4b78b3d4c97e401632988b33" },
   "nlsp-settings.nvim": { "branch": "main", "commit": "4bac2b88cc4dc61e915ecb3cddafd140c57c4404" },
   "nui.nvim": { "branch": "main", "commit": "0dc148c6ec06577fcf06cbab3b7dac96d48ba6be" },
   "nvim-autopairs": { "branch": "master", "commit": "e755f366721bc9e189ddecd39554559045ac0a18" },

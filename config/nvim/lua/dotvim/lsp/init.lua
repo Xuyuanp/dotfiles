@@ -5,7 +5,7 @@ local handlers = require('dotvim.lsp.handlers')
 
 local mason_lspcfg = vim.F.npcall(require, 'mason-lspconfig')
 if not mason_lspcfg then
-    vim.notify_once('mason not installed', 'ERROR')
+    vim.notify_once('mason not installed', vim.log.levels.WARN)
     return
 end
 local lspconfig = require('lspconfig')
@@ -20,6 +20,30 @@ if nlspsettings then
         loader = 'json',
     })
 end
+
+require('neodev').setup({
+    library = {
+        enabled = true, -- when not enabled, neodev will not change any settings to the LSP server
+        -- these settings will be used for your Neovim config directory
+        runtime = true, -- runtime path
+        types = true, -- full signature, docs and completion of vim.api, vim.treesitter, vim.lsp and others
+        plugins = true, -- installed opt or start plugins in packpath
+        -- you can also specify the list of plugins to make available as a workspace library
+        -- plugins = { "nvim-treesitter", "plenary.nvim", "telescope.nvim" },
+    },
+    setup_jsonls = true, -- configures jsonls to provide completion for project specific .luarc.json files
+    -- for your Neovim config directory, the config.library settings will be used as is
+    -- for plugin directories (root_dirs having a /lua directory), config.library.plugins will be disabled
+    -- for any other directory, config.library.enabled will be set to false
+    override = function(root_dir, options) end,
+    -- With lspconfig, Neodev will automatically setup your lua-language-server
+    -- If you disable this, then you have to set {before_init=require("neodev.lsp").before_init}
+    -- in your lsp start options
+    lspconfig = true,
+    -- much faster, but needs a recent built of lua-language-server
+    -- needs lua-language-server >= 3.6.0
+    pathStrict = true,
+})
 
 --- copy from https://github.com/williamboman/nvim-config/blob/main/lua/wb/lsp/on-attach.lua
 local function find_and_run_codelens()
@@ -141,14 +165,6 @@ local default_config = {
     },
 }
 
-local function get_runtime_path()
-    local runtime_path = vim.split(package.path, ';')
-    table.insert(runtime_path, 'lua/?.lua')
-    table.insert(runtime_path, 'lua/?/init.lua')
-    table.insert(runtime_path, vim.env.VIM .. '/sysinit.lua')
-    return runtime_path
-end
-
 local langs = {
     gopls = {
         filetypes = { 'go', 'gomod', 'gotmpl', 'helm' },
@@ -211,16 +227,6 @@ local langs = {
                         'unused-vararg',
                         'unused-local',
                         'redefined-local',
-                    },
-                },
-                runtime = {
-                    version = 'LuaJIT',
-                    path = get_runtime_path(),
-                },
-                workspace = {
-                    library = vim.api.nvim_get_runtime_file('', true),
-                    ignoreDir = {
-                        '.cache',
                     },
                 },
             },

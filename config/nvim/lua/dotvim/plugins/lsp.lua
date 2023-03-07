@@ -13,6 +13,7 @@ return {
         'neovim/nvim-lspconfig',
         dependencies = {
             'tamago324/nlsp-settings.nvim',
+            'folke/neodev.nvim',
         },
         name = 'lspconfig',
         config = function()
