@@ -47,9 +47,6 @@ end
 function M.setup()
     local plugins = get_plugins()
     local opts = {
-        defaults = {
-            lazy = true,
-        },
         performance = {
             rtp = {
                 disabled_plugins = {
