@@ -191,7 +191,7 @@ local langs = {
             },
         },
     },
-    sumneko_lua = {
+    lua_ls = {
         settings = {
             -- https://github.com/sumneko/vscode-lua/blob/master/setting/schema.json
             Lua = {

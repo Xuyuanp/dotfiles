@@ -1,4 +1,1 @@
-augroup dotvim_after_ftplugin_lua
-    autocmd!
-    autocmd! BufWritePre <buffer> silent! lua require('stylua-nvim').format_file()
-augroup END
+let b:lsp_disable_auto_format = v:true
