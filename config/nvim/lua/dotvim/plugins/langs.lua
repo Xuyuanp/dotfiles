@@ -1,3 +1,5 @@
+local vim = vim
+
 return {
     {
         'vim-scripts/a.vim',
@@ -27,7 +29,7 @@ return {
     {
         'plasticboy/vim-markdown',
         ft = { 'markdown', 'md' },
-        setup = function()
+        init = function()
             vim.g.vim_markdown_folding_disabled = 1
         end,
     },
@@ -48,14 +50,17 @@ return {
 
     {
         'KSP-KOS/EditorTools',
-        rtp = 'VIM/vim-kerboscript',
+        -- rtp = 'VIM/vim-kerboscript',
         branch = 'develop',
+        init = function(plugin)
+            vim.opt.rtp:append(plugin.dir .. '/VIM/vim-kerboscript')
+        end,
     },
 
     {
         'euclidianAce/BetterLua.vim',
         ft = { 'lua' },
-        setup = function()
+        init = function()
             vim.g.BetterLua_enable_emmylua = 1
         end,
     },
@@ -65,8 +70,8 @@ return {
 
     {
         'mfussenegger/nvim-dap',
-        as = 'dap',
-        requires = { 'plenary' },
+        name = 'dap',
+        dependencies = { 'plenary' },
         config = function()
             require('dotvim.dap').setup()
         end,
@@ -74,7 +79,7 @@ return {
 
     {
         'rcarriga/nvim-dap-ui',
-        requires = 'dap',
+        dependencies = 'dap',
         config = function()
             require('dotvim.dap').ui.setup()
         end,
@@ -82,7 +87,7 @@ return {
 
     {
         'theHamsta/nvim-dap-virtual-text',
-        requires = {
+        dependencies = {
             'dap',
             'nvim-treesitter/nvim-treesitter',
         },
@@ -93,7 +98,7 @@ return {
 
     {
         'mfussenegger/nvim-dap-python',
-        requires = { 'dap' },
+        dependencies = { 'dap' },
         config = function()
             local dap_py = require('dap-python')
             dap_py.setup('~/.pyenv/versions/debugpy/bin/python')
@@ -103,7 +108,7 @@ return {
 
     {
         'nvim-telescope/telescope-dap.nvim',
-        requires = { 'dap', 'telescope' },
+        dependencies = { 'dap', 'telescope' },
         config = function()
             require('telescope').load_extension('dap')
         end,
@@ -134,7 +139,7 @@ return {
     {
         'Fymyte/rasi.vim',
         ft = 'rasi',
-        requires = {
+        dependencies = {
             { 'ap/vim-css-color', ft = 'rasi' },
         },
     },

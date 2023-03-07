@@ -54,7 +54,7 @@ return {
 
     {
         'antoinemadec/FixCursorHold.nvim',
-        setup = function()
+        init = function()
             vim.g.cursorhold_updatetime = 800
         end,
     },
@@ -83,7 +83,7 @@ return {
 
     {
         'voldikss/vim-translator',
-        setup = function()
+        init = function()
             vim.g.translator_history_enable = true
         end,
     },
@@ -104,8 +104,8 @@ return {
 
     {
         'lewis6991/gitsigns.nvim',
-        as = 'gitsigns',
-        requires = { 'plenary' },
+        name = 'gitsigns',
+        dependencies = { 'plenary' },
         config = function()
             require('gitsigns').setup({
                 signs = {
@@ -119,10 +119,8 @@ return {
                 keymaps = {
                     noremap = true,
                     buffer = true,
-
                     ['n ]c'] = { expr = true, [[&diff ? ']c' : '<cmd>lua require"gitsigns.actions".next_hunk()<CR>']] },
                     ['n [c'] = { expr = true, [[&diff ? '[c' : '<cmd>lua require"gitsigns.actions".prev_hunk()<CR>']] },
-
                     ['n <leader>hs'] = '<cmd>lua require"gitsigns".stage_hunk()<CR>',
                     ['v <leader>hs'] = '<cmd>lua require"gitsigns".stage_hunk({vim.fn.line("."), vim.fn.line("v")})<CR>',
                     ['n <leader>hu'] = '<cmd>lua require"gitsigns".undo_stage_hunk()<CR>',
@@ -131,7 +129,6 @@ return {
                     ['n <leader>hR'] = '<cmd>lua require"gitsigns".reset_buffer()<CR>',
                     ['n <leader>hp'] = '<cmd>lua require"gitsigns".preview_hunk()<CR>',
                     ['n <leader>hb'] = '<cmd>lua require"gitsigns".blame_line(true)<CR>',
-
                     -- Text objects
                     ['o ih'] = ':<C-U>lua require"gitsigns.actions".select_hunk()<CR>',
                     ['x ih'] = ':<C-U>lua require"gitsigns.actions".select_hunk()<CR>',

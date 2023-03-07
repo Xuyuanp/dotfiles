@@ -1,21 +1,21 @@
 return {
     {
         'nvim-lua/plenary.nvim',
-        as = 'plenary',
+        name = 'plenary',
     },
 
     {
         'nvim-lua/popup.nvim',
-        as = 'popup',
+        name = 'popup',
     },
 
     {
         'junegunn/fzf.vim',
-        as = 'fzfvim',
-        requires = {
+        name = 'fzfvim',
+        dependencies = {
             {
                 'junegunn/fzf',
-                run = function()
+                build = function()
                     vim.fn['fzf#install']()
                 end,
             },

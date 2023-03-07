@@ -11,22 +11,32 @@ return {
     },
     {
         'neovim/nvim-lspconfig',
-        requires = {
+        dependencies = {
             'tamago324/nlsp-settings.nvim',
         },
-        as = 'lspconfig',
+        name = 'lspconfig',
         config = function()
             require('dotvim.lsp')
         end,
     },
     {
         'williamboman/mason.nvim',
-        requires = {
+        dependencies = {
             'lspconfig',
             'williamboman/mason-lspconfig.nvim',
         },
         config = function()
             require('mason').setup({})
+        end,
+    },
+
+    {
+        'williamboman/mason-lspconfig.nvim',
+        dependencies = {
+            'lspconfig',
+            'williamboman/mason.nvim',
+        },
+        config = function()
             require('mason-lspconfig').setup({})
         end,
     },
@@ -50,7 +60,7 @@ return {
 
     {
         'hrsh7th/vim-vsnip',
-        requires = {
+        dependencies = {
             'rafamadriz/friendly-snippets',
         },
         config = function()
@@ -68,7 +78,7 @@ return {
 
     {
         'hrsh7th/nvim-cmp',
-        requires = {
+        dependencies = {
             'hrsh7th/cmp-buffer',
             'hrsh7th/cmp-nvim-lua',
             'hrsh7th/cmp-nvim-lsp',
@@ -157,7 +167,7 @@ return {
         'mfussenegger/nvim-lint',
         config = function()
             local lint = require('lint')
-            lint.linters_by_ft.lua = { 'luacheck' }
+            -- lint.linters_by_ft.lua = { 'luacheck' }
             lint.linters_by_ft.vim = { 'vint' }
             -- lint.linters_by_ft.python = { 'pylint', 'flake8' }
             local codespell = vim.tbl_deep_extend('force', lint.linters.codespell, {

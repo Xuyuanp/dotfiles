@@ -1,9 +1,11 @@
+local vim = vim
+
 return {
 
     {
         'nvim-telescope/telescope.nvim',
-        as = 'telescope',
-        requires = {
+        name = 'telescope',
+        dependencies = {
             'popup',
             'plenary',
         },
@@ -17,7 +19,6 @@ return {
         config = function()
             require('dotvim/yanil').setup()
 
-            local vim = vim
             local execute = vim.api.nvim_command
 
             execute([[ nmap <C-e> :YanilToggle<CR> ]])
@@ -43,7 +44,7 @@ return {
     {
         'mhinz/vim-startify',
         event = 'BufEnter',
-        requires = {
+        dependencies = {
             -- 'kyazdani42/nvim-web-devicons'
         },
         config = function()
@@ -66,7 +67,7 @@ return {
 
     {
         'liuchengxu/vista.vim',
-        command = ':Vista',
+        cmd = 'Vista',
         config = function()
             vim.g.vista_default_executive = 'nvim_lsp'
             vim.api.nvim_set_keymap('n', '<C-t>', ':Vista!!<CR>', { noremap = true })
@@ -125,7 +126,7 @@ return {
     {
         'akinsho/bufferline.nvim',
         tag = 'v2.9.1',
-        -- requires = 'kyazdani42/nvim-web-devicons',
+        -- dependencies = 'kyazdani42/nvim-web-devicons',
         event = 'BufEnter',
         config = function()
             local bufferline = require('bufferline')
@@ -213,12 +214,12 @@ return {
 
     {
         'nvim-treesitter/nvim-treesitter',
-        requires = {
+        dependencies = {
             'nvim-treesitter/playground',
             'romgrk/nvim-treesitter-context',
             'p00f/nvim-ts-rainbow',
         },
-        run = ':TSUpdate',
+        build = ':TSUpdate',
         config = function()
             require('dotvim.treesitter').setup()
         end,
@@ -226,7 +227,7 @@ return {
 
     {
         'haringsrob/nvim_context_vt',
-        requires = { 'nvim-treesitter/nvim-treesitter' },
+        dependencies = { 'nvim-treesitter/nvim-treesitter' },
         config = function()
             require('nvim_context_vt').setup({
                 -- Enable by default. You can disable and use :NvimContextVtToggle to maually enable.
@@ -274,7 +275,7 @@ return {
         config = function()
             require('dotvim.statusline')
         end,
-        requires = {
+        dependencies = {
             -- 'kyazdani42/nvim-web-devicons',
         },
     },
@@ -282,7 +283,7 @@ return {
     {
         'lukas-reineke/indent-blankline.nvim',
         event = 'BufEnter',
-        setup = function()
+        init = function()
             vim.wo.colorcolumn = '99999'
 
             vim.g.indent_blankline_char = '│'
@@ -332,7 +333,7 @@ return {
 
     {
         'windwp/nvim-spectre',
-        requires = { 'plenary', 'popup' },
+        dependencies = { 'plenary', 'popup' },
         config = function()
             require('spectre').setup({})
 
@@ -362,22 +363,17 @@ return {
                 input = {
                     -- Set to false to disable the vim.ui.input implementation
                     enabled = true,
-
                     -- Default prompt string
                     default_prompt = 'Input:',
-
                     -- Can be 'left', 'right', or 'center'
                     prompt_align = 'left',
-
                     -- When true, <Esc> will close the modal
                     insert_only = true,
-
                     -- These are passed to nvim_open_win
                     anchor = 'SW',
                     border = 'rounded',
                     -- 'editor' and 'win' will default to being centered
                     relative = 'cursor',
-
                     -- These can be integers or a float between 0 and 1 (e.g. 0.4 for 40%)
                     prefer_width = 40,
                     width = nil,
@@ -385,35 +381,29 @@ return {
                     -- min_width = {20, 0.2} means "the greater of 20 columns or 20% of total"
                     max_width = { 140, 0.9 },
                     min_width = { 20, 0.2 },
-
                     win_options = {
                         -- Window transparency (0-100)
                         winblend = 10,
                         -- Change default highlight groups (see :help winhl)
                         winhighlight = '',
                     },
-
                     override = function(conf)
                         -- This is the config that will be passed to nvim_open_win.
                         -- Change values here to customize the layout
                         return conf
                     end,
-
                     -- see :help dressing_get_config
                     get_config = nil,
                 },
                 select = {
                     -- Set to false to disable the vim.ui.select implementation
                     enabled = true,
-
                     -- Priority list of preferred vim.select implementations
                     backend = { 'telescope', 'fzf_lua', 'fzf', 'builtin', 'nui' },
-
                     -- Options for telescope selector
                     -- These are passed into the telescope picker directly. Can be used like:
                     -- telescope = require('telescope.themes').get_ivy({...})
                     telescope = require('telescope.themes').get_dropdown({}),
-
                     -- Options for fzf selector
                     fzf = {
                         window = {
@@ -421,7 +411,6 @@ return {
                             height = 0.4,
                         },
                     },
-
                     -- Options for fzf_lua selector
                     fzf_lua = {
                         winopts = {
@@ -429,7 +418,6 @@ return {
                             height = 0.4,
                         },
                     },
-
                     -- Options for nui Menu
                     nui = {
                         position = '50%',
@@ -441,7 +429,6 @@ return {
                         max_width = 80,
                         max_height = 40,
                     },
-
                     -- Options for built-in selector
                     builtin = {
                         -- These are passed to nvim_open_win
@@ -449,14 +436,12 @@ return {
                         border = 'rounded',
                         -- 'editor' and 'win' will default to being centered
                         relative = 'editor',
-
                         win_options = {
                             -- Window transparency (0-100)
                             winblend = 10,
                             -- Change default highlight groups (see :help winhl)
                             winhighlight = '',
                         },
-
                         -- These can be integers or a float between 0 and 1 (e.g. 0.4 for 40%)
                         -- the min_ and max_ options can be a list of mixed types.
                         -- max_width = {140, 0.8} means "the lesser of 140 columns or 80% of total"
@@ -466,17 +451,14 @@ return {
                         height = nil,
                         max_height = 0.9,
                         min_height = { 10, 0.2 },
-
                         override = function(conf)
                             -- This is the config that will be passed to nvim_open_win.
                             -- Change values here to customize the layout
                             return conf
                         end,
                     },
-
                     -- Used to override format_item. See :help dressing-format
                     format_item_override = {},
-
                     -- see :help dressing_get_config
                     get_config = nil,
                 },
@@ -501,7 +483,7 @@ return {
 
     {
         'm-demare/hlargs.nvim',
-        requires = { 'nvim-treesitter/nvim-treesitter' },
+        dependencies = { 'nvim-treesitter/nvim-treesitter' },
         config = function()
             require('hlargs').setup({})
         end,
@@ -509,7 +491,7 @@ return {
 
     {
         'folke/todo-comments.nvim',
-        requires = 'plenary',
+        dependencies = 'plenary',
         config = function()
             require('todo-comments').setup({
                 keywords = {
