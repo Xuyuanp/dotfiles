@@ -581,8 +581,11 @@ return {
                     'starter',
                 }, -- will enable/disable automatically for the following filetypes
             })
-            vim.api.nvim_create_user_command('Drop', function()
+            vim.api.nvim_create_user_command('DropShow', function()
                 require('drop').show()
+            end, {})
+            vim.api.nvim_create_user_command('DropHide', function()
+                require('drop').hide()
             end, {})
         end,
     },
