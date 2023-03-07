@@ -537,6 +537,7 @@ return {
 
     {
         'lukas-reineke/headlines.nvim',
+        ft = { 'markdown', 'orgmode', 'neorg' },
         config = function()
             require('headlines').setup()
         end,
