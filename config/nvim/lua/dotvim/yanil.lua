@@ -35,7 +35,9 @@ local function git_diff(_tree, node)
     api.nvim_win_set_option(winnr, 'winhl', 'NormalFloat:')
     api.nvim_win_set_option(winnr, 'number', true)
 
-    api.nvim_command(string.format([[command! -buffer Apply lua require("yanil/git").apply_buf(%d)]], bufnr))
+    vim.api.nvim_buf_create_user_command(bufnr, 'Apply', function()
+        require('yanil/git').apply_buf(bufnr)
+    end, { desc = 'apply the patch in this buffer' })
 end
 
 local telescope_find_file = a.async(function(cwd, callback)
