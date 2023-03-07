@@ -52,13 +52,6 @@ return {
         end,
     },
 
-    {
-        'antoinemadec/FixCursorHold.nvim',
-        init = function()
-            vim.g.cursorhold_updatetime = 800
-        end,
-    },
-
     'thinca/vim-themis',
 
     {
