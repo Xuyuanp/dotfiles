@@ -580,6 +580,9 @@ return {
                     'starter',
                 }, -- will enable/disable automatically for the following filetypes
             })
+            vim.api.nvim_create_user_command('Drop', function()
+                require('drop').show()
+            end, {})
         end,
     },
 }
