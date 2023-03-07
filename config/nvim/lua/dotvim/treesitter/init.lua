@@ -4,10 +4,8 @@ function M.setup()
     local ts_configs = require('nvim-treesitter.configs')
 
     ts_configs.setup({
-        ensure_installed = { 'go', 'python' }, -- one of "all", "language", or a list of languages
         highlight = {
             enable = true, -- false will disable the whole extension
-            disable = { 'lua' },
         },
         incremental_selection = {
             enable = true,
