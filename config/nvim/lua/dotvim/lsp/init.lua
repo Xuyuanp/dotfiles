@@ -195,6 +195,12 @@ local langs = {
         settings = {
             -- https://github.com/sumneko/vscode-lua/blob/master/setting/schema.json
             Lua = {
+                codelenses = {
+                    enable = true,
+                },
+                hint = {
+                    enable = true,
+                },
                 diagnostics = {
                     enable = true,
                     globals = {
