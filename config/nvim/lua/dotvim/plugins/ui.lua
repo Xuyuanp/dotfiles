@@ -564,4 +564,22 @@ return {
             })
         end,
     },
+
+    {
+        'folke/drop.nvim',
+        event = 'VimEnter',
+        config = function()
+            require('drop').setup({
+                theme = 'leaves',
+                max = 40,
+                interval = 100,
+                screensaver = 1000 * 60 * 3,
+                filetypes = {
+                    'dashboard',
+                    'alpha',
+                    'starter',
+                }, -- will enable/disable automatically for the following filetypes
+            })
+        end,
+    },
 }
