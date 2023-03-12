@@ -60,7 +60,7 @@
   "nvim-spectre": { "branch": "master", "commit": "b71b64afe9fedbfdd25a8abec897ff4af3bd553a" },
   "nvim-treesitter": { "branch": "master", "commit": "a6cc614409e5920800d0b5d7bba930a0fe830271" },
   "nvim-treesitter-context": { "branch": "master", "commit": "f35bc5473117771b3b95125eea1bf1d13a550139" },
-  "nvim-ts-rainbow": { "branch": "master", "commit": "ef95c15a935f97c65a80e48e12fe72d49aacf9b9" },
+  "nvim-ts-rainbow2": { "branch": "master", "commit": "6bcb1472c321a15eef5a7a015b4fefa8758e6513" },
   "nvim_context_vt": { "branch": "master", "commit": "e592a9142fbfe0878ce886cd0d745963604c61d2" },
   "playground": { "branch": "master", "commit": "4044b53c4d4fcd7a78eae20b8627f78ce7dc6f56" },
   "plenary": { "branch": "master", "commit": "253d34830709d690f013daf2853a9d21ad7accab" },

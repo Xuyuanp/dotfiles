@@ -217,7 +217,7 @@ return {
         dependencies = {
             'nvim-treesitter/playground',
             'romgrk/nvim-treesitter-context',
-            'p00f/nvim-ts-rainbow',
+            'HiPhish/nvim-ts-rainbow2',
         },
         build = ':TSUpdate',
         config = function()
