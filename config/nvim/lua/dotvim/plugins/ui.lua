@@ -4,6 +4,7 @@ return {
     {
         'nvim-telescope/telescope.nvim',
         name = 'telescope',
+        version = '*',
         dependencies = {
             'popup',
             'plenary',

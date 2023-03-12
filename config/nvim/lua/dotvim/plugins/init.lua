@@ -24,24 +24,14 @@ end
 local M = {}
 
 local function get_plugins()
-    local plugins = {}
-
-    local groups = {
-        'dotvim.plugins.base',
-        'dotvim.plugins.color',
-        'dotvim.plugins.tools',
-        'dotvim.plugins.ui',
-        'dotvim.plugins.lsp',
-        'dotvim.plugins.langs',
+    return {
+        { import = 'dotvim.plugins.base' },
+        { import = 'dotvim.plugins.color' },
+        { import = 'dotvim.plugins.tools' },
+        { import = 'dotvim.plugins.ui' },
+        { import = 'dotvim.plugins.lsp' },
+        { import = 'dotvim.plugins.langs' },
     }
-
-    for _, group in ipairs(groups) do
-        for _, plug in ipairs(require(group)) do
-            table.insert(plugins, plug)
-        end
-    end
-
-    return plugins
 end
 
 function M.setup()
