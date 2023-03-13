@@ -16,6 +16,7 @@ return {
 
     {
         'Xuyuanp/yanil',
+        cmd = { 'YanilToggle', 'Yanil' },
         config = function()
             require('dotvim/yanil').setup()
 
