@@ -17,70 +17,73 @@ function M.setup()
     vim.g.loaded_remote_plugins = 1
     -- vim.g:loaded_man               = 1
 
-    vim.o.shell = '/bin/sh'
-
     -- redefine leader key
     vim.g.mapleader = ','
-    -- Set to auto read when a file is changed from the outside
-    vim.o.autoread = true
 
-    vim.o.scrolloff = 10
+    local opt = vim.opt
+
+    opt.shell = '/bin/sh'
+
+    -- Set to auto read when a file is changed from the outside
+    opt.autoread = true
+
+    opt.scrolloff = 10
 
     -- fuck mouse
-    vim.o.mouse = ''
+    opt.mouse = ''
 
-    vim.o.modifiable = true
-    vim.o.wrap = false
+    opt.modifiable = true
+    opt.wrap = false
     -- Always show current position
-    vim.o.ruler = true
+    opt.ruler = true
 
     -- Show line number
-    vim.o.number = true
+    opt.number = true
 
     -- if hidden is not set, TextEdit might fail.
-    vim.o.hidden = true
+    opt.hidden = true
 
     -- Ignore case when searching
-    vim.o.ignorecase = true
-    vim.o.smartcase = true
+    opt.ignorecase = true
+    opt.smartcase = true
 
     -- Set magic on
-    vim.o.magic = true
+    opt.magic = true
 
     -- No sound on errors.
-    vim.o.errorbells = false
-    vim.o.visualbell = false
+    opt.errorbells = false
+    opt.visualbell = false
 
     -- show matching bracets
-    vim.o.showmatch = true
-    vim.o.showfulltag = true
+    opt.showmatch = true
+    opt.showfulltag = true
     -- How many tenths of a second to blink
-    vim.o.matchtime = 2
+    opt.matchtime = 2
 
     -- Highlight search things
-    vim.o.hlsearch = true
-    vim.o.incsearch = true
+    opt.hlsearch = true
+    opt.incsearch = true
 
-    vim.o.cursorline = true
+    opt.cursorline = true
 
     -- Display incomplete commands
-    vim.o.showcmd = true
+    opt.showcmd = true
 
-    vim.o.cmdheight = 1
-    vim.o.laststatus = 3
+    opt.cmdheight = 1
+    opt.laststatus = 3
 
     -- Turn on wild menu, try typing :h and press <Tab>
-    vim.o.wildmenu = true
+    opt.wildmenu = true
     -- Shortens messages to avoid 'press a key' prompt
-    vim.o.shortmess = 'aoOtTIc'
+    opt.shortmess:append({ W = true, I = true, c = true })
 
     -- Turn backup off
-    vim.o.backup = false
-    vim.o.writebackup = false
-    vim.o.swapfile = false
+    opt.backup = false
+    opt.writebackup = false
+    opt.swapfile = false
 
     -- vim.o.wildignore = '*.o,*.obj,*~,*vim/backups*,*sass-cache*,*DS_Store*,vendor/rails/**,vendor/cache/**,*.gem,log/**,tmp/**,*.png,*.jpg,*.gif'
-    vim.opt.wildignore:append({
+    opt.wildignore:append({
         '*.o,*.obj,*~',
         '*vim/backups*',
         '*sass-cache*',
@@ -94,59 +97,45 @@ function M.setup()
     })
 
     -- Display tabs and trailing spaces visually
-    vim.o.list = true
-    vim.opt.listchars:append({
+    opt.list = true
+    opt.listchars:append({
         tab = '  ',
         trail = '·',
     })
 
     -- Don't redraw while executing macros (good performance config)
-    vim.o.lazyredraw = true
+    opt.lazyredraw = true
 
     -- always show signcolumn
-    vim.o.signcolumn = 'yes'
+    opt.signcolumn = 'yes'
 
     -- Text options
-    vim.o.expandtab = true
-    vim.o.shiftwidth = 4
-    vim.o.tabstop = 4
-    vim.o.smarttab = true
+    opt.expandtab = true
+    opt.shiftwidth = 4
+    opt.tabstop = 4
+    opt.smarttab = true
 
-    vim.o.linebreak = true
-    vim.o.textwidth = 800
+    opt.linebreak = true
+    opt.textwidth = 800
 
-    vim.o.smartindent = true
-    vim.o.autoindent = true
+    opt.smartindent = true
+    opt.autoindent = true
 
     vim.g.vimsyn_embed = 'lPr'
 
-    vim.o.pumblend = 20
-    vim.o.winblend = 20
+    opt.pumblend = 20
+    opt.winblend = 20
 
-    -- vim.o.fillchars = 'eob: ,vert:┃'
-    vim.opt.fillchars:append({
+    opt.fillchars:append({
         eob = ' ',
         vert = '┃',
     })
 
     -- don't syntax-highlight long lines
-    vim.o.synmaxcol = 200
+    opt.synmaxcol = 200
 
     -- Set completeopt to have a better completion experience
-    vim.o.completeopt = 'menuone,noinsert,noselect'
-
-    if vim.fn.has('gui') then
-        vim.o.guifont = 'FiraCode Nerd Font Mono:h13'
-
-        vim.g.neovide_fullscreen = true
-        vim.g.neovide_transparency = 0.9
-        vim.g.neovide_no_idle = true
-        vim.g.neovide_cursor_antialiasing = true
-    end
-
-    vim.api.nvim_create_user_command('Nerdfonts', function()
-        require('dotvim.util.nerdfonts').pick()
-    end, {})
+    opt.completeopt = 'menuone,noinsert,noselect'
 
     local sign_define = vim.fn.sign_define
     sign_define('DiagnosticSignError', { text = '', texthl = 'DiagnosticSignError' })
@@ -162,6 +151,20 @@ function M.setup()
             paste = { ['+'] = osc52.paste, ['*'] = osc52.paste },
         }
     end
+
+    if vim.g.neovide then
+        opt.guifont = 'FiraCode Nerd Font Mono:h13'
+
+        vim.g.neovide_fullscreen = true
+        vim.g.neovide_transparency = 0.9
+        vim.g.neovide_no_idle = true
+        vim.g.neovide_cursor_antialiasing = true
+    end
+
+    -- TODO: move to somewhere
+    vim.api.nvim_create_user_command('Nerdfonts', function()
+        require('dotvim.util.nerdfonts').pick()
+    end, {})
 end
 
 return M
