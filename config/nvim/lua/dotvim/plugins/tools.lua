@@ -73,7 +73,10 @@ return {
     'tomtom/tcomment_vim',
     'tpope/vim-scriptease',
 
-    'dstein64/vim-startuptime',
+    {
+        'dstein64/vim-startuptime',
+        cmd = 'StartupTime',
+    },
 
     {
         'voldikss/vim-translator',
@@ -101,6 +104,7 @@ return {
     {
         'lewis6991/gitsigns.nvim',
         name = 'gitsigns',
+        event = { 'BufReadPost', 'BufNewFile' },
         dependencies = { 'plenary' },
         config = function()
             require('gitsigns').setup({

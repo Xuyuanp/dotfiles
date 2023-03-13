@@ -25,12 +25,7 @@ local M = {}
 
 local function get_plugins()
     return {
-        { import = 'dotvim.plugins.base' },
-        { import = 'dotvim.plugins.color' },
-        { import = 'dotvim.plugins.tools' },
-        { import = 'dotvim.plugins.ui' },
-        { import = 'dotvim.plugins.lsp' },
-        { import = 'dotvim.plugins.langs' },
+        { import = 'dotvim.plugins' },
     }
 end
 

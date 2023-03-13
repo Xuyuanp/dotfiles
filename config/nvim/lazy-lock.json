@@ -70,7 +70,6 @@
   "rust-tools.nvim": { "branch": "master", "commit": "71d2cf67b5ed120a0e31b2c8adb210dd2834242f" },
   "rust.vim": { "branch": "master", "commit": "889b9a7515db477f4cb6808bef1769e53493c578" },
   "scrollbar.nvim": { "branch": "master", "commit": "bc97c132e8367efecb2ecb937d385e7dc04eb5a1" },
-  "shade.nvim": { "branch": "master", "commit": "4286b5abc47d62d0c9ffb22a4f388b7bf2ac2461" },
   "tabular": { "branch": "master", "commit": "339091ac4dd1f17e225fe7d57b48aff55f99b23a" },
   "tcomment_vim": { "branch": "master", "commit": "b4930f9da28647e5417d462c341013f88184be7e" },
   "telescope": { "branch": "master", "commit": "c1a2af0af69e80e14e6b226d3957a064cd080805" },

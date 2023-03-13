@@ -7,7 +7,7 @@ _G.pprint = function(obj)
 end
 
 require('dotvim.settings').setup()
-require('dotvim.plugins').setup()
+require('dotvim.lazy').setup()
 require('dotvim.mappings').setup()
 require('dotvim.autocmds').setup()
 
