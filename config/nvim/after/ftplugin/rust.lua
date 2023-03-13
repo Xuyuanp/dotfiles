@@ -48,7 +48,7 @@ local format_dat_sql = function(bufnr)
     for id, node, _ in query:iter_captures(tree:root(), bufnr, 0, -1) do
         if id == 3 then
             local text = vim.treesitter.get_node_text(node, bufnr)
-            local split = vim.split(text, '\n')
+            local split = vim.split(text, '\n', { plain = true })
             local result = table.concat(vim.list_slice(split, 2, #split - 1), '\n')
 
             local j = Job:new({
@@ -62,7 +62,7 @@ local format_dat_sql = function(bufnr)
 
             if j.code ~= 0 then
                 local err = j:stderr_result()
-                vim.notify(string.format('format SQL failed:\n%s', table.concat(err, '\n')), 'ERROR')
+                vim.notify(string.format('format SQL failed:\n%s', table.concat(err, '\n')), vim.log.levels.WARN)
                 return
             end
 
