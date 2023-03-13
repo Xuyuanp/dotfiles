@@ -3,24 +3,6 @@ local group_id = vim.api.nvim_create_augroup('dotvim_init', { clear = true })
 local M = {}
 
 function M.setup()
-    vim.api.nvim_create_autocmd({ 'CursorHold' }, {
-        group = group_id,
-        desc = 'show git lens',
-        pattern = { '*' },
-        callback = function()
-            require('dotvim.git.lens').show()
-        end,
-    })
-
-    vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
-        group = group_id,
-        desc = 'clear git lens',
-        pattern = { '*' },
-        callback = function()
-            require('dotvim.git.lens').clear()
-        end,
-    })
-
     vim.api.nvim_create_autocmd({ 'DirChanged' }, {
         group = group_id,
         desc = 'refresh git head',

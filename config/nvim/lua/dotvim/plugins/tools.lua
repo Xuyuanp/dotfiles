@@ -133,7 +133,8 @@ return {
                     ['o ih'] = ':<C-U>lua require"gitsigns.actions".select_hunk()<CR>',
                     ['x ih'] = ':<C-U>lua require"gitsigns.actions".select_hunk()<CR>',
                 },
-                current_line_blame = false,
+                current_line_blame = true,
+                current_line_blame_formatter = '@<author> / <abbrev_sha> <summary> / <author_time:%R>',
             })
         end,
     },
