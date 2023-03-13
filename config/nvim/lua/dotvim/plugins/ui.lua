@@ -5,6 +5,7 @@ return {
         'nvim-telescope/telescope.nvim',
         name = 'telescope',
         version = '*',
+        cmd = { 'Telescope' },
         dependencies = {
             'popup',
             'plenary',
@@ -77,7 +78,7 @@ return {
 
     {
         'norcalli/nvim-colorizer.lua',
-        event = 'BufEnter',
+        event = { 'BufReadPost', 'BufNewFile' },
         config = function()
             vim.opt.termguicolors = true
             require('colorizer').setup()
@@ -86,7 +87,7 @@ return {
 
     {
         'Xuyuanp/scrollbar.nvim',
-        event = 'BufEnter',
+        event = { 'BufReadPost', 'BufNewFile' },
         config = function()
             vim.g.scrollbar_excluded_filetypes = {
                 'nerdtree',
@@ -128,7 +129,7 @@ return {
         'akinsho/bufferline.nvim',
         tag = 'v2.9.1',
         -- dependencies = 'kyazdani42/nvim-web-devicons',
-        event = 'BufEnter',
+        event = { 'BufReadPost', 'BufNewFile' },
         config = function()
             local bufferline = require('bufferline')
             bufferline.setup({
@@ -195,25 +196,6 @@ return {
     },
 
     {
-        'sunjon/shade.nvim',
-        event = 'BufEnter',
-        config = function()
-            if vim.fn.has('gui') then
-                return
-            end
-            require('shade').setup({
-                overlay_opacity = 70,
-                opacity_step = 5,
-                keys = {
-                    brightness_up = '<C-Up>', -- FIXME: conflict with vim-visual-multi
-                    brightness_down = '<C-Down>',
-                    toggle = '<Leader>s',
-                },
-            })
-        end,
-    },
-
-    {
         'nvim-treesitter/nvim-treesitter',
         dependencies = {
             'nvim-treesitter/playground',
@@ -221,6 +203,7 @@ return {
             'HiPhish/nvim-ts-rainbow2',
         },
         build = ':TSUpdate',
+        event = { 'BufReadPost', 'BufNewFile' },
         config = function()
             require('dotvim.treesitter').setup()
         end,
@@ -272,7 +255,7 @@ return {
 
     {
         'NTBBloodbath/galaxyline.nvim',
-        event = 'BufEnter',
+        event = { 'BufReadPost', 'BufNewFile' },
         branch = 'main',
         config = function()
             require('dotvim.statusline')
@@ -284,16 +267,16 @@ return {
 
     {
         'lukas-reineke/indent-blankline.nvim',
-        event = 'BufEnter',
-        init = function()
-            vim.wo.colorcolumn = '99999'
-
-            vim.g.indent_blankline_char = '│'
-            vim.g.indent_blankline_use_treesitter = true
-            vim.g.indent_blankline_show_first_indent_level = true
-            vim.g.indent_blankline_show_trailing_blankline_indent = true
-            vim.g.indent_blankline_filetype_exclude = {
+        event = { 'BufReadPost', 'BufNewFile' },
+        opts = {
+            -- char = "▏",
+            har = '│',
+            show_trailing_blankline_indent = false,
+            show_current_context = false,
+            show_first_indent_level = true,
+            filetype_exclude = {
                 'help',
+                'lazy',
                 'man',
                 'vista',
                 'vista_kind',
@@ -304,10 +287,9 @@ return {
                 'startify',
                 'TelescopePrompt',
                 'lsp-installer',
-            }
-
-            vim.g.indent_blankline_show_current_context = true
-            vim.g.indent_blankline_context_patterns = {
+                'mason',
+            },
+            context_patterns = {
                 'class',
                 'function',
                 'method',
@@ -325,12 +307,36 @@ return {
                 '^for',
                 '^loop',
                 '^call',
-            }
+            },
+        },
+    },
+
+    -- active indent guide and indent text objects
+    {
+        'echasnovski/mini.indentscope',
+        version = false, -- wait till new 0.7.0 release to put it back on semver
+        event = { 'BufReadPre', 'BufNewFile' },
+        opts = {
+            -- symbol = "▏",
+            symbol = '│',
+            options = { try_as_border = true },
+        },
+        init = function()
+            vim.api.nvim_create_autocmd('FileType', {
+                pattern = { 'help', 'Yanil', 'lazy', 'mason' },
+                callback = function()
+                    vim.b.miniindentscope_disable = true
+                end,
+            })
+        end,
+        config = function(_, opts)
+            require('mini.indentscope').setup(opts)
         end,
     },
 
     {
         'MunifTanjim/nui.nvim',
+        lazy = true,
     },
 
     {
@@ -497,7 +503,7 @@ return {
 
     {
         'folke/todo-comments.nvim',
-        event = 'VeryLazy',
+        event = { 'BufReadPost', 'BufNewFile' },
         dependencies = 'plenary',
         config = function()
             require('todo-comments').setup({
@@ -575,7 +581,7 @@ return {
 
     {
         'folke/drop.nvim',
-        event = 'VimEnter',
+        event = 'VeryLazy',
         config = function()
             require('drop').setup({
                 theme = 'leaves',

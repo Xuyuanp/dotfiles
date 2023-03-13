@@ -2,11 +2,13 @@ return {
     {
         'nvim-lua/plenary.nvim',
         name = 'plenary',
+        lazy = true,
     },
 
     {
         'nvim-lua/popup.nvim',
         name = 'popup',
+        lazy = true,
     },
 
     {

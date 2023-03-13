@@ -10,6 +10,10 @@ function M.setup()
         incremental_selection = {
             enable = true,
         },
+        indent = {
+            enable = true,
+            disable = { 'python' },
+        },
         refactor = {
             highlight_definitions = { enable = true },
             highlight_current_scope = {

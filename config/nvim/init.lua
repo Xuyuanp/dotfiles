@@ -1,5 +1,5 @@
-if not vim.fn.has('nvim-0.7') then
-    error('require nvim >= 0.7')
+if not vim.fn.has('nvim-0.8') then
+    error('require nvim >= 0.8')
 end
 
 _G.pprint = function(obj)

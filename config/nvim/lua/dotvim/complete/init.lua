@@ -27,6 +27,10 @@ function M.setup()
     end
 
     cmp.setup({
+        completion = {
+            completeopt = 'menu,menuone,noinsert',
+        },
+
         snippet = {
             expand = function(args)
                 vim.fn['vsnip#anonymous'](args.body)
