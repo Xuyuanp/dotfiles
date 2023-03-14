@@ -149,6 +149,10 @@ end
 local on_attach = function(client, bufnr)
     set_lsp_autocmd(client, bufnr)
     set_lsp_keymaps(client, bufnr)
+
+    vim.api.nvim_buf_set_option(bufnr, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
+    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+    vim.api.nvim_buf_set_option(bufnr, 'tagfunc', 'v:lua.vim.lsp.tagfunc')
 end
 
 local default_capabilities = vim.lsp.protocol.make_client_capabilities()

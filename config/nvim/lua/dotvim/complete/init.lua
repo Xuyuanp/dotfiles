@@ -39,6 +39,8 @@ function M.setup()
         mapping = {
             ['<C-p>'] = cmp.mapping.select_prev_item(),
             ['<C-n>'] = cmp.mapping.select_next_item(),
+            ['<C-b>'] = cmp.mapping.scroll_docs(-5),
+            ['<C-f>'] = cmp.mapping.scroll_docs(5),
             ['<C-Space>'] = cmp.mapping.complete(),
             ['<CR>'] = cmp.mapping.confirm({
                 behavior = cmp.ConfirmBehavior.Insert,
@@ -108,10 +110,19 @@ function M.setup()
         },
     })
 
-    cmp.setup.cmdline('/', {
+    cmp.setup.cmdline({ '/', '?' }, {
+        mapping = cmp.mapping.preset.cmdline(),
         sources = {
             { name = 'buffer' },
         },
+    })
+    cmp.setup.cmdline({ ':' }, {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = cmp.config.sources({
+            { name = 'path' },
+        }, {
+            { name = 'cmdline' },
+        }),
     })
 
     local cmp_git = vim.F.npcall(require, 'cmp_git')
