@@ -283,4 +283,21 @@ return {
             })
         end,
     },
+
+    {
+        'nvim-neotest/neotest',
+        dependencies = {
+            'plenary',
+            'nvim-treesitter/nvim-treesitter',
+            'nvim-neotest/neotest-go',
+        },
+        event = 'VeryLazy',
+        config = function()
+            require('neotest').setup({
+                adapters = {
+                    require('neotest-go'),
+                },
+            })
+        end,
+    },
 }

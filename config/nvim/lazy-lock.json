@@ -46,6 +46,8 @@
   "mason.nvim": { "branch": "main", "commit": "698cd0c4f10480991e665f31977650858d625af1" },
   "mini.indentscope": { "branch": "main", "commit": "7998edc970610c05598c7aea3d21ece8dd87ed52" },
   "neodev.nvim": { "branch": "main", "commit": "78fb6373437eb400f1629b17d4a529669fa2a062" },
+  "neotest": { "branch": "master", "commit": "bbbfa55d850f1aaa6707ea85fb5230ac866459c6" },
+  "neotest-go": { "branch": "main", "commit": "49151e258088bd94895e48c977f8c51e3b956178" },
   "nlsp-settings.nvim": { "branch": "main", "commit": "1b9fed5dec33c6c731dc8ff91d337091930474be" },
   "nui.nvim": { "branch": "main", "commit": "0dc148c6ec06577fcf06cbab3b7dac96d48ba6be" },
   "nvim-autopairs": { "branch": "master", "commit": "e755f366721bc9e189ddecd39554559045ac0a18" },
