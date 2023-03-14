@@ -143,6 +143,7 @@ function M.setup()
         cmp.setup.filetype('toml', {
             sources = cmp.config.sources({
                 { name = 'crates' },
+                { name = 'nvim_lsp' },
             }, {
                 { name = 'buffer' },
                 { name = 'vsnip' },

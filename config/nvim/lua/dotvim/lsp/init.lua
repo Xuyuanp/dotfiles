@@ -70,13 +70,22 @@ end
 
 local group_id = api.nvim_create_augroup('dotvim_lsp_init_on_attach', { clear = true })
 
-local function set_lsp_keymaps(_client, bufnr)
+local function set_lsp_keymaps(client, bufnr)
     local key_opts = { noremap = false, silent = true, buffer = bufnr }
     local set_keymap = vim.keymap.set
+
+    local function show_documentation()
+        if client.name == 'taplo' and vim.fn.expand('%:t') == 'Cargo.toml' and require('crates').popup_available() then
+            require('crates').show_popup()
+        else
+            vim.lsp.buf.hover()
+        end
+    end
+
     -- stylua: ignore
     local keymaps = {
         gd  = vim.lsp.buf.definition,
-        K   = vim.lsp.buf.hover,
+        K   = show_documentation,
         gi  = vim.lsp.buf.implementation,
         gk  = vim.lsp.buf.signature_help,
         gtd = vim.lsp.buf.type_definition,
