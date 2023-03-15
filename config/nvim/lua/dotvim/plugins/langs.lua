@@ -41,6 +41,7 @@ return {
 
     {
         'simrat39/rust-tools.nvim',
+        ft = 'rust',
     },
 
     {
@@ -65,58 +66,24 @@ return {
         end,
     },
 
-    'milisims/nvim-luaref',
-    'nanotee/luv-vimdocs',
-
     {
-        'mfussenegger/nvim-dap',
-        name = 'dap',
-        dependencies = { 'plenary' },
-        config = function()
-            require('dotvim.dap').setup()
-        end,
+        'milisims/nvim-luaref',
+        ft = 'lua',
     },
 
     {
-        'rcarriga/nvim-dap-ui',
-        dependencies = 'dap',
-        config = function()
-            require('dotvim.dap').ui.setup()
-        end,
-    },
-
-    {
-        'theHamsta/nvim-dap-virtual-text',
-        dependencies = {
-            'dap',
-            'nvim-treesitter/nvim-treesitter',
-        },
-        config = function()
-            require('dotvim.dap').virtual_text.setup()
-        end,
-    },
-
-    {
-        'mfussenegger/nvim-dap-python',
-        dependencies = { 'dap' },
-        config = function()
-            local dap_py = require('dap-python')
-            dap_py.setup('~/.pyenv/versions/debugpy/bin/python')
-            dap_py.test_runner = 'pytest'
-        end,
-    },
-
-    {
-        'nvim-telescope/telescope-dap.nvim',
-        dependencies = { 'dap', 'telescope' },
-        config = function()
-            require('telescope').load_extension('dap')
-        end,
+        'nanotee/luv-vimdocs',
+        event = { 'CmdlineEnter' },
     },
 
     {
         'baskerville/vim-sxhkdrc',
         ft = 'sxhkdrc',
+    },
+
+    {
+        'tmux-plugins/vim-tmux',
+        ft = 'tmux',
     },
 
     {

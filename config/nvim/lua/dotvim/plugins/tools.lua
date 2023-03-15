@@ -1,11 +1,16 @@
 return {
-    'godlygeek/tabular',
-    'tpope/vim-surround',
-    'mg979/vim-visual-multi',
-    'tpope/vim-repeat',
+    {
+        'tpope/vim-surround',
+        event = { 'BufReadPost', 'BufNewFile' },
+    },
+    {
+        'mg979/vim-visual-multi',
+        event = { 'BufReadPost', 'BufNewFile' },
+    },
 
     {
         'windwp/nvim-autopairs',
+        event = { 'BufReadPost', 'BufNewFile' },
         config = function()
             local npairs = require('nvim-autopairs')
             npairs.setup()
@@ -52,11 +57,9 @@ return {
         end,
     },
 
-    'thinca/vim-themis',
-
     {
         'junegunn/vim-easy-align',
-        event = 'VeryLazy',
+        event = { 'BufReadPost', 'BufNewFile' },
         config = function()
             local set_keymap = vim.keymap.set
             set_keymap('v', '<CR><Space>', ':EasyAlign\\<CR>', { noremap = true })
@@ -70,8 +73,10 @@ return {
         end,
     },
 
-    'tomtom/tcomment_vim',
-    'tpope/vim-scriptease',
+    {
+        'tomtom/tcomment_vim',
+        event = { 'BufNewFile', 'BufReadPost' },
+    },
 
     {
         'dstein64/vim-startuptime',
@@ -86,7 +91,10 @@ return {
         end,
     },
 
-    'matze/vim-move',
+    {
+        'matze/vim-move',
+        event = { 'BufNewFile', 'BufReadPost' },
+    },
 
     {
         'jbyuki/venn.nvim',
@@ -94,11 +102,6 @@ return {
         config = function()
             vim.api.nvim_set_keymap('v', '<Leader>vb', ':VBox<CR>', { noremap = true })
         end,
-    },
-
-    {
-        'tmux-plugins/vim-tmux',
-        ft = 'tmux',
     },
 
     {
@@ -158,7 +161,7 @@ return {
 
     {
         'phaazon/hop.nvim',
-        event = 'VeryLazy',
+        event = { 'BufReadPost', 'BufNewFile' },
         branch = 'v1', -- optional but strongly recommended
         config = function()
             -- you can configure Hop the way you like here; see :h hop-config
@@ -187,7 +190,7 @@ return {
 
     {
         'mhartington/formatter.nvim',
-        event = 'VeryLazy',
+        event = { 'BufReadPost', 'BufNewFile' },
         config = function()
             local fmt = require('formatter')
             local util = require('formatter.util')

@@ -137,6 +137,8 @@ function M.setup()
     -- Set completeopt to have a better completion experience
     opt.completeopt = 'menuone,noinsert,noselect'
 
+    opt.termguicolors = true
+
     local sign_define = vim.fn.sign_define
     sign_define('DiagnosticSignError', { text = '', texthl = 'DiagnosticSignError' })
     sign_define('DiagnosticSignWarn', { text = '', texthl = 'DiagnosticSignWarn' })

@@ -60,24 +60,6 @@ return {
     },
 
     {
-        'hrsh7th/vim-vsnip',
-        dependencies = {
-            'rafamadriz/friendly-snippets',
-        },
-        config = function()
-            local vim = vim
-            local vfn = vim.fn
-            local command = vim.api.nvim_command
-
-            vim.g.vsnip_snippet_dir = vfn.stdpath('config') .. '/snippets'
-            command([[ imap <expr> <C-j> vsnip#available(1)  ? '<Plug>(vsnip-jump-next)' : '<C-j>' ]])
-            command([[ smap <expr> <C-j> vsnip#available(1)  ? '<Plug>(vsnip-jump-next)' : '<C-j>' ]])
-            command([[ imap <expr> <C-k> vsnip#available(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-k>' ]])
-            command([[ smap <expr> <C-k> vsnip#available(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-k>' ]])
-        end,
-    },
-
-    {
         'hrsh7th/nvim-cmp',
         event = { 'InsertEnter', 'CmdlineEnter' },
         dependencies = {
@@ -91,6 +73,23 @@ return {
             'hrsh7th/cmp-cmdline',
             'Saecki/crates.nvim',
             'petertriho/cmp-git',
+            {
+                'hrsh7th/vim-vsnip',
+                dependencies = {
+                    'rafamadriz/friendly-snippets',
+                },
+                config = function()
+                    local vim = vim
+                    local vfn = vim.fn
+                    local command = vim.api.nvim_command
+
+                    vim.g.vsnip_snippet_dir = vfn.stdpath('config') .. '/snippets'
+                    command([[ imap <expr> <C-j> vsnip#available(1)  ? '<Plug>(vsnip-jump-next)' : '<C-j>' ]])
+                    command([[ smap <expr> <C-j> vsnip#available(1)  ? '<Plug>(vsnip-jump-next)' : '<C-j>' ]])
+                    command([[ imap <expr> <C-k> vsnip#available(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-k>' ]])
+                    command([[ smap <expr> <C-k> vsnip#available(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-k>' ]])
+                end,
+            },
         },
         config = function()
             require('dotvim.complete').setup()

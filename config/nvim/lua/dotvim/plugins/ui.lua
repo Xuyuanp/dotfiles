@@ -80,7 +80,6 @@ return {
         'norcalli/nvim-colorizer.lua',
         event = { 'BufReadPost', 'BufNewFile' },
         config = function()
-            vim.opt.termguicolors = true
             require('colorizer').setup()
         end,
     },
@@ -196,45 +195,6 @@ return {
     },
 
     {
-        'nvim-treesitter/nvim-treesitter',
-        dependencies = {
-            'nvim-treesitter/playground',
-            'romgrk/nvim-treesitter-context',
-            'HiPhish/nvim-ts-rainbow2',
-        },
-        build = ':TSUpdate',
-        event = { 'BufReadPost', 'BufNewFile' },
-        config = function()
-            require('dotvim.treesitter').setup()
-        end,
-    },
-
-    {
-        'haringsrob/nvim_context_vt',
-        event = 'VeryLazy',
-        dependencies = { 'nvim-treesitter/nvim-treesitter' },
-        config = function()
-            require('nvim_context_vt').setup({
-                -- Enable by default. You can disable and use :NvimContextVtToggle to maually enable.
-                -- Default: true
-                enabled = true,
-                -- Disable virtual text for given filetypes
-                -- Default: { 'markdown' }
-                disable_ft = { 'markdown' },
-                -- Disable display of virtual text below blocks for indentation based languages like Python
-                -- Default: false
-                disable_virtual_lines = false,
-                -- Same as above but only for specific filetypes
-                -- Default: {}
-                disable_virtual_lines_ft = { 'yaml', 'python' },
-                -- How many lines required after starting position to show virtual text
-                -- Default: 1 (equals two lines total)
-                min_rows = 80,
-            })
-        end,
-    },
-
-    {
         'numToStr/FTerm.nvim',
         keys = { '<A-o>' },
         config = function()
@@ -317,7 +277,6 @@ return {
         version = false, -- wait till new 0.7.0 release to put it back on semver
         event = { 'BufReadPre', 'BufNewFile' },
         opts = {
-            -- symbol = "▏",
             symbol = '│',
             options = { try_as_border = true },
         },
@@ -367,7 +326,7 @@ return {
 
     {
         'stevearc/dressing.nvim',
-        event = 'VeryLazy',
+        event = { 'BufReadPost', 'BufNewFile' },
         config = function()
             require('dressing').setup({
                 input = {
@@ -478,7 +437,7 @@ return {
 
     {
         'kevinhwang91/nvim-hlslens',
-        event = 'VeryLazy',
+        event = { 'BufReadPost', 'BufNewFile' },
         config = function()
             require('hlslens').setup()
             local kopts = { noremap = true, silent = true }
@@ -489,15 +448,6 @@ return {
             vim.keymap.set('n', '#', [[#<Cmd>lua require('hlslens').start()<CR>]], kopts)
             vim.keymap.set('n', 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]], kopts)
             vim.keymap.set('n', 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], kopts)
-        end,
-    },
-
-    {
-        'm-demare/hlargs.nvim',
-        event = 'VeryLazy',
-        dependencies = { 'nvim-treesitter/nvim-treesitter' },
-        config = function()
-            require('hlargs').setup({})
         end,
     },
 
@@ -582,7 +532,7 @@ return {
 
     {
         'folke/drop.nvim',
-        event = 'VeryLazy',
+        event = { 'BufReadPost', 'BufNewFile' },
         config = function()
             require('drop').setup({
                 theme = 'leaves',
