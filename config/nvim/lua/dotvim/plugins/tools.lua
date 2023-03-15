@@ -74,8 +74,11 @@ return {
     },
 
     {
-        'tomtom/tcomment_vim',
+        'numToStr/Comment.nvim',
         event = { 'BufNewFile', 'BufReadPost' },
+        config = function()
+            require('Comment').setup()
+        end,
     },
 
     {
