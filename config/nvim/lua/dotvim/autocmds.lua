@@ -21,13 +21,7 @@ function M.setup()
         end,
     })
 
-    vim.api.nvim_create_autocmd({ 'User' }, {
-        group = group_id,
-        desc = 'Compile automatically after packer complete',
-        pattern = { 'PackerComplete' },
-        command = 'PackerCompile',
-    })
-
+    -- auto save/load cursor position
     vim.api.nvim_create_autocmd('BufReadPost', {
         group = group_id,
         callback = function()
