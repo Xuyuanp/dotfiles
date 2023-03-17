@@ -1,7 +1,9 @@
 local M = {}
 
 function M.get_name(bufnr)
-    local clients = vim.lsp.buf_get_clients(bufnr)
+    local clients = vim.lsp.get_active_clients({
+        bufnr = bufnr,
+    })
     if not clients or #clients == 0 then
         return ''
     end
