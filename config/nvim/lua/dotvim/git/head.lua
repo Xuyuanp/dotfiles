@@ -24,10 +24,6 @@ local choices = {
     },
 }
 
-local redraw_statusline = vim.schedule_wrap(function()
-    vim.cmd('redrawstatus')
-end)
-
 M.lazy_load = a.wrap(function()
     for _, choice in ipairs(choices) do
         local res = uv.simple_job({
@@ -36,7 +32,9 @@ M.lazy_load = a.wrap(function()
         }).await()
         if res.code == 0 then
             _G.dotvim_git_head = choice.icon .. ' ' .. res.stdout
-            redraw_statusline()
+
+            a.api.nvim_command('redrawstatus')
+
             return
         end
     end
