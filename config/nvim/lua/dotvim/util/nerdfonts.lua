@@ -9,8 +9,12 @@ M.pick = a.wrap(function()
         local path = vim.fn.stdpath('config') .. '/misc/nerdfonts.txt'
         local err, data = uv.read_file(path)
         assert(not err, err)
+        if not data then
+            vim.notify('nerdfonts.txt is empty', vim.log.levels.WARN)
+            return
+        end
 
-        M.nerdfonts = vim.split(data, '\n')
+        M.nerdfonts = vim.split(data, '\n', { plain = true })
     end
 
     a.schedule().await()
@@ -25,9 +29,11 @@ M.pick = a.wrap(function()
         return
     end
 
-    local fields = vim.split(item, ' ')
+    local fields = vim.split(item, '%s+', { plain = false })
     local ICON = 2
-    vim.fn.setreg(vim.v.register, fields[ICON])
+    local icon = fields[ICON]
+    vim.fn.setreg(vim.v.register, icon)
+    vim.notify(string.format('%s is copied', icon))
 end)
 
 return M
