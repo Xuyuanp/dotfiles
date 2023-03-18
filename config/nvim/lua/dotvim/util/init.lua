@@ -31,15 +31,15 @@ local border_symbols = {
 function border_symbols:draw(width, height)
     local border_lines = {
         table.concat({
-            border_symbols.corner.topleft,
-            string.rep(border_symbols.horizontal, width),
-            border_symbols.corner.topright,
+            self.corner.topleft,
+            string.rep(self.horizontal, width),
+            self.corner.topright,
         }),
     }
     local middle_line = table.concat({
-        border_symbols.vertical,
-        string.rep(border_symbols.fill, width),
-        border_symbols.vertical,
+        self.vertical,
+        string.rep(self.fill, width),
+        self.vertical,
     })
     for _ = 1, height do
         table.insert(border_lines, middle_line)
@@ -47,9 +47,9 @@ function border_symbols:draw(width, height)
     table.insert(
         border_lines,
         table.concat({
-            border_symbols.corner.bottomleft,
-            string.rep(border_symbols.horizontal, width),
-            border_symbols.corner.bottomright,
+            self.corner.bottomleft,
+            string.rep(self.horizontal, width),
+            self.corner.bottomright,
         })
     )
 
