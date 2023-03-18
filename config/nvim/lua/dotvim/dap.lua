@@ -1,3 +1,5 @@
+local a = require('dotvim.util.async')
+
 local M = {}
 
 local function setup_go()
@@ -57,24 +59,55 @@ local function setup_go()
     }
 end
 
+local function close_dap()
+    local dap = require('dap')
+    dap.disconnect()
+    dap.close()
+    local ui = vim.F.npcall(require, 'dapui')
+    if ui then
+        ui.close()
+    end
+    local vt = vim.F.npcall(require, 'nvim-dap-virtual-text.virtual_text')
+    if vt then
+        vt.clear_virtual_text()
+    end
+end
+
+local function set_condition_breakpoint()
+    local dap = require('dap')
+    local cond = a.ui.input({ prompt = 'Breakpoint condition:' }).await()
+    dap.set_breakpoint(cond)
+end
+
+local function set_log_point()
+    local dap = require('dap')
+    local log_message = a.ui.input({ prompt = 'Log point message:' }).await()
+    dap.set_breakpoint(nil, nil, log_message)
+end
+
+local function set_hit_count()
+    local dap = require('dap')
+    local hit_count = a.ui.input({ prompt = 'Hit count:' }).await()
+    dap.set_breakpoint(nil, hit_count, nil)
+end
+
+local set_breakpoint = a.wrap(function()
+    local actions = {
+        ['Breakpoint'] = require('dap').set_breakpoint,
+        ['Condition'] = set_condition_breakpoint,
+        ['Hit count'] = set_hit_count,
+        ['Log message'] = set_log_point,
+    }
+    local choice = a.ui.select(vim.tbl_keys(actions), { prompt = 'Set debug point' }).await()
+    if choice then
+        actions[choice]()
+    end
+end)
+
 function M.setup()
     setup_go()
 
     local sign_define = vim.fn.sign_define
-
-    local function close_dap()
-        local dap = require('dap')
-        dap.disconnect()
-        dap.close()
-        local ui = vim.F.npcall(require, 'dapui')
-        if ui then
-            ui.close()
-        end
-        local vt = vim.F.npcall(require, 'nvim-dap-virtual-text.virtual_text')
-        if vt then
-            vt.clear_virtual_text()
-        end
-    end
 
     local dap = require('dap')
 
@@ -87,11 +120,10 @@ function M.setup()
     set_keymap('n', '<F10>', dap.step_over, km_opts)
     set_keymap('n', '<F11>', dap.step_into, km_opts)
     set_keymap('n', '<F12>', dap.step_out, km_opts)
-    set_keymap('n', '<leader>b', dap.toggle_breakpoint, km_opts)
     set_keymap('n', '<leader>dr', dap.repl.open, km_opts)
     set_keymap('n', '<leader>dl', dap.run_last, km_opts)
-    set_keymap('n', '<leader>B', "<cmd>lua require('dap').set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>", km_opts)
-    set_keymap('n', '<leader>lp', "<cmd>lua require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>", km_opts)
+    set_keymap('n', '<leader>b', dap.toggle_breakpoint, km_opts)
+    set_keymap('n', '<leader>B', set_breakpoint, km_opts)
 
     vim.api.nvim_create_autocmd({ 'FileType' }, {
         group = vim.api.nvim_create_augroup('dotvim_dap_cmp', { clear = true }),
@@ -101,15 +133,11 @@ function M.setup()
         end,
     })
 
-    require('dotvim.colors').add_highlight('DapCustomPC', { bg = '#928374' })
-    sign_define('DapStopped', {
-        text = '',
-        texthl = 'GreenSign',
-        linehl = 'DapCustomPC',
-    })
-    sign_define('DapBreakpoint', { text = '', texthl = 'RedSign' })
-    sign_define('DapLogPoint', { text = 'ﰉ', texthl = 'YellowSign' })
-    sign_define('DapBreakpointRejected', { text = '' })
+    sign_define('DapStopped', { text = '', texthl = 'DapCustomPC' })
+    sign_define('DapBreakpoint', { text = '', texthl = 'DapBreakpoint' })
+    sign_define('DapBreakpointCondition', { text = '', texthl = 'DapBreakpointCondition' })
+    sign_define('DapBreakpointRejected', { text = '', texthl = 'DapBreakpointRejected' })
+    sign_define('DapLogPoint', { text = 'ﰉ', texthl = 'DapLogPoint' })
 end
 
 local ui = {}

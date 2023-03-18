@@ -29,6 +29,11 @@ return {
                     return {
                         YanilTreeDirectory = { fg = colors.palette.springGreen, bold = true },
                         YanilTreeFile = { fg = colors.palette.fujiWhite },
+                        DapCustomPC = { fg = colors.palette.autumnGreen },
+                        DapBreakpoint = { fg = colors.palette.autumnRed },
+                        DapBreakpointCondition = { fg = colors.palette.autumnYellow },
+                        DapBreakpointReject = { fg = colors.palette.fujiGray },
+                        DapLogPoint = { fg = colors.palette.autumnRed },
                     }
                 end,
                 theme = theme,

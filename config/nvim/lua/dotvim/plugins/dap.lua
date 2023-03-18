@@ -14,11 +14,16 @@ return {
                     'nvim-treesitter/nvim-treesitter',
                 },
             },
+            {
+                'nvim-telescope/telescope-dap.nvim',
+                dependencies = { 'telescope' },
+            },
         },
         config = function()
             require('dotvim.dap').setup()
             require('dotvim.dap').ui.setup()
             require('dotvim.dap').virtual_text.setup()
+            require('telescope').load_extension('dap')
         end,
     },
 
@@ -30,15 +35,6 @@ return {
             local dap_py = require('dap-python')
             dap_py.setup('~/.pyenv/versions/debugpy/bin/python')
             dap_py.test_runner = 'pytest'
-        end,
-    },
-
-    {
-        'nvim-telescope/telescope-dap.nvim',
-        dependencies = { 'dap', 'telescope' },
-        cmd = { 'Telescope' },
-        config = function()
-            require('telescope').load_extension('dap')
         end,
     },
 }
