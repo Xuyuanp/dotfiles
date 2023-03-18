@@ -25,6 +25,7 @@ local M = {}
 
 local function get_plugins()
     return {
+        { 'folke/lazy.nvim', version = '*' },
         { import = 'dotvim.plugins' },
     }
 end
