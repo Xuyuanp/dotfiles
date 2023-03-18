@@ -165,7 +165,7 @@ function M.references(_err, references, ctx)
             local parts = vim.fn.split(line, '\t')
             local choice = tonumber(parts[4])
             local ref_chosen = references[choice]
-            vim.lsp.util.jump_to_location(ref_chosen, offset_encoding)
+            vim.lsp.util.jump_to_location(ref_chosen, offset_encoding, true)
         end,
     })
 
@@ -193,12 +193,12 @@ function M.gen_location_handler(name)
 
         local util = vim.lsp.util
         if not vim.tbl_islist(result) then
-            util.jump_to_location(result, offset_encoding)
+            util.jump_to_location(result, offset_encoding, true)
             return
         end
 
         if #result == 1 then
-            util.jump_to_location(result[1], offset_encoding)
+            util.jump_to_location(result[1], offset_encoding, true)
             return
         end
 
@@ -242,7 +242,7 @@ function M.gen_location_handler(name)
                 local parts = vim.fn.split(line, '\t')
                 local choice = tonumber(parts[4])
                 local ref_chosen = result[choice]
-                util.jump_to_location(ref_chosen, offset_encoding)
+                util.jump_to_location(ref_chosen, offset_encoding, true)
             end,
         })
 
