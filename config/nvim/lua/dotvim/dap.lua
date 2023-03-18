@@ -2,63 +2,6 @@ local a = require('dotvim.util.async')
 
 local M = {}
 
-local function setup_go()
-    local dap = require('dap')
-    local pjob = require('plenary.job')
-    dap.adapters.go = function(callback, _config)
-        local port = 38697
-        local job_desc = {
-            command = 'dlv',
-            args = {
-                'dap',
-                '-l',
-                '127.0.0.1:' .. port,
-                '--check-go-version=false',
-            },
-            on_stdout = function(err, chunk)
-                assert(not err, err)
-                if chunk then
-                    vim.schedule(function()
-                        require('dap.repl').append(chunk)
-                    end)
-                end
-            end,
-        }
-        pjob:new(job_desc):start()
-
-        vim.defer_fn(function()
-            callback({
-                type = 'server',
-                host = '127.0.0.1',
-                port = port,
-            })
-        end, 100)
-    end
-
-    dap.configurations.go = {
-        {
-            type = 'go',
-            name = 'Debug',
-            request = 'launch',
-            program = '${file}',
-        },
-        {
-            type = 'go',
-            name = 'Debug test',
-            request = 'test',
-            mode = 'test',
-            program = '${file}',
-        },
-        {
-            type = 'go',
-            name = 'Debug test (go.mod)',
-            request = 'launch',
-            mode = 'test',
-            program = './${relativeFileDirname}',
-        },
-    }
-end
-
 local function close_dap()
     local dap = require('dap')
     dap.disconnect()
@@ -105,8 +48,6 @@ local set_breakpoint = a.wrap(function()
 end)
 
 function M.setup()
-    setup_go()
-
     local sign_define = vim.fn.sign_define
 
     local dap = require('dap')

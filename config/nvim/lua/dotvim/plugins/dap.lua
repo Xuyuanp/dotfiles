@@ -1,10 +1,7 @@
-local vim = vim
-
 return {
     {
         'mfussenegger/nvim-dap',
-        name = 'dap',
-        lazy = true,
+        event = { 'BufReadPost', 'BufNewFile' },
         dependencies = {
             'plenary',
             'rcarriga/nvim-dap-ui',
@@ -18,18 +15,40 @@ return {
                 'nvim-telescope/telescope-dap.nvim',
                 dependencies = { 'telescope' },
             },
+            {
+                'jay-babu/mason-nvim-dap.nvim',
+                dependencies = { 'williamboman/mason.nvim' },
+            },
         },
         config = function()
             require('dotvim.dap').setup()
             require('dotvim.dap').ui.setup()
             require('dotvim.dap').virtual_text.setup()
             require('telescope').load_extension('dap')
+
+            -- required
+            vim.schedule(function()
+                require('mason-nvim-dap').setup({
+                    automatic_install = false,
+                    automatic_setup = {
+                        filetypes = {
+                            python = false,
+                            rust = false,
+                        },
+                    },
+                })
+                require('mason-nvim-dap').setup_handlers({
+                    function(source_name)
+                        require('mason-nvim-dap.automatic_setup')(source_name)
+                    end,
+                })
+            end)
         end,
     },
 
     {
         'mfussenegger/nvim-dap-python',
-        dependencies = { 'dap' },
+        dependencies = { 'mfussenegger/nvim-dap' },
         ft = { 'python' },
         config = function()
             local dap_py = require('dap-python')
