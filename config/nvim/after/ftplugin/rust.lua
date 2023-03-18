@@ -42,7 +42,7 @@ local format_dat_sql = function(bufnr)
     local tree = parser:parse()[1]
 
     -- Finds sql-format-via-python somewhere in your nvim config path
-    local bin = vim.api.nvim_get_runtime_file('bin/sqlformat.py', false)[1]
+    local bin = vim.api.nvim_get_runtime_file('scripts/sqlformat.py', false)[1]
 
     local changes = {}
     for id, node, _ in query:iter_captures(tree:root(), bufnr, 0, -1) do

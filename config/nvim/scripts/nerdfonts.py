@@ -1,13 +1,9 @@
 #!/usr/bin/env python
-
-import os
-
 import requests
 from bs4 import BeautifulSoup
 
 
 def main():
-    os.getenv("")
     rsp = requests.get("https://www.nerdfonts.com/cheat-sheet")
     soup = BeautifulSoup(rsp.text, "html.parser")
 
