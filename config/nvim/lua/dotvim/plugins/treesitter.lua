@@ -2,9 +2,11 @@ return {
     {
         'nvim-treesitter/nvim-treesitter',
         dependencies = {
+            'nvim-treesitter/nvim-treesitter-context',
+            'nvim-treesitter/nvim-treesitter-textobjects',
             'nvim-treesitter/playground',
-            'romgrk/nvim-treesitter-context',
             'HiPhish/nvim-ts-rainbow2',
+            'RRethy/nvim-treesitter-textsubjects',
         },
         build = ':TSUpdate',
         event = { 'BufReadPost', 'BufNewFile' },
