@@ -69,6 +69,12 @@ zinit ice wait lucid as=program pick="$ZPFX/bin/(fzf|fzf-tmux)" \
     multisrc='shell/*.zsh'
 zinit light junegunn/fzf
 
+function zvm_config() {
+    ZVM_CURSOR_STYLE_ENABLED=false
+}
+zinit ice depth=1
+zinit light jeffreytse/zsh-vi-mode
+
 zinit ice depth=1
 zinit light romkatv/powerlevel10k
 
