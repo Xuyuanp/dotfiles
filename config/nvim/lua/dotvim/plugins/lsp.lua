@@ -17,7 +17,7 @@ return {
         },
         name = 'lspconfig',
         config = function()
-            require('dotvim.lsp')
+            require('dotvim.config.lsp')
         end,
     },
     {
@@ -91,7 +91,7 @@ return {
             },
         },
         config = function()
-            require('dotvim.complete').setup()
+            require('dotvim.config.complete').setup()
         end,
     },
 

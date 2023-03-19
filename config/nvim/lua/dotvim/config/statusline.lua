@@ -2,10 +2,10 @@ local mode = vim.fn.mode
 
 local galaxyline = require('galaxyline')
 local section = galaxyline.section
-local dotcolors = require('dotvim.colors').colors
+local dotcolors = require('dotvim.util.colors').colors
 local colors = require('kanagawa.colors').setup()
 
-require('dotvim.git.head').lazy_load()
+require('dotvim.util.git').load_head()
 
 --[[/* CONSTANTS */]]
 -- Defined in https://github.com/Iron-E/nvim-highlite
@@ -143,7 +143,7 @@ end
 local space = printer(' ')
 
 local lsp_icon = function()
-    if require('dotvim.lsp.status').get_name() == '' then
+    if require('dotvim.config.lsp.status').get_name() == '' then
         return ''
     else
         return ' ' .. _ICONS.Lsp.on .. ' '
@@ -183,7 +183,7 @@ section.left = {
                 local mode_name = current_mode[1]
                 local mode_color = current_mode[2]
 
-                require('dotvim.colors').add_highlight('GalaxyViMode', {
+                require('dotvim.util.colors').add_highlight('GalaxyViMode', {
                     fg = mode_color,
                     bg = _HEX_COLORS.bar.side,
                     style = 'bold',

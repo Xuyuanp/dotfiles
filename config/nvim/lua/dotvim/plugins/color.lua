@@ -39,7 +39,7 @@ return {
                 theme = theme,
             })
 
-            local dotcolors = require('dotvim.colors')
+            local dotcolors = require('dotvim.util.colors')
             dotcolors.enable_auto_update()
 
             local colors = require('kanagawa.colors').setup({ theme = theme })

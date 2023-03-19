@@ -24,7 +24,7 @@ local choices = {
     },
 }
 
-M.lazy_load = a.wrap(function()
+M.load_head = a.wrap(function()
     for _, choice in ipairs(choices) do
         local res = uv.simple_job({
             command = 'git',
@@ -33,7 +33,8 @@ M.lazy_load = a.wrap(function()
         if res.code == 0 then
             _G.dotvim_git_head = choice.icon .. ' ' .. res.stdout
 
-            a.api.nvim_command('redrawstatus')
+            a.schedule().await()
+            vim.cmd('redrawstatus')
 
             return
         end

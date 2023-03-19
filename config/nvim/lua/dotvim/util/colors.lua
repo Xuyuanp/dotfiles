@@ -91,7 +91,7 @@ function M.enable_auto_update()
         desc = 'Auto update colorscheme',
         pattern = { '*' },
         callback = function()
-            require('dotvim.colors').update()
+            M.update()
         end,
     })
 end

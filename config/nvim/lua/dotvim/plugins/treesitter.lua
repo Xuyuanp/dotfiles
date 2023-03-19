@@ -11,7 +11,7 @@ return {
         build = ':TSUpdate',
         event = { 'BufReadPost', 'BufNewFile' },
         config = function()
-            require('dotvim.treesitter').setup()
+            require('dotvim.config.treesitter').setup()
         end,
     },
     {

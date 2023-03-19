@@ -21,9 +21,9 @@ return {
             },
         },
         config = function()
-            require('dotvim.dap').setup()
-            require('dotvim.dap').ui.setup()
-            require('dotvim.dap').virtual_text.setup()
+            require('dotvim.config.dap').setup()
+            require('dotvim.config.dap').ui.setup()
+            require('dotvim.config.dap').virtual_text.setup()
             require('telescope').load_extension('dap')
 
             -- required

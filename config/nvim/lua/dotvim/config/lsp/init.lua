@@ -1,7 +1,7 @@
 local vim = vim
 local api = vim.api
 
-local handlers = require('dotvim.lsp.handlers')
+local handlers = require('dotvim.config.lsp.handlers')
 
 local mason_lspcfg = vim.F.npcall(require, 'mason-lspconfig')
 if not mason_lspcfg then
@@ -262,7 +262,7 @@ mason_lspcfg.setup_handlers({
             cfg = vim.tbl_deep_extend('force', cfg, langs[server_name])
         end
         if server_name == 'rust_analyzer' then
-            require('dotvim.lsp.rust').setup(cfg)
+            require('dotvim.config.lsp.rust').setup(cfg)
         else
             lspconfig[server_name].setup(cfg)
         end

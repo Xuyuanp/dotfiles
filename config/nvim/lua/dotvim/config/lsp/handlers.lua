@@ -3,7 +3,7 @@ local api = vim.api
 
 local dotutil = require('dotvim.util')
 
-local highlights = require('dotvim.lsp.highlights')
+local highlights = require('dotvim.config.lsp.highlights')
 highlights.setup()
 
 local fzf_run = dotutil.fzf_run

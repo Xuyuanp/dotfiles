@@ -11,7 +11,21 @@ return {
             'plenary',
         },
         config = function()
-            require('dotvim.telescope').setup()
+            local ts = require('telescope')
+            ts.setup({
+                defaults = {
+                    vimgrep_arguments = {
+                        'rg',
+                        '--color=never',
+                        '--no-heading',
+                        '--with-filename',
+                        '--line-number',
+                        '--column',
+                        '--smart-case',
+                    },
+                    prompt_prefix = '  ',
+                },
+            })
         end,
     },
 
@@ -19,11 +33,9 @@ return {
         'Xuyuanp/yanil',
         cmd = { 'YanilToggle', 'Yanil' },
         config = function()
-            require('dotvim/yanil').setup()
+            require('dotvim.config.yanil').setup()
 
-            local execute = vim.api.nvim_command
-
-            execute([[ nmap <C-e> :YanilToggle<CR> ]])
+            vim.keymap.set('n', '<C-e>', ':YanilToggle<CR>', { silent = true, noremap = false })
 
             local group_id = vim.api.nvim_create_augroup('dotvim_yanil', { clear = true })
             vim.api.nvim_create_autocmd({ 'BufEnter' }, {
@@ -218,7 +230,7 @@ return {
         event = { 'BufReadPost', 'BufNewFile' },
         branch = 'main',
         config = function()
-            require('dotvim.statusline')
+            require('dotvim.config.statusline')
         end,
         dependencies = {
             -- 'kyazdani42/nvim-web-devicons',
