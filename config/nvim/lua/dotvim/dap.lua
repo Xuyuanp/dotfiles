@@ -128,22 +128,16 @@ function ui.setup()
     local dap = require('dap')
     dap.listeners.after.event_initialized['dapui_config'] = function()
         dapui.open()
+        vim.opt.mouse = 'n'
     end
     dap.listeners.before.event_terminated['dapui_config'] = function()
         dapui.close()
+        vim.opt.mouse = ''
     end
     dap.listeners.before.event_exited['dapui_config'] = function()
         dapui.close()
+        vim.opt.mouse = ''
     end
-
-    vim.api.nvim_create_autocmd({ 'ColorScheme' }, {
-        group = vim.api.nvim_create_augroup('dotvim_dap_ui', { clear = true }),
-        desc = 'Auto setup highlights of dap ui',
-        pattern = { '*' },
-        callback = function()
-            require('dapui.config.highlights').setup()
-        end,
-    })
 end
 
 M.ui = ui
