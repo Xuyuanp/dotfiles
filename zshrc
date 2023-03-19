@@ -60,9 +60,6 @@ zinit ice as"program" atclone'perl Makefile.PL PREFIX=$ZPFX' \
     atpull'%atclone' make'install' pick"$ZPFX/bin/git-cal"
 zinit light k4rthik/git-cal
 
-zinit ice as"program" pick"bin/git-dsf"
-zinit light zdharma-continuum/zsh-diff-so-fancy
-
 zinit ice wait lucid as=program pick="$ZPFX/bin/(fzf|fzf-tmux)" \
     atclone="./install --bin; cp bin/(fzf|fzf-tmux) $ZPFX/bin" \
     atpull='%atclone' \
