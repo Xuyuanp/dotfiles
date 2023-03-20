@@ -105,6 +105,7 @@ return {
             'hrsh7th/cmp-calc',
             'hrsh7th/cmp-vsnip',
             'Saecki/crates.nvim',
+            'windwp/nvim-autopairs',
             {
                 'hrsh7th/vim-vsnip',
                 dependencies = {
@@ -144,35 +145,6 @@ return {
                     }),
                 })
             end
-        end,
-    },
-
-    {
-        'hrsh7th/cmp-cmdline',
-        event = { 'CmdlineEnter' },
-        config = function()
-            local cmp = require('cmp')
-
-            cmp.setup.cmdline({ '/', '?' }, {
-                mapping = cmp.mapping.preset.cmdline(),
-                sources = {
-                    { name = 'buffer' },
-                },
-            })
-            cmp.setup.cmdline({ ':' }, {
-                mapping = cmp.mapping.preset.cmdline(),
-                sources = cmp.config.sources({
-                    { name = 'path' },
-                }, {
-                    {
-                        name = 'cmdline',
-                        keyword_length = 3,
-                        option = {
-                            ignore_cmds = { 'Man', '!' },
-                        },
-                    },
-                }),
-            })
         end,
     },
 

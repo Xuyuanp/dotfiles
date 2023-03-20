@@ -108,44 +108,6 @@ return {
     },
 
     {
-        'lewis6991/gitsigns.nvim',
-        name = 'gitsigns',
-        event = { 'BufReadPost', 'BufNewFile' },
-        dependencies = { 'plenary' },
-        config = function()
-            require('gitsigns').setup({
-                signs = {
-                    add = { hl = 'GitSignsAdd', text = '┃', numhl = '', linehl = '' },
-                    change = { hl = 'GitSignsChange', text = '┃', numhl = '', linehl = '' },
-                    delete = { hl = 'GitSignsDelete', text = '┃', numhl = '', linehl = '' },
-                    topdelete = { hl = 'GitSignsDelete', text = '┃', numhl = '', linehl = '' },
-                    changedelete = { hl = 'GitSignsChange', text = '┃', numhl = '', linehl = '' },
-                    untracked = { hl = 'GitSignsAdd', text = '┃', numhl = '', linehl = '' },
-                },
-                keymaps = {
-                    noremap = true,
-                    buffer = true,
-                    ['n ]c'] = { expr = true, [[&diff ? ']c' : '<cmd>lua require"gitsigns.actions".next_hunk()<CR>']] },
-                    ['n [c'] = { expr = true, [[&diff ? '[c' : '<cmd>lua require"gitsigns.actions".prev_hunk()<CR>']] },
-                    ['n <leader>hs'] = '<cmd>lua require"gitsigns".stage_hunk()<CR>',
-                    ['v <leader>hs'] = '<cmd>lua require"gitsigns".stage_hunk({vim.fn.line("."), vim.fn.line("v")})<CR>',
-                    ['n <leader>hu'] = '<cmd>lua require"gitsigns".undo_stage_hunk()<CR>',
-                    ['n <leader>hr'] = '<cmd>lua require"gitsigns".reset_hunk()<CR>',
-                    ['v <leader>hr'] = '<cmd>lua require"gitsigns".reset_hunk({vim.fn.line("."), vim.fn.line("v")})<CR>',
-                    ['n <leader>hR'] = '<cmd>lua require"gitsigns".reset_buffer()<CR>',
-                    ['n <leader>hp'] = '<cmd>lua require"gitsigns".preview_hunk()<CR>',
-                    ['n <leader>hb'] = '<cmd>lua require"gitsigns".blame_line(true)<CR>',
-                    -- Text objects
-                    ['o ih'] = ':<C-U>lua require"gitsigns.actions".select_hunk()<CR>',
-                    ['x ih'] = ':<C-U>lua require"gitsigns.actions".select_hunk()<CR>',
-                },
-                current_line_blame = true,
-                current_line_blame_formatter = '@<author> / <abbrev_sha> <summary> / <author_time:%R>',
-            })
-        end,
-    },
-
-    {
         'rcarriga/nvim-notify',
         event = 'VeryLazy',
         config = function()
@@ -248,56 +210,57 @@ return {
         'rest-nvim/rest.nvim',
         dependencies = { 'plenary' },
         ft = 'http',
-        event = 'VeryLazy',
         keys = {
             { '<leader>r', '<Plug>RestNvim', desc = 'run http request' },
         },
-        config = function()
-            require('rest-nvim').setup({
-                -- Open request results in a horizontal split
-                result_split_horizontal = false,
-                -- Keep the http file buffer above|left when split horizontal|vertical
-                result_split_in_place = false,
-                -- Skip SSL verification, useful for unknown certificates
-                skip_ssl_verification = false,
-                -- Encode URL before making request
-                encode_url = true,
-                -- Highlight request on run
-                highlight = {
-                    enabled = true,
-                    timeout = 150,
+        opts = {
+            -- Open request results in a horizontal split
+            result_split_horizontal = false,
+            -- Keep the http file buffer above|left when split horizontal|vertical
+            result_split_in_place = false,
+            -- Skip SSL verification, useful for unknown certificates
+            skip_ssl_verification = false,
+            -- Encode URL before making request
+            encode_url = true,
+            -- Highlight request on run
+            highlight = {
+                enabled = true,
+                timeout = 150,
+            },
+            result = {
+                -- toggle showing URL, HTTP info, headers at top the of result window
+                show_url = true,
+                show_http_info = true,
+                show_headers = true,
+                -- executables or functions for formatting response body [optional]
+                -- set them to false if you want to disable them
+                formatters = {
+                    json = 'jq',
+                    html = function(body)
+                        return vim.fn.system({ 'tidy', '-i', '-q', '-' }, body)
+                    end,
                 },
-                result = {
-                    -- toggle showing URL, HTTP info, headers at top the of result window
-                    show_url = true,
-                    show_http_info = true,
-                    show_headers = true,
-                    -- executables or functions for formatting response body [optional]
-                    -- set them to false if you want to disable them
-                    formatters = {
-                        json = 'jq',
-                        html = function(body)
-                            return vim.fn.system({ 'tidy', '-i', '-q', '-' }, body)
-                        end,
-                    },
-                },
-                -- Jump to request line on run
-                jump_to_request = false,
-                env_file = '.env',
-                custom_dynamic_variables = {},
-                yank_dry_run = true,
-            })
-        end,
+            },
+            -- Jump to request line on run
+            jump_to_request = false,
+            env_file = '.env',
+            custom_dynamic_variables = {},
+            yank_dry_run = true,
+        },
     },
 
     {
         'nvim-neotest/neotest',
+        lazy = true,
         dependencies = {
             'plenary',
             'nvim-treesitter/nvim-treesitter',
-            'nvim-neotest/neotest-go',
         },
-        event = 'VeryLazy',
+    },
+
+    {
+        'nvim-neotest/neotest-go',
+        ft = 'go',
         config = function()
             require('neotest').setup({
                 adapters = {
