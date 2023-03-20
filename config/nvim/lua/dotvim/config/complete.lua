@@ -6,6 +6,11 @@ local function t(key)
     return replace_termcodes(key, true, true, true)
 end
 
+local function has_words_before()
+    local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+    return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match('%s') == nil
+end
+
 function M.setup()
     local cmp = require('cmp')
     local compare = require('cmp.config.compare')
@@ -42,21 +47,39 @@ function M.setup()
             ['<C-b>'] = cmp.mapping.scroll_docs(-5),
             ['<C-f>'] = cmp.mapping.scroll_docs(5),
             ['<C-Space>'] = cmp.mapping.complete(),
-            ['<CR>'] = cmp.mapping.confirm({
-                behavior = cmp.ConfirmBehavior.Insert,
-                select = false,
+            ['<CR>'] = cmp.mapping({
+                i = cmp.mapping.confirm({ select = true }),
+                s = cmp.mapping.confirm({ select = true }),
+                c = function(fallback)
+                    if cmp.visible() then
+                        local entry = cmp.get_selected_entry()
+                        if entry then
+                            if vim.endswith(entry.context.cursor_line, entry.completion_item.label) then
+                                fallback()
+                            else
+                                cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
+                            end
+                        else
+                            fallback()
+                        end
+                    else
+                        fallback()
+                    end
+                end,
             }),
-            ['<C-e>'] = nil,
-            ['<Tab>'] = function(fallback)
+            ['<C-e>'] = cmp.mapping.close(),
+            ['<Tab>'] = cmp.mapping(function(fallback)
                 if cmp.visible() then
                     cmp.select_next_item()
                 elseif vim.fn['vsnip#available']() == 1 then
                     vim.fn.feedkeys(t('<Plug>(vsnip-expand-or-jump)'), '')
+                elseif has_words_before() then
+                    cmp.complete()
                 else
                     fallback()
                 end
-            end,
-            ['<S-Tab>'] = function(fallback)
+            end, { 'i', 's', 'c' }),
+            ['<S-Tab>'] = cmp.mapping(function(fallback)
                 if cmp.visible() then
                     cmp.select_next_item()
                 elseif vim.fn['vsnip#available']() == 1 then
@@ -64,7 +87,7 @@ function M.setup()
                 else
                     fallback()
                 end
-            end,
+            end, { 'i', 's', 'c' }),
         },
         window = {
             documentation = {
@@ -81,7 +104,7 @@ function M.setup()
                 end
             end)(),
         },
-        preselect = cmp.PreselectMode.None,
+        preselect = cmp.PreselectMode.Item,
         sources = cmp.config.sources({
             { name = 'nvim_lsp' },
         }, {
@@ -109,34 +132,6 @@ function M.setup()
             ghost_text = true,
         },
     })
-
-    cmp.setup.cmdline({ '/', '?' }, {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = {
-            { name = 'buffer' },
-        },
-    })
-    cmp.setup.cmdline({ ':' }, {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = cmp.config.sources({
-            { name = 'path' },
-        }, {
-            { name = 'cmdline' },
-        }),
-    })
-
-    local cmp_git = vim.F.npcall(require, 'cmp_git')
-    if cmp_git then
-        cmp_git.setup()
-        cmp.setup.filetype('gitcommit', {
-            sources = cmp.config.sources({
-                { name = 'git' },
-            }, {
-                { name = 'buffer' },
-                { name = 'vsnip' },
-            }),
-        })
-    end
 
     cmp.setup.filetype('lua', {
         sources = cmp.config.sources({

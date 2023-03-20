@@ -61,7 +61,7 @@ return {
 
     {
         'hrsh7th/nvim-cmp',
-        event = { 'InsertEnter', 'CmdlineEnter' },
+        event = { 'InsertEnter' },
         dependencies = {
             'hrsh7th/cmp-buffer',
             'hrsh7th/cmp-nvim-lua',
@@ -70,9 +70,7 @@ return {
             'hrsh7th/cmp-path',
             'hrsh7th/cmp-calc',
             'hrsh7th/cmp-vsnip',
-            'hrsh7th/cmp-cmdline',
             'Saecki/crates.nvim',
-            'petertriho/cmp-git',
             {
                 'hrsh7th/vim-vsnip',
                 dependencies = {
@@ -83,15 +81,64 @@ return {
                     local vfn = vim.fn
 
                     vim.g.vsnip_snippet_dir = vfn.stdpath('config') .. '/snippets'
-                    vim.cmd([[ imap <expr> <C-j> vsnip#available(1)  ? '<Plug>(vsnip-jump-next)' : '<C-j>' ]])
-                    vim.cmd([[ smap <expr> <C-j> vsnip#available(1)  ? '<Plug>(vsnip-jump-next)' : '<C-j>' ]])
-                    vim.cmd([[ imap <expr> <C-k> vsnip#available(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-k>' ]])
-                    vim.cmd([[ smap <expr> <C-k> vsnip#available(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-k>' ]])
+                    vim.cmd([[imap <expr> <C-j> vsnip#available(1)  ? '<Plug>(vsnip-jump-next)' : '<C-j>']])
+                    vim.cmd([[smap <expr> <C-j> vsnip#available(1)  ? '<Plug>(vsnip-jump-next)' : '<C-j>']])
+                    vim.cmd([[imap <expr> <C-k> vsnip#available(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-k>']])
+                    vim.cmd([[smap <expr> <C-k> vsnip#available(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-k>']])
                 end,
             },
         },
         config = function()
             require('dotvim.config.complete').setup()
+        end,
+    },
+
+    {
+        'petertriho/cmp-git',
+        ft = { 'gitcommit' },
+        config = function()
+            local cmp = require('cmp')
+            local cmp_git = require('cmp_git')
+            if cmp_git then
+                cmp_git.setup()
+                cmp.setup.filetype('gitcommit', {
+                    sources = cmp.config.sources({
+                        { name = 'git' },
+                    }, {
+                        { name = 'buffer' },
+                        { name = 'vsnip' },
+                    }),
+                })
+            end
+        end,
+    },
+
+    {
+        'hrsh7th/cmp-cmdline',
+        event = { 'CmdlineEnter' },
+        config = function()
+            local cmp = require('cmp')
+
+            cmp.setup.cmdline({ '/', '?' }, {
+                mapping = cmp.mapping.preset.cmdline(),
+                sources = {
+                    { name = 'buffer' },
+                },
+            })
+            cmp.setup.cmdline({ ':' }, {
+                mapping = cmp.mapping.preset.cmdline(),
+                sources = cmp.config.sources({
+                    { name = 'path' },
+                }, {
+                    {
+                        name = 'cmdline',
+                        keyword_length = 3,
+                        option = {
+                            ignore_cmds = { 'Man', '!' },
+                        },
+                    },
+                }),
+            })
         end,
     },
 

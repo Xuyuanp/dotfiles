@@ -8,7 +8,7 @@ function M.setup()
         desc = 'refresh git head',
         pattern = { '*' },
         callback = function()
-            require('dotvim.git.head').lazy_load()
+            require('dotvim.util.git').load_head()
         end,
     })
 
