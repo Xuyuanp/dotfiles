@@ -158,40 +158,10 @@ return {
         event = { 'BufReadPost', 'BufNewFile' },
         config = function()
             local fmt = require('formatter')
-            local util = require('formatter.util')
-            local python_formaters = require('formatter.filetypes.python')
             fmt.setup({
                 logging = true,
                 log_level = vim.log.levels.WARN,
                 filetype = {
-                    lua = require('formatter.filetypes.lua').stylua,
-                    python = {
-                        python_formaters.black,
-                        python_formaters.isort,
-                        python_formaters.yapf,
-                        python_formaters.autopep8,
-                    },
-                    go = {
-                        function()
-                            return {
-                                exe = 'goimports-reviser',
-                                args = { '-set-alias', '-use-cache', '-rm-unused', '-output=file' },
-                            }
-                        end,
-                    },
-                    proto = function()
-                        return {
-                            exe = 'buf',
-                            args = {
-                                'format',
-                                util.get_current_buffer_file_path(),
-                            },
-                            stdin = true,
-                        }
-                    end,
-                    graphql = {
-                        require('formatter.filetypes.graphql').prettierd,
-                    },
                     ['*'] = {
                         require('formatter.filetypes.any').remove_trailing_whitespace,
                     },

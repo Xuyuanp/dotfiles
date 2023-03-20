@@ -79,18 +79,18 @@ local function set_lsp_keymaps(client, bufnr)
 end
 
 local function set_lsp_autocmd(client, bufnr)
-    if client.supports_method('textDocument/formatting') then
-        api.nvim_create_autocmd({ 'BufWritePre' }, {
-            group = group_id,
-            buffer = bufnr,
-            desc = '[lsp] formatting',
-            callback = function()
-                if not vim.b[bufnr].lsp_disable_auto_format then
-                    vim.lsp.buf.format({ async = false })
-                end
-            end,
-        })
-    end
+    -- if client.supports_method('textDocument/formatting') then
+    --     api.nvim_create_autocmd({ 'BufWritePre' }, {
+    --         group = group_id,
+    --         buffer = bufnr,
+    --         desc = '[lsp] formatting',
+    --         callback = function()
+    --             if not vim.b[bufnr].lsp_disable_auto_format then
+    --                 vim.lsp.buf.format({ async = false })
+    --             end
+    --         end,
+    --     })
+    -- end
 
     if client.supports_method('textDocument/documentHighlight') and client.name ~= 'rust_analyzer' then
         api.nvim_create_autocmd({ 'CursorHold' }, {

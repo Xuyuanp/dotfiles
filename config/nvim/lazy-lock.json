@@ -50,6 +50,7 @@
   "neotest-go": { "branch": "main", "commit": "49151e258088bd94895e48c977f8c51e3b956178" },
   "nlsp-settings.nvim": { "branch": "main", "commit": "b56366f38acc4374cf298596e9091664725d6b4f" },
   "nui.nvim": { "branch": "main", "commit": "0dc148c6ec06577fcf06cbab3b7dac96d48ba6be" },
+  "null-ls.nvim": { "branch": "main", "commit": "77be7c61923c6a6faf3a33293623c8a6e31ea57b" },
   "nvim-autopairs": { "branch": "master", "commit": "e755f366721bc9e189ddecd39554559045ac0a18" },
   "nvim-cmp": { "branch": "main", "commit": "777450fd0ae289463a14481673e26246b5e38bf2" },
   "nvim-colorizer.lua": { "branch": "master", "commit": "36c610a9717cc9ec426a07c8e6bf3b3abcb139d6" },

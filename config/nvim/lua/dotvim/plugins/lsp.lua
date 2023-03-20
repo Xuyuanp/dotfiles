@@ -17,6 +17,7 @@ return {
             'williamboman/mason-lspconfig.nvim',
             'folke/neodev.nvim',
             'simrat39/rust-tools.nvim',
+            'jose-elias-alvarez/null-ls.nvim',
         },
         name = 'lspconfig',
         config = function()
@@ -292,6 +293,63 @@ return {
                         return
                     end
                     inlayhints.on_attach(client, bufnr, false)
+                end,
+            })
+        end,
+    },
+
+    {
+        'jose-elias-alvarez/null-ls.nvim',
+        lazy = true,
+        config = function()
+            local null_ls = require('null-ls')
+
+            null_ls.setup({
+                sources = {
+                    ---@formatting
+                    null_ls.builtins.formatting.stylua,
+                    null_ls.builtins.formatting.prettierd,
+                    null_ls.builtins.formatting.black, -- python
+                    null_ls.builtins.formatting.buf, -- proto
+                    null_ls.builtins.formatting.goimports_reviser.with({
+                        generator_opts = {
+                            command = 'goimports-reviser',
+                            args = { '-set-alias', '-use-cache', '-rm-unused', '-output', 'stdout', '$FILENAME' },
+                            to_stdin = true,
+                        },
+                    }), -- python
+
+                    null_ls.builtins.completion.spell,
+
+                    ---@code_actions
+                    null_ls.builtins.code_actions.gitsigns,
+                    null_ls.builtins.code_actions.gomodifytags,
+                    null_ls.builtins.code_actions.refactoring,
+                },
+            })
+            local group_id = vim.api.nvim_create_augroup('dotvim_null_ls_format', { clear = true })
+            vim.api.nvim_create_autocmd('LspAttach', {
+                callback = function(args)
+                    if not (args.data and args.data.client_id) then
+                        return
+                    end
+
+                    local bufnr = args.buf
+                    local client = vim.lsp.get_client_by_id(args.data.client_id)
+                    if client.name ~= 'null-ls' then
+                        return
+                    end
+
+                    vim.api.nvim_create_autocmd('BufWritePre', {
+                        buffer = bufnr,
+                        desc = 'Formatting on save by null-ls',
+                        callback = function()
+                            vim.lsp.buf.format({
+                                name = 'null-ls',
+                                bufnr = bufnr,
+                            })
+                        end,
+                    })
                 end,
             })
         end,
