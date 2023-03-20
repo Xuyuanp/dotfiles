@@ -1,6 +1,3 @@
-export PATH="${HOME}/.local/bin:${PATH}"
-export PATH="${HOME}/.cargo/bin:${PATH}"
-
 trace_file=~/.startup.log
 [ -f $trace_file ] && rm $trace_file
 
@@ -87,9 +84,11 @@ zinit snippet OMZP::docker/_docker
 trace 'zinit'
 
 # ================================ zinit end ================================= #
-
-autoload -Uz compinit
-compinit -i
+if type brew &>/dev/null; then
+    FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+    autoload -Uz compinit
+    compinit
+fi
 
 trace 'compinit'
 
@@ -101,6 +100,7 @@ _exists exa     && alias ls='exa --icons --git'
 _exists htop    && alias top='htop'
 _exists fdfind  && alias fd='fdfind'
 _exists batcat  && alias bat='batcat'
+_exists bat     && alias cat='bat'
 _exists free    && alias free='free -h'
 _exists less    && export PAGER=less
 _exists less    && alias more='less'
@@ -121,7 +121,9 @@ fi
 
 unfunction _exists
 
-[ -f ~/.startup.py ] && export PYTHONSTARTUP=${HOME}/.startup.py
+function zsh-stats() {
+  fc -l 1 | awk '{CMD[$2]++;count++;}END { for (a in CMD)print CMD[a] " " CMD[a]/count*100 "% " a;}' | grep -v "./" | column -c3 -s " " -t | sort -nr | nl | head -n25
+}
 
 # alias
 alias ll='ls -l'
@@ -195,10 +197,6 @@ EOL
     )
 }
 
-function toppy () {
-        omz_history | awk '{CMD[$2]++;count++;}END { for (a in CMD)print CMD[a] " " CMD[a]/count*100 "% " a;}' | rg -v "./" | column -c3 -s " " -t | sort -nr | nl | head -n 21
-}
-
 trace 'base'
 
 # Customize to your needs...
@@ -215,6 +213,7 @@ trace 'zshrc.after'
 
 trace 'p10k'
 
+[ -f ~/.startup.py ] && export PYTHONSTARTUP=${HOME}/.startup.py
 export PYENV_ROOT="$HOME/.pyenv"
 if [[ -d "${PYENV_ROOT}" ]]; then
     export PATH="${PYENV_ROOT}/bin:$PATH"
