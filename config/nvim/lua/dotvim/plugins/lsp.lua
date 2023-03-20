@@ -11,21 +11,54 @@ return {
     },
     {
         'neovim/nvim-lspconfig',
+        event = { 'BufReadPost', 'BufNewFile' },
         dependencies = {
             'tamago324/nlsp-settings.nvim',
+            'williamboman/mason-lspconfig.nvim',
             'folke/neodev.nvim',
+            'simrat39/rust-tools.nvim',
         },
         name = 'lspconfig',
         config = function()
             require('dotvim.config.lsp')
         end,
     },
+
+    {
+        'simrat39/rust-tools.nvim',
+        lazy = true,
+    },
+
+    {
+        'folke/neodev.nvim',
+        lazy = true,
+        opts = {
+            library = {
+                enabled = true, -- when not enabled, neodev will not change any settings to the LSP server
+                -- these settings will be used for your Neovim config directory
+                runtime = true, -- runtime path
+                types = true, -- full signature, docs and completion of vim.api, vim.treesitter, vim.lsp and others
+                plugins = true, -- installed opt or start plugins in packpath
+                -- you can also specify the list of plugins to make available as a workspace library
+                -- plugins = { "nvim-treesitter", "plenary.nvim", "telescope.nvim" },
+            },
+            setup_jsonls = true, -- configures jsonls to provide completion for project specific .luarc.json files
+            -- for your Neovim config directory, the config.library settings will be used as is
+            -- for plugin directories (root_dirs having a /lua directory), config.library.plugins will be disabled
+            -- for any other directory, config.library.enabled will be set to false
+            override = function(root_dir, options) end,
+            -- With lspconfig, Neodev will automatically setup your lua-language-server
+            -- If you disable this, then you have to set {before_init=require("neodev.lsp").before_init}
+            -- in your lsp start options
+            lspconfig = true,
+            -- much faster, but needs a recent built of lua-language-server
+            -- needs lua-language-server >= 3.6.0
+            pathStrict = true,
+        },
+    },
+
     {
         'williamboman/mason.nvim',
-        dependencies = {
-            'lspconfig',
-            'williamboman/mason-lspconfig.nvim',
-        },
         config = function()
             require('mason').setup({})
         end,
@@ -33,6 +66,7 @@ return {
 
     {
         'williamboman/mason-lspconfig.nvim',
+        lazy = true,
         dependencies = {
             'lspconfig',
             'williamboman/mason.nvim',

@@ -40,11 +40,6 @@ return {
     },
 
     {
-        'simrat39/rust-tools.nvim',
-        ft = 'rust',
-    },
-
-    {
         'neovimhaskell/haskell-vim',
         ft = { 'haskell', 'hs' },
     },
