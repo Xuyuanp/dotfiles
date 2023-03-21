@@ -4,43 +4,40 @@ local api = vim.api
 local M = {}
 
 function M.setup(highlight_map)
-    api.nvim_create_autocmd('LspAttach', {
-        once = true,
-        callback = function()
-            highlight_map = vim.tbl_deep_extend('keep', highlight_map or {}, {
-                File = 'Teal',
-                Module = 'Include',
-                Namespace = 'Include',
-                Package = 'Include',
-                Class = 'Structure',
-                Method = 'Function',
-                Property = 'Identifier',
-                Field = 'Identifier',
-                Constructor = 'Function',
-                Enum = 'Constructor',
-                Interface = 'Type',
-                Function = 'Function',
-                Variable = 'Identifier',
-                Constant = 'Constant',
-                String = 'String',
-                Number = 'Number',
-                Boolean = 'Boolean',
-                Array = 'Type',
-                Object = 'Identifier',
-                Key = 'Aqua',
-                Null = 'SpecialChar',
-                EnumMember = 'Purple',
-                Struct = 'Structure',
-                Event = 'Special',
-                Operator = 'Operator',
-                TypeParameter = 'Typedef',
-            })
+    require('dotvim.util').on_lsp_attach(function()
+        highlight_map = vim.tbl_deep_extend('keep', highlight_map or {}, {
+            File = 'Teal',
+            Module = 'Include',
+            Namespace = 'Include',
+            Package = 'Include',
+            Class = 'Structure',
+            Method = 'Function',
+            Property = 'Identifier',
+            Field = 'Identifier',
+            Constructor = 'Function',
+            Enum = 'Constructor',
+            Interface = 'Type',
+            Function = 'Function',
+            Variable = 'Identifier',
+            Constant = 'Constant',
+            String = 'String',
+            Number = 'Number',
+            Boolean = 'Boolean',
+            Array = 'Type',
+            Object = 'Identifier',
+            Key = 'Aqua',
+            Null = 'SpecialChar',
+            EnumMember = 'Purple',
+            Struct = 'Structure',
+            Event = 'Special',
+            Operator = 'Operator',
+            TypeParameter = 'Typedef',
+        })
 
-            for kind, hl_group in pairs(highlight_map) do
-                api.nvim_command(string.format('hi! default link LspKind%s %s', kind, hl_group))
-            end
-        end,
-    })
+        for kind, hl_group in pairs(highlight_map) do
+            vim.cmd(string.format('hi! default link LspKind%s %s', kind, hl_group))
+        end
+    end, { once = true, desc = 'Set LspKind highlights' })
 end
 
 local escapeKey = string.char(27)

@@ -218,30 +218,6 @@ return {
     },
 
     {
-        'mfussenegger/nvim-lint',
-        config = function()
-            local lint = require('lint')
-            -- lint.linters_by_ft.lua = { 'luacheck' }
-            lint.linters_by_ft.vim = { 'vint' }
-            -- lint.linters_by_ft.python = { 'pylint', 'flake8' }
-            local codespell = vim.tbl_deep_extend('force', lint.linters.codespell, {
-                args = { '--config', vim.env.HOME .. '/.config/codespell/config.toml' },
-                name = 'codespell',
-            })
-
-            local group_id = vim.api.nvim_create_augroup('dotvim_lint', { clear = true })
-            vim.api.nvim_create_autocmd({ 'InsertLeave', 'BufWritePost' }, {
-                group = group_id,
-                pattern = '*',
-                callback = function()
-                    lint.try_lint()
-                    lint.lint(codespell)
-                end,
-            })
-        end,
-    },
-
-    {
         'lvimuser/lsp-inlayhints.nvim',
         config = function()
             local inlayhints = require('lsp-inlayhints')
@@ -279,22 +255,12 @@ return {
                 debug_mode = false,
             })
 
-            local group_id = vim.api.nvim_create_augroup('LspAttach_inlayhints', { clear = true })
-            vim.api.nvim_create_autocmd('LspAttach', {
-                group = group_id,
-                callback = function(args)
-                    if not (args.data and args.data.client_id) then
-                        return
-                    end
-
-                    local bufnr = args.buf
-                    local client = vim.lsp.get_client_by_id(args.data.client_id)
-                    if client.name == 'rust_analyzer' then
-                        return
-                    end
-                    inlayhints.on_attach(client, bufnr, false)
-                end,
-            })
+            require('dotvim.util').on_lsp_attach(function(client, bufnr)
+                if client.name == 'rust_analyzer' then
+                    return
+                end
+                inlayhints.on_attach(client, bufnr, false)
+            end, { desc = 'setup inlay hints' })
         end,
     },
 
@@ -306,52 +272,45 @@ return {
 
             null_ls.setup({
                 sources = {
-                    ---@formatting
+                    -- formatting
                     null_ls.builtins.formatting.stylua,
-                    null_ls.builtins.formatting.prettierd,
+                    null_ls.builtins.formatting.prettierd, -- graphql
                     null_ls.builtins.formatting.black, -- python
                     null_ls.builtins.formatting.buf, -- proto
+                    null_ls.builtins.formatting.taplo, -- toml
+                    null_ls.builtins.formatting.jq, -- json
                     null_ls.builtins.formatting.goimports_reviser.with({
                         generator_opts = {
                             command = 'goimports-reviser',
                             args = { '-set-alias', '-use-cache', '-rm-unused', '-output', 'stdout', '$FILENAME' },
                             to_stdin = true,
                         },
-                    }), -- python
+                    }),
 
-                    null_ls.builtins.completion.spell,
+                    -- diagnostics
+                    null_ls.builtins.diagnostics.codespell,
 
-                    ---@code_actions
+                    -- code_actions
                     null_ls.builtins.code_actions.gitsigns,
                     null_ls.builtins.code_actions.gomodifytags,
-                    null_ls.builtins.code_actions.refactoring,
                 },
             })
-            local group_id = vim.api.nvim_create_augroup('dotvim_null_ls_format', { clear = true })
-            vim.api.nvim_create_autocmd('LspAttach', {
-                callback = function(args)
-                    if not (args.data and args.data.client_id) then
-                        return
-                    end
+            require('dotvim.util').on_lsp_attach(function(client, bufnr)
+                if client.name ~= 'null-ls' then
+                    return
+                end
 
-                    local bufnr = args.buf
-                    local client = vim.lsp.get_client_by_id(args.data.client_id)
-                    if client.name ~= 'null-ls' then
-                        return
-                    end
-
-                    vim.api.nvim_create_autocmd('BufWritePre', {
-                        buffer = bufnr,
-                        desc = 'Formatting on save by null-ls',
-                        callback = function()
-                            vim.lsp.buf.format({
-                                name = 'null-ls',
-                                bufnr = bufnr,
-                            })
-                        end,
-                    })
-                end,
-            })
+                vim.api.nvim_create_autocmd('BufWritePre', {
+                    buffer = bufnr,
+                    desc = 'Formatting on save by null-ls',
+                    callback = function()
+                        vim.lsp.buf.format({
+                            name = 'null-ls',
+                            bufnr = bufnr,
+                        })
+                    end,
+                })
+            end, { desc = 'set auto format trigger' })
         end,
     },
 }

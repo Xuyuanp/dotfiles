@@ -47,26 +47,13 @@ function M.setup()
             ['<C-b>'] = cmp.mapping.scroll_docs(-5),
             ['<C-f>'] = cmp.mapping.scroll_docs(5),
             ['<C-Space>'] = cmp.mapping.complete(),
-            ['<CR>'] = cmp.mapping({
-                i = cmp.mapping.confirm({ select = true }),
-                s = cmp.mapping.confirm({ select = true }),
-                c = function(fallback)
-                    if cmp.visible() then
-                        local entry = cmp.get_selected_entry()
-                        if entry then
-                            if vim.endswith(entry.context.cursor_line, entry.completion_item.label) then
-                                fallback()
-                            else
-                                cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
-                            end
-                        else
-                            fallback()
-                        end
-                    else
-                        fallback()
-                    end
-                end,
-            }),
+            ['<CR>'] = cmp.mapping(function(fallback)
+                if cmp.visible() then
+                    cmp.confirm({ select = true })
+                else
+                    fallback()
+                end
+            end),
             ['<C-e>'] = cmp.mapping.close(),
             ['<Tab>'] = cmp.mapping(function(fallback)
                 if cmp.visible() then
@@ -78,7 +65,7 @@ function M.setup()
                 else
                     fallback()
                 end
-            end, { 'i', 's', 'c' }),
+            end, { 'i', 's' }),
             ['<S-Tab>'] = cmp.mapping(function(fallback)
                 if cmp.visible() then
                     cmp.select_next_item()
@@ -87,7 +74,7 @@ function M.setup()
                 else
                     fallback()
                 end
-            end, { 'i', 's', 'c' }),
+            end, { 'i', 's' }),
         },
         window = {
             documentation = {
