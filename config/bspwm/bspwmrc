@@ -116,5 +116,5 @@ bash $HOME/.fehbg
 # Start bspwm scripts
 bspcolors
 bspbar
-bspcomp
+# bspcomp
 bspfloat &

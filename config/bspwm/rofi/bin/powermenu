@@ -42,9 +42,9 @@ case $chosen in
         ans=$(${DIR}/bin/confirm &)
         if [[ $ans == "yes" ]] || [[ $ans == "YES" ]] || [[ $ans == "y" ]]; then
             mpc -q pause
-            amixer set Master mute
+            # amixer set Master mute
             bsplock
-            systemctl suspend-then-hibernate
+            systemctl suspend
         else
             exit
         fi
@@ -58,4 +58,3 @@ case $chosen in
         fi
         ;;
 esac
-

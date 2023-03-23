@@ -23,9 +23,13 @@ super + shift + Return
 # ctrl + alt + t
 #     sh ~/.config/bspwm/rofi/bin/themes
 
-# Rofi Menus/Applets(launcher, windows, mpd, powermenu, asroot, screenshot)
-super + {a,w,m,x,r,s}
-    ~/.config/bspwm/rofi/bin/{launcher,windows,mpd,powermenu,asroot,screenshot}
+# Rofi Menus/Applets(launcher, windows, mpd, powermenu, asroot)
+super + {a,w,m,x,r}
+    ~/.config/bspwm/rofi/bin/{launcher,windows,mpd,powermenu,asroot}
+
+# screenshot
+super + s
+    flameshot gui
 
 # Open chrome
 super + b
