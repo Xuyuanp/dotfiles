@@ -120,16 +120,6 @@ function M.setup()
         },
     })
 
-    cmp.setup.filetype('lua', {
-        sources = cmp.config.sources({
-            { name = 'nvim_lua' },
-            { name = 'nvim_lsp' },
-        }, {
-            { name = 'buffer' },
-            { name = 'vsnip' },
-        }),
-    })
-
     local crates = vim.F.npcall(require, 'crates')
     if crates then
         crates.setup()

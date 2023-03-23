@@ -99,33 +99,39 @@ return {
         event = { 'InsertEnter' },
         dependencies = {
             'hrsh7th/cmp-buffer',
-            'hrsh7th/cmp-nvim-lua',
             'hrsh7th/cmp-nvim-lsp',
-            'andersevenrud/compe-tmux',
             'hrsh7th/cmp-path',
             'hrsh7th/cmp-calc',
-            'hrsh7th/cmp-vsnip',
+            {
+                'hrsh7th/cmp-vsnip',
+                dependencies = {
+                    'hrsh7th/vim-vsnip',
+                },
+            },
+            'andersevenrud/compe-tmux',
             'Saecki/crates.nvim',
             'windwp/nvim-autopairs',
-            {
-                'hrsh7th/vim-vsnip',
-                dependencies = {
-                    'rafamadriz/friendly-snippets',
-                },
-                config = function()
-                    local vim = vim
-                    local vfn = vim.fn
-
-                    vim.g.vsnip_snippet_dir = vfn.stdpath('config') .. '/snippets'
-                    vim.cmd([[imap <expr> <C-j> vsnip#available(1)  ? '<Plug>(vsnip-jump-next)' : '<C-j>']])
-                    vim.cmd([[smap <expr> <C-j> vsnip#available(1)  ? '<Plug>(vsnip-jump-next)' : '<C-j>']])
-                    vim.cmd([[imap <expr> <C-k> vsnip#available(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-k>']])
-                    vim.cmd([[smap <expr> <C-k> vsnip#available(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-k>']])
-                end,
-            },
         },
         config = function()
             require('dotvim.config.complete').setup()
+        end,
+    },
+
+    {
+        'hrsh7th/vim-vsnip',
+        lazy = true,
+        dependencies = {
+            'rafamadriz/friendly-snippets',
+        },
+        config = function()
+            local vim = vim
+            local vfn = vim.fn
+
+            vim.g.vsnip_snippet_dir = vfn.stdpath('config') .. '/snippets'
+            vim.cmd([[imap <expr> <C-j> vsnip#available(1)  ? '<Plug>(vsnip-jump-next)' : '<C-j>']])
+            vim.cmd([[smap <expr> <C-j> vsnip#available(1)  ? '<Plug>(vsnip-jump-next)' : '<C-j>']])
+            vim.cmd([[imap <expr> <C-k> vsnip#available(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-k>']])
+            vim.cmd([[smap <expr> <C-k> vsnip#available(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-k>']])
         end,
     },
 
