@@ -1,24 +1,31 @@
 return {
     {
+        'theHamsta/nvim-dap-virtual-text',
+        lazy = true,
+        dependencies = {
+            'nvim-treesitter/nvim-treesitter',
+        },
+    },
+    {
+        'nvim-telescope/telescope-dap.nvim',
+        lazy = true,
+        dependencies = { 'telescope' },
+    },
+    {
+        'jay-babu/mason-nvim-dap.nvim',
+        lazy = true,
+        dependencies = { 'williamboman/mason.nvim' },
+    },
+
+    {
         'mfussenegger/nvim-dap',
         event = { 'BufReadPost', 'BufNewFile' },
         dependencies = {
             'plenary',
             'rcarriga/nvim-dap-ui',
-            {
-                'theHamsta/nvim-dap-virtual-text',
-                dependencies = {
-                    'nvim-treesitter/nvim-treesitter',
-                },
-            },
-            {
-                'nvim-telescope/telescope-dap.nvim',
-                dependencies = { 'telescope' },
-            },
-            {
-                'jay-babu/mason-nvim-dap.nvim',
-                dependencies = { 'williamboman/mason.nvim' },
-            },
+            'theHamsta/nvim-dap-virtual-text',
+            'nvim-telescope/telescope-dap.nvim',
+            'jay-babu/mason-nvim-dap.nvim',
         },
         config = function()
             require('dotvim.config.dap').setup()

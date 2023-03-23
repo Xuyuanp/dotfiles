@@ -18,13 +18,13 @@ end
 
 local function set_condition_breakpoint()
     local dap = require('dap')
-    local cond = a.ui.input({ prompt = 'Breakpoint condition:' }).await()
+    local cond = a.ui.input({ prompt = 'Breakpoint condition (var > 10):' }).await()
     dap.set_breakpoint(cond)
 end
 
 local function set_log_point()
     local dap = require('dap')
-    local log_message = a.ui.input({ prompt = 'Log point message:' }).await()
+    local log_message = a.ui.input({ prompt = 'Log point message (var = {var}):' }).await()
     dap.set_breakpoint(nil, nil, log_message)
 end
 
@@ -41,7 +41,7 @@ local set_breakpoint = a.wrap(function()
         ['Hit count'] = set_hit_count,
         ['Log message'] = set_log_point,
     }
-    local choice = a.ui.select(vim.tbl_keys(actions), { prompt = 'Set debug point' }).await()
+    local choice = a.ui.select(vim.tbl_keys(actions), { prompt = 'Select Breakpoint Type:' }).await()
     if choice then
         actions[choice]()
     end
@@ -76,9 +76,9 @@ function M.setup()
 
     sign_define('DapStopped', { text = '', texthl = 'DapCustomPC' })
     sign_define('DapBreakpoint', { text = '', texthl = 'DapBreakpoint' })
-    sign_define('DapBreakpointCondition', { text = '', texthl = 'DapBreakpointCondition' })
-    sign_define('DapBreakpointRejected', { text = '', texthl = 'DapBreakpointRejected' })
-    sign_define('DapLogPoint', { text = 'ﰉ', texthl = 'DapLogPoint' })
+    sign_define('DapBreakpointCondition', { text = '', texthl = 'DapBreakpointCondition' })
+    sign_define('DapBreakpointRejected', { text = '', texthl = 'DapBreakpointRejected' })
+    sign_define('DapLogPoint', { text = '', texthl = 'DapLogPoint' })
 end
 
 local ui = {}
