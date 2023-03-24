@@ -174,9 +174,17 @@ return {
         'rest-nvim/rest.nvim',
         dependencies = { 'plenary' },
         ft = 'http',
-        keys = {
-            { '<leader>r', '<Plug>RestNvim', desc = 'run http request' },
-        },
+        config = function(_, opts)
+            require('rest-nvim').setup(opts)
+            vim.api.nvim_create_autocmd('FileType', {
+                pattern = 'http',
+                group = vim.api.nvim_create_augroup('dotvim_rest', { clear = true }),
+                desc = 'run http request',
+                callback = function()
+                    vim.keymap.set('n', '<leader>r', '<Plug>RestNvim', { desc = 'run http request', buffer = 0 })
+                end,
+            })
+        end,
         opts = {
             -- Open request results in a horizontal split
             result_split_horizontal = false,
