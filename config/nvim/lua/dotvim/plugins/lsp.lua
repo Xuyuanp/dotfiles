@@ -1,6 +1,7 @@
 return {
     {
         'j-hui/fidget.nvim',
+        lazy = true,
         config = function()
             require('fidget').setup({
                 text = {
@@ -18,6 +19,10 @@ return {
             'folke/neodev.nvim',
             'simrat39/rust-tools.nvim',
             'jose-elias-alvarez/null-ls.nvim',
+            'j-hui/fidget.nvim',
+            'ray-x/lsp_signature.nvim',
+            'lvimuser/lsp-inlayhints.nvim',
+            'onsails/lspkind-nvim',
         },
         name = 'lspconfig',
         config = function()
@@ -79,6 +84,7 @@ return {
 
     {
         'ray-x/lsp_signature.nvim',
+        lazy = true,
         config = function()
             require('lsp_signature').setup({
                 bind = true,
@@ -157,6 +163,7 @@ return {
 
     {
         'onsails/lspkind-nvim',
+        lazy = true,
         config = function()
             require('lspkind').init({
                 mode = 'symbol_text',
@@ -225,6 +232,7 @@ return {
 
     {
         'lvimuser/lsp-inlayhints.nvim',
+        lazy = true,
         config = function()
             local inlayhints = require('lsp-inlayhints')
             inlayhints.setup({
