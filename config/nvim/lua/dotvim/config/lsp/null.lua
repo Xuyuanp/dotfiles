@@ -6,29 +6,27 @@ local function on_lsp_attach(client, bufnr)
         return
     end
 
+    local event = 'BufWritePre'
+    local desc = 'Formatting on save by lsp ' .. client.name
+
     if client.name == 'null-ls' then
-        vim.api.nvim_create_autocmd('BufWritePost', {
-            buffer = bufnr,
-            desc = 'Formatting on save by null-ls',
-            callback = function()
-                vim.lsp.buf.format({
-                    name = 'null-ls',
-                    bufnr = bufnr,
-                })
-            end,
-        })
-    elseif not vim.b[bufnr].lsp_disable_auto_format then
-        vim.api.nvim_create_autocmd('BufWritePre', {
-            buffer = bufnr,
-            desc = 'Formatting on save by lsp ' .. client.name,
-            callback = function()
-                vim.lsp.buf.format({
-                    name = client.name,
-                    bufnr = bufnr,
-                })
-            end,
-        })
+        event = 'BufWritePost'
+    elseif vim.b[bufnr].lsp_disable_auto_format then
+        -- disable auto format
+        return
     end
+
+    vim.api.nvim_create_autocmd(event, {
+        buffer = bufnr,
+        desc = desc,
+        callback = function()
+            vim.lsp.buf.format({
+                name = client.name,
+                bufnr = bufnr,
+                async = false,
+            })
+        end,
+    })
 end
 
 function M.setup()
