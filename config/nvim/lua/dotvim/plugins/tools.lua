@@ -88,7 +88,14 @@ return {
 
     {
         'voldikss/vim-translator',
-        event = 'VeryLazy',
+        cmd = {
+            'Translate',
+            'TranslateH',
+            'TranslateL',
+            'TranslateR',
+            'TranslateW',
+            'TranslateX',
+        },
         init = function()
             vim.g.translator_history_enable = true
         end,
