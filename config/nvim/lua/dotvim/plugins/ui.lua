@@ -63,7 +63,6 @@ return {
         },
         config = function()
             local vfn = vim.fn
-            local command = vim.api.nvim_command
 
             _G.devicons_get_icon = function(path)
                 local filename = vfn.fnamemodify(path, ':t')
@@ -71,7 +70,7 @@ return {
                 return require('nvim-web-devicons').get_icon(filename, extension, { default = true })
             end
 
-            command([[
+            vim.cmd([[
             function! StartifyEntryFormat()
                 return 'v:lua.devicons_get_icon(absolute_path) ." ". entry_path'
             endfunction
@@ -82,6 +81,7 @@ return {
     {
         'liuchengxu/vista.vim',
         cmd = 'Vista',
+        keys = { { '<C-t>', ':Vista!!<CR>', 'n' } },
         config = function()
             vim.g.vista_default_executive = 'nvim_lsp'
             vim.api.nvim_set_keymap('n', '<C-t>', ':Vista!!<CR>', { noremap = true })
@@ -98,7 +98,7 @@ return {
 
     {
         'Xuyuanp/scrollbar.nvim',
-        event = { 'BufReadPost', 'BufNewFile' },
+        event = 'VeryLazy',
         config = function()
             vim.g.scrollbar_excluded_filetypes = {
                 'nerdtree',
@@ -208,21 +208,24 @@ return {
 
     {
         'numToStr/FTerm.nvim',
-        keys = { '<A-o>' },
-        config = function()
-            local fterm = require('FTerm')
-            fterm.setup({
-                border = 'rounded',
-                blend = 10,
-                dimensions = {
-                    height = 0.9,
-                    widgets = 0.9,
-                },
-            })
-
-            local opts = { noremap = false, silent = true }
-            vim.keymap.set({ 'n', 't' }, '<A-o>', fterm.toggle, opts)
-        end,
+        lazy = true,
+        keys = {
+            {
+                '<A-o>',
+                function()
+                    require('FTerm').toggle()
+                end,
+                mode = { 'n', 't' },
+            },
+        },
+        opts = {
+            border = 'rounded',
+            blend = 10,
+            dimensions = {
+                height = 0.9,
+                widgets = 0.9,
+            },
+        },
     },
 
     {
@@ -312,16 +315,13 @@ return {
 
     {
         'windwp/nvim-spectre',
-        event = 'VeryLazy',
+        keys = {
+            { '<leader>S', ':lua require("spectre").open()<CR>', mode = 'n', noremap = true, silent = true },
+            { '<leader>Ss', 'viw:lua require("spectre").open_file_search()<CR>', mode = 'n', noremap = true, silent = true },
+        },
         dependencies = { 'plenary', 'popup' },
         config = function()
             require('spectre').setup({})
-
-            local set_keymap = vim.api.nvim_set_keymap
-
-            local opts = { noremap = true, silent = true }
-            set_keymap('n', '<leader>S', ':lua require("spectre").open()<CR>', opts)
-            set_keymap('n', '<leader>Sc', 'viw:lua require("spectre").open_file_search()<CR>', opts)
 
             local group_id = vim.api.nvim_create_augroup('dotvim_spectre', { clear = true })
 
