@@ -154,29 +154,6 @@ return {
     },
 
     {
-        'mhartington/formatter.nvim',
-        event = { 'BufReadPost', 'BufNewFile' },
-        config = function()
-            local fmt = require('formatter')
-            fmt.setup({
-                logging = true,
-                log_level = vim.log.levels.WARN,
-                filetype = {
-                    ['*'] = {
-                        require('formatter.filetypes.any').remove_trailing_whitespace,
-                    },
-                },
-            })
-
-            vim.api.nvim_create_autocmd('BufWritePost', {
-                group = vim.api.nvim_create_augroup('dotvim_format', { clear = true }),
-                pattern = '*',
-                command = 'FormatWrite',
-            })
-        end,
-    },
-
-    {
         'rest-nvim/rest.nvim',
         dependencies = { 'plenary' },
         ft = 'http',
