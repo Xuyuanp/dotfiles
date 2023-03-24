@@ -1,4 +1,4 @@
-local on_read = { 'BufReadPost', 'BufNewFile' }
+local PostRead = { 'BufReadPost', 'BufNewFile' }
 
 return {
     {
@@ -11,14 +11,14 @@ return {
             'RRethy/nvim-treesitter-textsubjects',
         },
         build = ':TSUpdate',
-        event = on_read,
+        event = PostRead,
         config = function()
             require('dotvim.config.treesitter').setup()
         end,
     },
     {
         'haringsrob/nvim_context_vt',
-        event = on_read,
+        event = PostRead,
         dependencies = { 'nvim-treesitter/nvim-treesitter' },
         config = function()
             require('nvim_context_vt').setup({
@@ -43,7 +43,7 @@ return {
 
     {
         'm-demare/hlargs.nvim',
-        event = on_read,
+        event = PostRead,
         dependencies = { 'nvim-treesitter/nvim-treesitter' },
         config = function()
             require('hlargs').setup({})
