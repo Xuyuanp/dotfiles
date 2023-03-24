@@ -33,6 +33,14 @@ end
 function M.setup()
     local plugins = get_plugins()
     local opts = {
+        concurrency = 8,
+        defaults = {
+            lazy = true,
+        },
+        install = {
+            missing = true,
+            colorscheme = { 'kanagawa' },
+        },
         performance = {
             rtp = {
                 disabled_plugins = {

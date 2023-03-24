@@ -116,7 +116,6 @@ return {
 
     {
         'rcarriga/nvim-notify',
-        lazy = true,
         dependencies = { 'telescope' },
         init = function()
             ---@diagnostic disable-next-line: duplicate-set-field
@@ -155,6 +154,7 @@ return {
 
     {
         'nathom/filetype.nvim',
+        lazy = false,
         config = function()
             require('filetype').setup({
                 overrides = {},
@@ -223,7 +223,6 @@ return {
 
     {
         'nvim-neotest/neotest',
-        lazy = true,
         dependencies = {
             'plenary',
             'nvim-treesitter/nvim-treesitter',

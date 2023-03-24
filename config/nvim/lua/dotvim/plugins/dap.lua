@@ -1,19 +1,16 @@
 return {
     {
         'theHamsta/nvim-dap-virtual-text',
-        lazy = true,
         dependencies = {
             'nvim-treesitter/nvim-treesitter',
         },
     },
     {
         'nvim-telescope/telescope-dap.nvim',
-        lazy = true,
         dependencies = { 'telescope' },
     },
     {
         'jay-babu/mason-nvim-dap.nvim',
-        lazy = true,
         dependencies = { 'williamboman/mason.nvim' },
     },
 

@@ -2,18 +2,17 @@ return {
     {
         'nvim-lua/plenary.nvim',
         name = 'plenary',
-        lazy = true,
     },
 
     {
         'nvim-lua/popup.nvim',
         name = 'popup',
-        lazy = true,
     },
 
     {
         'junegunn/fzf.vim',
         name = 'fzfvim',
+        lazy = false,
         dependencies = {
             {
                 'junegunn/fzf',

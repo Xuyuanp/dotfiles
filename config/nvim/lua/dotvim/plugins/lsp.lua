@@ -1,7 +1,6 @@
 return {
     {
         'j-hui/fidget.nvim',
-        lazy = true,
         config = function()
             require('fidget').setup({
                 text = {
@@ -32,12 +31,10 @@ return {
 
     {
         'simrat39/rust-tools.nvim',
-        lazy = true,
     },
 
     {
         'folke/neodev.nvim',
-        lazy = true,
         opts = {
             library = {
                 enabled = true, -- when not enabled, neodev will not change any settings to the LSP server
@@ -65,6 +62,7 @@ return {
 
     {
         'williamboman/mason.nvim',
+        lazy = false,
         config = function()
             require('mason').setup({})
         end,
@@ -72,7 +70,6 @@ return {
 
     {
         'williamboman/mason-lspconfig.nvim',
-        lazy = true,
         dependencies = {
             'lspconfig',
             'williamboman/mason.nvim',
@@ -84,7 +81,6 @@ return {
 
     {
         'ray-x/lsp_signature.nvim',
-        lazy = true,
         config = function()
             require('lsp_signature').setup({
                 bind = true,
@@ -125,7 +121,6 @@ return {
 
     {
         'hrsh7th/vim-vsnip',
-        lazy = true,
         dependencies = {
             'rafamadriz/friendly-snippets',
         },
@@ -163,7 +158,6 @@ return {
 
     {
         'onsails/lspkind-nvim',
-        lazy = true,
         config = function()
             require('lspkind').init({
                 mode = 'symbol_text',
@@ -232,7 +226,6 @@ return {
 
     {
         'lvimuser/lsp-inlayhints.nvim',
-        lazy = true,
         config = function()
             local inlayhints = require('lsp-inlayhints')
             inlayhints.setup({
@@ -280,7 +273,6 @@ return {
 
     {
         'jose-elias-alvarez/null-ls.nvim',
-        lazy = true,
         config = function()
             require('dotvim.config.lsp.null').setup()
         end,

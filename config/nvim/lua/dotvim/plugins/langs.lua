@@ -83,6 +83,7 @@ return {
 
     {
         'towolf/vim-helm',
+        ft = 'helm',
         config = function()
             local group_id = vim.api.nvim_create_augroup('dotvim_helm', { clear = true })
             vim.api.nvim_create_autocmd({ 'BufReadPre' }, {

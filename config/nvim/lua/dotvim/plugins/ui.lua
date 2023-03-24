@@ -31,11 +31,11 @@ return {
 
     {
         'Xuyuanp/yanil',
-        cmd = { 'YanilToggle', 'Yanil' },
+        keys = {
+            { '<C-e>', require('dotvim.util').lazy_require('yanil/canvas').toggle, mode = 'n', desc = 'Toggle Yanil' },
+        },
         config = function()
             require('dotvim.config.yanil').setup()
-
-            vim.keymap.set('n', '<C-e>', ':YanilToggle<CR>', { silent = true, noremap = false })
 
             local group_id = vim.api.nvim_create_augroup('dotvim_yanil', { clear = true })
             vim.api.nvim_create_autocmd({ 'BufEnter' }, {
@@ -44,10 +44,11 @@ return {
                 pattern = { 'Yanil' },
                 command = 'if len(nvim_list_wins()) ==1 | q | endif',
             })
-            vim.api.nvim_create_autocmd({ 'FocusGained' }, {
+
+            vim.api.nvim_create_autocmd('User', {
+                pattern = 'GitSignsUpdate',
                 group = group_id,
-                desc = 'Auto refresh git status of yanil',
-                pattern = { '*' },
+                desc = 'Auto refresh git status of Yanil',
                 callback = function()
                     require('yanil/git').update()
                 end,
@@ -80,11 +81,9 @@ return {
 
     {
         'liuchengxu/vista.vim',
-        cmd = 'Vista',
-        keys = { { '<C-t>', ':Vista!!<CR>', 'n' } },
+        keys = { { '<C-t>', ':Vista!!<CR>', mode = 'n' } },
         config = function()
             vim.g.vista_default_executive = 'nvim_lsp'
-            vim.api.nvim_set_keymap('n', '<C-t>', ':Vista!!<CR>', { noremap = true })
         end,
     },
 
@@ -208,7 +207,6 @@ return {
 
     {
         'numToStr/FTerm.nvim',
-        lazy = true,
         keys = {
             {
                 '<A-o>',
@@ -309,7 +307,6 @@ return {
 
     {
         'MunifTanjim/nui.nvim',
-        lazy = true,
     },
 
     {
@@ -337,7 +334,6 @@ return {
 
     {
         'stevearc/dressing.nvim',
-        lazy = true,
         init = function()
             ---@diagnostic disable-next-line: duplicate-set-field
             vim.ui.select = function(...)

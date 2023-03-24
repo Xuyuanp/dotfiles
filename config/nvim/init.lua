@@ -13,5 +13,3 @@ require('dotvim.autocmds').setup()
 
 -- force quit
 vim.cmd([[command! Q execute('qa!')]])
-
-vim.cmd([[highlight! default link GitLens SpecialComment]])
