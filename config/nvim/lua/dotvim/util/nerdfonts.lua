@@ -33,7 +33,7 @@ M.pick = a.wrap(function()
     local ICON = 2
     local icon = fields[ICON]
     vim.fn.setreg(vim.v.register, icon)
-    vim.notify(string.format('%s is copied', icon))
+    vim.notify(string.format('icon %s is copied', icon), vim.log.levels.INFO, { title = 'Nerdfonts' })
 end)
 
 return M

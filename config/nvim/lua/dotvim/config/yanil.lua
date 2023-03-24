@@ -12,6 +12,12 @@ local devicons = require('yanil/devicons')
 local canvas = require('yanil/canvas')
 local utils = require('yanil/utils')
 
+local vim_notify = function(msg, level, opts)
+    opts = opts or {}
+    opts.title = 'Yanil'
+    vim.notify(msg, level, opts)
+end
+
 local a = dotutil.async()
 local uv = a.uv()
 
@@ -76,7 +82,7 @@ local find_file = a.wrap(function(tree, node)
 
     local target = tree.root:find_node_by_path(path)
     if not target then
-        vim.notify('file "' .. path .. '" is not found or ignored', Levels.WARN)
+        vim_notify('file "' .. path .. '" is not found or ignored', Levels.WARN)
         return
     end
     tree:go_to_node(target)
@@ -98,7 +104,7 @@ local create_node = a.wrap(function(tree, node)
 
     local path = node.abs_path .. name
     if tree.root:find_node_by_path(path) then
-        vim.notify('path "' .. path .. '" is already exists', Levels.WARN)
+        vim_notify('path "' .. path .. '" is already exists', Levels.WARN)
         return
     end
 
@@ -106,14 +112,14 @@ local create_node = a.wrap(function(tree, node)
     local res = uv.simple_job({ command = 'mkdir', args = { '-p', dir } }).await()
 
     if res.code ~= 0 then
-        vim.notify('mkdir failed: ' .. (res.stderr or res.stdout or ''), Levels.ERROR)
+        vim_notify('mkdir failed: ' .. (res.stderr or res.stdout or ''), Levels.ERROR)
         return
     end
     if not vim.endswith(path, '/') then
         res = uv.simple_job({ command = 'touch', args = { path } }).await()
 
         if res.code ~= 0 then
-            vim.notify('touch file failed: ' .. (res.stderr or res.stdout or ''), Levels.ERROR)
+            vim_notify('touch file failed: ' .. (res.stderr or res.stdout or ''), Levels.ERROR)
             return
         end
     end
@@ -125,7 +131,7 @@ local create_node = a.wrap(function(tree, node)
 
     local new_node = tree.root:find_node_by_path(path)
     if not new_node then
-        vim.notify('create node failed', Levels.WARN)
+        vim_notify('create node failed', Levels.WARN)
         return
     end
     tree:go_to_node(new_node)
@@ -142,7 +148,7 @@ end
 
 local delete_node = a.wrap(function(tree, node)
     if node == tree.root then
-        vim.notify('You can NOT delete the root', Levels.WARN)
+        vim_notify('You can NOT delete the root', Levels.WARN)
         return
     end
     if node:is_dir() then

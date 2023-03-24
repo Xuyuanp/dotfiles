@@ -109,18 +109,28 @@ return {
 
     {
         'rcarriga/nvim-notify',
-        event = 'VeryLazy',
-        config = function()
-            vim.notify = require('notify')
+        lazy = true,
+        dependencies = { 'telescope' },
+        init = function()
+            ---@diagnostic disable-next-line: duplicate-set-field
+            vim.notify = function(...)
+                local notify = require('notify')
+                ---@diagnostic disable-next-line: duplicate-set-field
+                vim.notify = function(msg, level, opts)
+                    opts = opts or {}
+                    local filetype = opts.filetype
+                    if filetype then
+                        opts.filetype = nil
+                        opts.on_open = require('dotvim.util').wrap_func_after(opts.on_open, function(win)
+                            local buf = vim.api.nvim_win_get_buf(win)
+                            vim.api.nvim_buf_set_option(buf, 'filetype', filetype)
+                        end)
+                    end
+                    notify(msg, level, opts)
+                end
 
-            vim.api.nvim_create_autocmd({ 'ColorScheme' }, {
-                group = vim.api.nvim_create_augroup('dotvim_notify', { clear = true }),
-                pattern = '*',
-                callback = function()
-                    package.loaded['notify.config.highlights'] = nil
-                    require('notify.config.highlights')
-                end,
-            })
+                vim.notify(...)
+            end
         end,
     },
 

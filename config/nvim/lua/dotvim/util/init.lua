@@ -143,4 +143,30 @@ function M.on_lsp_attach(on_attach, opts)
     vim.api.nvim_create_autocmd('LspAttach', opts)
 end
 
+function M.wrap_func_before(old, new)
+    if not new then
+        return old
+    end
+    if not old then
+        return new
+    end
+    return function(...)
+        new(...)
+        old(...)
+    end
+end
+
+function M.wrap_func_after(old, new)
+    if not new then
+        return old
+    end
+    if not old then
+        return new
+    end
+    return function(...)
+        old(...)
+        new(...)
+    end
+end
+
 return M
