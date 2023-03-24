@@ -169,4 +169,16 @@ function M.wrap_func_after(old, new)
     end
 end
 
+function M.lazy_require(modname)
+    local m = {}
+
+    return setmetatable(m, {
+        __index = function(_, key)
+            return function(...)
+                require(modname)[key](...)
+            end
+        end,
+    })
+end
+
 return M

@@ -212,10 +212,9 @@ return {
         keys = {
             {
                 '<A-o>',
-                function()
-                    require('FTerm').toggle()
-                end,
+                require('dotvim.util').lazy_require('FTerm').toggle,
                 mode = { 'n', 't' },
+                desc = 'toggle floating terminal',
             },
         },
         opts = {
