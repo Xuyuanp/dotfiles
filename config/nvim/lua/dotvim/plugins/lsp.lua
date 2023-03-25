@@ -1,15 +1,5 @@
 return {
     {
-        'j-hui/fidget.nvim',
-        config = function()
-            require('fidget').setup({
-                text = {
-                    spinner = 'meter',
-                },
-            })
-        end,
-    },
-    {
         'neovim/nvim-lspconfig',
         event = { 'BufReadPost', 'BufNewFile' },
         dependencies = {
@@ -18,8 +8,6 @@ return {
             'folke/neodev.nvim',
             'simrat39/rust-tools.nvim',
             'jose-elias-alvarez/null-ls.nvim',
-            'j-hui/fidget.nvim',
-            'ray-x/lsp_signature.nvim',
             'lvimuser/lsp-inlayhints.nvim',
             'onsails/lspkind-nvim',
         },
@@ -49,7 +37,7 @@ return {
             -- for your Neovim config directory, the config.library settings will be used as is
             -- for plugin directories (root_dirs having a /lua directory), config.library.plugins will be disabled
             -- for any other directory, config.library.enabled will be set to false
-            override = function(root_dir, options) end,
+            -- override = function(root_dir, options) end,
             -- With lspconfig, Neodev will automatically setup your lua-language-server
             -- If you disable this, then you have to set {before_init=require("neodev.lsp").before_init}
             -- in your lsp start options
@@ -76,23 +64,6 @@ return {
         },
         config = function()
             require('mason-lspconfig').setup({})
-        end,
-    },
-
-    {
-        'ray-x/lsp_signature.nvim',
-        config = function()
-            require('lsp_signature').setup({
-                bind = true,
-                floating_window = true,
-                floating_window_above_cur_line = true,
-                hi_parameter = 'Underlined',
-                hint_enable = false,
-                use_lspsaga = false,
-                handler_opts = {
-                    border = 'rounded',
-                },
-            })
         end,
     },
 

@@ -143,7 +143,6 @@ local default_config = {
     on_attach = on_attach,
     capabilities = default_capabilities,
     handlers = {
-        ['textDocument/hover']          = handlers.hover,
         ['workspace/symbol']            = handlers.symbol_handler,
         ['textDocument/references']     = handlers.references,
         ['textDocument/documentSymbol'] = handlers.symbol_handler,
@@ -214,9 +213,11 @@ local langs = {
                     },
                     disable = {
                         'unused-vararg',
-                        'unused-local',
                         'redefined-local',
                     },
+                },
+                workspace = {
+                    checkThirdParty = false,
                 },
             },
         },

@@ -103,9 +103,6 @@ function M.setup()
         trail = '·',
     })
 
-    -- Don't redraw while executing macros (good performance config)
-    opt.lazyredraw = true
-
     -- always show signcolumn
     opt.signcolumn = 'yes'
 

@@ -35,6 +35,7 @@ return {
                         DapBreakpointCondition = { fg = colors.palette.autumnYellow },
                         DapBreakpointReject = { fg = colors.palette.fujiGray },
                         DapLogPoint = { fg = colors.palette.autumnRed },
+                        LspSignatureActiveParameter = { underline = true },
                     }
                 end,
                 theme = theme,
