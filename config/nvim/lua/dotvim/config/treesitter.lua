@@ -76,6 +76,9 @@ function M.setup()
             extend_mode = true,
             max_file_lines = 2000,
         },
+        context_commentstring = {
+            enable = true,
+        },
     })
 
     require('treesitter-context').setup({

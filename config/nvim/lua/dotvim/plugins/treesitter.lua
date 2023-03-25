@@ -9,6 +9,7 @@ return {
             'nvim-treesitter/playground',
             'HiPhish/nvim-ts-rainbow2',
             'RRethy/nvim-treesitter-textsubjects',
+            'JoosepAlviste/nvim-ts-context-commentstring',
         },
         build = ':TSUpdate',
         event = PostRead,
