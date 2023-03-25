@@ -51,7 +51,15 @@ function M.setup()
             }),
 
             -- diagnostics
-            null_ls.builtins.diagnostics.codespell,
+            null_ls.builtins.diagnostics.codespell.with({
+                args = {
+                    '--config',
+                    '~/.config/codespell/config.toml',
+                    '--ignore-words',
+                    '~/.config/codespell/ignore_words',
+                    '-',
+                },
+            }),
 
             -- code_actions
             null_ls.builtins.code_actions.gitsigns,
