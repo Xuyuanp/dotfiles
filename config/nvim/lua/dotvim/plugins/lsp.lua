@@ -84,6 +84,7 @@ return {
             'andersevenrud/compe-tmux',
             'Saecki/crates.nvim',
             'windwp/nvim-autopairs',
+            'zbirenbaum/copilot-cmp',
         },
         config = function()
             require('dotvim.config.complete').setup()
@@ -190,6 +191,7 @@ return {
                     Event = '鬒',
                     TypeParameter = '',
                     Default = '',
+                    Copilot = '',
                 },
             })
         end,
@@ -246,6 +248,26 @@ return {
         'jose-elias-alvarez/null-ls.nvim',
         config = function()
             require('dotvim.config.lsp.null').setup()
+        end,
+    },
+
+    {
+
+        'zbirenbaum/copilot.lua',
+        cmd = { 'Copilot' },
+        opts = {
+            suggestion = { enabled = false },
+            panel = { enabled = false },
+        },
+    },
+
+    {
+        'zbirenbaum/copilot-cmp',
+        dependencies = {
+            'zbirenbaum/copilot.lua',
+        },
+        config = function()
+            require('copilot_cmp').setup()
         end,
     },
 }

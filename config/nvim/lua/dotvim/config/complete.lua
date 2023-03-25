@@ -93,6 +93,7 @@ function M.setup()
         },
         preselect = cmp.PreselectMode.Item,
         sources = cmp.config.sources({
+            { name = 'copilot' },
             { name = 'nvim_lsp' },
         }, {
             { name = 'buffer', keyword_length = 5 },
@@ -105,6 +106,7 @@ function M.setup()
         sorting = {
             priority_weight = 2,
             comparators = {
+                require('copilot_cmp.comparators').prioritize,
                 compare.offset,
                 compare.exact,
                 compare.score,
