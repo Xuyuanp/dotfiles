@@ -49,7 +49,7 @@ function M.setup()
             ['<C-Space>'] = cmp.mapping.complete(),
             ['<CR>'] = cmp.mapping(function(fallback)
                 if cmp.visible() then
-                    cmp.confirm({ select = true })
+                    cmp.confirm({ behavior = types.cmp.ConfirmBehavior.Replace, select = true })
                 else
                     fallback()
                 end
