@@ -1,15 +1,26 @@
 local Popup = require('nui.popup')
 local Layout = require('nui.layout')
 local event = require('nui.utils.autocmd').event
+local NuiText = require('nui.text')
+
+local function You()
+    -- TODO: add highlight group
+    return NuiText('# @You:', 'Keyword')
+end
+
+local function ChatGPT()
+    -- TODO: add highlight group
+    return NuiText('# @ChatGPT:', 'Function')
+end
 
 local Chat = {}
 
 function Chat.new()
-    local popup_chat = Popup({
+    local popup_conversation = Popup({
         border = {
             style = 'rounded',
             text = {
-                top = 'Chat',
+                top = '[Conversation]',
                 top_align = 'center',
             },
         },
@@ -19,6 +30,7 @@ function Chat.new()
         },
         win_options = {
             wrap = true,
+            conceallevel = 1,
         },
     })
 
@@ -26,7 +38,7 @@ function Chat.new()
         border = {
             style = 'rounded',
             text = {
-                top = 'Input',
+                top = '[Input]',
                 top_align = 'center',
                 bottom = '<CR>: submit, <S-CR>: add newline, <C-CR>: new chat',
                 bottom_align = 'center',
@@ -50,7 +62,7 @@ function Chat.new()
             },
         },
         Layout.Box({
-            Layout.Box(popup_chat, { size = '75%' }),
+            Layout.Box(popup_conversation, { size = '75%' }),
             Layout.Box(popup_input, { size = '25%' }),
         }, { dir = 'col' })
     )
@@ -58,7 +70,7 @@ function Chat.new()
     local chat = setmetatable({
         hidden = false,
         layout = layout,
-        popup_chat = popup_chat,
+        popup_conversation = popup_conversation,
         popup_input = popup_input,
         messages = {},
     }, { __index = Chat })
@@ -83,11 +95,11 @@ function Chat:init()
     end, { noremap = false })
 
     self.popup_input:map('n', '<Up>', function()
-        -- focus on chat
-        vim.api.nvim_set_current_win(self.popup_chat.winid)
+        -- focus on conversation
+        vim.api.nvim_set_current_win(self.popup_conversation.winid)
     end, { noremap = false })
 
-    self.popup_chat:map('n', '<Down>', function()
+    self.popup_conversation:map('n', '<Down>', function()
         -- focus on input
         vim.api.nvim_set_current_win(self.popup_input.winid)
     end, { noremap = false })
@@ -104,7 +116,7 @@ end
 
 function Chat:clear()
     self.messages = {}
-    vim.api.nvim_buf_set_lines(self.popup_chat.bufnr, 0, -1, false, {})
+    vim.api.nvim_buf_set_lines(self.popup_conversation.bufnr, 0, -1, false, {})
     vim.api.nvim_buf_set_lines(self.popup_input.bufnr, 0, -1, false, {})
 end
 
@@ -120,10 +132,16 @@ end
 ---@param input string[]
 function Chat:append_input(input)
     -- send to chat
-    vim.api.nvim_buf_set_lines(self.popup_chat.bufnr, -1, -1, false, { '# @You:' })
-    vim.api.nvim_buf_set_lines(self.popup_chat.bufnr, -1, -1, false, input)
-    -- add new line
-    vim.api.nvim_buf_set_lines(self.popup_chat.bufnr, -1, -1, false, { '' })
+    local line_count = vim.api.nvim_buf_line_count(self.popup_conversation.bufnr)
+    You():render(self.popup_conversation.bufnr, -1, line_count, 0, line_count, 0)
+    -- print input
+    vim.api.nvim_buf_set_lines(self.popup_conversation.bufnr, -1, -1, false, input)
+    -- add two new lines
+    vim.api.nvim_buf_set_lines(self.popup_conversation.bufnr, -1, -1, false, { '', '' })
+
+    -- move cursor to the end
+    local line_count = vim.api.nvim_buf_line_count(self.popup_conversation.bufnr)
+    vim.api.nvim_win_set_cursor(self.popup_conversation.winid, { line_count, 0 })
 
     table.insert(self.messages, {
         role = 'user',
@@ -133,7 +151,7 @@ end
 
 function Chat:on_submit()
     local lines = self:get_input()
-    if not lines then
+    if not lines or lines[1] == '' then
         return
     end
 
@@ -142,13 +160,23 @@ function Chat:on_submit()
 
     self:append_input(lines)
 
-    self:perform_request()
+    ---@diagnostic disable-next-line: param-type-mismatch
+    vim.defer_fn(function()
+        self:perform_request()
+        ---@diagnostic disable-next-line: param-type-mismatch
+    end, 800)
 end
 
 function Chat:perform_request()
-    vim.api.nvim_buf_set_lines(self.popup_chat.bufnr, -1, -1, false, { '# @ChatGPT:' })
-    -- newline
-    vim.api.nvim_buf_set_lines(self.popup_chat.bufnr, -1, -1, false, { '' })
+    local line_count = vim.api.nvim_buf_line_count(self.popup_conversation.bufnr)
+    ChatGPT():render(self.popup_conversation.bufnr, -1, line_count, 0, line_count, 0)
+
+    -- add newline
+    vim.api.nvim_buf_set_lines(self.popup_conversation.bufnr, -1, -1, false, { '' })
+    -- move cursor to the end
+    local line_count = vim.api.nvim_buf_line_count(self.popup_conversation.bufnr)
+    vim.api.nvim_win_set_cursor(self.popup_conversation.winid, { line_count, 0 })
+
     table.insert(self.messages, {
         role = 'assistant',
         content = '',
@@ -184,21 +212,7 @@ function Chat:perform_request()
     uv.read_start(pipe_stdout, function(err, data)
         assert(not err, err)
 
-        if not data then
-            vim.schedule(function()
-                vim.api.nvim_buf_set_lines(self.popup_chat.bufnr, -1, -1, false, { '' })
-            end)
-            return
-        end
-
-        self.messages[#self.messages].content = self.messages[#self.messages].content .. data
-
-        vim.schedule(function()
-            local lines = vim.api.nvim_buf_get_lines(self.popup_chat.bufnr, 0, -1, false)
-            local row = #lines - 1
-            local col = lines[#lines]:len()
-            vim.api.nvim_buf_set_text(self.popup_chat.bufnr, row, col, row, col, vim.split(data, '\n', { plain = true }))
-        end)
+        self:on_delta(data)
     end)
 
     uv.read_start(pipe_stderr, function(err, data)
@@ -211,6 +225,36 @@ function Chat:perform_request()
 
     uv.write(pipe_stdin, vim.fn.json_encode(self.messages))
     uv.shutdown(pipe_stdin)
+end
+
+function Chat:on_delta(data)
+    if not data then
+        -- output ends, print new line
+        data = '\n\n'
+    else
+        local content = self.messages[#self.messages].content
+        self.messages[#self.messages].content = content .. data
+    end
+
+    vim.schedule(function()
+        local line_count = vim.api.nvim_buf_line_count(self.popup_conversation.bufnr)
+        local last_line = vim.api.nvim_buf_get_lines(self.popup_conversation.bufnr, -2, -1, false)[1] or ''
+        local row = line_count
+        local col = last_line:len()
+
+        local lines = vim.split(data, '\n', { plain = true })
+        vim.api.nvim_buf_set_text(self.popup_conversation.bufnr, row - 1, col, row - 1, col, lines)
+
+        row = row + #lines - 1
+        if #lines > 1 then
+            col = lines[#lines]:len()
+        else
+            col = col + lines[#lines]:len()
+        end
+
+        -- move cursor to the end
+        vim.api.nvim_win_set_cursor(self.popup_conversation.winid, { row, col })
+    end)
 end
 
 return Chat
