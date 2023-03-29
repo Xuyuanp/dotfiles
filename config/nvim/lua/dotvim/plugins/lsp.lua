@@ -11,7 +11,6 @@ return {
             'lvimuser/lsp-inlayhints.nvim',
             'onsails/lspkind-nvim',
         },
-        name = 'lspconfig',
         config = function()
             require('dotvim.config.lsp')
         end,
@@ -59,7 +58,7 @@ return {
     {
         'williamboman/mason-lspconfig.nvim',
         dependencies = {
-            'lspconfig',
+            'neovim/nvim-lspconfig',
             'williamboman/mason.nvim',
         },
         config = function()
@@ -268,6 +267,21 @@ return {
         },
         config = function()
             require('copilot_cmp').setup()
+        end,
+    },
+
+    {
+        'https://git.sr.ht/~whynothugo/lsp_lines.nvim',
+        dependencies = {
+            'neovim/nvim-lspconfig',
+        },
+        event = { 'BufReadPost', 'BufNewFile' },
+        config = function()
+            vim.diagnostic.config({
+                virtual_text = false,
+            })
+
+            require('lsp_lines').setup()
         end,
     },
 }
