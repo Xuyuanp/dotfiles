@@ -558,7 +558,7 @@ return {
                 theme = 'leaves',
                 max = 40,
                 interval = 100,
-                screensaver = 1000 * 60 * 3,
+                screensaver = 1000 * 60 * 10,
                 filetypes = {
                     'dashboard',
                     'alpha',
