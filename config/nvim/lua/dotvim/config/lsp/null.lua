@@ -34,7 +34,9 @@ function M.setup()
         sources = {
             -- formatting
             null_ls.builtins.formatting.stylua,
-            null_ls.builtins.formatting.prettierd, -- graphql
+            null_ls.builtins.formatting.prettierd.with({
+                disabled_filetypes = { 'yaml' },
+            }), -- graphql
             null_ls.builtins.formatting.black, -- python
             null_ls.builtins.formatting.isort, -- python
             null_ls.builtins.formatting.buf, -- proto
