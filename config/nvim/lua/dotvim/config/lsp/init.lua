@@ -79,19 +79,6 @@ local function set_lsp_keymaps(client, bufnr)
 end
 
 local function set_lsp_autocmd(client, bufnr)
-    -- if client.supports_method('textDocument/formatting') then
-    --     api.nvim_create_autocmd({ 'BufWritePre' }, {
-    --         group = group_id,
-    --         buffer = bufnr,
-    --         desc = '[lsp] formatting',
-    --         callback = function()
-    --             if not vim.b[bufnr].lsp_disable_auto_format then
-    --                 vim.lsp.buf.format({ async = false })
-    --             end
-    --         end,
-    --     })
-    -- end
-
     if client.supports_method('textDocument/documentHighlight') and client.name ~= 'rust_analyzer' then
         api.nvim_create_autocmd({ 'CursorHold' }, {
             group = group_id,
@@ -152,6 +139,19 @@ local default_config = {
         ['callHierarchy/outgoingCalls'] = handlers.outgoing_calls,
     },
 }
+
+local function make_on_new_config(opts)
+    opts = opts or {}
+    return function(new_config)
+        on_attach = new_config.on_attach
+        new_config.on_attach = function(client, ...)
+            if opts.disable_hover then
+                client.server_capabilities.hoverProvider = false
+            end
+            on_attach(client, ...)
+        end
+    end
+end
 
 local langs = {
     gopls = {
@@ -222,13 +222,14 @@ local langs = {
             },
         },
     },
-    sourcery = {
-        init_options = {
-            token = vim.env.SOURCERY_TOKEN,
-        },
-    },
     sqls = {
         root_dir = lspconfig.util.root_pattern('.nlsp-settings/sqls.json'),
+    },
+    sourcery = {
+        on_new_config = make_on_new_config({ disable_hover = true }),
+    },
+    ruff_lsp = {
+        on_new_config = make_on_new_config({ disable_hover = true }),
     },
 }
 

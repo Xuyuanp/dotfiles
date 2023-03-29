@@ -9,9 +9,7 @@ local function on_lsp_attach(client, bufnr)
     local event = 'BufWritePre'
     local desc = 'Formatting on save by lsp ' .. client.name
 
-    if client.name == 'null-ls' then
-        event = 'BufWritePost'
-    elseif vim.b[bufnr].lsp_disable_auto_format then
+    if client.name ~= 'null-ls' and vim.b[bufnr].lsp_disable_auto_format then
         -- disable auto format
         return
     end
@@ -38,6 +36,7 @@ function M.setup()
             null_ls.builtins.formatting.stylua,
             null_ls.builtins.formatting.prettierd, -- graphql
             null_ls.builtins.formatting.black, -- python
+            null_ls.builtins.formatting.isort, -- python
             null_ls.builtins.formatting.buf, -- proto
             null_ls.builtins.formatting.taplo, -- toml
             null_ls.builtins.formatting.jq, -- json

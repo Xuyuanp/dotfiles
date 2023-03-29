@@ -172,8 +172,6 @@ function M.references(_err, references, ctx)
     fzf_run(wrapped)
 end
 
-M.hover = vim.lsp.with(vim.lsp.handlers.hover, { border = 'rounded' })
-
 function M.gen_location_handler(name)
     return function(_, result, ctx)
         if result == nil or vim.tbl_isempty(result) then
