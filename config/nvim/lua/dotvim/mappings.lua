@@ -57,12 +57,6 @@ local function setup()
     set_keymap('n', '[d', vim.diagnostic.goto_prev, opts)
     set_keymap('n', '<leader>sd', vim.diagnostic.open_float, opts)
     ---]]
-
-    ---[[
-    set_keymap({ 'i', 'n' }, '<A-g>', function()
-        require('neochat').toggle()
-    end, { noremap = false, desc = 'toggle neochat' })
-    ---]]
 end
 
 return {
