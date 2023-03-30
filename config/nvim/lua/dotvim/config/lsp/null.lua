@@ -46,8 +46,8 @@ function M.setup()
             null_ls.builtins.formatting.goimports_reviser.with({
                 generator_opts = {
                     command = 'goimports-reviser',
-                    args = { '-set-alias', '-use-cache', '-rm-unused', '-output', 'stdout', '$FILENAME' },
-                    to_stdin = true,
+                    args = { '-set-alias', '-use-cache', '-rm-unused', '-output', 'write', '$FILENAME' },
+                    to_temp_file = true,
                 },
             }),
 
