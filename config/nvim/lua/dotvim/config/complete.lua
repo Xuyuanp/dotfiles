@@ -1,10 +1,4 @@
-local replace_termcodes = vim.api.nvim_replace_termcodes
-
 local M = {}
-
-local function t(key)
-    return replace_termcodes(key, true, true, true)
-end
 
 local function has_words_before()
     local line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -31,6 +25,8 @@ function M.setup()
         end
     end
 
+    local luasnip = require('luasnip')
+
     cmp.setup({
         completion = {
             completeopt = 'menu,menuone,noinsert',
@@ -38,7 +34,7 @@ function M.setup()
 
         snippet = {
             expand = function(args)
-                vim.fn['vsnip#anonymous'](args.body)
+                luasnip.lsp_expand(args.body)
             end,
         },
         mapping = {
@@ -58,8 +54,8 @@ function M.setup()
             ['<Tab>'] = cmp.mapping(function(fallback)
                 if cmp.visible() then
                     cmp.select_next_item()
-                elseif vim.fn['vsnip#available']() == 1 then
-                    vim.fn.feedkeys(t('<Plug>(vsnip-expand-or-jump)'), '')
+                elseif luasnip.expand_or_jumpable() then
+                    luasnip.expand_or_jump()
                 elseif has_words_before() then
                     cmp.complete()
                 else
@@ -68,9 +64,9 @@ function M.setup()
             end, { 'i', 's' }),
             ['<S-Tab>'] = cmp.mapping(function(fallback)
                 if cmp.visible() then
-                    cmp.select_next_item()
-                elseif vim.fn['vsnip#available']() == 1 then
-                    vim.fn.feedkeys(t('<Plug>(vsnip-jump-prev)'), '')
+                    cmp.select_prev_item()
+                elseif luasnip.jumpable(-1) then
+                    luasnip.jump(-1)
                 else
                     fallback()
                 end
@@ -95,13 +91,12 @@ function M.setup()
         sources = cmp.config.sources({
             { name = 'copilot' },
             { name = 'nvim_lsp' },
+            { name = 'luasnip' },
         }, {
             { name = 'buffer', keyword_length = 5 },
             { name = 'path' },
             { name = 'tmux', keyword_length = 5 },
             { name = 'calc' },
-        }, {
-            { name = 'vsnip' },
         }),
         sorting = {
             priority_weight = 2,
@@ -131,7 +126,7 @@ function M.setup()
                 { name = 'nvim_lsp' },
             }, {
                 { name = 'buffer' },
-                { name = 'vsnip' },
+                { name = 'luasnip' },
             }),
         })
     end

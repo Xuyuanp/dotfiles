@@ -75,15 +75,16 @@ return {
             'hrsh7th/cmp-path',
             'hrsh7th/cmp-calc',
             {
-                'hrsh7th/cmp-vsnip',
+                'saadparwaiz1/cmp_luasnip',
                 dependencies = {
-                    'hrsh7th/vim-vsnip',
+                    'L3MON4D3/LuaSnip',
                 },
             },
             'andersevenrud/compe-tmux',
             'Saecki/crates.nvim',
             'windwp/nvim-autopairs',
             'zbirenbaum/copilot-cmp',
+            'onsails/lspkind-nvim',
         },
         config = function()
             require('dotvim.config.complete').setup()
@@ -91,19 +92,41 @@ return {
     },
 
     {
-        'hrsh7th/vim-vsnip',
+        'L3MON4D3/LuaSnip',
         dependencies = {
             'rafamadriz/friendly-snippets',
         },
+        keys = {
+            {
+                '<C-j>',
+                function()
+                    return require('luasnip').jumpable(1) and '<Plug>luasnip-jump-next' or '<C-j>'
+                end,
+                expr = true,
+                silent = true,
+                desc = 'luasnip jump next',
+                mode = { 'i', 's' },
+            },
+            {
+                '<C-k>',
+                function()
+                    return require('luasnip').jumpable(-1) and '<Plug>luasnip-jump-prev' or '<C-k>'
+                end,
+                expr = true,
+                silent = true,
+                desc = 'luasnip jump prev',
+                mode = { 'i', 's' },
+            },
+        },
         config = function()
-            local vim = vim
-            local vfn = vim.fn
+            require('luasnip.loaders.from_vscode').lazy_load()
+            require('luasnip.loaders.from_vscode').lazy_load({ paths = { './snippets' } })
 
-            vim.g.vsnip_snippet_dir = vfn.stdpath('config') .. '/snippets'
-            vim.cmd([[imap <expr> <C-j> vsnip#available(1)  ? '<Plug>(vsnip-jump-next)' : '<C-j>']])
-            vim.cmd([[smap <expr> <C-j> vsnip#available(1)  ? '<Plug>(vsnip-jump-next)' : '<C-j>']])
-            vim.cmd([[imap <expr> <C-k> vsnip#available(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-k>']])
-            vim.cmd([[smap <expr> <C-k> vsnip#available(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-k>']])
+            local luasnip = require('luasnip')
+            luasnip.setup({
+                history = true,
+                delete_check_events = 'TextChanged',
+            })
         end,
     },
 
@@ -120,7 +143,7 @@ return {
                         { name = 'git' },
                     }, {
                         { name = 'buffer' },
-                        { name = 'vsnip' },
+                        { name = 'luasnip' },
                     }),
                 })
             end
