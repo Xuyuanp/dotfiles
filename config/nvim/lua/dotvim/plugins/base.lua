@@ -11,7 +11,6 @@ return {
 
     {
         'junegunn/fzf.vim',
-        name = 'fzfvim',
         lazy = false,
         dependencies = {
             {
