@@ -279,19 +279,4 @@ return {
             require('copilot_cmp').setup()
         end,
     },
-
-    {
-        'https://git.sr.ht/~whynothugo/lsp_lines.nvim',
-        dependencies = {
-            'neovim/nvim-lspconfig',
-        },
-        event = { 'BufReadPost', 'BufNewFile' },
-        config = function()
-            vim.diagnostic.config({
-                virtual_text = false,
-            })
-
-            require('lsp_lines').setup()
-        end,
-    },
 }
