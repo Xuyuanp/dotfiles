@@ -95,13 +95,37 @@ return {
                 },
             },
             'andersevenrud/compe-tmux',
-            'Saecki/crates.nvim',
             'windwp/nvim-autopairs',
             'zbirenbaum/copilot-cmp',
             'onsails/lspkind-nvim',
         },
         config = function()
             require('dotvim.config.complete').setup()
+        end,
+    },
+
+    {
+
+        'Saecki/crates.nvim',
+        dependencies = {
+            'hrsh7th/nvim-cmp',
+        },
+        event = { 'BufReadPre Cargo.toml' },
+        config = function()
+            require('crates').setup({
+                autoload = true,
+                null_ls = {
+                    enabled = true,
+                },
+            })
+            local cmp = require('cmp')
+            cmp.setup.filetype('toml', {
+                sources = {
+                    { name = 'crates' },
+                    { name = 'nvim_lsp' },
+                    { name = 'copilot' },
+                },
+            })
         end,
     },
 

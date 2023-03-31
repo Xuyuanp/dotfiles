@@ -5,6 +5,12 @@ local function has_words_before()
     return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match('%s') == nil
 end
 
+local function toCamelCase(str)
+    return str:gsub('(%a)(%w*)', function(first, rest)
+        return first:upper() .. rest:lower()
+    end)
+end
+
 function M.setup()
     local cmp = require('cmp')
     local compare = require('cmp.config.compare')
@@ -26,6 +32,7 @@ function M.setup()
     end
 
     local luasnip = require('luasnip')
+    local lspkind = require('lspkind')
 
     cmp.setup({
         completion = {
@@ -80,12 +87,20 @@ function M.setup()
             },
         },
         formatting = {
-            format = (function()
-                local ok, lspkind = pcall(require, 'lspkind')
-                if ok then
-                    return lspkind.cmp_format()
-                end
-            end)(),
+            expandable_indicator = true,
+            format = lspkind.cmp_format({
+                mode = 'symbol_text',
+                maxwidth = 50,
+                menu = setmetatable({
+                    nvim_lsp = '[LSP]',
+                    luasnip = '[LuaSnip]',
+                }, {
+                    __index = function(obj, key)
+                        rawset(obj, key, '[' .. toCamelCase(key) .. ']')
+                        return rawget(obj, key)
+                    end,
+                }),
+            }),
         },
         preselect = cmp.PreselectMode.Item,
         sources = cmp.config.sources({
@@ -113,28 +128,14 @@ function M.setup()
             },
         },
         experimental = {
-            ghost_text = true,
+            ghost_text = {
+                hl_group = 'LspCodeLens',
+            },
         },
     })
 
-    local crates = vim.F.npcall(require, 'crates')
-    if crates then
-        crates.setup()
-        cmp.setup.filetype('toml', {
-            sources = cmp.config.sources({
-                { name = 'crates' },
-                { name = 'nvim_lsp' },
-            }, {
-                { name = 'buffer' },
-                { name = 'luasnip' },
-            }),
-        })
-    end
-
-    local autopair_cmp = vim.F.npcall(require, 'nvim-autopairs.completion.cmp')
-    if autopair_cmp then
-        cmp.event:on('confirm_done', autopair_cmp.on_confirm_done({}))
-    end
+    local autopair_cmp = require('nvim-autopairs.completion.cmp')
+    cmp.event:on('confirm_done', autopair_cmp.on_confirm_done({}))
 end
 
 return M
