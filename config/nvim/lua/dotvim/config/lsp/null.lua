@@ -9,9 +9,7 @@ local function on_lsp_attach(client, bufnr)
     local event = 'BufWritePre'
     local desc = 'Formatting on save by lsp ' .. client.name
 
-    if client.name == 'null-ls' then
-        event = 'BufWritePost'
-    elseif vim.b[bufnr].lsp_disable_auto_format then
+    if client.name ~= 'null-ls' and vim.b[bufnr].lsp_disable_auto_format then
         -- disable auto format
         return
     end
@@ -33,6 +31,7 @@ function M.setup()
     local null_ls = require('null-ls')
 
     null_ls.setup({
+        debug = vim.env.NULLLS_DEBUG == 'true',
         sources = {
             -- formatting
             null_ls.builtins.formatting.stylua,
@@ -42,13 +41,11 @@ function M.setup()
             null_ls.builtins.formatting.black, -- python
             null_ls.builtins.formatting.isort, -- python
             null_ls.builtins.formatting.buf, -- proto
-            null_ls.builtins.formatting.taplo, -- toml
-            null_ls.builtins.formatting.jq, -- json
             null_ls.builtins.formatting.trim_whitespace,
             null_ls.builtins.formatting.goimports_reviser.with({
                 generator_opts = {
                     command = 'goimports-reviser',
-                    args = { '-set-alias', '-use-cache', '-rm-unused', '-output', 'write', '$FILENAME' },
+                    args = { '-set-alias', '-rm-unused', '-output', 'file', '$FILENAME' },
                     to_temp_file = true,
                 },
             }),
@@ -57,9 +54,9 @@ function M.setup()
             null_ls.builtins.diagnostics.codespell.with({
                 args = {
                     '--config',
-                    '~/.config/codespell/config.toml',
+                    vim.env.HOME .. '/.config/codespell/config.toml',
                     '--ignore-words',
-                    '~/.config/codespell/ignore_words',
+                    vim.env.HOME .. '/.config/codespell/ignore_words',
                     '-',
                 },
             }),
