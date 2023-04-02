@@ -10,7 +10,7 @@ return {
         dependencies = {
             'MunifTanjim/nui.nvim',
             'plenary',
-            'telescope',
+            'nvim-telescope/telescope.nvim',
         },
     },
 
@@ -36,6 +36,8 @@ return {
         },
         dependencies = {
             'MunifTanjim/nui.nvim',
+            'f/awesome-chatgpt-prompts',
+            'nvim-telescope/telescope.nvim',
         },
         config = function()
             require('neochat').setup({})

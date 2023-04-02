@@ -3,7 +3,6 @@ local vim = vim
 return {
     {
         'nvim-telescope/telescope.nvim',
-        name = 'telescope',
         version = '*',
         cmd = { 'Telescope' },
         dependencies = {

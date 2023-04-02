@@ -7,7 +7,12 @@ return {
     },
     {
         'nvim-telescope/telescope-dap.nvim',
-        dependencies = { 'telescope' },
+        dependencies = {
+            'nvim-telescope/telescope.nvim',
+        },
+        config = function()
+            require('telescope').load_extension('dap')
+        end,
     },
     {
         'jay-babu/mason-nvim-dap.nvim',
@@ -28,7 +33,6 @@ return {
             require('dotvim.config.dap').setup()
             require('dotvim.config.dap').ui.setup()
             require('dotvim.config.dap').virtual_text.setup()
-            require('telescope').load_extension('dap')
 
             -- required
             vim.schedule(function()

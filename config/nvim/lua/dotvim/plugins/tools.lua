@@ -116,7 +116,9 @@ return {
 
     {
         'rcarriga/nvim-notify',
-        dependencies = { 'telescope' },
+        dependencies = {
+            'nvim-telescope/telescope.nvim',
+        },
         init = function()
             ---@diagnostic disable-next-line: duplicate-set-field
             vim.notify = function(...)
