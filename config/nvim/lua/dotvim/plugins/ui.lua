@@ -614,7 +614,7 @@ return {
     {
         'folke/noice.nvim',
         event = 'VeryLazy',
-        cond = function()
+        enabled = function()
             return not vim.g.neovide
         end,
         opts = {
@@ -622,12 +622,12 @@ return {
                 override = {
                     ['vim.lsp.util.convert_input_to_markdown_lines'] = true,
                     ['vim.lsp.util.stylize_markdown'] = true,
-                    ['cmp.entry.get_documentation'] = true,
+                    ['cmp.entry.get_documentation'] = false,
                 },
                 signature = {
                     enabled = true,
                     auto_open = {
-                        luasnip = false,
+                        luasnip = true,
                     },
                 },
                 progress = {
@@ -653,7 +653,7 @@ return {
         },
         keys = {
             {
-                '<c-f>',
+                '<C-f>',
                 function()
                     if not require('noice.lsp').scroll(4) then
                         return '<c-f>'
@@ -665,7 +665,7 @@ return {
                 mode = { 'i', 'n', 's' },
             },
             {
-                '<c-b>',
+                '<C-b>',
                 function()
                     if not require('noice.lsp').scroll(-4) then
                         return '<c-b>'
@@ -678,4 +678,22 @@ return {
             },
         },
     },
+    config = function(_, opts)
+        local noice = require('noice')
+        noice.setup(opts)
+
+        local Hacks = require('noice.hacks')
+        local Format = require('noice.format')
+
+        Hacks.on_module('cmp.entry', function(mod)
+            local fallback = mod.get_documentation
+            mod.get_documentation = function(self)
+                local item = self:get_completion_item()
+                if item.documentation then
+                    return Format.markdown(item.documentation)
+                end
+                return fallback(self)
+            end
+        end)
+    end,
 }
