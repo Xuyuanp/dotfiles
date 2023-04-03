@@ -136,14 +136,16 @@ return {
 
     {
         'akinsho/bufferline.nvim',
-        tag = 'v2.9.1',
+        version = 'v3',
         -- dependencies = 'kyazdani42/nvim-web-devicons',
         event = { 'BufReadPost', 'BufNewFile' },
         config = function()
             local bufferline = require('bufferline')
             bufferline.setup({
                 options = {
+                    mode = 'buffers',
                     themable = true,
+                    ---@diagnostic disable-next-line: assign-type-mismatch
                     numbers = function(opts)
                         return string.format('%s', opts.raise(opts.ordinal))
                     end,
@@ -653,22 +655,4 @@ return {
             },
         },
     },
-    config = function(_, opts)
-        local noice = require('noice')
-        noice.setup(opts)
-
-        local Hacks = require('noice.hacks')
-        local Format = require('noice.format')
-
-        Hacks.on_module('cmp.entry', function(mod)
-            local fallback = mod.get_documentation
-            mod.get_documentation = function(self)
-                local item = self:get_completion_item()
-                if item.documentation then
-                    return Format.markdown(item.documentation)
-                end
-                return fallback(self)
-            end
-        end)
-    end,
 }

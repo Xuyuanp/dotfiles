@@ -7,7 +7,7 @@
   "LuaSnip": { "branch": "master", "commit": "bc8ec05022743d3f08bda7a76c6bb5e9a9024581" },
   "a.vim": { "branch": "master", "commit": "2cbe946206ec622d9d8cf2c99317f204c4d41885" },
   "awesome-chatgpt-prompts": { "branch": "main", "commit": "93548a4cd46a50029795331c52c847c9780d6dcb" },
-  "bufferline.nvim": { "branch": "main", "commit": "ffa1d0009f5e52d3d32d08c9a781f18b2b2ef507" },
+  "bufferline.nvim": { "branch": "main", "commit": "eb4e95be22c55890b90fc01a8223e0c0ea4a0862" },
   "cellular-automaton.nvim": { "branch": "main", "commit": "679943b8e1e5ef79aaeeaf4b00782c52eb4e928f" },
   "cmp-buffer": { "branch": "main", "commit": "3022dbc9166796b644a841a02de8dd1cc1d311fa" },
   "cmp-calc": { "branch": "main", "commit": "50792f34a628ea6eb31d2c90e8df174671e4e7a0" },
