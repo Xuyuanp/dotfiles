@@ -33,12 +33,13 @@ end
 function M.async(async_func)
     return function(...)
         local params = { ... }
-        local co = function(cont)
-            table.insert(params, cont)
-            async_func(unpack(params))
-        end
-        debug.setmetatable(co, { __index = Awaitable })
-        return co
+        return setmetatable({}, {
+            __call = function(_, cont)
+                table.insert(params, cont)
+                async_func(unpack(params))
+            end,
+            __index = Awaitable,
+        })
     end
 end
 
