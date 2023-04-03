@@ -3,7 +3,6 @@ local mode = vim.fn.mode
 local galaxyline = require('galaxyline')
 local section = galaxyline.section
 local dotcolors = require('dotvim.util.colors').colors
-local colors = require('kanagawa.colors').setup()
 
 require('dotvim.util.git').load_head()
 
@@ -32,8 +31,7 @@ local _HEX_COLORS = setmetatable({
 
 local _BG = {
     file = _HEX_COLORS.bar.side,
-    -- git = _HEX_COLORS.blue,
-    git = colors.palette.katanaGray,
+    git = '#54546d',
     diagnostic = _HEX_COLORS.bar.middle,
 }
 
