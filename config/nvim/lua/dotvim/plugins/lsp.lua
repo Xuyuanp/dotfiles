@@ -3,7 +3,11 @@ return {
         'neovim/nvim-lspconfig',
         event = { 'BufReadPost', 'BufNewFile' },
         dependencies = {
-            'tamago324/nlsp-settings.nvim',
+            {
+                'folke/neoconf.nvim',
+                cmd = 'Neoconf',
+                config = true,
+            },
             'williamboman/mason-lspconfig.nvim',
             'folke/neodev.nvim',
             'simrat39/rust-tools.nvim',

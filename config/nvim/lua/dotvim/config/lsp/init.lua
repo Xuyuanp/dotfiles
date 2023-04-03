@@ -3,23 +3,7 @@ local api = vim.api
 
 local handlers = require('dotvim.config.lsp.handlers')
 
-local mason_lspcfg = vim.F.npcall(require, 'mason-lspconfig')
-if not mason_lspcfg then
-    vim.notify_once('mason not installed', vim.log.levels.WARN)
-    return
-end
 local lspconfig = require('lspconfig')
-
-local nlspsettings = vim.F.npcall(require, 'nlspsettings')
-if nlspsettings then
-    nlspsettings.setup({
-        config_home = vim.fn.stdpath('config') .. '/nlsp-settings',
-        local_settings_dir = '.nlsp-settings',
-        local_settings_root_markers = { '.git' },
-        append_default_schemas = true,
-        loader = 'json',
-    })
-end
 
 --- copy from https://github.com/williamboman/nvim-config/blob/main/lua/wb/lsp/on-attach.lua
 local function find_and_run_codelens()
@@ -233,7 +217,7 @@ local langs = {
     },
 }
 
-mason_lspcfg.setup_handlers({
+require('mason-lspconfig').setup_handlers({
     function(server_name)
         local cfg = default_config
         if langs[server_name] then
