@@ -10,6 +10,7 @@ return {
             'jose-elias-alvarez/null-ls.nvim',
             'lvimuser/lsp-inlayhints.nvim',
             'onsails/lspkind-nvim',
+            'j-hui/fidget.nvim',
         },
         config = function()
             require('dotvim.config.lsp')
@@ -278,5 +279,14 @@ return {
         config = function()
             require('copilot_cmp').setup()
         end,
+    },
+
+    {
+        'j-hui/fidget.nvim',
+        opts = {
+            text = {
+                spinner = 'meter',
+            },
+        },
     },
 }

@@ -606,7 +606,7 @@ return {
                     },
                 },
                 progress = {
-                    enabled = true,
+                    enabled = false,
                 },
             },
             presets = {
