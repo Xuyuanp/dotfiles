@@ -549,31 +549,6 @@ return {
     },
 
     {
-        'folke/drop.nvim',
-        event = { 'CursorHold' },
-        cmd = { 'DropShow' },
-        config = function()
-            require('drop').setup({
-                theme = 'leaves',
-                max = 40,
-                interval = 100,
-                screensaver = 1000 * 60 * 10,
-                filetypes = {
-                    'dashboard',
-                    'alpha',
-                    'starter',
-                }, -- will enable/disable automatically for the following filetypes
-            })
-            vim.api.nvim_create_user_command('DropShow', function()
-                require('drop').show()
-            end, {})
-            vim.api.nvim_create_user_command('DropHide', function()
-                require('drop').hide()
-            end, {})
-        end,
-    },
-
-    {
         'lewis6991/gitsigns.nvim',
         name = 'gitsigns',
         event = { 'BufReadPost', 'BufNewFile' },
