@@ -86,7 +86,7 @@ local function set_lsp_autocmd(client, bufnr)
         api.nvim_create_autocmd({ 'BufEnter', 'InsertLeave', 'BufWritePost', 'CursorHold' }, {
             group = group_id,
             buffer = bufnr,
-            desc = '[lsp] code lens',
+            desc = '[lsp] codelens refresh',
             callback = vim.lsp.codelens.refresh,
         })
         vim.schedule(vim.lsp.codelens.refresh)
@@ -127,12 +127,12 @@ local default_config = {
 local function make_on_new_config(opts)
     opts = opts or {}
     return function(new_config)
-        on_attach = new_config.on_attach
+        local on_attach_origin = new_config.on_attach or function() end
         new_config.on_attach = function(client, ...)
             if opts.disable_hover then
                 client.server_capabilities.hoverProvider = false
             end
-            on_attach(client, ...)
+            on_attach_origin(client, ...)
         end
     end
 end
