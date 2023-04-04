@@ -3,11 +3,7 @@ return {
         'neovim/nvim-lspconfig',
         event = { 'BufReadPost', 'BufNewFile' },
         dependencies = {
-            {
-                'folke/neoconf.nvim',
-                cmd = 'Neoconf',
-                config = true,
-            },
+            'folke/neoconf.nvim',
             'williamboman/mason-lspconfig.nvim',
             'folke/neodev.nvim',
             'simrat39/rust-tools.nvim',
@@ -19,6 +15,12 @@ return {
         config = function()
             require('dotvim.config.lsp')
         end,
+    },
+
+    {
+        'folke/neoconf.nvim',
+        cmd = 'Neoconf',
+        config = true,
     },
 
     {

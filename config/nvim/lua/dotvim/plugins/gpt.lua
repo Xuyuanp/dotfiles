@@ -9,7 +9,7 @@ return {
         end,
         dependencies = {
             'MunifTanjim/nui.nvim',
-            'plenary',
+            'nvim-lua/plenary.nvim',
             'nvim-telescope/telescope.nvim',
         },
     },

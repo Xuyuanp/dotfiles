@@ -4,7 +4,7 @@ return {
         cmd = { 'Neorg' },
         ft = { 'norg' },
         dependencies = {
-            'plenary',
+            'nvim-lua/plenary.nvim',
             'hrsh7th/nvim-cmp',
         },
         config = function()

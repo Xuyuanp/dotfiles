@@ -155,12 +155,12 @@ return {
         'phaazon/hop.nvim',
         event = { 'BufReadPost', 'BufNewFile' },
         branch = 'v1', -- optional but strongly recommended
-        config = function()
-            -- you can configure Hop the way you like here; see :h hop-config
-            require('hop').setup({ keys = 'etovxqpdygfblzhckisuran' })
-            vim.api.nvim_set_keymap('n', '<leader>w', '<cmd>HopWord<CR>', {})
-            vim.api.nvim_set_keymap('n', '<leader>l', '<cmd>HopLine<CR>', {})
-        end,
+        opts = {
+            keys = 'etovxqpdygfblzhckisuran',
+        },
+        keys = {
+            { '<leader>w', require('dotvim.util').lazy_require('hop').hint_words, mode = 'n', desc = 'hop words' },
+        },
     },
 
     {
@@ -183,16 +183,18 @@ return {
 
     {
         'rest-nvim/rest.nvim',
-        dependencies = { 'plenary' },
+        dependencies = {
+            'nvim-lua/plenary.nvim',
+        },
         ft = 'http',
         config = function(_, opts)
             require('rest-nvim').setup(opts)
             vim.api.nvim_create_autocmd('FileType', {
                 pattern = 'http',
                 group = vim.api.nvim_create_augroup('dotvim_rest', { clear = true }),
-                desc = 'run http request',
+                desc = 'setup keymaps for http file',
                 callback = function()
-                    vim.keymap.set('n', '<leader>r', '<Plug>RestNvim', { desc = 'run http request', buffer = 0 })
+                    vim.keymap.set('n', '<leader>r', '<Plug>RestNvim', { desc = 'run http request', buffer = true })
                 end,
             })
         end,
@@ -235,7 +237,7 @@ return {
     {
         'nvim-neotest/neotest',
         dependencies = {
-            'plenary',
+            'nvim-lua/plenary.nvim',
             'nvim-treesitter/nvim-treesitter',
         },
     },

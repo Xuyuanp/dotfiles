@@ -2,11 +2,6 @@ local vim = vim
 
 return {
     {
-        'vim-scripts/a.vim',
-        ft = { 'c', 'cpp' },
-    },
-
-    {
         'Vimjas/vim-python-pep8-indent',
         ft = { 'python' },
     },
@@ -24,14 +19,6 @@ return {
     {
         'zdharma-continuum/zinit-vim-syntax',
         ft = { 'zsh' },
-    },
-
-    {
-        'plasticboy/vim-markdown',
-        ft = { 'markdown', 'md' },
-        init = function()
-            vim.g.vim_markdown_folding_disabled = 1
-        end,
     },
 
     {

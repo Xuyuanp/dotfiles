@@ -17,6 +17,7 @@ return {
             require('dotvim.config.treesitter').setup()
         end,
     },
+
     {
         'haringsrob/nvim_context_vt',
         event = PostRead,

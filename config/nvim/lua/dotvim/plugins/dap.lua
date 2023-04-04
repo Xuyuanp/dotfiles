@@ -23,7 +23,7 @@ return {
         'mfussenegger/nvim-dap',
         event = { 'BufReadPost', 'BufNewFile' },
         dependencies = {
-            'plenary',
+            'nvim-lua/plenary.nvim',
             'rcarriga/nvim-dap-ui',
             'theHamsta/nvim-dap-virtual-text',
             'nvim-telescope/telescope-dap.nvim',

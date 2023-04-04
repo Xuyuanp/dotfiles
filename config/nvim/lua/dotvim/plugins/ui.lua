@@ -6,8 +6,8 @@ return {
         version = '*',
         cmd = { 'Telescope' },
         dependencies = {
-            'popup',
-            'plenary',
+            'nvim-lua/popup.nvim',
+            'nvim-lua/plenary.nvim',
         },
         config = function()
             local ts = require('telescope')
@@ -307,16 +307,12 @@ return {
     },
 
     {
-        'MunifTanjim/nui.nvim',
-    },
-
-    {
         'windwp/nvim-spectre',
         keys = {
             { '<leader>S', ':lua require("spectre").open()<CR>', mode = 'n', noremap = true, silent = true },
             { '<leader>Ss', 'viw:lua require("spectre").open_file_search()<CR>', mode = 'n', noremap = true, silent = true },
         },
-        dependencies = { 'plenary', 'popup' },
+        dependencies = { 'nvim-lua/plenary.nvim', 'nvim-lua/popup.nvim' },
         config = function()
             require('spectre').setup({})
 
@@ -474,7 +470,7 @@ return {
     {
         'folke/todo-comments.nvim',
         event = { 'BufReadPost', 'BufNewFile' },
-        dependencies = 'plenary',
+        dependencies = 'nvim-lua/plenary.nvim',
         config = function()
             require('todo-comments').setup({
                 keywords = {
@@ -519,14 +515,6 @@ return {
     },
 
     {
-        'lukas-reineke/headlines.nvim',
-        ft = { 'markdown', 'orgmode', 'neorg' },
-        config = function()
-            require('headlines').setup()
-        end,
-    },
-
-    {
         'eandrju/cellular-automaton.nvim',
         cmd = { 'CellularAutomaton' },
     },
@@ -552,9 +540,8 @@ return {
 
     {
         'lewis6991/gitsigns.nvim',
-        name = 'gitsigns',
         event = { 'BufReadPost', 'BufNewFile' },
-        dependencies = { 'plenary' },
+        dependencies = { 'nvim-lua/plenary.nvim' },
         config = function()
             require('gitsigns').setup({
                 signs = {
