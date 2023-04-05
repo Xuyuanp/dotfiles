@@ -149,7 +149,7 @@ return {
                 end,
                 expr = true,
                 silent = true,
-                desc = 'luasnip jump next',
+                desc = '[LuaSnip] jump next',
                 mode = { 'i', 's' },
             },
             {
@@ -159,7 +159,7 @@ return {
                 end,
                 expr = true,
                 silent = true,
-                desc = 'luasnip jump prev',
+                desc = '[LuaSnip] jump prev',
                 mode = { 'i', 's' },
             },
         },

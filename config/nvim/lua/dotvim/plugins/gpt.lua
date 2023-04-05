@@ -30,7 +30,7 @@ return {
                 '<A-g>',
                 require('dotvim.util').lazy_require('neochat').toggle,
                 mode = { 'n', 'i' },
-                desc = 'toggle neochat',
+                desc = '[NeoChat] toggle',
                 noremap = false,
             },
         },

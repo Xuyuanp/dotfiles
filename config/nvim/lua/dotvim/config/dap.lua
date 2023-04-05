@@ -52,19 +52,19 @@ function M.setup()
 
     local dap = require('dap')
 
-    local km_opts = { noremap = false, silent = true }
-
     local set_keymap = vim.keymap.set
-    set_keymap('n', '<F5>', dap.continue, km_opts)
-    set_keymap('n', '<F6>', dap.run_to_cursor, km_opts)
-    set_keymap('n', '<F9>', close_dap, km_opts)
-    set_keymap('n', '<F10>', dap.step_over, km_opts)
-    set_keymap('n', '<F11>', dap.step_into, km_opts)
-    set_keymap('n', '<F12>', dap.step_out, km_opts)
-    set_keymap('n', '<leader>dr', dap.repl.open, km_opts)
-    set_keymap('n', '<leader>dl', dap.run_last, km_opts)
-    set_keymap('n', '<leader>b', dap.toggle_breakpoint, km_opts)
-    set_keymap('n', '<leader>B', set_breakpoint, km_opts)
+    -- stylua: ignore start
+    set_keymap('n', '<F5>',       dap.continue,          { remap = true, silent = true, desc = '[Dap] continue' })
+    set_keymap('n', '<F6>',       dap.run_to_cursor,     { remap = true, silent = true, desc = '[Dap] run to cursor' })
+    set_keymap('n', '<F9>',       close_dap,             { remap = true, silent = true, desc = '[Dap] close' })
+    set_keymap('n', '<F10>',      dap.step_over,         { remap = true, silent = true, desc = '[Dap] step over' })
+    set_keymap('n', '<F11>',      dap.step_into,         { remap = true, silent = true, desc = '[Dap] step into' })
+    set_keymap('n', '<F12>',      dap.step_out,          { remap = true, silent = true, desc = '[Dap] step out' })
+    set_keymap('n', '<leader>dr', dap.repl.open,         { remap = true, silent = true, desc = '[Dap] repl open' })
+    set_keymap('n', '<leader>dl', dap.run_last,          { remap = true, silent = true, desc = '[Dap] run last' })
+    set_keymap('n', '<leader>b',  dap.toggle_breakpoint, { remap = true, silent = true, desc = '[Dap] toggle breakpoint' })
+    set_keymap('n', '<leader>B',  set_breakpoint,        { remap = true, silent = true, desc = '[Dap] set breakpoint' })
+    -- stylua: ignore end
 
     vim.api.nvim_create_autocmd({ 'FileType' }, {
         group = vim.api.nvim_create_augroup('dotvim_dap_cmp', { clear = true }),

@@ -43,10 +43,10 @@ return {
             )
 
             local set_keymap = vim.keymap.set
-            set_keymap('n', '<leader>ag', ':Ag<CR>', { silent = true, noremap = true })
-            set_keymap('n', '<leader>rg', ':Rg<CR>', { silent = true, noremap = true })
-            set_keymap('n', '<leader>af', ':AF<CR>', { silent = true, noremap = true })
-            set_keymap('n', '<A-m>', ':Commands<CR>', { silent = true, noremap = true })
+            set_keymap('n', '<leader>ag', ':Ag<CR>', { silent = true, noremap = true, desc = '[FZF] search by ag' })
+            set_keymap('n', '<leader>rg', ':Rg<CR>', { silent = true, noremap = true, desc = '[FZF] search by rg' })
+            set_keymap('n', '<leader>af', ':AF<CR>', { silent = true, noremap = true, desc = '[FZF] find files' })
+            set_keymap('n', '<A-m>', ':Commands<CR>', { silent = true, noremap = true, desc = '[FZF] commands' })
         end,
     },
 }

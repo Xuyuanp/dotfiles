@@ -110,7 +110,7 @@ return {
         'jbyuki/venn.nvim',
         event = 'VeryLazy',
         config = function()
-            vim.api.nvim_set_keymap('v', '<Leader>vb', ':VBox<CR>', { noremap = true })
+            vim.api.nvim_set_keymap('v', '<Leader>vb', ':VBox<CR>', { noremap = true, desc = '[Venn] draw vbox' })
         end,
     },
 
@@ -159,7 +159,7 @@ return {
             keys = 'etovxqpdygfblzhckisuran',
         },
         keys = {
-            { '<leader>w', require('dotvim.util').lazy_require('hop').hint_words, mode = 'n', desc = 'hop words' },
+            { '<leader>w', require('dotvim.util').lazy_require('hop').hint_words, mode = 'n', desc = '[Hop] hint words' },
         },
     },
 
@@ -194,7 +194,7 @@ return {
                 group = vim.api.nvim_create_augroup('dotvim_rest', { clear = true }),
                 desc = 'setup keymaps for http file',
                 callback = function()
-                    vim.keymap.set('n', '<leader>r', '<Plug>RestNvim', { desc = 'run http request', buffer = true })
+                    vim.keymap.set('n', '<leader>r', '<Plug>RestNvim', { desc = '[Rest] run http request', buffer = true })
                 end,
             })
         end,

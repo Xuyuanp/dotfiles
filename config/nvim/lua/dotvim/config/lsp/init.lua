@@ -31,7 +31,6 @@ end
 local group_id = api.nvim_create_augroup('dotvim_lsp_init_on_attach', { clear = true })
 
 local function set_lsp_keymaps(client, bufnr)
-    local key_opts = { noremap = false, silent = true, buffer = bufnr }
     local set_keymap = vim.keymap.set
 
     local function show_documentation()
@@ -44,21 +43,26 @@ local function set_lsp_keymaps(client, bufnr)
 
     -- stylua: ignore
     local keymaps = {
-        gd  = vim.lsp.buf.definition,
-        K   = show_documentation,
-        gi  = vim.lsp.buf.implementation,
-        gk  = vim.lsp.buf.signature_help,
-        gtd = vim.lsp.buf.type_definition,
-        gR  = vim.lsp.buf.references,
-        grr = vim.lsp.buf.rename,
-        gds = vim.lsp.buf.document_symbol,
-        gws = vim.lsp.buf.workspace_symbol,
-        gca = vim.lsp.buf.code_action,
-        go  = vim.lsp.buf.outgoing_calls,
-        gcl = find_and_run_codelens,
+        gd  = { vim.lsp.buf.definition, 'goto definition' },
+        K   = { show_documentation, 'show documentation' },
+        gi  = { vim.lsp.buf.implementation, 'goto implementation' },
+        gk  = { vim.lsp.buf.signature_help, 'show signature help' },
+        gtd = { vim.lsp.buf.type_definition, 'goto type definition' },
+        gR  = { vim.lsp.buf.references, 'show references' },
+        grr = { vim.lsp.buf.rename, 'rename' },
+        gds = { vim.lsp.buf.document_symbol, 'show document symbols' },
+        gws = { vim.lsp.buf.workspace_symbol, 'show workspace symbols' },
+        gca = { vim.lsp.buf.code_action , 'code action'},
+        go  = { vim.lsp.buf.outgoing_calls, 'show outgoing calls' },
+        gcl = { find_and_run_codelens, 'find and run codelens' },
     }
     for key, action in pairs(keymaps) do
-        set_keymap('n', key, action, key_opts)
+        set_keymap('n', key, action[1], {
+            noremap = false,
+            silent = true,
+            buffer = bufnr,
+            desc = '[Lsp] ' .. action[2],
+        })
     end
 end
 
@@ -67,7 +71,7 @@ local function set_lsp_autocmd(client, bufnr)
         api.nvim_create_autocmd({ 'CursorHold' }, {
             group = group_id,
             buffer = bufnr,
-            desc = '[lsp] document highlight',
+            desc = '[Lsp] document highlight',
             callback = function()
                 vim.lsp.buf.document_highlight()
             end,
@@ -75,7 +79,7 @@ local function set_lsp_autocmd(client, bufnr)
         api.nvim_create_autocmd({ 'CursorMoved' }, {
             group = group_id,
             buffer = bufnr,
-            desc = '[lsp] document highlight clear',
+            desc = '[Lsp] document highlight clear',
             callback = function()
                 vim.lsp.buf.clear_references()
             end,

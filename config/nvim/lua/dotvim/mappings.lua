@@ -14,13 +14,6 @@ local function setup()
     set_keymap('n', '<Right>', '<C-w>>', opts)
     ---]]
 
-    ---[[ Mapping for tab management
-    set_keymap('n', '<leader>tc', ':tabc<CR>', opts)
-    set_keymap('n', '<leader>tn', ':tabn<CR>', opts)
-    set_keymap('n', '<leader>tp', ':tabp<CR>', opts)
-    set_keymap('n', '<leader>te', ':tabe<CR>', opts)
-    ---]]
-
     ---[[ Reselect visual block after indent/outdent
     set_keymap('v', '<', '<gv', opts)
     set_keymap('v', '>', '>gv', opts)

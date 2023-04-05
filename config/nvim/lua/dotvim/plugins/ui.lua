@@ -31,7 +31,7 @@ return {
     {
         'Xuyuanp/yanil',
         keys = {
-            { '<C-e>', require('dotvim.util').lazy_require('yanil/canvas').toggle, mode = 'n', desc = 'Toggle Yanil' },
+            { '<C-e>', require('dotvim.util').lazy_require('yanil/canvas').toggle, mode = 'n', desc = '[Yanil] toggle' },
         },
         config = function()
             require('dotvim.config.yanil').setup()
@@ -80,7 +80,7 @@ return {
 
     {
         'liuchengxu/vista.vim',
-        keys = { { '<C-t>', ':Vista!!<CR>', mode = 'n' } },
+        keys = { { '<C-t>', ':Vista!!<CR>', mode = 'n', desc = '[Vista] toggle' } },
         config = function()
             vim.g.vista_default_executive = 'nvim_lsp'
         end,
@@ -175,23 +175,22 @@ return {
                 },
             })
 
-            local set_keymap = vim.keymap.set
             local keymaps = {
                 -- Magic buffer-picking mode
-                ['<A-s>'] = ':BufferLinePick<CR>',
+                { '<A-s>', ':BufferLinePick<CR>', 'magic buffer-picking' },
                 -- Move to previous/next
-                ['<Tab>'] = ':BufferLineCycleNext<CR>',
-                ['<S-Tab>'] = ':BufferLineCyclePrev<CR>',
+                { '<Tab>', ':BufferLineCycleNext<CR>', 'move to next' },
+                { '<S-Tab>', ':BufferLineCyclePrev<CR>', 'move to previous' },
                 -- Re-order to previous/next
-                ['<A-h>'] = ':BufferLineMovePrev<CR>',
-                ['<A-l>'] = ':BufferLineMoveNext<CR>',
+                { '<A-h>', ':BufferLineMovePrev<CR>', 'reorder to previous' },
+                { '<A-l>', ':BufferLineMoveNext<CR>', 'reorder to next' },
                 -- Sort automatically by...
-                ['<Leader>bd'] = ':BufferLineSortByDirectory<CR>',
-                ['<Leader>bl'] = ':BufferLineSortByExtension<CR>',
+                { '<Leader>bd', ':BufferLineSortByDirectory<CR>', 'sort automatically by directory' },
+                { '<Leader>bl', ':BufferLineSortByExtension<CR>', 'sort automatically by extension' },
             }
 
-            for k, a in pairs(keymaps) do
-                set_keymap('n', k, a, { silent = true, noremap = true })
+            for _, spec in pairs(keymaps) do
+                vim.keymap.set('n', spec[1], spec[2], { silent = true, remap = false, desc = '[BufferLine] ' .. spec[3] })
             end
             local function gen_goto(idx)
                 return function()
@@ -201,7 +200,7 @@ return {
 
             -- Goto buffer in position...
             for i = 1, 10, 1 do
-                set_keymap('n', string.format('<A-%d>', i), gen_goto(i), { silent = true, noremap = false })
+                vim.keymap.set('n', string.format('<A-%d>', i), gen_goto(i), { desc = string.format('[BufferLine] goto buffer %d', i) })
             end
         end,
     },
@@ -213,7 +212,7 @@ return {
                 '<A-o>',
                 require('dotvim.util').lazy_require('FTerm').toggle,
                 mode = { 'n', 't' },
-                desc = 'toggle floating terminal',
+                desc = '[FTerm] toggle',
             },
         },
         opts = {
@@ -309,8 +308,24 @@ return {
     {
         'windwp/nvim-spectre',
         keys = {
-            { '<leader>S', ':lua require("spectre").open()<CR>', mode = 'n', noremap = true, silent = true },
-            { '<leader>Ss', 'viw:lua require("spectre").open_file_search()<CR>', mode = 'n', noremap = true, silent = true },
+            {
+                '<leader>S',
+                require('dotvim.util').lazy_require('spectre').open,
+                mode = 'n',
+                noremap = true,
+                silent = true,
+                desc = '[Spectre] search',
+            },
+            {
+                '<leader>Ss',
+                function()
+                    require('spectre').open_file_search({ select_word = true })
+                end,
+                mode = 'n',
+                noremap = true,
+                silent = true,
+                desc = '[Spectre] search current word in file',
+            },
         },
         dependencies = { 'nvim-lua/plenary.nvim', 'nvim-lua/popup.nvim' },
         config = function()
@@ -641,5 +656,16 @@ return {
                 mode = { 'i', 'n', 's' },
             },
         },
+    },
+
+    {
+        'folke/which-key.nvim',
+        event = 'VeryLazy',
+        config = function()
+            vim.o.timeout = true
+            vim.o.timeoutlen = 300
+            local wk = require('which-key')
+            wk.setup({})
+        end,
     },
 }

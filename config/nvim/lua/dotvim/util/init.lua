@@ -181,4 +181,19 @@ function M.lazy_require(modname)
     })
 end
 
+function M.set_keymap(spec)
+    vim.keymap.set(spec.mode or 'n', spec[1], spec[2], {
+        buffer = spec.buffer,
+        desc = spec.desc,
+        remap = spec.remap,
+        noremap = spec.noremap,
+        replace_keycodes = spec.replace_keycodes,
+        nowait = spec.nowait,
+        silent = spec.silent,
+        script = spec.script,
+        expr = spec.expr,
+        unique = spec.unique,
+    })
+end
+
 return M
