@@ -164,16 +164,6 @@ return {
     },
 
     {
-        'nathom/filetype.nvim',
-        lazy = false,
-        config = function()
-            require('filetype').setup({
-                overrides = {},
-            })
-        end,
-    },
-
-    {
         'max397574/colortils.nvim',
         cmd = 'Colortils',
         config = function()
