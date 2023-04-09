@@ -27,7 +27,7 @@ return {
             'rcarriga/nvim-dap-ui',
             'theHamsta/nvim-dap-virtual-text',
             'nvim-telescope/telescope-dap.nvim',
-            'jay-babu/mason-nvim-dap.nvim',
+            { 'jay-babu/mason-nvim-dap.nvim', version = 'v2' },
         },
         config = function()
             require('dotvim.config.dap').setup()
@@ -44,11 +44,11 @@ return {
                             rust = false,
                         },
                     },
-                })
-                require('mason-nvim-dap').setup_handlers({
-                    function(source_name)
-                        require('mason-nvim-dap.automatic_setup')(source_name)
-                    end,
+                    handlers = {
+                        function(config)
+                            require('mason-nvim-dap').default_setup(config)
+                        end,
+                    },
                 })
             end)
         end,
@@ -60,7 +60,7 @@ return {
         ft = { 'python' },
         config = function()
             local dap_py = require('dap-python')
-            dap_py.setup('~/.pyenv/versions/debugpy/bin/python')
+            dap_py.setup()
             dap_py.test_runner = 'pytest'
         end,
     },
