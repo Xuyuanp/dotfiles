@@ -50,6 +50,9 @@ local function setup()
     set_keymap('n', '[d', vim.diagnostic.goto_prev, opts)
     set_keymap('n', '<leader>sd', vim.diagnostic.open_float, opts)
     ---]]
+
+    set_keymap('n', 'j', 'gj', opts)
+    set_keymap('n', 'k', 'gk', opts)
 end
 
 return {
