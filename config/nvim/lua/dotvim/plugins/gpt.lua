@@ -16,7 +16,7 @@ return {
 
     {
         'Xuyuanp/neochat.nvim',
-        dev = vim.fn.exists('~/workspace/neovim/neochat.nvim'),
+        dev = true,
         build = function()
             vim.fn.system({
                 'pip',
@@ -39,8 +39,30 @@ return {
             'f/awesome-chatgpt-prompts',
             'nvim-telescope/telescope.nvim',
         },
+        cmd = 'NeoChatExplainCode',
         config = function()
-            require('neochat').setup({})
+            require('neochat').setup({
+                bot_text = 'Bot:',
+                user_text = 'You:',
+                spinners = 'line',
+            })
+
+            vim.api.nvim_create_user_command('NeoChatExplainCode', function(args)
+                local ft = vim.bo.filetype
+                if not ft then
+                    return
+                end
+
+                local code_block = vim.api.nvim_buf_get_lines(0, args.line1 - 1, args.line2 - 1, false)
+                local input = { 'Explain the following code', '```' .. ft }
+                vim.list_extend(input, code_block)
+                vim.list_extend(input, { '```' })
+
+                require('neochat').open(input)
+            end, {
+                desc = '[NeoChat] explain code',
+                range = true,
+            })
         end,
     },
 }
