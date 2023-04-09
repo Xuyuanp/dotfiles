@@ -101,6 +101,8 @@ function M.setup()
     opt.listchars:append({
         tab = '  ',
         trail = '·',
+        extends = '',
+        precedes = '',
     })
 
     -- always show signcolumn
