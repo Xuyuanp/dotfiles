@@ -9,17 +9,18 @@ def main():
 
     columns = soup.find_all("div", attrs={"class": "column"})
 
-    icons = [(
-        col.find("div", attrs={
-            "class": "codepoint"
-        }).text,
-        col.find("div", attrs={
-            "class": "class-name"
-        }).text,
-    ) for col in columns]
+    icons = [
+        (
+            col.find("div", attrs={"class": "codepoint"}).text,
+            col.find("div", attrs={"class": "class-name"}).text,
+        )
+        for col in columns
+    ]
 
     for code, name in icons:
-        print(f"{code} {chr(int(code, 16))} {name}")
+        if "-mdi-" in name:
+            continue
+        print(f"{code:<5} {chr(int(code, 16))} {name}")
 
 
 if __name__ == "__main__":
