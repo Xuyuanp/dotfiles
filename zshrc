@@ -94,6 +94,9 @@ trace 'compinit'
 
 bindkey -v
 
+# run the command, but won't clear the actual commandline
+bindkey '^\'    accept-and-hold
+
 _exists() { (( $+commands[$1])) }
 
 _exists exa     && alias ls='exa --icons --git'
