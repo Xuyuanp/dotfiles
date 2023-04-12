@@ -99,7 +99,17 @@ function M.setup(server)
             adapter = require('rust-tools.dap').get_codelldb_adapter(codelldb_path, liblldb_path),
         },
     }
-    require('rust-tools').setup(opts)
+    local rt = require('rust-tools')
+    rt.setup(opts)
+
+    vim.api.nvim_create_autocmd('FileType', {
+        pattern = 'rust',
+        callback = function()
+            vim.keymap.set('n', '<leader>R', function()
+                rt.runnables.runnables()
+            end, { silent = true, remap = true, desc = '[rust] show runnables' })
+        end,
+    })
 end
 
 return M

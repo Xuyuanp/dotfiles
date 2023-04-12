@@ -1,16 +1,4 @@
 (
- ((line_comment) @_comment_start
-   (#eq? @_comment_start "/// ```")) @_start
-
- (line_comment) @rust
-
- ((line_comment) @_comment_end
-   (#eq? @_comment_end "/// ```")) @_end
-
- (#offset! @rust 0 4 0 0)
-)
-
-(
   (macro_invocation
     macro: ((identifier) @_html_def)
     (token_tree) @rsx)
@@ -24,9 +12,24 @@
      path: (identifier) @_path
      name: (identifier) @_identifier)
 
-  (token_tree (raw_string_literal) @sql))
+  (token_tree (raw_string_literal) @injection.content))
 
  (#eq? @_path "sqlx")
  (#match? @_identifier "^query")
- (#offset! @sql 1 0 0 0)
+ (#offset! @injection.content 0 3 0 -2)
+ (#set! injection.language "sql")
+)
+
+(
+ (macro_invocation
+  (scoped_identifier
+     path: (identifier) @_path
+     name: (identifier) @_identifier)
+
+  (token_tree (string_literal) @injection.content))
+
+ (#eq? @_path "sqlx")
+ (#match? @_identifier "^query")
+ (#offset! @injection.content 0 1 0 -1)
+ (#set! injection.language "sql")
 )
