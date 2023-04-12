@@ -43,7 +43,9 @@ return {
         config = function()
             require('neochat').setup({
                 bot_text = 'Bot:',
+                bot_sign = '',
                 user_text = 'You:',
+                user_sign = '',
                 spinners = 'line',
             })
 
