@@ -138,6 +138,8 @@ function M.setup()
 
     opt.termguicolors = true
 
+    opt.conceallevel = 1
+
     local sign_define = vim.fn.sign_define
     sign_define('DiagnosticSignError', { text = '', texthl = 'DiagnosticSignError' })
     sign_define('DiagnosticSignWarn', { text = '', texthl = 'DiagnosticSignWarn' })
