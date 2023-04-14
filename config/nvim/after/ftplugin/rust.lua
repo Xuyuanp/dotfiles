@@ -1,8 +1,13 @@
 local vim = vim
 
-local query = vim.treesitter.query.parse(
-    'rust',
-    [[
+local query_name = 'sqlx-query'
+
+local query = vim.treesitter.query.get('rust', query_name)
+if not query then
+    vim.treesitter.query.set(
+        'rust',
+        query_name,
+        [[
 (
  (macro_invocation
    (scoped_identifier
@@ -15,7 +20,10 @@ local query = vim.treesitter.query.parse(
  (#match? @_identifier "^query")
  )
 ]]
-)
+    )
+    query = vim.treesitter.query.get('rust', query_name)
+    assert(query, 'failed to create query')
+end
 
 local format_dat_sql = function(bufnr)
     bufnr = bufnr or vim.api.nvim_get_current_buf()
@@ -32,7 +40,7 @@ local format_dat_sql = function(bufnr)
 
     local changes = {}
     for id, node, _ in query:iter_captures(tree:root(), bufnr, 0, -1) do
-        if id == 3 then
+        if 'raw' == query.captures[id] then
             local text = vim.treesitter.get_node_text(node, bufnr)
             -- trim prefix `r#"` and suffix `"#`
             text = string.sub(text, 4, #text - 2)
@@ -50,6 +58,7 @@ local format_dat_sql = function(bufnr)
             end
             table.insert(formatted, 1, 'r#"')
             table.insert(formatted, rep .. '"#')
+
             table.insert(changes, 1, {
                 start_row = range[1],
                 start_col = range[2],
