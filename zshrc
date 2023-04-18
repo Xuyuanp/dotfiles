@@ -235,3 +235,19 @@ export PATH=${GOPATH}/bin:${PATH}
 trace 'done'
 
 unfunction trace
+
+function howto() {
+    # read input from flags or stdin if no tty
+    input=$(if [ -t 0 ]; then echo $@; else cat -; fi)
+
+    # escape double quotes
+    input=${input//\"/\\\"}
+
+    content=$(cat<<EOF
+I want you to act as a shell command assistant. I will type my goal in natural language, and you will output the shell command that can achieve my goal.
+I want you to only output plain text shell commands, do not add any markdown tags, do not add any explanations. My first goal is: "${input}"
+EOF
+)
+    output=$(openai api chat_completions.create -m 'gpt-3.5-turbo' -g user "${content}")
+    print -z "$output"
+}
