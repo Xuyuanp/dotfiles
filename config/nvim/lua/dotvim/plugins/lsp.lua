@@ -105,6 +105,19 @@ return {
             'windwp/nvim-autopairs',
             'zbirenbaum/copilot-cmp',
             'onsails/lspkind-nvim',
+            {
+                {
+                    'jcdickinson/codeium.nvim',
+                    dependencies = {
+                        'nvim-lua/plenary.nvim',
+                        'hrsh7th/nvim-cmp',
+                    },
+                    cmd = 'Codeium',
+                    config = function()
+                        require('codeium').setup({})
+                    end,
+                },
+            },
         },
         config = function()
             require('dotvim.config.complete').setup()
@@ -208,6 +221,7 @@ return {
                 preset = 'default',
                 symbol_map = {
                     Copilot = '',
+                    Codeium = '󱃖',
                 },
             })
         end,
