@@ -10,7 +10,6 @@ local git = require('yanil/git')
 local decorators = require('yanil/decorators')
 local devicons = require('yanil/devicons')
 local canvas = require('yanil/canvas')
-local utils = require('yanil/utils')
 
 local vim_notify = function(msg, level, opts)
     opts = opts or {}
@@ -23,6 +22,7 @@ local uv = a.uv()
 
 local M = {}
 
+---@diagnostic disable-next-line: unused-local
 local function git_diff(_tree, node)
     local diff = git.diff(node)
     if not diff then
@@ -53,6 +53,7 @@ local telescope_find_file = a.async(function(cwd, callback)
     local actions_state = require('telescope.actions.state')
     require('telescope.builtin').find_files({
         cwd = cwd,
+        ---@diagnostic disable-next-line: unused-local
         attach_mappings = function(prompt_bufnr, _map)
             actions.select_default:replace(function()
                 actions.close(prompt_bufnr)
@@ -253,9 +254,9 @@ function M.setup()
     canvas.register_hooks({
         on_enter = function()
             git.update(tree.cwd)
-            utils.buf_set_keymap(canvas.bufnr, 'n', 'q', function()
-                vim.fn.execute('quit')
-            end)
+            vim.keymap.set('n', 'q', function()
+                vim.cmd('quit')
+            end, { buffer = canvas.bufnr })
         end,
     })
 

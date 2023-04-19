@@ -30,6 +30,8 @@ return {
 
     {
         'Xuyuanp/yanil',
+        dev = true,
+        branch = 'main',
         keys = {
             { '<C-e>', require('dotvim.util').lazy_require('yanil/canvas').toggle, mode = 'n', desc = '[Yanil] toggle' },
         },
