@@ -18,13 +18,13 @@ return {
                             end,
                         },
                     },
-                    ['core.norg.concealer'] = {}, -- Adds pretty icons to your documents
-                    ['core.norg.completion'] = {
+                    ['core.concealer'] = {}, -- Adds pretty icons to your documents
+                    ['core.completion'] = {
                         config = {
                             engine = 'nvim-cmp',
                         },
                     },
-                    ['core.norg.dirman'] = { -- Manages Neorg workspaces
+                    ['core.dirman'] = { -- Manages Neorg workspaces
                         config = {
                             workspaces = {
                                 notes = '~/notes',
