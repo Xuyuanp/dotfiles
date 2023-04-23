@@ -219,6 +219,10 @@ local langs = {
     ruff_lsp = {
         on_new_config = make_on_new_config({ disable_hover = true }),
     },
+    clangd = {
+        -- disable clangd for proto files
+        filetypes = { 'c', 'cpp', 'objc', 'objcpp', 'cuda' },
+    },
 }
 
 require('mason-lspconfig').setup_handlers({
