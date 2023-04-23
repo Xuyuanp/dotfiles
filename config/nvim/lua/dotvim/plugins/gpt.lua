@@ -55,7 +55,7 @@ return {
                     return
                 end
 
-                local code_block = vim.api.nvim_buf_get_lines(0, args.line1 - 1, args.line2 - 1, false)
+                local code_block = vim.api.nvim_buf_get_lines(0, args.line1 - 1, args.line2, false)
                 local input = { 'Explain the following code', '```' .. ft }
                 vim.list_extend(input, code_block)
                 vim.list_extend(input, { '```' })
