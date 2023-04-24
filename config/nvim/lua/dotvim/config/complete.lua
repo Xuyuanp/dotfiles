@@ -52,7 +52,7 @@ function M.setup()
             ['<C-Space>'] = cmp.mapping.complete(),
             ['<CR>'] = cmp.mapping(function(fallback)
                 if cmp.visible() then
-                    cmp.confirm({ behavior = types.cmp.ConfirmBehavior.Replace, select = true })
+                    cmp.confirm({ behavior = types.cmp.ConfirmBehavior.Replace, select = false })
                 else
                     fallback()
                 end
@@ -136,7 +136,7 @@ function M.setup()
     })
 
     local autopair_cmp = require('nvim-autopairs.completion.cmp')
-    cmp.event:on('confirm_done', autopair_cmp.on_confirm_done({}))
+    cmp.event:on('confirm_done', autopair_cmp.on_confirm_done({ map_char = { tex = '' } }))
 end
 
 return M
