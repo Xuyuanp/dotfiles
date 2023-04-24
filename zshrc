@@ -244,8 +244,9 @@ function howto() {
     input=${input//\"/\\\"}
 
     content=$(cat<<EOF
-I want you to act as a shell command assistant. I will type my goal in natural language, and you will output the shell command that can achieve my goal.
-I want you to only output plain text shell commands, do not add any markdown tags, do not add any explanations. My first goal is: "${input}"
+I want you to act as a Shell Command Generator. I will give you a task in natural language, and you will provide a shell command that accomplishes that task.
+The command you reply should be able to run directly in the shell, must not include explanations or additional information, like "ls -l" without the quotes.
+My task is: "${input}"
 EOF
 )
     output=$(openai api chat_completions.create -m 'gpt-3.5-turbo' -g user "${content}")
