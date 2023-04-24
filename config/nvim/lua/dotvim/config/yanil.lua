@@ -189,7 +189,7 @@ local icon_decorator
 if (vim.env.YANIL_BUBBLE or '0') == '1' then
     icon_decorator = function(node)
         if not node.parent then
-            local text = ''
+            local text = node.is_open and '' or ''
             return text, 'YanilTreeDirectory'
         end
 
