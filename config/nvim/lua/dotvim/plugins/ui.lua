@@ -27,6 +27,7 @@ return {
                         '--smart-case',
                     },
                     prompt_prefix = ' 󰍉 ',
+                    selection_caret = ' ',
                 },
                 extensions = {
                     file_browser = {
