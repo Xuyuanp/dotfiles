@@ -8,6 +8,10 @@ return {
         dependencies = {
             'nvim-lua/popup.nvim',
             'nvim-lua/plenary.nvim',
+            'nvim-telescope/telescope-file-browser.nvim',
+        },
+        keys = {
+            { '<A-l>', '<cmd>Telescope file_browser<CR>', mode = 'n', desc = '[Telescope] file browser' },
         },
         config = function()
             local ts = require('telescope')
@@ -24,7 +28,14 @@ return {
                     },
                     prompt_prefix = ' 󰍉 ',
                 },
+                extensions = {
+                    file_browser = {
+                        git_status = true,
+                    },
+                },
             })
+
+            require('telescope').load_extension('file_browser')
         end,
     },
 
