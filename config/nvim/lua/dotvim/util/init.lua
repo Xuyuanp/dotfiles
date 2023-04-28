@@ -181,18 +181,39 @@ function M.lazy_require(modname)
     })
 end
 
+---@class KeymapSpec
+---@field [1] string lhs
+---@field [2] string|function rhs
+---@field mode? string|string[] mode short name(s), default 'n'
+-- and opts of `vim.keymap.set`
+
+---@param spec KeymapSpec
 function M.set_keymap(spec)
-    vim.keymap.set(spec.mode or 'n', spec[1], spec[2], {
-        buffer = spec.buffer,
-        desc = spec.desc,
-        remap = spec.remap,
-        noremap = spec.noremap,
-        replace_keycodes = spec.replace_keycodes,
-        nowait = spec.nowait,
-        silent = spec.silent,
-        script = spec.script,
-        expr = spec.expr,
-        unique = spec.unique,
+    assert(spec[1], 'lhs is required')
+    assert(spec[2], 'rhs is required')
+    local mode = spec.mode or 'n'
+    local opts = {}
+    for k, v in pairs(spec) do
+        if type(k) == 'string' and k ~= 'mode' then
+            opts[k] = v
+        end
+    end
+    vim.keymap.set(mode, spec[1], spec[2], opts)
+end
+
+function M.hijack_notify()
+    local notify = vim.notify
+    vim.notify = setmetatable({}, {
+        __call = function(_, ...)
+            notify(...)
+        end,
+        __index = function(obj, level)
+            local f = function(msg, opts)
+                notify(msg, level, opts)
+            end
+            rawset(obj, level, f)
+            return f
+        end,
     })
 end
 

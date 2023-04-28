@@ -573,6 +573,7 @@ return {
         dependencies = { 'nvim-lua/plenary.nvim' },
         config = function()
             require('gitsigns').setup({
+                debug_mode = true,
                 signs = {
                     add = { hl = 'GitSignsAdd', text = '┃', numhl = '', linehl = '' },
                     change = { hl = 'GitSignsChange', text = '┃', numhl = '', linehl = '' },
