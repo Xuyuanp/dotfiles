@@ -47,6 +47,11 @@ return {
                 user_text = 'You:',
                 user_sign = '',
                 spinners = 'line',
+                openai = {
+                    chat_completions = {
+                        model = 'gpt-4',
+                    },
+                },
             })
 
             vim.api.nvim_create_user_command('NeoChatExplainCode', function(args)
