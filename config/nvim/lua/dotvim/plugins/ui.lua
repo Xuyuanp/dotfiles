@@ -573,7 +573,6 @@ return {
         dependencies = { 'nvim-lua/plenary.nvim' },
         config = function()
             require('gitsigns').setup({
-                debug_mode = true,
                 signs = {
                     add = { hl = 'GitSignsAdd', text = '┃', numhl = '', linehl = '' },
                     change = { hl = 'GitSignsChange', text = '┃', numhl = '', linehl = '' },
@@ -582,23 +581,21 @@ return {
                     changedelete = { hl = 'GitSignsChange', text = '┃', numhl = '', linehl = '' },
                     untracked = { hl = 'GitSignsAdd', text = '┃', numhl = '', linehl = '' },
                 },
-                keymaps = {
-                    noremap = true,
-                    buffer = true,
-                    ['n ]c'] = { expr = true, [[&diff ? ']c' : '<cmd>lua require"gitsigns.actions".next_hunk()<CR>']] },
-                    ['n [c'] = { expr = true, [[&diff ? '[c' : '<cmd>lua require"gitsigns.actions".prev_hunk()<CR>']] },
-                    ['n <leader>hs'] = '<cmd>lua require"gitsigns".stage_hunk()<CR>',
-                    ['v <leader>hs'] = '<cmd>lua require"gitsigns".stage_hunk({vim.fn.line("."), vim.fn.line("v")})<CR>',
-                    ['n <leader>hu'] = '<cmd>lua require"gitsigns".undo_stage_hunk()<CR>',
-                    ['n <leader>hr'] = '<cmd>lua require"gitsigns".reset_hunk()<CR>',
-                    ['v <leader>hr'] = '<cmd>lua require"gitsigns".reset_hunk({vim.fn.line("."), vim.fn.line("v")})<CR>',
-                    ['n <leader>hR'] = '<cmd>lua require"gitsigns".reset_buffer()<CR>',
-                    ['n <leader>hp'] = '<cmd>lua require"gitsigns".preview_hunk()<CR>',
-                    ['n <leader>hb'] = '<cmd>lua require"gitsigns".blame_line(true)<CR>',
-                    -- Text objects
-                    ['o ih'] = ':<C-U>lua require"gitsigns.actions".select_hunk()<CR>',
-                    ['x ih'] = ':<C-U>lua require"gitsigns.actions".select_hunk()<CR>',
-                },
+                on_attach = function(bufnr)
+                    local dotutil = require('dotvim.util')
+                    local keymaps = {
+                        { ']c', [[&diff ? ']c' : '<cmd>lua require"gitsigns.actions".next_hunk()<CR>']], expr = true, desc = 'jump to next hunk' },
+                        { '[c', [[&diff ? '[c' : '<cmd>lua require"gitsigns.actions".prev_hunk()<CR>']], expr = true, desc = 'jump to prev hunk' },
+                        --  Text objects
+                        { 'ih', ':<C-U>lua require"gitsigns.actions".select_hunk()<CR>', mode = { 'x', 'o' }, desc = 'select hunk' },
+                    }
+                    for _, spec in ipairs(keymaps) do
+                        spec.desc = '[gitsigns] ' .. spec.desc
+                        spec.buffer = bufnr
+                        spec.noremap = true
+                        dotutil.set_keymap(spec)
+                    end
+                end,
                 current_line_blame = true,
                 current_line_blame_formatter = '@<author> / <abbrev_sha> <summary> / <author_time:%R>',
             })

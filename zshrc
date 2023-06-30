@@ -167,15 +167,20 @@ export FZF_DEFAULT_OPTS="
 "
 
 function tgo() {
-    tmp="$(mktemp -p ${HOME}/.tmp -d "tgo_$(date +%Y%m%d)_XXXXXXXX")"
-    cat > "${tmp}/main.go" << EOL
+    tgo_path="${HOME}/.tmp/tgo"
+    mkdir -p "${tgo_path}"
+
+    # check if the first argument is exists
+    if [[ -n "${1}" ]]; then
+        tmp="$(mktemp -p ${tgo_path} -d "${1}_$(date +%Y%m%d)_XXXXXXXX")"
+        cat > "${tmp}/main.go" << EOF
 package main
 
 func main() {
 }
-EOL
+EOF
 
-    cat > "${tmp}/main_test.go" << EOL
+    cat > "${tmp}/main_test.go" << EOF
 package main_test
 
 import "testing"
@@ -190,14 +195,19 @@ func BenchmarkMain(b *testing.B) {
 
     }
 }
-EOL
+EOF
 
-    printf 'module %s\n' "$(basename "${tmp}")" > "${tmp}/go.mod"
-    (
-        cd ${tmp}
-        vim -p main.go main_test.go
-        echo ${tmp}
-    )
+        printf 'module %s\n' "$(basename "${tmp}")" > "${tmp}/go.mod"
+        (
+            cd ${tmp}
+            vim -p main.go main_test.go
+            echo ${tmp}
+        )
+    else
+        choice=$(find "${tgo_path}" -maxdepth 1 -type d -exec basename {} \; | fzf) && \
+            cd "${tgo_path}/${choice}" && \
+            vim -p main.go main_test.go
+    fi
 }
 
 trace 'base'
