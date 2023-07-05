@@ -49,7 +49,7 @@ return {
                 spinners = 'line',
                 openai = {
                     chat_completions = {
-                        model = 'gpt-4',
+                        model = 'gpt-3.5-turbo',
                     },
                 },
             })
