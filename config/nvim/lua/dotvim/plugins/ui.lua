@@ -584,8 +584,16 @@ return {
                 on_attach = function(bufnr)
                     local dotutil = require('dotvim.util')
                     local keymaps = {
-                        { ']c', [[&diff ? ']c' : '<cmd>lua require"gitsigns.actions".next_hunk()<CR>']], expr = true, desc = 'jump to next hunk' },
-                        { '[c', [[&diff ? '[c' : '<cmd>lua require"gitsigns.actions".prev_hunk()<CR>']], expr = true, desc = 'jump to prev hunk' },
+                        {
+                            ']c',
+                            require('gitsigns.actions').next_hunk,
+                            desc = 'jump to next hunk',
+                        },
+                        {
+                            '[c',
+                            require('gitsigns.actions').prev_hunk,
+                            desc = 'jump to next hunk',
+                        },
                         --  Text objects
                         { 'ih', ':<C-U>lua require"gitsigns.actions".select_hunk()<CR>', mode = { 'x', 'o' }, desc = 'select hunk' },
                     }
