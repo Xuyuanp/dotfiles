@@ -254,8 +254,11 @@ function howto() {
     input=${input//\"/\\\"}
 
     content=$(cat<<EOF
-I want you to act as a Shell Command Generator. I will give you a task in natural language, and you will provide a shell command that accomplishes that task.
-The command you reply should be able to run directly in the shell, must not include explanations or additional information, like "ls -l" without the quotes.
+Please function as a Unix Shell Command Generator.
+Upon receiving a specific task in plain language from me,
+generate an appropriate shell command that would execute the given task.
+The provided command must be runnable directly in the shell
+and should exclude any supplementary information or commentary.
 My task is: "${input}"
 EOF
 )
