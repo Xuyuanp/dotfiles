@@ -224,7 +224,7 @@ function M.setup()
         },
         filters = {
             function(name)
-                local patterns = { '^%.git$', '%.pyc', '^__pycache__$', '^%.idea$', '^%.iml$', '^%.DS_Store$', '%.o$' }
+                local patterns = { '^%.git$', '%.pyc', '^__pycache__$', '^%.idea$', '^%.iml$', '^%.DS_Store$', '%.o$', '%.cmd$' }
                 for _, pat in ipairs(patterns) do
                     if string.find(name, pat) then
                         return true
@@ -273,6 +273,18 @@ function M.setup()
                 end,
             },
         },
+    })
+
+    vim.keymap.set({ 'n', 'i' }, '<A-f>', function()
+        local path = vim.fn.expand('%')
+        local target = tree.root:find_node_by_path(path)
+        if not target then
+            vim_notify('file "' .. path .. '" is not found or ignored', Levels.WARN)
+            return
+        end
+        tree:go_to_node(target)
+    end, {
+        desc = '[Yanil] focus current file in tree',
     })
 end
 
