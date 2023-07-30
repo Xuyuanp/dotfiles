@@ -153,6 +153,7 @@ local langs = {
                 staticcheck = true,
                 vulncheck = 'Imports',
                 codelenses = {
+                    gc_details = true,
                     generate = true,
                     test = true,
                     tidy = true,
