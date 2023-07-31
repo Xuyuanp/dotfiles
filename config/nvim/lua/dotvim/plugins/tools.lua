@@ -230,6 +230,9 @@ return {
             'nvim-lua/plenary.nvim',
             'nvim-treesitter/nvim-treesitter',
         },
+        config = function()
+            require('dotvim.config.neotest').setup()
+        end,
     },
 
     {
@@ -238,7 +241,26 @@ return {
         config = function()
             require('neotest').setup({
                 adapters = {
-                    require('neotest-go'),
+                    require('neotest-go')({
+                        experimental = {
+                            test_table = true,
+                        },
+                        args = { '-count=1', '-race', '-timeout=60s' },
+                    }),
+                },
+            })
+        end,
+    },
+
+    {
+        'rouge8/neotest-rust',
+        ft = 'rust',
+        config = function()
+            require('neotest').setup({
+                adapters = {
+                    require('neotest-rust')({
+                        args = { '--no-capture' },
+                    }),
                 },
             })
         end,
