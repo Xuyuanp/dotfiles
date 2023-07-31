@@ -49,6 +49,7 @@
   "neorg": { "branch": "main", "commit": "e76f0cb6b3ae5e990052343ebb73a5c8d8cac783" },
   "neotest": { "branch": "master", "commit": "bec7be0f13ee19c85561943fc5f7b8daa4f4d465" },
   "neotest-go": { "branch": "main", "commit": "f2580cad67ef0181403cf65858ab638ffd3ede9f" },
+  "neotest-rust": { "branch": "main", "commit": "d1dfe0f51f3a1def715d1fdd6918341176592c23" },
   "noice.nvim": { "branch": "main", "commit": "894db25ec726d32047799d4d0a982b701bec453b" },
   "nui.nvim": { "branch": "main", "commit": "9e3916e784660f55f47daa6f26053ad044db5d6a" },
   "null-ls.nvim": { "branch": "main", "commit": "db09b6c691def0038c456551e4e2772186449f35" },
