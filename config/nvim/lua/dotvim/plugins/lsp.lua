@@ -229,6 +229,9 @@ return {
 
     {
         'lvimuser/lsp-inlayhints.nvim',
+        cond = function()
+            return vim.fn.has('nvim-0.10') == 0
+        end,
         config = function()
             local inlayhints = require('lsp-inlayhints')
             inlayhints.setup({

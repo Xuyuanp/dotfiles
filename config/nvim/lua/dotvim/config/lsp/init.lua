@@ -97,9 +97,21 @@ local function set_lsp_autocmd(client, bufnr)
     end
 end
 
+local function on_attach_nvim_010(client, bufnr)
+    if client.supports_method('textDocument/inlayHint') then
+        vim.schedule(function()
+            vim.lsp.inlay_hint(bufnr, true)
+        end)
+    end
+end
+
 local on_attach = function(client, bufnr)
     set_lsp_autocmd(client, bufnr)
     set_lsp_keymaps(client, bufnr)
+
+    if vim.fn.has('nvim-0.10') == 1 then
+        on_attach_nvim_010(client, bufnr)
+    end
 
     vim.api.nvim_buf_set_option(bufnr, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
     vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
