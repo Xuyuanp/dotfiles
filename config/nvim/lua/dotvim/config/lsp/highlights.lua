@@ -49,34 +49,23 @@ local styles = {
     reverse = 7,
 }
 
-function M.get_ansi_color_by_name(name, rgb)
-    rgb = rgb or vim.fn.has('gui') or vim.fn.exists('termguicolors') and vim.api.nvim_get_option('termguicolors')
-    local hl = api.nvim_get_hl_by_name(name, rgb)
+function M.get_ansi_color_by_name(name)
+    local hl = api.nvim_get_hl(0, { name = name, link = false })
     local params = {}
-    if hl.foreground then
+    if hl.fg then
         table.insert(params, '38')
-        if rgb then
-            table.insert(params, '2')
-            local code = string.format('%x', hl.foreground)
-            for v in string.gmatch(code, '%x%x') do
-                table.insert(params, tonumber(v, 16))
-            end
-        else
-            table.insert(params, '5')
-            table.insert(params, hl.foreground)
+        table.insert(params, '2')
+        local code = string.format('%x', hl.fg)
+        for v in string.gmatch(code, '%x%x') do
+            table.insert(params, tonumber(v, 16))
         end
     end
-    if hl.background then
+    if hl.bg then
         table.insert(params, '48')
-        if rgb then
-            table.insert(params, '2')
-            local code = string.format('%x', hl.background)
-            for v in string.gmatch(code, '%x%x') do
-                table.insert(params, tonumber(v, 16))
-            end
-        else
-            table.insert(params, '5')
-            table.insert(params, hl.background)
+        table.insert(params, '2')
+        local code = string.format('%x', hl.bg)
+        for v in string.gmatch(code, '%x%x') do
+            table.insert(params, tonumber(v, 16))
         end
     end
     for style, id in pairs(styles) do
@@ -87,8 +76,8 @@ function M.get_ansi_color_by_name(name, rgb)
     return vim.fn.join(params, ';')
 end
 
-function M.wrap_text_in_hl_group(text, name, rgb)
-    local ansi_params = M.get_ansi_color_by_name(name, rgb)
+function M.wrap_text_in_hl_group(text, name)
+    local ansi_params = M.get_ansi_color_by_name(name)
     return string.format('%s[%sm%s%s[0m', escapeKey, ansi_params, text, escapeKey)
 end
 
