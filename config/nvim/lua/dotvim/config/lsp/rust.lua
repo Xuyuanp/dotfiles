@@ -24,7 +24,7 @@ function M.setup(server)
 
             -- These apply to the default RustSetInlayHints command
             inlay_hints = {
-                auto = true,
+                auto = vim.fn.has('nvim-0.10') == 0,
 
                 -- Only show inlay hints for the current line
                 only_current_line = false,
