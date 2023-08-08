@@ -1,15 +1,13 @@
 local M = {}
 
-local extension_path = vim.fn.stdpath('data') .. '/mason/packages/codelldb/extension'
-local codelldb_path = extension_path .. '/adapter/codelldb'
-local liblldb_path = extension_path .. '/lldb/lib/liblldb.so'
+local xdg_data_path = vim.fn.stdpath('data')
+local extension_path = vim.fs.joinpath(xdg_data_path, '/mason/packages/codelldb/extension')
+local codelldb_path = vim.fs.joinpath(extension_path, '/adapter/codelldb')
+local liblldb_path = vim.fs.joinpath(extension_path, '/lldb/lib/liblldb.so')
 
 function M.setup(server)
     local opts = {
         tools = { -- rust-tools options
-            -- Automatically set inlay hints (type hints)
-            autoSetHints = true,
-
             -- Whether to show hover actions inside the hover window
             -- This overrides the default hover handler
             -- hover_with_actions = true,
@@ -18,44 +16,9 @@ function M.setup(server)
 
             reload_workspace_from_cargo_toml = true,
 
-            -- on_initialized = function(status)
-            --     vim.notify('rust_analyzer started: ' .. status.health, 'INFO')
-            -- end,
-
             -- These apply to the default RustSetInlayHints command
             inlay_hints = {
-                auto = vim.fn.has('nvim-0.10') == 0,
-
-                -- Only show inlay hints for the current line
-                only_current_line = false,
-
-                -- whether to show parameter hints with the inlay hints or not
-                show_parameter_hints = true,
-
-                -- whether to show variable name before type hints with the inlay hints or not
-                -- default: false
-                show_variable_name = false,
-
-                -- prefix for parameter hints
-                parameter_hints_prefix = '<- ',
-
-                -- prefix for all the other hints (type, chaining)
-                other_hints_prefix = '=> ',
-
-                -- whether to align to the length of the longest line in the file
-                max_len_align = false,
-
-                -- padding from the left if max_len_align is true
-                max_len_align_padding = 1,
-
-                -- whether to align to the extreme right or not
-                right_align = false,
-
-                -- padding from the right if right_align is true
-                right_align_padding = 7,
-
-                -- The color of the hints
-                highlight = 'Comment',
+                auto = false,
             },
 
             hover_actions = {
@@ -73,7 +36,7 @@ function M.setup(server)
                 },
 
                 -- whether the hover action window gets automatically focused
-                auto_focus = false,
+                auto_focus = true,
             },
 
             -- settings for showing the crate graph based on graphviz and the dot
