@@ -16,7 +16,8 @@ local function find_and_run_codelens()
     end, lenses)
 
     if #lenses == 0 then
-        return vim.api.nvim_echo({ { 'Could not find codelens to run.', 'WarningMsg' } }, false, {})
+        vim.notify('Could not find codelens to run.', vim.log.levels.WARN)
+        return
     end
 
     table.sort(lenses, function(a, b)
