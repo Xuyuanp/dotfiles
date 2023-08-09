@@ -1,15 +1,4 @@
-trace_file=~/.startup.log
-[ -f $trace_file ] && rm $trace_file
-
-function trace() {
-    echo "$(date --rfc-3339=ns):" $* >> $trace_file
-}
-
-trace 'start'
-
 [ -f ~/.zshrc.before ] && source ~/.zshrc.before
-
-trace 'zshrc.before'
 
 if [[ $FORCE_TMUX == '1' ]] && [[ ! -v TMUX ]]; then
     tmux attach || tmux
@@ -81,8 +70,6 @@ zinit snippet OMZP::gitignore
 zinit ice as"completion"
 zinit snippet OMZP::docker/_docker
 
-trace 'zinit'
-
 # ================================ zinit end ================================= #
 if type brew &>/dev/null; then
     FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
@@ -90,60 +77,15 @@ if type brew &>/dev/null; then
     compinit
 fi
 
-trace 'compinit'
-
 bindkey -v
 
 # run the command, but won't clear the actual commandline
 bindkey '^\'    accept-and-hold
 
-_exists() { (( $+commands[$1])) }
+# Customize to your needs...
+[ -f ~/.shared_profile.zsh ] && source ~/.shared_profile.zsh
 
-_exists exa     && alias ls='exa --icons --git'
-_exists htop    && alias top='htop'
-_exists fdfind  && alias fd='fdfind'
-_exists batcat  && alias bat='batcat'
-_exists bat     && alias cat='bat'
-_exists free    && alias free='free -h'
-_exists less    && export PAGER=less
-_exists less    && alias more='less'
-_exists kubectl && alias kubesys='kubectl --namespace kube-system'
-_exists ag      && alias grep='ag'
-_exists rg      && alias grep='rg'
-_exists curlie  && alias curl=curlie
-export DIRENV_LOG_FORMAT=
-_exists direnv  && eval "$(direnv hook zsh)"
-
-if _exists nvim; then
-    export EDITOR=nvim
-    export VISUAL=nvim
-    export MANPAGER="nvim +Man!"
-    alias vim='nvim'
-    alias vi='nvim'
-fi
-
-unfunction _exists
-
-function zsh-stats() {
-  fc -l 1 | awk '{CMD[$2]++;count++;}END { for (a in CMD)print CMD[a] " " CMD[a]/count*100 "% " a;}' | grep -v "./" | column -c3 -s " " -t | sort -nr | nl | head -n25
-}
-
-# alias
-alias ll='ls -l'
-alias llh='ls -lh'
-
-alias cpwd='pwd | clipcopy'
-
-alias dis="docker images | sort -k7 -h"
-
-alias piplist="pip freeze | awk -F'==' '{print \$1}'"
-
-alias genpass="date +%s | sha256sum | base64 | head -c 14"
-
-function mkcd() {
-    mkdir -p "$1" && cd "$1"
-}
-
+# ================================ envs ================================= #
 export PIP_INDEX_URL=https://mirrors.aliyun.com/pypi/simple
 export PIPENV_PYPI_MIRROR=${PIP_INDEX_URL}
 
@@ -165,6 +107,105 @@ export FZF_DEFAULT_OPTS="
 --exact
 --info=inline
 "
+
+export GOPATH=${HOME}/go
+
+# python
+[ -f ~/.startup.py ] && export PYTHONSTARTUP=${HOME}/.startup.py
+export PYENV_ROOT="$HOME/.pyenv"
+
+function _prepend_path() {
+    if [[ -d "$1" ]] && [[ ":${PATH}:" != *":$1:"* ]]; then
+        PATH="${1}${PATH:+":$PATH"}"
+    fi
+}
+
+function _append_path() {
+    if [[ -d "$1" ]] && [[ ":${PATH}:" != *":$1:"* ]]; then
+        PATH="${PATH:+"$PATH:"}$1"
+    fi
+}
+
+_prepend_path "${HOME}/.cargo/bin"
+_prepend_path "${PYENV_ROOT}/bin"
+_prepend_path "${HOME}/.krew/bin"
+_prepend_path "${HOME}/.wasme/bin"
+_prepend_path "${HOME}/.local/share/bob/nvim-bin"
+_prepend_path "${GOPATH}/bin"
+_prepend_path "${HOME}/.local/bin"
+export PATH
+
+unfunction _prepend_path
+unfunction _append_path
+
+if [[ -d "${PYENV_ROOT}" ]]; then
+    eval "$(pyenv init --path)"
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
+else
+    unset PYENV_ROOT
+fi
+
+# ================================ aliases ================================= #
+function _exists() { (( $+commands[$1])) }
+
+_exists exa     && alias ls='exa --icons --git'
+_exists htop    && alias top='htop'
+_exists fdfind  && alias fd='fdfind'
+_exists batcat  && alias bat='batcat'
+_exists bat     && alias cat='bat'
+_exists free    && alias free='free -h'
+_exists less    && export PAGER=less
+_exists less    && alias more='less'
+_exists kubectl && alias kubesys='kubectl --namespace kube-system'
+_exists ag      && alias grep='ag'
+_exists rg      && alias grep='rg'
+_exists curlie  && alias curl=curlie
+export DIRENV_LOG_FORMAT=
+_exists direnv  && eval "$(direnv hook zsh)"
+_exists docker  && alias dis='docker images | sort -k7 -h'
+_exists neovide && alias vide='neovide'
+
+alias ll='ls -l'
+alias llh='ls -lh'
+
+alias cpwd='pwd | clipcopy'
+
+alias piplist="pip freeze | awk -F'==' '{print \$1}'"
+
+alias genpass="date +%s | sha256sum | base64 | head -c 14"
+
+if _exists nvim; then
+    export EDITOR=nvim
+    export VISUAL=nvim
+    export MANPAGER="nvim +Man!"
+    alias vim='nvim'
+    alias vi='nvim'
+fi
+
+unfunction _exists
+
+# ================================ functions ================================= #
+
+function howto() {
+    # read input from flags or stdin if no tty
+    input=$(if [ -t 0 ]; then echo $@; else cat -; fi)
+
+    # escape double quotes
+    input=${input//\"/\\\"}
+
+    content=$(cat<<EOF
+Please function as a Unix Shell Command Generator.
+Upon receiving a specific task in plain language from me,
+generate an appropriate shell command that would execute the given task.
+The provided command must be runnable directly in the shell
+and should exclude any supplementary information or commentary.
+My task is: "${input}"
+EOF
+)
+    output=$(openai api chat_completions.create -m 'gpt-3.5-turbo' -g user "${content}")
+    print -z "$output"
+}
 
 function tgo() {
     tgo_path="${HOME}/.tmp/tgo"
@@ -206,62 +247,17 @@ EOF
     else
         choice=$(find "${tgo_path}" -maxdepth 1 -type d -exec basename {} \; | fzf) && \
             cd "${tgo_path}/${choice}" && \
-            vim -p main.go main_test.go
+            nvim -p main.go main_test.go
     fi
 }
 
-trace 'base'
+function mkcd() {
+    mkdir -p "$1" && cd "$1"
+}
 
-# Customize to your needs...
-[ -f ~/.shared_profile.zsh ] && source ~/.shared_profile.zsh
-
-trace 'shared_profile'
-
-[ -f ~/.zshrc.after ] && source ~/.zshrc.after
-
-trace 'zshrc.after'
+function zsh-stats() {
+  fc -l 1 | awk '{CMD[$2]++;count++;}END { for (a in CMD)print CMD[a] " " CMD[a]/count*100 "% " a;}' | grep -v "./" | column -c3 -s " " -t | sort -nr | nl | head -n25
+}
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-trace 'p10k'
-
-[ -f ~/.startup.py ] && export PYTHONSTARTUP=${HOME}/.startup.py
-export PYENV_ROOT="$HOME/.pyenv"
-if [[ -d "${PYENV_ROOT}" ]]; then
-    export PATH="${PYENV_ROOT}/bin:$PATH"
-    eval "$(pyenv init --path)"
-    eval "$(pyenv init -)"
-    eval "$(pyenv virtualenv-init -)"
-else
-    unset PYENV_ROOT
-fi
-
-trace 'pyenv'
-
-export GOPATH=${HOME}/go
-export PATH=${GOPATH}/bin:${PATH}
-
-trace 'done'
-
-unfunction trace
-
-function howto() {
-    # read input from flags or stdin if no tty
-    input=$(if [ -t 0 ]; then echo $@; else cat -; fi)
-
-    # escape double quotes
-    input=${input//\"/\\\"}
-
-    content=$(cat<<EOF
-Please function as a Unix Shell Command Generator.
-Upon receiving a specific task in plain language from me,
-generate an appropriate shell command that would execute the given task.
-The provided command must be runnable directly in the shell
-and should exclude any supplementary information or commentary.
-My task is: "${input}"
-EOF
-)
-    output=$(openai api chat_completions.create -m 'gpt-3.5-turbo' -g user "${content}")
-    print -z "$output"
-}
