@@ -50,24 +50,28 @@ local styles = {
     reverse = 7,
 }
 
-function M.get_ansi_color_by_name(name)
+-- return { 'rr', 'gg', 'bb' }
+local function parse_rgb(hl)
+    local code = string.format('%x', hl)
+    return vim.iter(code:gmatch('%x%x'))
+        :map(function(v)
+            return tonumber(v, 16)
+        end)
+        :totable()
+end
+
+function M.get_ansi_color_by_hl_name(name)
     local hl = api.nvim_get_hl(0, { name = name, link = false })
     local params = {}
     if hl.fg then
-        table.insert(params, '38')
-        table.insert(params, '2')
-        local code = string.format('%x', hl.fg)
-        for v in string.gmatch(code, '%x%x') do
-            table.insert(params, tonumber(v, 16))
-        end
+        table.insert(params, '38') -- foreground
+        table.insert(params, '2') -- rgb format
+        vim.list_extend(params, parse_rgb(hl.fg))
     end
     if hl.bg then
-        table.insert(params, '48')
-        table.insert(params, '2')
-        local code = string.format('%x', hl.bg)
-        for v in string.gmatch(code, '%x%x') do
-            table.insert(params, tonumber(v, 16))
-        end
+        table.insert(params, '48') -- background
+        table.insert(params, '2') -- rgb format
+        vim.list_extend(params, parse_rgb(hl.bg))
     end
     for style, id in pairs(styles) do
         if hl[style] then
@@ -77,8 +81,8 @@ function M.get_ansi_color_by_name(name)
     return table.concat(params, ';')
 end
 
-function M.wrap_text_in_hl_group(text, name)
-    local ansi_params = M.get_ansi_color_by_name(name)
+function M.wrap_text_in_hl_name(text, hl_name)
+    local ansi_params = M.get_ansi_color_by_hl_name(hl_name)
     return string.format('%s[%sm%s%s[0m', escapeKey, ansi_params, text, escapeKey)
 end
 

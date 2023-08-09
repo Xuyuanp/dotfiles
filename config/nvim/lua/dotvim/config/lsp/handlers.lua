@@ -53,7 +53,7 @@ function M.symbol_handler(err, result, ctx)
                     symbol.location.range['end'].line + 1,
                     string.rep('  ', depth),
                     kind,
-                    highlights.wrap_text_in_hl_group(symbol.name, symbol_highlights[kind])
+                    highlights.wrap_text_in_hl_name(symbol.name, symbol_highlights[kind])
                 )
             else
                 -- for DocumentSymbols
@@ -64,8 +64,8 @@ function M.symbol_handler(err, result, ctx)
                     symbol.range['end'].line + 1,
                     string.rep('  ', depth),
                     kind,
-                    highlights.wrap_text_in_hl_group(symbol.name, symbol_highlights[kind]),
-                    highlights.wrap_text_in_hl_group(symbol.detail or '', 'SpecialComment')
+                    highlights.wrap_text_in_hl_name(symbol.name, symbol_highlights[kind]),
+                    highlights.wrap_text_in_hl_name(symbol.detail or '', 'SpecialComment')
                 )
             end
             table.insert(source, line)
@@ -277,8 +277,8 @@ function M.outgoing_calls(err, result, ctx)
                 item.range.start.line + 1,
                 item.range['end'].line + 1,
                 kind,
-                highlights.wrap_text_in_hl_group(item.name, symbol_highlights[kind]),
-                highlights.wrap_text_in_hl_group(item.detail or '', 'SpecialComment')
+                highlights.wrap_text_in_hl_name(item.name, symbol_highlights[kind]),
+                highlights.wrap_text_in_hl_name(item.detail or '', 'SpecialComment')
             )
         )
     end
