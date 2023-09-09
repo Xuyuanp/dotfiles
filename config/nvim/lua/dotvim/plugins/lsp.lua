@@ -313,4 +313,16 @@ return {
             },
         },
     },
+
+    {
+        'aznhe21/actions-preview.nvim',
+        keys = {
+            {
+                'gap',
+                require('dotvim.util').lazy_require('actions-preview').code_actions,
+                mode = { 'n', 'v' },
+                desc = '[Lsp] actions preview',
+            },
+        },
+    },
 }
