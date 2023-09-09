@@ -1,9 +1,13 @@
 local vim = vim
 local api = vim.api
 
+local LspMethods = vim.lsp.protocol.Methods
+
 local handlers = require('dotvim.config.lsp.handlers')
 
 local lspconfig = require('lspconfig')
+
+local has_nvim_010 = vim.fn.has('nvim-0.10') == 1
 
 --- copy from https://github.com/williamboman/nvim-config/blob/main/lua/wb/lsp/on-attach.lua
 local function find_and_run_codelens()
@@ -53,7 +57,7 @@ local function set_lsp_keymaps(client, bufnr)
         grr = { vim.lsp.buf.rename, 'rename' },
         gds = { vim.lsp.buf.document_symbol, 'show document symbols' },
         gws = { vim.lsp.buf.workspace_symbol, 'show workspace symbols' },
-        gca = { vim.lsp.buf.code_action , 'code action'},
+        gca = { vim.lsp.buf.code_action, 'code action' },
         go  = { vim.lsp.buf.outgoing_calls, 'show outgoing calls' },
         gcl = { find_and_run_codelens, 'find and run codelens' },
     }
@@ -68,7 +72,7 @@ local function set_lsp_keymaps(client, bufnr)
 end
 
 local function set_lsp_autocmd(client, bufnr)
-    if client.supports_method('textDocument/documentHighlight') and client.name ~= 'rust_analyzer' then
+    if client.supports_method(LspMethods.textDocument_documentHighlight) and client.name ~= 'rust_analyzer' then
         api.nvim_create_autocmd({ 'CursorHold' }, {
             group = group_id,
             buffer = bufnr,
@@ -87,7 +91,7 @@ local function set_lsp_autocmd(client, bufnr)
         })
     end
 
-    if client.supports_method('textDocument/codeLens') then
+    if client.supports_method(LspMethods.textDocument_codeLens) then
         api.nvim_create_autocmd({ 'BufEnter', 'InsertLeave', 'BufWritePost', 'CursorHold' }, {
             group = group_id,
             buffer = bufnr,
@@ -99,7 +103,7 @@ local function set_lsp_autocmd(client, bufnr)
 end
 
 local function on_attach_nvim_010(client, bufnr)
-    if client.supports_method('textDocument/inlayHint') then
+    if client.supports_method(LspMethods.textDocument_inlayHint) then
         vim.schedule(function()
             vim.lsp.inlay_hint(bufnr, true)
         end)
@@ -110,13 +114,19 @@ local on_attach = function(client, bufnr)
     set_lsp_autocmd(client, bufnr)
     set_lsp_keymaps(client, bufnr)
 
-    if vim.fn.has('nvim-0.10') == 1 then
+    if has_nvim_010 then
         on_attach_nvim_010(client, bufnr)
     end
 
-    vim.api.nvim_buf_set_option(bufnr, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
-    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-    vim.api.nvim_buf_set_option(bufnr, 'tagfunc', 'v:lua.vim.lsp.tagfunc')
+    if vim.bo[bufnr].filetype == 'helm' and client.name == 'gopls' then
+        vim.defer_fn(function()
+            vim.lsp.semantic_tokens.stop(bufnr, client.id)
+        end, 100)
+    end
+
+    vim.bo[bufnr].formatexpr = 'v:lua.vim.lsp.formatexpr()'
+    vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
+    vim.bo[bufnr].tagfunc = 'v:lua.vim.lsp.tagfunc'
 end
 
 local default_capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -131,13 +141,13 @@ local default_config = {
     on_attach = on_attach,
     capabilities = default_capabilities,
     handlers = {
-        ['workspace/symbol']            = handlers.symbol_handler,
-        ['textDocument/references']     = handlers.references,
-        ['textDocument/documentSymbol'] = handlers.symbol_handler,
-        ['textDocument/definition']     = handlers.gen_location_handler('Definition'),
-        ['textDocument/typeDefinition'] = handlers.gen_location_handler('TypeDefinition'),
-        ['textDocument/implementation'] = handlers.gen_location_handler('Implementation'),
-        ['callHierarchy/outgoingCalls'] = handlers.outgoing_calls,
+        [LspMethods.workspace_symbol]            = handlers.symbol_handler,
+        [LspMethods.textDocument_references]     = handlers.references,
+        [LspMethods.textDocument_documentSymbol] = handlers.symbol_handler,
+        [LspMethods.textDocument_definition]     = handlers.gen_location_handler('Definition'),
+        [LspMethods.textDocument_typeDefinition] = handlers.gen_location_handler('TypeDefinition'),
+        [LspMethods.textDocument_implementation] = handlers.gen_location_handler('Implementation'),
+        [LspMethods.callHierarchy_outgoingCalls] = handlers.outgoing_calls,
     },
 }
 
@@ -198,7 +208,6 @@ local langs = {
                 diagnostics = {
                     enable = true,
                     disabled = { 'unresolved-proc-macro' },
-                    enableExperimental = true,
                 },
             },
         },
