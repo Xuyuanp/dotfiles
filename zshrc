@@ -149,7 +149,7 @@ fi
 # ================================ aliases ================================= #
 function _exists() { (( $+commands[$1])) }
 
-_exists exa     && alias ls='exa --icons --git'
+_exists eza     && alias ls='eza --icons --git'
 _exists htop    && alias top='htop'
 _exists fdfind  && alias fd='fdfind'
 _exists batcat  && alias bat='batcat'
