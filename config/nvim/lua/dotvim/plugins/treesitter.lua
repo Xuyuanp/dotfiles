@@ -7,7 +7,7 @@ return {
             'nvim-treesitter/nvim-treesitter-context',
             'nvim-treesitter/nvim-treesitter-textobjects',
             'nvim-treesitter/playground',
-            'HiPhish/nvim-ts-rainbow2',
+            -- 'HiPhish/nvim-ts-rainbow2',
             'RRethy/nvim-treesitter-textsubjects',
             'JoosepAlviste/nvim-ts-context-commentstring',
         },
