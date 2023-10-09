@@ -7,7 +7,7 @@ return {
             'williamboman/mason-lspconfig.nvim',
             'folke/neodev.nvim',
             'simrat39/rust-tools.nvim',
-            'jose-elias-alvarez/null-ls.nvim',
+            'nvimtools/none-ls.nvim',
             'lvimuser/lsp-inlayhints.nvim',
             'onsails/lspkind-nvim',
             'j-hui/fidget.nvim',
@@ -80,7 +80,7 @@ return {
         event = { 'BufReadPre', 'BufNewFile' },
         dependencies = {
             'williamboman/mason.nvim',
-            'jose-elias-alvarez/null-ls.nvim',
+            'nvimtools/none-ls.nvim',
         },
         config = function()
             require('mason-null-ls').setup({
@@ -281,7 +281,7 @@ return {
     },
 
     {
-        'jose-elias-alvarez/null-ls.nvim',
+        'nvimtools/none-ls.nvim',
         config = function()
             require('dotvim.config.lsp.null').setup()
         end,
