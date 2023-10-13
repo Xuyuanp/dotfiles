@@ -1,6 +1,8 @@
 local vim = vim
 local api = vim.api
 
+local a = require('dotvim.util.async')
+
 local LspMethods = vim.lsp.protocol.Methods
 
 local handlers = require('dotvim.config.lsp.handlers')
@@ -35,21 +37,22 @@ end
 
 local group_id = api.nvim_create_augroup('dotvim_lsp_init_on_attach', { clear = true })
 
-local function set_lsp_keymaps(client, bufnr)
-    local set_keymap = vim.keymap.set
-
-    local function show_documentation()
-        if client.name == 'taplo' and vim.fn.expand('%:t') == 'Cargo.toml' and require('crates').popup_available() then
-            require('crates').show_popup()
-        else
-            vim.lsp.buf.hover()
-        end
+local function my_show_documentation()
+    local clients = vim.lsp.get_clients({ name = 'taplo' })
+    if clients and vim.fn.expand('%:t') == 'Cargo.toml' and require('crates').popup_available() then
+        require('crates').show_popup()
+    else
+        vim.lsp.buf.hover()
     end
+end
+
+local function set_lsp_keymaps(_, bufnr)
+    local set_keymap = vim.keymap.set
 
     -- stylua: ignore
     local keymaps = {
         gd  = { vim.lsp.buf.definition, 'goto definition' },
-        K   = { show_documentation, 'show documentation' },
+        K   = { my_show_documentation, 'show documentation' },
         gi  = { vim.lsp.buf.implementation, 'goto implementation' },
         gk  = { vim.lsp.buf.signature_help, 'show signature help' },
         gtd = { vim.lsp.buf.type_definition, 'goto type definition' },
@@ -69,6 +72,29 @@ local function set_lsp_keymaps(client, bufnr)
             desc = '[Lsp] ' .. action[2],
         })
     end
+
+    local show_menu = a.wrap(function()
+        local choice = a.ui
+            .select(vim.tbl_values(keymaps), {
+                prompt = 'Lsp actions:',
+                format_item = function(item)
+                    -- uppercase the first letter
+                    local display = item[2]:gsub('^%l', string.upper)
+                    return display
+                end,
+            })
+            .await()
+        if choice then
+            choice[1]()
+        end
+    end)
+
+    set_keymap('n', '<space><space>', show_menu, {
+        noremap = false,
+        silent = true,
+        buffer = bufnr,
+        desc = '[Lsp] show menu',
+    })
 end
 
 local function set_lsp_autocmd(client, bufnr)
