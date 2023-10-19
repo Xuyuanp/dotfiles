@@ -15,7 +15,7 @@ local M = {}
 
 local symbol_highlights = setmetatable({}, {
     __index = function(obj, kind)
-        local ft = vim.api.nvim_buf_get_option(0, 'filetype')
+        local ft = vim.api.nvim_get_option_value('filetype', { buf = 0 })
         if ft ~= '' then
             local group = ft .. kind
             local syn_id = vim.fn.hlID(ft .. kind)

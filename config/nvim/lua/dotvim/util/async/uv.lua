@@ -2,7 +2,7 @@
 Example:
 
 --]]
-local uv = vim.loop
+local uv = vim.uv
 local a = require('dotvim.util.async')
 
 local M = {}

@@ -1,7 +1,7 @@
 local vim = vim
 local api = vim.api
 local vfn = vim.fn
-local uv = vim.loop
+local uv = vim.uv
 
 local M = {}
 
@@ -81,8 +81,8 @@ function M.floating_window(bufnr)
     local border_lines = border_symbols:draw(win_width, win_height)
     api.nvim_buf_set_lines(border_bufnr, 0, -1, false, border_lines)
     local border_winnr = api.nvim_open_win(border_bufnr, true, border_opts)
-    api.nvim_win_set_option(border_winnr, 'winblend', 0)
-    api.nvim_win_set_option(border_winnr, 'winhl', 'NormalFloat:')
+    api.nvim_set_option_value('winhl', 'NormalFloat:', { win = border_winnr })
+    api.nvim_set_option_value('winblend', 0, { win = border_winnr })
 
     -- content
     local win_opts = {
