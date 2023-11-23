@@ -11,5 +11,5 @@ configuration {
 @import "common.rasi"
 
 textbox-prompt-colon {
-    str: "直";
+    str: "󰖩";
 }

@@ -13,5 +13,5 @@ configuration {
 @import "common.rasi"
 
 textbox-prompt-colon {
-    str: "ﱘ";
+    str: "󰝚";
 }

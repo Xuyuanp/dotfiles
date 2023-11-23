@@ -14,7 +14,7 @@ editor="  Geany"
 clifm="  Ranger"
 lpad="  Leafpad"
 vim="  Neovide"
-nvidia="  Nvidia"
+nvidia="󰍹  Nvidia"
 
 # Variable passed to rofi
 # options="$terminal\n$files\n$editor\n$clifm\n$lpad\n$vim\n$nvidia"
@@ -31,5 +31,3 @@ case $chosen in
         apps_as_root nvidia-settings
         ;;
 esac
-
-
