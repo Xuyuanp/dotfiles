@@ -110,14 +110,14 @@ local create_node = a.wrap(function(tree, node)
     end
 
     local dir = vim.fn.fnamemodify(path, ':h')
-    local res = uv.simple_job({ command = 'mkdir', args = { '-p', dir } }).await()
+    local res = a.system({ 'mkdir', '-p', dir }).await()
 
     if res.code ~= 0 then
         vim_notify('mkdir failed: ' .. (res.stderr or res.stdout or ''), Levels.ERROR)
         return
     end
     if not vim.endswith(path, '/') then
-        res = uv.simple_job({ command = 'touch', args = { path } }).await()
+        res = a.system({ 'touch', path }).await()
 
         if res.code ~= 0 then
             vim_notify('touch file failed: ' .. (res.stderr or res.stdout or ''), Levels.ERROR)
@@ -168,10 +168,7 @@ local delete_node = a.wrap(function(tree, node)
         end
     end
 
-    local res = uv.simple_job({
-        command = 'rm',
-        args = { '-rf', node.abs_path },
-    }).await()
+    local res = a.system({ 'rm', '-rf', node.abs_path }).await()
     if res.code ~= 0 then
         a.api.nvim_err_writeln('delete node failed:', (res.stderr or res.stdout or ''))
         return
