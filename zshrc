@@ -131,8 +131,8 @@ _prepend_path "${PYENV_ROOT}/bin"
 _prepend_path "${HOME}/.krew/bin"
 _prepend_path "${HOME}/.wasme/bin"
 _prepend_path "${HOME}/.local/share/bob/nvim-bin"
-_prepend_path "${GOPATH}/bin"
 _prepend_path "${HOME}/.local/bin"
+_prepend_path "${GOPATH}/bin"
 export PATH
 
 unfunction _prepend_path
@@ -214,40 +214,43 @@ function tgo() {
     # check if the first argument is exists
     if [[ -n "${1}" ]]; then
         tmp="$(mktemp -p ${tgo_path} -d "${1}_$(date +%Y%m%d)_XXXXXXXX")"
-        cat > "${tmp}/main.go" << EOF
+        (
+            cd ${tmp}
+            go mod init "$(basename "${tmp}")"
+            cat > "main.go" << EOF
 package main
 
 func main() {
 }
 EOF
 
-    cat > "${tmp}/main_test.go" << EOF
+            cat > "main_test.go" << EOF
 package main_test
 
-import "testing"
+import (
+	"os"
+	"testing"
+)
 
-func TestMain(t *testing.T) {
-
+func TestMain(m *testing.M) {
+	os.Exit(m.Run())
 }
 
 func BenchmarkMain(b *testing.B) {
-    b.ReportAllocs()
-    for n := 0; n < b.N; n++ {
+	b.ReportAllocs()
+	for n := 0; n < b.N; n++ {
 
-    }
+	}
 }
 EOF
 
-        printf 'module %s\n' "$(basename "${tmp}")" > "${tmp}/go.mod"
-        (
-            cd ${tmp}
-            vim -p main.go main_test.go
+            nvim -p main.go main_test.go
             echo ${tmp}
         )
     else
         choice=$(find "${tgo_path}" -maxdepth 1 -type d -exec basename {} \; | fzf) && \
-            cd "${tgo_path}/${choice}" && \
-            nvim -p main.go main_test.go
+            (cd "${tgo_path}/${choice}" && \
+            nvim -p main.go main_test.go)
     fi
 }
 
