@@ -28,7 +28,7 @@ local custom_directives = {
 
 function M.register_custom_directives()
     for name, handler in pairs(custom_directives) do
-        vim.treesitter.query.add_directive(name, handler, true)
+        vim.treesitter.query.add_directive(name, handler, { force = true })
     end
 end
 
@@ -38,6 +38,11 @@ function M.setup()
     local ts_configs = require('nvim-treesitter.configs')
 
     ts_configs.setup({
+        ensure_installed = {},
+        ignore_install = {},
+        sync_install = false,
+        auto_install = false,
+        modules = {},
         highlight = {
             enable = true, -- false will disable the whole extension
         },

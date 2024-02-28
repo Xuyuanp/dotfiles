@@ -16,7 +16,7 @@ end
 
 local function debug_nearest()
     vim.schedule(function()
-        require('neotest').run.run({ strategy = 'dap' })
+        require('neotest').run.run({ strategy = 'dap', suite = false })
     end)
 end
 

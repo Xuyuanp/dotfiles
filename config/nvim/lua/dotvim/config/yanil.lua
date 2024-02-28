@@ -18,7 +18,6 @@ local vim_notify = function(msg, level, opts)
 end
 
 local a = dotutil.async()
-local uv = a.uv()
 
 local M = {}
 
