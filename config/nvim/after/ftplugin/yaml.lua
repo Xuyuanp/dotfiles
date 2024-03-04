@@ -20,7 +20,7 @@ local detect_helm_ft = a.wrap(function(bufnr, path)
             path = upper_dir(path)
             local err, stat = a.uv().fs_stat(path .. '/' .. 'Chart.yaml').await()
             if not err and stat then
-                api.nvim_buf_set_option(bufnr, 'filetype', 'helm')
+                vim.api.nvim_set_option_value('filetype', 'helm', { buf = bufnr })
             end
             return
         end

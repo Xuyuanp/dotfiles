@@ -140,7 +140,7 @@ return {
                         opts.filetype = nil
                         opts.on_open = require('dotvim.util').wrap_func_after(opts.on_open, function(win)
                             local buf = vim.api.nvim_win_get_buf(win)
-                            vim.api.nvim_buf_set_option(buf, 'filetype', filetype)
+                            vim.api.nvim_set_option_value('filetype', filetype, { buf = buf })
                         end)
                     end
                     notify(msg, level, opts)
