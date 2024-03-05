@@ -41,7 +41,6 @@ function M.setup()
             null_ls.builtins.formatting.black, -- python
             null_ls.builtins.formatting.isort, -- python
             null_ls.builtins.formatting.buf, -- proto
-            null_ls.builtins.formatting.trim_whitespace,
             null_ls.builtins.formatting.goimports_reviser.with({
                 generator_opts = {
                     command = 'goimports-reviser',
