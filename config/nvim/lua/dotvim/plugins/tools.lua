@@ -140,7 +140,7 @@ return {
                         opts.filetype = nil
                         opts.on_open = require('dotvim.util').wrap_func_after(opts.on_open, function(win)
                             local buf = vim.api.nvim_win_get_buf(win)
-                            vim.api.nvim_buf_set_option(buf, 'filetype', filetype)
+                            vim.api.nvim_set_option_value('filetype', filetype, { buf = buf })
                         end)
                     end
                     notify(msg, level, opts)
@@ -222,47 +222,5 @@ return {
             custom_dynamic_variables = {},
             yank_dry_run = true,
         },
-    },
-
-    {
-        'nvim-neotest/neotest',
-        dependencies = {
-            'nvim-lua/plenary.nvim',
-            'nvim-treesitter/nvim-treesitter',
-        },
-        config = function()
-            require('dotvim.config.neotest').setup()
-        end,
-    },
-
-    {
-        'nvim-neotest/neotest-go',
-        ft = 'go',
-        config = function()
-            require('neotest').setup({
-                adapters = {
-                    require('neotest-go')({
-                        experimental = {
-                            test_table = true,
-                        },
-                        args = { '-count=1', '-race', '-timeout=60s' },
-                    }),
-                },
-            })
-        end,
-    },
-
-    {
-        'rouge8/neotest-rust',
-        ft = 'rust',
-        config = function()
-            require('neotest').setup({
-                adapters = {
-                    require('neotest-rust')({
-                        args = { '--no-capture' },
-                    }),
-                },
-            })
-        end,
     },
 }

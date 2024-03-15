@@ -140,11 +140,16 @@ function M.setup()
 
     opt.conceallevel = 1
 
-    local sign_define = vim.fn.sign_define
-    sign_define('DiagnosticSignError', { text = '', texthl = 'DiagnosticSignError' })
-    sign_define('DiagnosticSignWarn', { text = '', texthl = 'DiagnosticSignWarn' })
-    sign_define('DiagnosticSignInfo', { text = '', texthl = 'DiagnosticSignInfo' })
-    sign_define('DiagnosticSignHint', { text = '', texthl = 'DiagnosticSignHint' })
+    vim.diagnostic.config({
+        signs = {
+            text = {
+                [vim.diagnostic.severity.ERROR] = '',
+                [vim.diagnostic.severity.WARN] = '',
+                [vim.diagnostic.severity.INFO] = '',
+                [vim.diagnostic.severity.HINT] = '',
+            },
+        },
+    })
 
     if vim.env.SSH_TTY then
         local osc52 = require('dotvim.util.osc52')
@@ -163,11 +168,6 @@ function M.setup()
         vim.g.neovide_no_idle = true
         vim.g.neovide_cursor_antialiasing = true
     end
-
-    -- TODO: move to somewhere
-    vim.api.nvim_create_user_command('Nerdfonts', function()
-        require('dotvim.util.nerdfonts').pick()
-    end, {})
 end
 
 return M

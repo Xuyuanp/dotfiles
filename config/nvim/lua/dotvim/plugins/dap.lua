@@ -37,7 +37,8 @@ return {
             -- required
             vim.schedule(function()
                 require('mason-nvim-dap').setup({
-                    automatic_install = false,
+                    ensure_installed = {},
+                    automatic_installation = false,
                     automatic_setup = {
                         filetypes = {
                             python = false,
@@ -46,6 +47,10 @@ return {
                     },
                     handlers = {
                         function(config)
+                            local options = config.adapters.options or {}
+                            options.initialize_timeout_sec = 60
+                            config.adapters.options = options
+
                             require('mason-nvim-dap').default_setup(config)
                         end,
                     },

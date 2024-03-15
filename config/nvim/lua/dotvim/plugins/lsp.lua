@@ -7,7 +7,7 @@ return {
             'williamboman/mason-lspconfig.nvim',
             'folke/neodev.nvim',
             'simrat39/rust-tools.nvim',
-            'jose-elias-alvarez/null-ls.nvim',
+            'nvimtools/none-ls.nvim',
             'lvimuser/lsp-inlayhints.nvim',
             'onsails/lspkind-nvim',
             'j-hui/fidget.nvim',
@@ -35,7 +35,9 @@ return {
                 -- these settings will be used for your Neovim config directory
                 runtime = true, -- runtime path
                 types = true, -- full signature, docs and completion of vim.api, vim.treesitter, vim.lsp and others
-                plugins = true, -- installed opt or start plugins in packpath
+                plugins = {
+                    'nvim-dap-ui',
+                }, -- installed opt or start plugins in packpath
                 -- you can also specify the list of plugins to make available as a workspace library
                 -- plugins = { "nvim-treesitter", "plenary.nvim", "telescope.nvim" },
             },
@@ -58,7 +60,9 @@ return {
         'williamboman/mason.nvim',
         lazy = false,
         config = function()
-            require('mason').setup({})
+            require('mason').setup({
+                PATH = 'append',
+            })
         end,
     },
 
@@ -78,11 +82,12 @@ return {
         event = { 'BufReadPre', 'BufNewFile' },
         dependencies = {
             'williamboman/mason.nvim',
-            'jose-elias-alvarez/null-ls.nvim',
+            'nvimtools/none-ls.nvim',
         },
         config = function()
             require('mason-null-ls').setup({
                 automatic_installation = true,
+                ensure_installed = {},
             })
         end,
     },
@@ -107,7 +112,7 @@ return {
             'onsails/lspkind-nvim',
             {
                 {
-                    'jcdickinson/codeium.nvim',
+                    'Exafunction/codeium.nvim',
                     dependencies = {
                         'nvim-lua/plenary.nvim',
                         'hrsh7th/nvim-cmp',
@@ -278,7 +283,7 @@ return {
     },
 
     {
-        'jose-elias-alvarez/null-ls.nvim',
+        'nvimtools/none-ls.nvim',
         config = function()
             require('dotvim.config.lsp.null').setup()
         end,
@@ -310,6 +315,18 @@ return {
         opts = {
             text = {
                 spinner = 'meter',
+            },
+        },
+    },
+
+    {
+        'aznhe21/actions-preview.nvim',
+        keys = {
+            {
+                'gap',
+                require('dotvim.util').lazy_require('actions-preview').code_actions,
+                mode = { 'n', 'v' },
+                desc = '[Lsp] actions preview',
             },
         },
     },

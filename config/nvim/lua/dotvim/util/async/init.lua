@@ -129,4 +129,6 @@ M.ui = setmetatable({}, {
     end,
 })
 
+M.system = M.async(vim.system)
+
 return M

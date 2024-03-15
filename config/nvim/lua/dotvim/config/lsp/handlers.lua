@@ -1,6 +1,8 @@
 local vim = vim
 local api = vim.api
 
+local symbol_kinds = vim.lsp.protocol.SymbolKind
+
 local dotutil = require('dotvim.util')
 
 local highlights = require('dotvim.config.lsp.highlights')
@@ -11,30 +13,29 @@ local fzf_wrap = dotutil.fzf_wrap
 
 local M = {}
 
-local symbol_highlights = {}
-
-setmetatable(symbol_highlights, {
-    __index = function(_table, kind)
-        local ft = vim.api.nvim_buf_get_option(0, 'filetype')
+local symbol_highlights = setmetatable({}, {
+    __index = function(obj, kind)
+        local ft = vim.api.nvim_get_option_value('filetype', { buf = 0 })
         if ft ~= '' then
             local group = ft .. kind
             local syn_id = vim.fn.hlID(ft .. kind)
             if syn_id and syn_id > 0 then
+                rawset(obj, kind, group)
                 return group
             end
         end
+        local group = 'LspKind' .. kind
+        rawset(obj, kind, group)
         return 'LspKind' .. kind
     end,
 })
 
-function M.symbol_handler(_err, result, ctx)
-    if not result or vim.tbl_isempty(result) then
-        print('no symbols')
+function M.symbol_handler(err, result, ctx)
+    if err or not result or vim.tbl_isempty(result) then
         return
     end
 
     local bufname = api.nvim_buf_get_name(ctx.bufnr or 0)
-    local symbol_kinds = vim.lsp.protocol.SymbolKind
 
     local source = {}
 
@@ -52,7 +53,7 @@ function M.symbol_handler(_err, result, ctx)
                     symbol.location.range['end'].line + 1,
                     string.rep('  ', depth),
                     kind,
-                    highlights.wrap_text_in_hl_group(symbol.name, symbol_highlights[kind])
+                    highlights.wrap_text_in_hl_name(symbol.name, symbol_highlights[kind])
                 )
             else
                 -- for DocumentSymbols
@@ -63,8 +64,8 @@ function M.symbol_handler(_err, result, ctx)
                     symbol.range['end'].line + 1,
                     string.rep('  ', depth),
                     kind,
-                    highlights.wrap_text_in_hl_group(symbol.name, symbol_highlights[kind]),
-                    highlights.wrap_text_in_hl_group(symbol.detail or '', 'SpecialComment')
+                    highlights.wrap_text_in_hl_name(symbol.name, symbol_highlights[kind]),
+                    highlights.wrap_text_in_hl_name(symbol.detail or '', 'SpecialComment')
                 )
             end
             table.insert(source, line)
@@ -114,8 +115,8 @@ function M.symbol_handler(_err, result, ctx)
     fzf_run(wrapped)
 end
 
-function M.references(_err, references, ctx)
-    if not references or vim.tbl_isempty(references) then
+function M.references(err, references, ctx)
+    if err or not references or vim.tbl_isempty(references) then
         print('No references available')
         return
     end
@@ -248,11 +249,12 @@ function M.gen_location_handler(name)
     end
 end
 
-function M.outgoing_calls(_err, result, ctx)
-    local direction = 'to'
-    if not result then
+function M.outgoing_calls(err, result, ctx)
+    if err or not result then
         return
     end
+
+    local direction = 'to'
 
     local bufname = api.nvim_buf_get_name(ctx.bufnr or 0)
 
@@ -275,8 +277,8 @@ function M.outgoing_calls(_err, result, ctx)
                 item.range.start.line + 1,
                 item.range['end'].line + 1,
                 kind,
-                highlights.wrap_text_in_hl_group(item.name, symbol_highlights[kind]),
-                highlights.wrap_text_in_hl_group(item.detail or '', 'SpecialComment')
+                highlights.wrap_text_in_hl_name(item.name, symbol_highlights[kind]),
+                highlights.wrap_text_in_hl_name(item.detail or '', 'SpecialComment')
             )
         )
     end

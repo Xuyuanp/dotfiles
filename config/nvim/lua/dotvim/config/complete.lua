@@ -87,6 +87,7 @@ function M.setup()
             },
         },
         formatting = {
+            fields = { 'abbr', 'kind', 'menu' },
             expandable_indicator = true,
             format = lspkind.cmp_format({
                 mode = 'symbol_text',

@@ -14,7 +14,11 @@ function M.copy(lines, _)
 end
 
 function M.paste()
-    return { vim.fn.split(vim.fn.getreg(''), '\n'), vim.fn.getregtype('') }
+    local content = vim.fn.getreg('')
+    if not content then
+        return
+    end
+    return { vim.fn.split(content, '\n'), vim.fn.getregtype('') }
 end
 
 return M

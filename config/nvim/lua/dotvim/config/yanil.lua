@@ -18,7 +18,6 @@ local vim_notify = function(msg, level, opts)
 end
 
 local a = dotutil.async()
-local uv = a.uv()
 
 local M = {}
 
@@ -31,17 +30,17 @@ local function git_diff(_tree, node)
 
     -- content
     local bufnr = api.nvim_create_buf(false, true)
-    api.nvim_buf_set_option(bufnr, 'filetype', 'diff')
-    api.nvim_buf_set_option(bufnr, 'bufhidden', 'wipe')
-    api.nvim_buf_set_option(bufnr, 'swapfile', false)
+    api.nvim_set_option_value('filetype', 'diff', { buf = bufnr })
+    api.nvim_set_option_value('bufhidden', 'wipe', { buf = bufnr })
+    api.nvim_set_option_value('swapfile', false, { buf = bufnr })
     api.nvim_buf_set_lines(bufnr, 0, -1, false, diff)
 
     local winnr = dotutil.floating_window(bufnr)
 
-    api.nvim_win_set_option(winnr, 'cursorline', true)
-    api.nvim_win_set_option(winnr, 'winblend', 0)
-    api.nvim_win_set_option(winnr, 'winhl', 'NormalFloat:')
-    api.nvim_win_set_option(winnr, 'number', true)
+    api.nvim_set_option_value('cursorline', true, { win = winnr })
+    api.nvim_set_option_value('winblend', 0, { win = winnr })
+    api.nvim_set_option_value('winhl', 'NormalFloat:', { win = winnr })
+    api.nvim_set_option_value('number', true, { win = winnr })
 
     vim.api.nvim_buf_create_user_command(bufnr, 'Apply', function()
         require('yanil/git').apply_buf(bufnr)
@@ -110,14 +109,14 @@ local create_node = a.wrap(function(tree, node)
     end
 
     local dir = vim.fn.fnamemodify(path, ':h')
-    local res = uv.simple_job({ command = 'mkdir', args = { '-p', dir } }).await()
+    local res = a.system({ 'mkdir', '-p', dir }).await()
 
     if res.code ~= 0 then
         vim_notify('mkdir failed: ' .. (res.stderr or res.stdout or ''), Levels.ERROR)
         return
     end
     if not vim.endswith(path, '/') then
-        res = uv.simple_job({ command = 'touch', args = { path } }).await()
+        res = a.system({ 'touch', path }).await()
 
         if res.code ~= 0 then
             vim_notify('touch file failed: ' .. (res.stderr or res.stdout or ''), Levels.ERROR)
@@ -168,10 +167,7 @@ local delete_node = a.wrap(function(tree, node)
         end
     end
 
-    local res = uv.simple_job({
-        command = 'rm',
-        args = { '-rf', node.abs_path },
-    }).await()
+    local res = a.system({ 'rm', '-rf', node.abs_path }).await()
     if res.code ~= 0 then
         a.api.nvim_err_writeln('delete node failed:', (res.stderr or res.stdout or ''))
         return

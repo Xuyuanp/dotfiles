@@ -3,7 +3,7 @@ local vfn = vim.fn
 
 local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
 local std_data_path = vfn.stdpath('data')
-local lazypath = std_data_path .. '/lazy/lazy.nvim'
+local lazypath = vim.fs.joinpath(std_data_path, '/lazy/lazy.nvim')
 
 if not vim.loop.fs_stat(lazypath) then
     vim.fn.system({

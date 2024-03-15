@@ -22,3 +22,4 @@
     ~/.Xresources: config/Xresources
     ~/.Xresources.d: config/Xresources.d
     ~/.local/bin/osc52-yank: scripts/osc52-yank
+    ~/.editorconfig: .editorconfig

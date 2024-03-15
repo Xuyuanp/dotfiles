@@ -7,9 +7,14 @@ return {
             'nvim-treesitter/nvim-treesitter-context',
             'nvim-treesitter/nvim-treesitter-textobjects',
             'nvim-treesitter/playground',
-            'HiPhish/nvim-ts-rainbow2',
+            -- 'HiPhish/nvim-ts-rainbow2',
             'RRethy/nvim-treesitter-textsubjects',
-            'JoosepAlviste/nvim-ts-context-commentstring',
+            {
+                'JoosepAlviste/nvim-ts-context-commentstring',
+                config = function()
+                    vim.g.skip_ts_context_commentstring_module = true
+                end,
+            },
         },
         build = ':TSUpdate',
         event = PostRead,
