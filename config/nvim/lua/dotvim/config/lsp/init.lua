@@ -122,9 +122,13 @@ local function set_lsp_autocmd(client, bufnr)
             group = group_id,
             buffer = bufnr,
             desc = '[lsp] codelens refresh',
-            callback = vim.lsp.codelens.refresh,
+            callback = function()
+                vim.lsp.codelens.refresh({ bufnr = bufnr })
+            end,
         })
-        vim.schedule(vim.lsp.codelens.refresh)
+        vim.schedule(function()
+            vim.lsp.codelens.refresh({ bufnr = bufnr })
+        end)
     end
 end
 
