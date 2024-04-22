@@ -2,7 +2,7 @@ local M = {}
 
 local function osc(lines)
     local content = table.concat(lines, '\n')
-    local encoded = vim.fn.system({ 'base64', '--wrap=0' }, content)
+    local encoded = vim.base64.encode(content)
     local escaped = string.format('%s]52;c;%s%s', string.char(0x1b), encoded, string.char(0x07))
     return escaped
 end

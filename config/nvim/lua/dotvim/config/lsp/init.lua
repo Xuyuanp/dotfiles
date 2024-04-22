@@ -135,7 +135,7 @@ end
 local function on_attach_nvim_010(client, bufnr)
     if client.supports_method(LspMethods.textDocument_inlayHint) then
         vim.schedule(function()
-            vim.lsp.inlay_hint.enable(bufnr, true)
+            vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
         end)
     end
 end
