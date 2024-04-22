@@ -150,7 +150,7 @@ return {
 
     {
         'akinsho/bufferline.nvim',
-        version = 'v3',
+        version = 'v4',
         -- dependencies = 'kyazdani42/nvim-web-devicons',
         event = { 'BufReadPost', 'BufNewFile' },
         config = function()

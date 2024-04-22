@@ -74,14 +74,6 @@ return {
     },
 
     {
-        'numToStr/Comment.nvim',
-        event = { 'BufNewFile', 'BufReadPost' },
-        config = function()
-            require('Comment').setup()
-        end,
-    },
-
-    {
         'dstein64/vim-startuptime',
         cmd = 'StartupTime',
     },
