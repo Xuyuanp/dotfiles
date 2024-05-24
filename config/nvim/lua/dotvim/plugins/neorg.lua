@@ -1,10 +1,15 @@
 return {
     {
+        'vhyrro/luarocks.nvim',
+        priority = 1000, -- Very high priority is required, luarocks.nvim should run as the first plugin in your config.
+        config = true,
+    },
+    {
         'nvim-neorg/neorg',
         cmd = { 'Neorg' },
         ft = { 'norg' },
         dependencies = {
-            'nvim-lua/plenary.nvim',
+            'vhyrro/luarocks.nvim',
             'hrsh7th/nvim-cmp',
         },
         config = function()
@@ -43,6 +48,5 @@ return {
                 }),
             })
         end,
-        build = ':Neorg sync-parsers',
     },
 }
