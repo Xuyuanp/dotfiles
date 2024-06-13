@@ -5,14 +5,13 @@ return {
         dependencies = {
             'folke/neoconf.nvim',
             'williamboman/mason-lspconfig.nvim',
-            'simrat39/rust-tools.nvim',
             'nvimtools/none-ls.nvim',
             'lvimuser/lsp-inlayhints.nvim',
             'onsails/lspkind-nvim',
             'j-hui/fidget.nvim',
         },
         config = function()
-            require('dotvim.config.lsp')
+            require('dotvim.config.lsp').setup()
         end,
     },
 
@@ -20,10 +19,6 @@ return {
         'folke/neoconf.nvim',
         cmd = 'Neoconf',
         config = true,
-    },
-
-    {
-        'simrat39/rust-tools.nvim',
     },
 
     {
@@ -239,5 +234,14 @@ return {
                 desc = '[Lsp] actions preview',
             },
         },
+    },
+
+    {
+        'mrcjkb/rustaceanvim',
+        version = '^4', -- Recommended
+        lazy = false,
+        config = function()
+            require('dotvim.config.lsp.rust').setup()
+        end,
     },
 }
