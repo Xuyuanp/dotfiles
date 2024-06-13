@@ -108,7 +108,6 @@ return {
             },
             'andersevenrud/compe-tmux',
             'windwp/nvim-autopairs',
-            'zbirenbaum/copilot-cmp',
             'onsails/lspkind-nvim',
             {
                 {
@@ -148,7 +147,6 @@ return {
                 sources = {
                     { name = 'crates' },
                     { name = 'nvim_lsp' },
-                    { name = 'copilot' },
                 },
             })
         end,
@@ -225,7 +223,6 @@ return {
                 -- default: 'default'
                 preset = 'default',
                 symbol_map = {
-                    Copilot = '',
                     Codeium = '󱃖',
                 },
             })
@@ -286,26 +283,6 @@ return {
         'nvimtools/none-ls.nvim',
         config = function()
             require('dotvim.config.lsp.null').setup()
-        end,
-    },
-
-    {
-
-        'zbirenbaum/copilot.lua',
-        cmd = { 'Copilot' },
-        opts = {
-            suggestion = { enabled = false },
-            panel = { enabled = false },
-        },
-    },
-
-    {
-        'zbirenbaum/copilot-cmp',
-        dependencies = {
-            'zbirenbaum/copilot.lua',
-        },
-        config = function()
-            require('copilot_cmp').setup()
         end,
     },
 
