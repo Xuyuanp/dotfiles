@@ -105,10 +105,10 @@ function M.setup()
         },
         preselect = cmp.PreselectMode.Item,
         sources = cmp.config.sources({
-            { name = 'copilot' },
             { name = 'codeium' },
             { name = 'nvim_lsp' },
             { name = 'luasnip' },
+            { name = 'lazydev', group_index = 0 },
         }, {
             { name = 'buffer', keyword_length = 5 },
             { name = 'path' },
