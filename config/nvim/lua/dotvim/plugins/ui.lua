@@ -586,12 +586,24 @@ return {
                     local keymaps = {
                         {
                             ']c',
-                            gitsigns.nav_hunk('next'),
+                            function()
+                                if vim.wo.diff then
+                                    vim.cmd.normal({ ']c', bang = true })
+                                else
+                                    gitsigns.nav_hunk('next')
+                                end
+                            end,
                             desc = 'jump to next hunk',
                         },
                         {
                             '[c',
-                            gitsigns.nav_hunk('prev'),
+                            function()
+                                if vim.wo.diff then
+                                    vim.cmd.normal({ '[c', bang = true })
+                                else
+                                    gitsigns.nav_hunk('prev')
+                                end
+                            end,
                             desc = 'jump to next hunk',
                         },
                         --  Text objects
