@@ -571,30 +571,31 @@ return {
         event = { 'BufReadPost', 'BufNewFile' },
         dependencies = { 'nvim-lua/plenary.nvim' },
         config = function()
-            require('gitsigns').setup({
+            local gitsigns = require('gitsigns')
+            gitsigns.setup({
                 signs = {
-                    add = { hl = 'GitSignsAdd', text = '┃', numhl = '', linehl = '' },
-                    change = { hl = 'GitSignsChange', text = '┃', numhl = '', linehl = '' },
-                    delete = { hl = 'GitSignsDelete', text = '┃', numhl = '', linehl = '' },
-                    topdelete = { hl = 'GitSignsDelete', text = '┃', numhl = '', linehl = '' },
-                    changedelete = { hl = 'GitSignsChange', text = '┃', numhl = '', linehl = '' },
-                    untracked = { hl = 'GitSignsAdd', text = '┃', numhl = '', linehl = '' },
+                    add = { text = '┃' },
+                    change = { text = '┃' },
+                    delete = { text = '┃' },
+                    topdelete = { text = '┃' },
+                    changedelete = { text = '┃' },
+                    untracked = { text = '┃' },
                 },
                 on_attach = function(bufnr)
                     local dotutil = require('dotvim.util')
                     local keymaps = {
                         {
                             ']c',
-                            require('gitsigns.actions').next_hunk,
+                            gitsigns.nav_hunk('next'),
                             desc = 'jump to next hunk',
                         },
                         {
                             '[c',
-                            require('gitsigns.actions').prev_hunk,
+                            gitsigns.nav_hunk('prev'),
                             desc = 'jump to next hunk',
                         },
                         --  Text objects
-                        { 'ih', ':<C-U>lua require"gitsigns.actions".select_hunk()<CR>', mode = { 'x', 'o' }, desc = 'select hunk' },
+                        { 'ih', ':<C-U>lua require"gitsigns".select_hunk()<CR>', mode = { 'x', 'o' }, desc = 'select hunk' },
                     }
                     for _, spec in ipairs(keymaps) do
                         spec.desc = '[gitsigns] ' .. spec.desc
