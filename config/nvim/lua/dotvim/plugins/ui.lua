@@ -240,7 +240,7 @@ return {
     },
 
     {
-        'NTBBloodbath/galaxyline.nvim',
+        'nvimdev/galaxyline.nvim',
         event = { 'BufReadPost', 'BufNewFile' },
         branch = 'main',
         config = function()
@@ -568,8 +568,8 @@ return {
 
     {
         'lewis6991/gitsigns.nvim',
+        version = '*',
         event = { 'BufReadPost', 'BufNewFile' },
-        dependencies = { 'nvim-lua/plenary.nvim' },
         config = function()
             local gitsigns = require('gitsigns')
             gitsigns.setup({
@@ -581,6 +581,8 @@ return {
                     changedelete = { text = '┃' },
                     untracked = { text = '┃' },
                 },
+                current_line_blame = true,
+                current_line_blame_formatter = '@<author> / <abbrev_sha> <summary> / <author_time:%R>',
                 on_attach = function(bufnr)
                     local dotutil = require('dotvim.util')
                     local keymaps = {
@@ -616,8 +618,6 @@ return {
                         dotutil.set_keymap(spec)
                     end
                 end,
-                current_line_blame = true,
-                current_line_blame_formatter = '@<author> / <abbrev_sha> <summary> / <author_time:%R>',
             })
         end,
     },
