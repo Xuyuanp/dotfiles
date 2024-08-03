@@ -1,5 +1,6 @@
 if not vim.fn.has('nvim-0.10') then
-    error('require nvim >= 0.10')
+    vim.notify('require nvim >= 0.10', vim.log.levels.WARN)
+    return
 end
 
 require('dotvim.settings').setup()
