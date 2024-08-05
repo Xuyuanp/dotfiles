@@ -1,6 +1,9 @@
 local M = {}
 
 local xdg_data_path = vim.fn.stdpath('data')
+if type(xdg_data_path) == 'table' then
+    xdg_data_path = xdg_data_path[1]
+end
 local extension_path = vim.fs.joinpath(xdg_data_path, '/mason/packages/codelldb/extension')
 local codelldb_path = vim.fs.joinpath(extension_path, '/adapter/codelldb')
 local liblldb_path = vim.fs.joinpath(extension_path, '/lldb/lib/liblldb.so')
