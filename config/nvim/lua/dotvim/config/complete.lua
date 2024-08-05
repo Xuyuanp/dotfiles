@@ -114,7 +114,7 @@ function M.setup()
         },
         preselect = cmp.PreselectMode.Item,
         sources = cmp.config.sources({
-            -- { name = 'codeium' },
+            { name = 'codeium' },
             { name = 'copilot' },
             { name = 'nvim_lsp' },
             { name = 'luasnip' },

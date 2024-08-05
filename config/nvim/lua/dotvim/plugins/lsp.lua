@@ -89,19 +89,8 @@ return {
             'andersevenrud/compe-tmux',
             'windwp/nvim-autopairs',
             'onsails/lspkind-nvim',
-            {
-                -- {
-                --     'Exafunction/codeium.nvim',
-                --     dependencies = {
-                --         'nvim-lua/plenary.nvim',
-                --     },
-                --     cmd = 'Codeium',
-                --     config = function()
-                --         require('codeium').setup({})
-                --     end,
-                -- },
-                { 'zbirenbaum/copilot-cmp', optional = true },
-            },
+            { 'Exafunction/codeium.nvim', optional = true },
+            { 'zbirenbaum/copilot-cmp', optional = true },
         },
         config = function()
             require('dotvim.config.complete').setup()
@@ -123,6 +112,18 @@ return {
         cmd = 'Copilot',
         config = function()
             require('copilot').setup({})
+        end,
+    },
+
+    {
+        'Exafunction/codeium.nvim',
+        cond = features.codeium,
+        dependencies = {
+            'nvim-lua/plenary.nvim',
+        },
+        cmd = 'Codeium',
+        config = function()
+            require('codeium').setup({})
         end,
     },
 
