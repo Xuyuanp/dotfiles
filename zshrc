@@ -67,12 +67,9 @@ zinit snippet OMZL::history.zsh
 zinit snippet OMZP::colored-man-pages
 zinit snippet OMZP::gitignore
 
-zinit ice as"completion"
-zinit snippet OMZP::docker/_docker
-
 # ================================ zinit end ================================= #
 if type brew &>/dev/null; then
-    FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+    FPATH=$FPATH:$(brew --prefix)/share/zsh/site-functions
     autoload -Uz compinit
     compinit
 fi
@@ -91,7 +88,7 @@ export PIPENV_PYPI_MIRROR=${PIP_INDEX_URL}
 
 export NVM_NODEJS_ORG_MIRROR=https://npm.taobao.org/mirrors/node
 
-export BAT_THEME='gruvbox-dark'
+export BAT_THEME='kanagawa'
 
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
@@ -160,7 +157,7 @@ _exists less    && alias more='less'
 _exists kubectl && alias kubesys='kubectl --namespace kube-system'
 _exists ag      && alias grep='ag'
 _exists rg      && alias grep='rg'
-_exists curlie  && alias curl=curlie
+_exists curlie  && alias curl='curlie'
 export DIRENV_LOG_FORMAT=
 _exists direnv  && eval "$(direnv hook zsh)"
 _exists docker  && alias dis='docker images | sort -k7 -h'
