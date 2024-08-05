@@ -4,22 +4,41 @@
 
 - clean: ['~']
 
+- create:
+  - ~/.config/bat/themes
+  - ~/.fonts
+
 - shell:
   - git config --global include.path ${PWD}/gitconfig
   - cp -R fonts/* ~/.fonts/
-  - fc-cache
+  - if [ `uname` = Linux ]; then fc-cache; fi
+  - curl -o ~/.config/bat/themes/kanagawa.tmTheme -sSL https://raw.githubusercontent.com/rebelot/kanagawa.nvim/master/extras/kanagawa.tmTheme
 
 - link:
     ~/.tmux.conf: tmux.conf
     ~/.zshrc: zshrc
-    ~/.config/bspwm: config/bspwm
-    ~/.config/dunst: config/dunst
     ~/.config/kitty: config/kitty
     ~/.config/zellij: config/zellij
-    ~/.config/networkmanager-dmenu: config/networkmanager-dmenu
     ~/.config/nvim: config/nvim
-    ~/.config/sxhkd: config/sxhkd
-    ~/.Xresources: config/Xresources
-    ~/.Xresources.d: config/Xresources.d
     ~/.local/bin/osc52-yank: scripts/osc52-yank
     ~/.editorconfig: .editorconfig
+
+    # for linux
+    ~/.config/bspwm:
+      path: config/bspwm
+      if: '[ `uname` = Linux ]'
+    ~/.config/dunst:
+      path: config/dunst
+      if: '[ `uname` = Linux ]'
+    ~/.config/networkmanager-dmenu:
+      path: config/networkmanager-dmenu
+      if: '[ `uname` = Linux ]'
+    ~/.config/sxhkd:
+      path: config/sxhkd
+      if: '[ `uname` = Linux ]'
+    ~/.Xresources:
+      path: config/Xresources
+      if: '[ `uname` = Linux ]'
+    ~/.Xresources.d:
+      path: config/Xresources.d
+      if: '[ `uname` = Linux ]'
