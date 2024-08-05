@@ -135,8 +135,10 @@ function M.setup()
         },
     })
 
-    local autopair_cmp = require('nvim-autopairs.completion.cmp')
-    cmp.event:on('confirm_done', autopair_cmp.on_confirm_done({ map_char = { tex = '' } }))
+    local ok, autopair_cmp = pcall(require, 'nvim-autopairs.completion.cmp')
+    if ok then
+        cmp.event:on('confirm_done', autopair_cmp.on_confirm_done({ map_char = { tex = '' } }))
+    end
 end
 
 return M
