@@ -43,8 +43,8 @@ end
 
 -- stylua: ignore
 local _MODES = {
-    ['c']       = { '', dotcolors.red },
-    ['ce']      = { '', dotcolors.red_dark },
+    ['c']       = { 'C', dotcolors.red },
+    ['ce']      = { 'C', dotcolors.red_dark },
     ['cv']      = { 'EX', dotcolors.red_light },
     ['i']       = { 'I', dotcolors.green },
     ['ic']      = { 'IC', dotcolors.green_light },
@@ -58,7 +58,7 @@ local _MODES = {
     ['s']       = { 'S', dotcolors.turqoise },
     ['S']       = { 'S', dotcolors.turqoise },
     [t '<C-s>'] = { 'S-L', dotcolors.turqoise },
-    ['t']       = { 'T', dotcolors.orange },
+    ['t']       = { '', dotcolors.orange },
     ['v']       = { 'V', dotcolors.blue },
     ['V']       = { 'V-L', dotcolors.blue },
     [t '<C-v>'] = { 'V-B', dotcolors.blue },
