@@ -1,3 +1,5 @@
+local features = require('dotvim.features')
+
 return {
     {
         'neovim/nvim-lspconfig',
@@ -88,21 +90,39 @@ return {
             'windwp/nvim-autopairs',
             'onsails/lspkind-nvim',
             {
-                {
-                    'Exafunction/codeium.nvim',
-                    dependencies = {
-                        'nvim-lua/plenary.nvim',
-                        'hrsh7th/nvim-cmp',
-                    },
-                    cmd = 'Codeium',
-                    config = function()
-                        require('codeium').setup({})
-                    end,
-                },
+                -- {
+                --     'Exafunction/codeium.nvim',
+                --     dependencies = {
+                --         'nvim-lua/plenary.nvim',
+                --     },
+                --     cmd = 'Codeium',
+                --     config = function()
+                --         require('codeium').setup({})
+                --     end,
+                -- },
+                { 'zbirenbaum/copilot-cmp', optional = true },
             },
         },
         config = function()
             require('dotvim.config.complete').setup()
+        end,
+    },
+
+    {
+        'zbirenbaum/copilot-cmp',
+        cond = features.copilot,
+        dependencies = {
+            'zbirenbaum/copilot.lua',
+        },
+        config = function()
+            require('copilot_cmp').setup()
+        end,
+    },
+    {
+        'zbirenbaum/copilot.lua',
+        cmd = 'Copilot',
+        config = function()
+            require('copilot').setup({})
         end,
     },
 
@@ -202,6 +222,7 @@ return {
                 preset = 'default',
                 symbol_map = {
                     Codeium = '󱃖',
+                    Copilot = '',
                 },
             })
         end,

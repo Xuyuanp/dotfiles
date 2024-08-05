@@ -11,6 +11,14 @@ local function toCamelCase(str)
     end)
 end
 
+local function copilot_cmp()
+    local ok, comparators = pcall(require, 'copilot_cmp.comparators')
+    if ok then
+        return comparators.prioritize
+    end
+    return function() end
+end
+
 function M.setup()
     local cmp = require('cmp')
     local compare = require('cmp.config.compare')
@@ -93,6 +101,7 @@ function M.setup()
                 mode = 'symbol_text',
                 maxwidth = 50,
                 menu = setmetatable({
+                    copilot = '[Github]',
                     nvim_lsp = '[LSP]',
                     luasnip = '[LuaSnip]',
                 }, {
@@ -105,10 +114,11 @@ function M.setup()
         },
         preselect = cmp.PreselectMode.Item,
         sources = cmp.config.sources({
-            { name = 'codeium' },
+            -- { name = 'codeium' },
+            { name = 'copilot' },
             { name = 'nvim_lsp' },
             { name = 'luasnip' },
-            { name = 'lazydev', group_index = 0 },
+            { name = 'lazydev' },
         }, {
             { name = 'buffer', keyword_length = 5 },
             { name = 'path' },
@@ -118,6 +128,7 @@ function M.setup()
         sorting = {
             priority_weight = 2,
             comparators = {
+                copilot_cmp(),
                 compare.offset,
                 compare.exact,
                 compare.score,
