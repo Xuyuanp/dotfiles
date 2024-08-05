@@ -128,24 +128,19 @@ return {
     },
 
     {
-
         'Saecki/crates.nvim',
-        dependencies = {
-            'hrsh7th/nvim-cmp',
-        },
-        event = { 'BufReadPre Cargo.toml' },
+        event = { 'BufRead Cargo.toml' },
         config = function()
             require('crates').setup({
                 autoload = true,
                 null_ls = {
                     enabled = true,
                 },
-            })
-            local cmp = require('cmp')
-            cmp.setup.filetype('toml', {
-                sources = {
-                    { name = 'crates' },
-                    { name = 'nvim_lsp' },
+                lsp = {
+                    enabled = true,
+                    completion = true,
+                    actions = true,
+                    hover = true,
                 },
             })
         end,
@@ -224,6 +219,9 @@ return {
                 symbol_map = {
                     Codeium = '󱃖',
                     Copilot = '',
+                    -- crates.nvim
+                    Feature = '󰩉',
+                    Version = '',
                 },
             })
         end,
@@ -260,8 +258,8 @@ return {
 
     {
         'mrcjkb/rustaceanvim',
-        version = '^4', -- Recommended
-        lazy = false,
+        version = '*',
+        ft = 'rust',
         config = function()
             require('dotvim.config.lsp.rust').setup()
         end,

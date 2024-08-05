@@ -82,7 +82,7 @@
   "popup.nvim": { "branch": "master", "commit": "b7404d35d5d3548a82149238289fa71f7f6de4ac" },
   "rasi.vim": { "branch": "main", "commit": "7ce90590d007a7d15fc292313565e04a2ba57182" },
   "rust.vim": { "branch": "master", "commit": "889b9a7515db477f4cb6808bef1769e53493c578" },
-  "rustaceanvim": { "branch": "master", "commit": "047f9c9d8cd2861745eb9de6c1570ee0875aa795" },
+  "rustaceanvim": { "branch": "master", "commit": "7da155a907e3f48b1f7c25c59e248996fba833df" },
   "scrollbar.nvim": { "branch": "master", "commit": "bc97c132e8367efecb2ecb937d385e7dc04eb5a1" },
   "sqlx-rs.nvim": { "branch": "main", "commit": "9f85eee41f1e0e97ad25b0912314d5e4ce19f307" },
   "telescope-dap.nvim": { "branch": "master", "commit": "8c88d9716c91eaef1cdea13cb9390d8ef447dbfe" },
