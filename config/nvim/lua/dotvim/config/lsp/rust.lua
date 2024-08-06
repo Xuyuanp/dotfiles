@@ -6,7 +6,15 @@ if type(xdg_data_path) == 'table' then
 end
 local extension_path = vim.fs.joinpath(xdg_data_path, '/mason/packages/codelldb/extension')
 local codelldb_path = vim.fs.joinpath(extension_path, '/adapter/codelldb')
-local liblldb_path = vim.fs.joinpath(extension_path, '/lldb/lib/liblldb.so')
+local this_os = vim.uv.os_uname().sysname
+-- The liblldb extension is .so for Linux and .dylib for MacOS
+local liblldb_path = vim.fs.joinpath(extension_path, 'lldb/lib/liblldb.' .. (this_os == 'Linux' and 'so' or 'dylib'))
+
+-- The path is different on Windows
+if this_os:find('Windows') then
+    codelldb_path = vim.fs.joinpath(extension_path, 'adapter\\codelldb.exe')
+    liblldb_path = vim.fs.joinpath(extension_path, 'lldb\\bin\\liblldb.dll')
+end
 
 function M.setup()
     local default_config = require('dotvim.config.lsp.utils')
@@ -33,6 +41,17 @@ function M.setup()
             adapter = require('rustaceanvim.config').get_codelldb_adapter(codelldb_path, liblldb_path),
         },
     }
+
+    local ok, neotest = pcall(require, 'neotest')
+    if ok then
+        local adapter = require('rustaceanvim.neotest')
+        ---@diagnostic disable-next-line: missing-fields
+        neotest.setup({
+            adapters = {
+                adapter,
+            },
+        })
+    end
 
     vim.api.nvim_create_autocmd('FileType', {
         pattern = 'rust',

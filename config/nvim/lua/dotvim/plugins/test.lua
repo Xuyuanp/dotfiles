@@ -2,6 +2,7 @@ return {
     {
         'nvim-neotest/neotest',
         dependencies = {
+            'nvim-neotest/nvim-nio',
             'nvim-lua/plenary.nvim',
             'nvim-treesitter/nvim-treesitter',
         },
@@ -21,20 +22,6 @@ return {
                             test_table = true,
                         },
                         args = { '-count=1', '-race', '-timeout=60s' },
-                    }),
-                },
-            })
-        end,
-    },
-
-    {
-        'rouge8/neotest-rust',
-        ft = 'rust',
-        config = function()
-            require('neotest').setup({
-                adapters = {
-                    require('neotest-rust')({
-                        args = { '--no-capture' },
                     }),
                 },
             })
