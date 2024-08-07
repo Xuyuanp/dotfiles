@@ -191,7 +191,7 @@ function M.gen_location_handler(name)
         -- https://microsoft.github.io/language-server-protocol/specifications/specification-current/#textDocument_definition
 
         local util = vim.lsp.util
-        if not vim.tbl_islist(result) then
+        if not vim.islist(result) then
             util.jump_to_location(result, offset_encoding, true)
             return
         end
