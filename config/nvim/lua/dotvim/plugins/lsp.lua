@@ -236,10 +236,14 @@ return {
 
     {
         'j-hui/fidget.nvim',
-        tag = 'legacy',
+        version = '*',
         opts = {
-            text = {
-                spinner = 'meter',
+            progress = {
+                display = {
+                    progress_icon = {
+                        pattern = 'meter',
+                    },
+                },
             },
         },
     },
