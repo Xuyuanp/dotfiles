@@ -1,46 +1,16 @@
 local vim = vim
 local api = vim.api
 
+local dotutil = require('dotvim.util')
+
 local M = {}
 
-function M.setup(highlight_map)
-    require('dotvim.util').on_lsp_attach(function()
-        -- stylua: ignore
-        highlight_map = vim.tbl_deep_extend('keep', highlight_map or {}, {
-            File        = 'Comment',
-            Module      = 'Include',
-            Namespace   = 'Structure',
-            Package     = 'Include',
-            Class       = 'Structure',
-            Method      = 'Function',
-            Property    = 'Identifier',
-            Field       = 'Identifier',
-            Constructor = 'Function',
-            Enum        = 'Structure',
-            Interface   = 'Structure',
-            Function    = 'Function',
-            Variable    = 'Identifier',
-            Constant    = 'Constant',
-            String      = 'String',
-            Number      = 'Number',
-            Boolean     = 'Boolean',
-            Array       = 'Type',
-            Object      = 'Identifier',
-            Key         = 'Keyword',
-            Null        = 'SpecialChar',
-            EnumMember  = 'Constant',
-            Struct      = 'Structure',
-            Event       = 'Special',
-            Operator    = 'Operator',
-        })
-
-        for kind, hl_group in pairs(highlight_map) do
-            vim.api.nvim_set_hl(0, 'LspKind' .. kind, { link = hl_group, default = true })
-        end
-    end, { once = true, desc = 'Setup LspKind highlights' })
-end
-
-local escapeKey = string.char(27)
+local ANSI_CODES = {
+    ESCAPE = string.char(27),
+    FOREGROUND = '38',
+    BACKGROUND = '48',
+    RGB = '2',
+}
 
 -- ansi color style codes
 local styles = {
@@ -50,7 +20,7 @@ local styles = {
     reverse = 7,
 }
 
--- return { 'rr', 'gg', 'bb' }
+---@return number[] rgb # format: { r, g, b }
 local function parse_rgb(hl)
     local code = string.format('%x', hl)
     return vim.iter(code:gmatch('%x%x'))
@@ -60,30 +30,50 @@ local function parse_rgb(hl)
         :totable()
 end
 
-function M.get_ansi_color_by_hl_name(name)
-    local hl = api.nvim_get_hl(0, { name = name, link = false })
+---@param hl_info vim.api.keyset.hl_info
+---@return string
+local function hl2ansi(hl_info)
     local params = {}
-    if hl.fg then
-        table.insert(params, '38') -- foreground
-        table.insert(params, '2') -- rgb format
-        vim.list_extend(params, parse_rgb(hl.fg))
+    if hl_info.fg then
+        table.insert(params, ANSI_CODES.FOREGROUND)
+        table.insert(params, ANSI_CODES.RGB)
+        vim.list_extend(params, parse_rgb(hl_info.fg))
     end
-    if hl.bg then
-        table.insert(params, '48') -- background
-        table.insert(params, '2') -- rgb format
-        vim.list_extend(params, parse_rgb(hl.bg))
+    if hl_info.bg then
+        table.insert(params, ANSI_CODES.BACKGROUND)
+        table.insert(params, ANSI_CODES.RGB)
+        vim.list_extend(params, parse_rgb(hl_info.bg))
     end
     for style, id in pairs(styles) do
-        if hl[style] then
+        if hl_info[style] then
             table.insert(params, id)
         end
     end
     return table.concat(params, ';')
 end
 
+---@param hl_name string
+---@return string
+function M.get_ansi_color_by_hl_name(hl_name)
+    local hl = api.nvim_get_hl(0, { name = hl_name, link = false })
+    return hl2ansi(hl)
+end
+
+---@type table<string, string>
+M.ansi_colors = dotutil.new_cache_table(M.get_ansi_color_by_hl_name)
+
+-- flush cache when colorscheme changed
+vim.api.nvim_create_autocmd('ColorScheme', {
+    callback = function()
+        M.ansi_colors = dotutil.new_cache_table(M.get_ansi_color_by_hl_name)
+    end,
+})
+
+---@param text string
+---@param hl_name string
+---@return string
 function M.wrap_text_in_hl_name(text, hl_name)
-    local ansi_params = M.get_ansi_color_by_hl_name(hl_name)
-    return string.format('%s[%sm%s%s[0m', escapeKey, ansi_params, text, escapeKey)
+    return string.format('%s[%sm%s%s[0m', ANSI_CODES.ESCAPE, M.ansi_colors[hl_name], text, ANSI_CODES.ESCAPE)
 end
 
 return M

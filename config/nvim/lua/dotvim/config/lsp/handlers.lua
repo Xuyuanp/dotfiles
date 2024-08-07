@@ -6,29 +6,16 @@ local symbol_kinds = vim.lsp.protocol.SymbolKind
 local dotutil = require('dotvim.util')
 
 local highlights = require('dotvim.config.lsp.highlights')
-highlights.setup()
 
 local fzf_run = dotutil.fzf_run
 local fzf_wrap = dotutil.fzf_wrap
 
 local M = {}
 
-local symbol_highlights = setmetatable({}, {
-    __index = function(obj, kind)
-        local ft = vim.api.nvim_get_option_value('filetype', { buf = 0 })
-        if ft ~= '' then
-            local group = ft .. kind
-            local syn_id = vim.fn.hlID(ft .. kind)
-            if syn_id and syn_id > 0 then
-                rawset(obj, kind, group)
-                return group
-            end
-        end
-        local group = 'LspKind' .. kind
-        rawset(obj, kind, group)
-        return 'LspKind' .. kind
-    end,
-})
+---@type table<string, string>
+local symbol_highlights = dotutil.new_cache_table(function(kind)
+    return 'CmpItemKind' .. kind
+end)
 
 function M.symbol_handler(err, result, ctx)
     if err or not result or vim.tbl_isempty(result) then

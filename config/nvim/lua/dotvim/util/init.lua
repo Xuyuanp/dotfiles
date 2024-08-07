@@ -216,4 +216,20 @@ function M.hijack_notify()
     })
 end
 
+---@generic T
+---@param fn fun(key: string): T
+---@return table<string, T>
+function M.new_cache_table(fn)
+    return setmetatable({}, {
+        __index = function(obj, key)
+            local value = fn(key)
+            rawset(obj, key, value)
+            return value
+        end,
+        __newindex = function()
+            error('cache table is read-only')
+        end,
+    })
+end
+
 return M
