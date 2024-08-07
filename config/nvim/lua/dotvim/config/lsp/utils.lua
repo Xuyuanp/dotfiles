@@ -41,6 +41,15 @@ local function my_show_documentation()
     end
 end
 
+local function code_action(...)
+    local ok, actions_preview = pcall(require, 'actions-preview')
+    if ok then
+        actions_preview.code_actions(...)
+    else
+        vim.lsp.buf.code_action(...)
+    end
+end
+
 local function set_lsp_keymaps(_, bufnr)
     local set_keymap = vim.keymap.set
 
@@ -55,7 +64,7 @@ local function set_lsp_keymaps(_, bufnr)
         grr = { vim.lsp.buf.rename, 'rename' },
         gds = { vim.lsp.buf.document_symbol, 'show document symbols' },
         gws = { vim.lsp.buf.workspace_symbol, 'show workspace symbols' },
-        gca = { vim.lsp.buf.code_action, 'code action' },
+        gca = { code_action, 'code action' },
         go  = { vim.lsp.buf.outgoing_calls, 'show outgoing calls' },
         gcl = { find_and_run_codelens, 'find and run codelens' },
     }
