@@ -257,7 +257,7 @@ return {
         version = 'v2',
         opts = {
             -- char = "▏",
-            har = '│',
+            char = '│',
             show_trailing_blankline_indent = false,
             show_current_context = false,
             show_first_indent_level = true,
