@@ -283,4 +283,10 @@ return {
             require('dotvim.config.lsp.rust').setup()
         end,
     },
+
+    {
+        'maxandron/goplements.nvim',
+        ft = 'go',
+        opts = {},
+    },
 }

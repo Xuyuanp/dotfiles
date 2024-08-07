@@ -27,6 +27,7 @@
   "galaxyline.nvim": { "branch": "main", "commit": "20f5f750002532a35193f55cd499074fc97d933d" },
   "git-conflict.nvim": { "branch": "main", "commit": "bfd9fe6fba9a161fc199771d85996236a0d0faad" },
   "gitsigns.nvim": { "branch": "main", "commit": "0b04035bb7b3c83e999b9676e2fb46fd0aa9f910" },
+  "goplements.nvim": { "branch": "main", "commit": "a3291c4db092d5bc95ec0e6e2bcfc14587d06dfc" },
   "haskell-vim": { "branch": "master", "commit": "f35d02204b4813d1dbe8b0e98cc39701a4b8e15e" },
   "hlargs.nvim": { "branch": "main", "commit": "cc0d9ee75e5ffba730393049119361b9e3a5b1b6" },
   "hop.nvim": { "branch": "v1", "commit": "75f73d3959a0df7ef3642fd5138acdb1ce50fdc8" },
