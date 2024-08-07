@@ -37,6 +37,17 @@ return {
                         DapLogPoint = { fg = colors.palette.autumnRed },
                         LspSignatureActiveParameter = { underline = true },
                         Conceal = { bold = false, italic = false },
+
+                        CmpItemKindNamespace = { link = '@lsp.type.namespace' },
+                        CmpItemKindPackage = { link = '@module' },
+                        CmpItemKindConstant = { link = 'Constant' },
+                        CmpItemKindString = { link = 'String' },
+                        CmpItemKindNumber = { link = 'Number' },
+                        CmpItemKindBoolean = { link = 'Boolean' },
+                        -- CmpItemKindArray         = {},
+                        -- CmpItemKindObject        = {},
+                        -- CmpItemKindKey           = {},
+                        -- CmpItemKindNull          = {},
                     }
                 end,
                 theme = theme,

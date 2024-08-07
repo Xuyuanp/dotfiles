@@ -10,14 +10,13 @@ local ANSI_CODES = {
     FOREGROUND = '38',
     BACKGROUND = '48',
     RGB = '2',
-}
 
--- ansi color style codes
-local styles = {
-    bold = 1,
-    italic = 3,
-    underlined = 4,
-    reverse = 7,
+    STYLES = {
+        bold = 1,
+        italic = 3,
+        underlined = 4,
+        reverse = 7,
+    },
 }
 
 ---@return number[] rgb # format: { r, g, b }
@@ -44,7 +43,7 @@ local function hl2ansi(hl_info)
         table.insert(params, ANSI_CODES.RGB)
         vim.list_extend(params, parse_rgb(hl_info.bg))
     end
-    for style, id in pairs(styles) do
+    for style, id in pairs(ANSI_CODES.STYLES) do
         if hl_info[style] then
             table.insert(params, id)
         end
