@@ -186,7 +186,6 @@ end
 ---@field [2] string|function rhs
 ---@field mode? string|string[] mode short name(s), default 'n'
 -- and opts of `vim.keymap.set`
-
 ---@param spec KeymapSpec
 function M.set_keymap(spec)
     assert(spec[1], 'lhs is required')
