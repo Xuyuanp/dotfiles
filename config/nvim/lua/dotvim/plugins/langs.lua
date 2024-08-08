@@ -22,11 +22,6 @@ return {
     },
 
     {
-        'rust-lang/rust.vim',
-        ft = { 'rust', 'rs' },
-    },
-
-    {
         'neovimhaskell/haskell-vim',
         ft = { 'haskell', 'hs' },
     },
@@ -37,14 +32,6 @@ return {
         ft = 'kerboscript',
         init = function(plugin)
             vim.opt.rtp:append(plugin.dir .. '/VIM/vim-kerboscript')
-        end,
-    },
-
-    {
-        'euclidianAce/BetterLua.vim',
-        ft = { 'lua' },
-        init = function()
-            vim.g.BetterLua_enable_emmylua = 1
         end,
     },
 
