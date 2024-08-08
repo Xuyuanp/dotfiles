@@ -106,8 +106,9 @@ function M.setup()
                     luasnip = '[LuaSnip]',
                 }, {
                     __index = function(obj, key)
-                        rawset(obj, key, '[' .. toCamelCase(key) .. ']')
-                        return rawget(obj, key)
+                        local v = '[' .. toCamelCase(key) .. ']'
+                        rawset(obj, key, v)
+                        return v
                     end,
                 }),
             }),
