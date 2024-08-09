@@ -1,5 +1,4 @@
 {
-  "BetterLua.vim": { "branch": "master", "commit": "d2d6c115575d09258a794a6f20ac60233eee59d5" },
   "ChatGPT.nvim": { "branch": "main", "commit": "f081338f07216a46d3915ce46c1fcb083bcb5016" },
   "EditorTools": { "branch": "develop", "commit": "c96bf06ed0b516a12ab29a867416c6e2a9059b87" },
   "FTerm.nvim": { "branch": "master", "commit": "d1320892cc2ebab472935242d9d992a2c9570180" },
@@ -82,7 +81,6 @@
   "plenary.nvim": { "branch": "master", "commit": "a3e3bc82a3f95c5ed0d7201546d5d2c19b20d683" },
   "popup.nvim": { "branch": "master", "commit": "b7404d35d5d3548a82149238289fa71f7f6de4ac" },
   "rasi.vim": { "branch": "main", "commit": "7ce90590d007a7d15fc292313565e04a2ba57182" },
-  "rust.vim": { "branch": "master", "commit": "889b9a7515db477f4cb6808bef1769e53493c578" },
   "rustaceanvim": { "branch": "master", "commit": "cb83e412f0552df3957a5d3e5f29c1ea4b777975" },
   "scrollbar.nvim": { "branch": "master", "commit": "bc97c132e8367efecb2ecb937d385e7dc04eb5a1" },
   "sqlx-rs.nvim": { "branch": "main", "commit": "9f85eee41f1e0e97ad25b0912314d5e4ce19f307" },
