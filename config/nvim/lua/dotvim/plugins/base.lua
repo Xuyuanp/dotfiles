@@ -13,7 +13,6 @@ return {
 
     {
         'junegunn/fzf.vim',
-        lazy = false,
         dependencies = {
             {
                 'junegunn/fzf',
@@ -21,6 +20,13 @@ return {
                     vim.fn['fzf#install']()
                 end,
             },
+        },
+        cmd = { 'FZF', 'AF' },
+        keys = {
+            { '<leader>ag', ':Ag<CR>', desc = '[FZF] search by ag' },
+            { '<leader>rg', ':Rg<CR>', desc = '[FZF] search by rg' },
+            { '<leader>af', ':AF<CR>', desc = '[FZF] find files' },
+            { '<A-m>', ':Commands<CR>', desc = '[FZF] commands' },
         },
         config = function()
             vim.g.fzf_layout = {
@@ -35,18 +41,17 @@ return {
                 ['ctrl-v'] = 'vsplit',
             }
 
-            vim.api.nvim_command(
-                'command! -nargs=? -complete=dir AF '
-                    .. 'call fzf#run(fzf#wrap(fzf#vim#with_preview({'
-                    .. [['source': 'fd --type f --hidden --follow --exclude .git --no-ignore . '.expand(<q-args>)]]
-                    .. '})))'
-            )
-
-            local set_keymap = vim.keymap.set
-            set_keymap('n', '<leader>ag', ':Ag<CR>', { silent = true, noremap = true, desc = '[FZF] search by ag' })
-            set_keymap('n', '<leader>rg', ':Rg<CR>', { silent = true, noremap = true, desc = '[FZF] search by rg' })
-            set_keymap('n', '<leader>af', ':AF<CR>', { silent = true, noremap = true, desc = '[FZF] find files' })
-            set_keymap('n', '<A-m>', ':Commands<CR>', { silent = true, noremap = true, desc = '[FZF] commands' })
+            vim.api.nvim_create_user_command('AF', function(ctx)
+                local fzf_run = vim.fn['fzf#run']
+                local fzf_wrap = vim.fn['fzf#wrap']
+                local fzf_vim_with_preview = vim.fn['fzf#vim#with_preview']
+                fzf_run(fzf_wrap(fzf_vim_with_preview({
+                    source = 'fd --type f --hidden --follow --exclude .git --no-ignore . ' .. ctx.args,
+                })))
+            end, {
+                nargs = '?',
+                complete = 'dir',
+            })
         end,
     },
 }

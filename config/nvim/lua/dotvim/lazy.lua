@@ -21,10 +21,6 @@ local function install_lazy_nvim()
     return completed.code == 0, completed.stderr or completed.stdout
 end
 
-if vfn.has('osx') then
-    vfn.setenv('MACOSX_DEPLOYMENT_TARGET', '10.8')
-end
-
 local M = {}
 
 local function get_plugins()

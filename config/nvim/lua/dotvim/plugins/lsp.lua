@@ -11,6 +11,7 @@ return {
             'lvimuser/lsp-inlayhints.nvim',
             'onsails/lspkind-nvim',
             'j-hui/fidget.nvim',
+            'junegunn/fzf.vim',
         },
         config = function()
             require('dotvim.config.lsp').setup()

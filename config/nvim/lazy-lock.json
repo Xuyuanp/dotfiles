@@ -47,7 +47,7 @@
   "mason-null-ls.nvim": { "branch": "main", "commit": "de19726de7260c68d94691afb057fa73d3cc53e7" },
   "mason-nvim-dap.nvim": { "branch": "main", "commit": "8b9363d83b5d779813cdd2819b8308651cec2a09" },
   "mason.nvim": { "branch": "main", "commit": "e2f7f9044ec30067bc11800a9e266664b88cda22" },
-  "mini.indentscope": { "branch": "main", "commit": "1222393d9c5e8d92b913ccab6701a7164b21781c" },
+  "mini.indentscope": { "branch": "main", "commit": "f0d7faa064c892b96997810afcddfadc3f2a15b3" },
   "neochat.nvim": { "branch": "main", "commit": "90bed19ec60e0b17147b0426286859abd404ffea" },
   "neoconf.nvim": { "branch": "main", "commit": "7644e39f1cdbfa165003f091cb1cf59758a7865b" },
   "neorg": { "branch": "main", "commit": "e5e797e6eddcb6efb1d2c3fc2612b31ad9a76cef" },

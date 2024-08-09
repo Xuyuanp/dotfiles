@@ -77,7 +77,7 @@ return {
         'Fymyte/rasi.vim',
         ft = 'rasi',
         dependencies = {
-            { 'ap/vim-css-color', ft = 'rasi' },
+            'ap/vim-css-color',
         },
     },
 
@@ -93,7 +93,6 @@ return {
 
     {
         'Xuyuanp/sqlx-rs.nvim',
-        dev = true,
         ft = { 'rust' },
         cmd = { 'SqlxFormat' },
         build = function()
