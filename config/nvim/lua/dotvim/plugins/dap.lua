@@ -30,20 +30,23 @@ return {
             { 'jay-babu/mason-nvim-dap.nvim', version = 'v2' },
         },
         cmd = { 'DapContinue' },
-        keys = {
-            -- stylua: ignore start
-            { '<F5>',       require('dotvim.config.dap').dap_proxy.continue,          mode = 'n', desc = '[Dap] continue' },
-            { '<F6>',       require('dotvim.config.dap').dap_proxy.run_to_cursor,     mode = 'n', desc = '[Dap] run to cursor' },
-            { '<F10>',      require('dotvim.config.dap').dap_proxy.step_over,         mode = 'n', desc = '[Dap] step over' },
-            { '<F11>',      require('dotvim.config.dap').dap_proxy.step_into,         mode = 'n', desc = '[Dap] step into' },
-            { '<F12>',      require('dotvim.config.dap').dap_proxy.step_out,          mode = 'n', desc = '[Dap] step out' },
-            { '<leader>dl', require('dotvim.config.dap').dap_proxy.run_last,          mode = 'n', desc = '[Dap] run last' },
-            { '<leader>b',  require('dotvim.config.dap').dap_proxy.toggle_breakpoint, mode = 'n', desc = '[Dap] toggle breakpoint', },
-            { '<leader>dr', require('dotvim.config.dap').open_repl,                   mode = 'n', desc = '[Dap] repl open' },
-            { '<F9>',       require('dotvim.config.dap').close_dap,                   mode = 'n', desc = '[Dap] close' },
-            { '<leader>B',  require('dotvim.config.dap').select_breakpoint,           mode = 'n', desc = '[Dap] select breakpoint' },
-            -- stylua: ignore end
-        },
+        keys = function()
+            local cfg = require('dotvim.config.dap')
+            return {
+                -- stylua: ignore start
+                { '<F5>',       cfg.dap_proxy.continue,          desc = '[Dap] continue' },
+                { '<F6>',       cfg.dap_proxy.run_to_cursor,     desc = '[Dap] run to cursor' },
+                { '<F10>',      cfg.dap_proxy.step_over,         desc = '[Dap] step over' },
+                { '<F11>',      cfg.dap_proxy.step_into,         desc = '[Dap] step into' },
+                { '<F12>',      cfg.dap_proxy.step_out,          desc = '[Dap] step out' },
+                { '<leader>dl', cfg.dap_proxy.run_last,          desc = '[Dap] run last' },
+                { '<leader>b',  cfg.dap_proxy.toggle_breakpoint, desc = '[Dap] toggle breakpoint', },
+                { '<leader>dr', cfg.open_repl,                   desc = '[Dap] repl open' },
+                { '<F9>',       cfg.close_dap,                   desc = '[Dap] close' },
+                { '<leader>B',  cfg.select_breakpoint,           desc = '[Dap] select breakpoint' },
+                -- stylua: ignore end
+            }
+        end,
         config = function()
             require('dotvim.config.dap').setup()
             require('dotvim.config.dap').ui.setup()
