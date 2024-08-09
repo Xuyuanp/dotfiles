@@ -100,17 +100,13 @@ return {
 
     {
         'jbyuki/venn.nvim',
-        event = 'VeryLazy',
-        config = function()
-            vim.api.nvim_set_keymap('v', '<Leader>vb', ':VBox<CR>', { noremap = true, desc = '[Venn] draw vbox' })
-        end,
+        keys = {
+            { '<Leader>vb', ':<C-e>VBox<CR>', mode = 'v', desc = '[Venn] draw vbox' },
+        },
     },
 
     {
         'rcarriga/nvim-notify',
-        dependencies = {
-            'nvim-telescope/telescope.nvim',
-        },
         opts = {
             timeout = 3000,
             max_height = function()
