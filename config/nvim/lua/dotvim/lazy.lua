@@ -8,16 +8,17 @@ if type(std_data_path) == 'table' then
 end
 local lazypath = vim.fs.joinpath(std_data_path, '/lazy/lazy.nvim')
 
+---@return boolean, string?
 local function install_lazy_nvim()
-    local output = vim.fn.system({
+    local completed = vim.system({
         'git',
         'clone',
         '--filter=blob:none',
         lazyrepo,
         '--branch=stable', -- latest stable release
         lazypath,
-    })
-    return vim.v.shell_error == 0, output
+    }):wait()
+    return completed.code == 0, completed.stderr or completed.stdout
 end
 
 if vfn.has('osx') then
@@ -69,6 +70,9 @@ function M.setup()
                     'tohtml',
                     'tutor',
                     'zipPlugin',
+                    'shada',
+                    'spellfile',
+                    'rplugin',
                 },
             },
         },
