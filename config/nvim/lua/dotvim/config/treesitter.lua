@@ -51,7 +51,7 @@ function M.setup()
         },
         indent = {
             enable = true,
-            disable = { 'python' },
+            disable = { 'python', 'yaml', 'helm' },
         },
         textobjects = {
             select = {
