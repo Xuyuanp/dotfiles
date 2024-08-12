@@ -36,9 +36,17 @@ local function my_show_documentation()
     local clients = vim.lsp.get_clients({ name = 'taplo' })
     if clients and vim.fn.expand('%:t') == 'Cargo.toml' and require('crates').popup_available() then
         require('crates').show_popup()
-    else
-        vim.lsp.buf.hover()
+        return
     end
+    local ok, ufo = pcall(require, 'ufo')
+    if ok then
+        local winid = ufo.peekFoldedLinesUnderCursor()
+        if winid then
+            return
+        end
+    end
+
+    vim.lsp.buf.hover()
 end
 
 local function code_action(...)
@@ -157,16 +165,23 @@ local on_attach = function(client, bufnr)
     vim.bo[bufnr].tagfunc = 'v:lua.vim.lsp.tagfunc'
 end
 
-local default_capabilities = vim.lsp.protocol.make_client_capabilities()
+local function default_capabilities()
+    local capabilities = vim.lsp.protocol.make_client_capabilities()
 
-local cmp_lsp = vim.F.npcall(require, 'cmp_nvim_lsp')
-if cmp_lsp then
-    default_capabilities = cmp_lsp.default_capabilities(default_capabilities)
+    local cmp_lsp = vim.F.npcall(require, 'cmp_nvim_lsp')
+    if cmp_lsp then
+        capabilities = cmp_lsp.default_capabilities(capabilities)
+    end
+    capabilities.textDocument.foldingRange = {
+        dynamicRegistration = false,
+        lineFoldingOnly = true,
+    }
+    return capabilities
 end
 
 return {
     on_attach = on_attach,
-    capabilities = default_capabilities,
+    capabilities = default_capabilities(),
     -- stylua: ignore
     handlers = {
         [LspMethods.workspace_symbol]            = handlers.symbol_handler,

@@ -130,10 +130,6 @@ function M.setup()
         separator = nil,
         zindex = 20, -- The Z-index of the context window
     })
-
-    vim.o.foldmethod = 'expr'
-    vim.o.foldexpr = 'nvim_treesitter#foldexpr()'
-    vim.o.foldlevel = 100
 end
 
 return M

@@ -13,9 +13,6 @@ function M.setup()
 
     opt.scrolloff = 10
 
-    -- fuck mouse
-    opt.mouse = ''
-
     opt.modifiable = true
     opt.wrap = false
     -- Always show current position
