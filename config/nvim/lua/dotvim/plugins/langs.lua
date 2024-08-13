@@ -115,4 +115,8 @@ return {
             })
         end,
     },
+    {
+        'martinda/Jenkinsfile-vim-syntax',
+        ft = 'Jenkinsfile',
+    },
 }
