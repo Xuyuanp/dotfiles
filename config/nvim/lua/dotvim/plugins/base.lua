@@ -14,12 +14,7 @@ return {
     {
         'junegunn/fzf.vim',
         dependencies = {
-            {
-                'junegunn/fzf',
-                build = function()
-                    vim.fn['fzf#install']()
-                end,
-            },
+            { 'junegunn/fzf', build = './install --bin' },
         },
         cmd = { 'FZF', 'AF' },
         keys = {

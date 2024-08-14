@@ -8,9 +8,7 @@ return {
             'folke/neoconf.nvim',
             'williamboman/mason-lspconfig.nvim',
             'nvimtools/none-ls.nvim',
-            'lvimuser/lsp-inlayhints.nvim',
             'onsails/lspkind-nvim',
-            'j-hui/fidget.nvim',
             'junegunn/fzf.vim',
         },
         config = function()
@@ -50,7 +48,6 @@ return {
     {
         'williamboman/mason-lspconfig.nvim',
         dependencies = {
-            'neovim/nvim-lspconfig',
             'williamboman/mason.nvim',
         },
         config = function()
@@ -238,6 +235,7 @@ return {
     {
         'j-hui/fidget.nvim',
         version = '*',
+        event = 'LspAttach',
         opts = {
             progress = {
                 display = {
