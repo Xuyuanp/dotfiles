@@ -108,7 +108,13 @@ function M.setup()
 
     opt.fillchars:append({
         eob = ' ',
+        horiz = '━',
+        horizup = '┻',
+        horizdown = '┳',
         vert = '┃',
+        vertleft = '┫',
+        vertright = '┣',
+        verthoriz = '╋',
     })
 
     -- don't syntax-highlight long lines
