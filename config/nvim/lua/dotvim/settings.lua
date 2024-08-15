@@ -127,6 +127,12 @@ function M.setup()
 
     opt.conceallevel = 1
 
+    vim.filetype.add({
+        filename = {
+            ['.envrc'] = 'sh',
+        },
+    })
+
     vim.diagnostic.config({
         signs = {
             text = {
