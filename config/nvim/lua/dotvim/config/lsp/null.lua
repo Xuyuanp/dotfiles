@@ -1,7 +1,9 @@
 local M = {}
 
+---@param client vim.lsp.Client
+---@param bufnr number
 local function on_lsp_attach(client, bufnr)
-    local support_formatting = client.supports_method('textDocument/formatting')
+    local support_formatting = client.supports_method(vim.lsp.protocol.Methods.textDocument_formatting)
     if not support_formatting then
         return
     end
@@ -63,6 +65,7 @@ function M.setup()
             -- code_actions
             null_ls.builtins.code_actions.gitsigns,
             null_ls.builtins.code_actions.gomodifytags,
+            null_ls.builtins.code_actions.impl,
         },
     })
     require('dotvim.util').on_lsp_attach(on_lsp_attach, { desc = 'set auto formatting trigger' })
