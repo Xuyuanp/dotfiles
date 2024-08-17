@@ -29,7 +29,7 @@ return {
         dependencies = { 'nvim-treesitter/nvim-treesitter' },
         config = function()
             require('nvim_context_vt').setup({
-                -- Enable by default. You can disable and use :NvimContextVtToggle to maually enable.
+                -- Enable by default. You can disable and use :NvimContextVtToggle to manually enable.
                 -- Default: true
                 enabled = true,
                 -- Disable virtual text for given filetypes

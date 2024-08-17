@@ -240,7 +240,7 @@ return {
 
     {
         'nvimdev/galaxyline.nvim',
-        event = { 'BufReadPost', 'BufNewFile' },
+        event = 'UiEnter',
         branch = 'main',
         config = function()
             require('dotvim.config.statusline')
@@ -255,7 +255,6 @@ return {
         event = { 'BufReadPost', 'BufNewFile' },
         version = 'v2',
         opts = {
-            -- char = "▏",
             char = '│',
             show_trailing_blankline_indent = false,
             show_current_context = false,

@@ -129,13 +129,19 @@ local function printer(str)
     end
 end
 
--- local function negated(fn)
---     return function() return not fn() end
--- end
+local function diagnostic_count(bufnr)
+    local cnt = vim.diagnostic.count(bufnr)
+    return cnt and #cnt or 0
+end
 
-local function lsp_diagnostic_count(bufnr)
-    local cnt = #vim.diagnostic.get(bufnr)
-    return cnt
+local function gen_diagnostic_provider(severity)
+    return function()
+        local cnt = vim.diagnostic.count(0, { severity = severity })[severity]
+        if cnt and cnt > 0 then
+            return cnt .. ' '
+        end
+        return ''
+    end
 end
 
 local space = printer(' ')
@@ -273,7 +279,7 @@ section.left = {
     {
         DiagnosticSpace = {
             provider = function()
-                if lsp_diagnostic_count() > 0 then
+                if diagnostic_count() > 0 then
                     return ' '
                 end
                 return ''
@@ -284,7 +290,7 @@ section.left = {
 
     {
         DiagnosticError = {
-            provider = 'DiagnosticError',
+            provider = gen_diagnostic_provider(vim.diagnostic.severity.ERROR),
             icon = _ICONS.Diagnostics.error,
             highlight = { _HEX_COLORS.Diagnostic.Error, _BG.diagnostic },
         },
@@ -292,7 +298,7 @@ section.left = {
 
     {
         DiagnosticWarn = {
-            provider = 'DiagnosticWarn',
+            provider = gen_diagnostic_provider(vim.diagnostic.severity.WARN),
             icon = _ICONS.Diagnostics.warning,
             highlight = { _HEX_COLORS.Diagnostic.Warn, _BG.diagnostic },
         },
@@ -300,7 +306,7 @@ section.left = {
 
     {
         DiagnosticInfo = {
-            provider = 'DiagnosticInfo',
+            provider = gen_diagnostic_provider(vim.diagnostic.severity.INFO),
             icon = _ICONS.Diagnostics.info,
             highlight = { _HEX_COLORS.Diagnostic.Info, _BG.diagnostic },
         },
@@ -308,7 +314,7 @@ section.left = {
 
     {
         DiagnosticHint = {
-            provider = 'DiagnosticHint',
+            provider = gen_diagnostic_provider(vim.diagnostic.severity.HINT),
             icon = _ICONS.Diagnostics.hint,
             highlight = { _HEX_COLORS.Diagnostic.Hint, _BG.diagnostic },
         },
