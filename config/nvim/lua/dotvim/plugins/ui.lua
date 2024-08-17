@@ -153,41 +153,40 @@ return {
         version = 'v4',
         dependencies = { 'nvim-tree/nvim-web-devicons' },
         event = { 'BufReadPost', 'BufNewFile' },
-        config = function()
+        ---@type bufferline.UserConfig
+        opts = {
+            options = {
+                mode = 'buffers',
+                themable = true,
+                numbers = 'ordinal',
+                diagnostics = 'nvim_lsp',
+                show_buffer_icons = true,
+                separator_style = 'slant',
+                always_show_bufferline = true,
+                show_buffer_close_icons = false,
+                offsets = {
+                    { filetype = 'Yanil', text = 'File Explorer', text_align = 'left' },
+                    { filetype = 'vista_kind', text = 'Vista', text_align = 'right' },
+                },
+            },
+            highlights = {
+                fill = {
+                    bg = '#282828',
+                },
+                separator_selected = {
+                    fg = '#282828',
+                },
+                separator_visible = {
+                    fg = '#282828',
+                },
+                separator = {
+                    fg = '#282828',
+                },
+            },
+        },
+        config = function(_, opts)
             local bufferline = require('bufferline')
-            bufferline.setup({
-                options = {
-                    mode = 'buffers',
-                    themable = true,
-                    ---@diagnostic disable-next-line: assign-type-mismatch
-                    numbers = function(opts)
-                        return string.format('%s', opts.raise(opts.ordinal))
-                    end,
-                    diagnostics = 'nvim_lsp',
-                    show_buffer_icons = true,
-                    separator_style = 'slant',
-                    always_show_bufferline = true,
-                    show_buffer_close_icons = false,
-                    offsets = {
-                        { filetype = 'Yanil', text = 'File Explorer', text_align = 'left' },
-                        { filetype = 'vista_kind', text = 'Vista', text_align = 'right' },
-                    },
-                },
-                highlights = {
-                    fill = {
-                        bg = '#282828',
-                    },
-                    separator_selected = {
-                        fg = '#282828',
-                    },
-                    separator_visible = {
-                        fg = '#282828',
-                    },
-                    separator = {
-                        fg = '#282828',
-                    },
-                },
-            })
+            bufferline.setup(opts)
 
             local keymaps = {
                 -- Magic buffer-picking mode
@@ -208,7 +207,7 @@ return {
             end
             local function gen_goto(idx)
                 return function()
-                    bufferline.go_to_buffer(idx)
+                    bufferline.go_to(idx, true)
                 end
             end
 
@@ -552,6 +551,7 @@ return {
         version = '*',
         event = 'VeryLazy',
         config = function()
+            ---@diagnostic disable-next-line: missing-fields
             require('git-conflict').setup({
                 default_mappings = {
                     ours = '<leader>co',
@@ -776,8 +776,8 @@ return {
             vim.o.foldlevelstart = 99
             vim.o.foldenable = true
         end,
-        config = function()
-            local handler = function(virtText, lnum, endLnum, width, truncate)
+        opts = {
+            fold_virt_text_handler = function(virtText, lnum, endLnum, width, truncate)
                 local newVirtText = {}
                 local suffix = (' 󰁂 %d '):format(endLnum - lnum)
                 local sufWidth = vim.fn.strdisplaywidth(suffix)
@@ -803,17 +803,13 @@ return {
                 end
                 table.insert(newVirtText, { suffix, 'MoreMsg' })
                 return newVirtText
-            end
-
-            require('ufo').setup({
-                fold_virt_text_handler = handler,
-                mappings = {
-                    scrollU = '<C-u>',
-                    scrollD = '<C-d>',
-                    jumpTop = '[',
-                    jumpBot = ']',
-                },
-            })
-        end,
+            end,
+            mappings = {
+                scrollU = '<C-u>',
+                scrollD = '<C-d>',
+                jumpTop = '[',
+                jumpBot = ']',
+            },
+        },
     },
 }
