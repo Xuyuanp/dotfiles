@@ -142,16 +142,10 @@ function M.setup()
                 [vim.diagnostic.severity.HINT] = '',
             },
         },
+        float = {
+            source = true,
+        },
     })
-
-    if vim.env.SSH_TTY then
-        local osc52 = require('dotvim.util.osc52')
-        vim.g.clipboard = {
-            name = 'osc52',
-            copy = { ['+'] = osc52.copy, ['*'] = osc52.copy },
-            paste = { ['+'] = osc52.paste, ['*'] = osc52.paste },
-        }
-    end
 
     if vim.g.neovide then
         vim.g.neovide_transparency = 0.9
