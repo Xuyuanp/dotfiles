@@ -20,6 +20,7 @@
     ~/.config/kitty: config/kitty
     ~/.config/zellij: config/zellij
     ~/.config/nvim: config/nvim
+    ~/.config/neovide: config/neovide
     ~/.local/bin/osc52-yank: scripts/osc52-yank
     ~/.editorconfig: .editorconfig
 

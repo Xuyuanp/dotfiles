@@ -1,0 +1,14 @@
+fork = true
+
+[font]
+normal = "FiraCode Nerd Font Mono"
+style = "Retina"
+size = 12
+
+[font.italic]
+family = "Fira Code"
+style = "RegularItalic"
+
+[font.bold_italic]
+family = "Fira Code"
+style = "BoldItalic"

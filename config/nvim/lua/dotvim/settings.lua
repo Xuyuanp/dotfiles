@@ -154,9 +154,6 @@ function M.setup()
     end
 
     if vim.g.neovide then
-        opt.guifont = 'FiraCode Nerd Font Mono:h13'
-
-        vim.g.neovide_fullscreen = true
         vim.g.neovide_transparency = 0.9
         vim.g.neovide_no_idle = true
         vim.g.neovide_cursor_antialiasing = true
