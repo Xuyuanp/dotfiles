@@ -157,6 +157,11 @@ function M.setup()
         vim.g.neovide_transparency = 0.9
         vim.g.neovide_no_idle = true
         vim.g.neovide_cursor_antialiasing = true
+
+        if vim.fn.has('mac') then
+            vim.g.neovide_window_blurred = true
+            vim.g.neovide_input_macos_option_key_is_meta = 'both'
+        end
     end
 end
 
