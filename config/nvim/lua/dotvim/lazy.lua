@@ -60,10 +60,10 @@ function M.setup()
                 disabled_plugins = {
                     'gzip',
                     'matchit',
-                    'matchparen',
+                    -- 'matchparen',
                     'netrwPlugin',
                     'tarPlugin',
-                    'tohtml',
+                    -- 'tohtml',
                     'tutor',
                     'zipPlugin',
                     'shada',
