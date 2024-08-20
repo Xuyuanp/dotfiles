@@ -39,7 +39,6 @@ function M.setup()
         end
     end
 
-    local luasnip = require('luasnip')
     local lspkind = require('lspkind')
 
     cmp.setup({
@@ -49,9 +48,10 @@ function M.setup()
 
         snippet = {
             expand = function(args)
-                luasnip.lsp_expand(args.body)
+                vim.snippet.expand(args.body)
             end,
         },
+
         mapping = {
             ['<C-p>'] = cmp.mapping.select_prev_item(),
             ['<C-n>'] = cmp.mapping.select_next_item(),
@@ -69,8 +69,6 @@ function M.setup()
             ['<Tab>'] = cmp.mapping(function(fallback)
                 if cmp.visible() then
                     cmp.select_next_item()
-                elseif luasnip.expand_or_jumpable() then
-                    luasnip.expand_or_jump()
                 elseif has_words_before() then
                     cmp.complete()
                 else
@@ -80,8 +78,20 @@ function M.setup()
             ['<S-Tab>'] = cmp.mapping(function(fallback)
                 if cmp.visible() then
                     cmp.select_prev_item()
-                elseif luasnip.jumpable(-1) then
-                    luasnip.jump(-1)
+                else
+                    fallback()
+                end
+            end, { 'i', 's' }),
+            ['<C-j>'] = cmp.mapping(function(fallback)
+                if vim.snippet.active({ direction = 1 }) then
+                    vim.snippet.jump(1)
+                else
+                    fallback()
+                end
+            end, { 'i', 's' }),
+            ['<C-k>'] = cmp.mapping(function(fallback)
+                if vim.snippet.active({ direction = -1 }) then
+                    vim.snippet.jump(-1)
                 else
                     fallback()
                 end
@@ -103,7 +113,6 @@ function M.setup()
                 menu = setmetatable({
                     copilot = '[Github]',
                     nvim_lsp = '[LSP]',
-                    luasnip = '[LuaSnip]',
                 }, {
                     __index = function(obj, key)
                         local v = '[' .. toCamelCase(key) .. ']'
@@ -118,7 +127,7 @@ function M.setup()
             { name = 'codeium' },
             { name = 'copilot' },
             { name = 'nvim_lsp' },
-            { name = 'luasnip' },
+            { name = 'snippets' },
             { name = 'lazydev' },
         }, {
             { name = 'buffer', keyword_length = 5 },

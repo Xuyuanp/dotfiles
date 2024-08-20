@@ -78,12 +78,7 @@ return {
             'hrsh7th/cmp-nvim-lsp',
             'hrsh7th/cmp-path',
             'hrsh7th/cmp-calc',
-            {
-                'saadparwaiz1/cmp_luasnip',
-                dependencies = {
-                    'L3MON4D3/LuaSnip',
-                },
-            },
+            'garymjr/nvim-snippets',
             'andersevenrud/compe-tmux',
             'windwp/nvim-autopairs',
             'onsails/lspkind-nvim',
@@ -145,42 +140,14 @@ return {
     },
 
     {
-        'L3MON4D3/LuaSnip',
+        'garymjr/nvim-snippets',
         dependencies = {
             'rafamadriz/friendly-snippets',
         },
-        keys = {
-            {
-                '<C-j>',
-                function()
-                    return require('luasnip').jumpable(1) and '<Plug>luasnip-jump-next' or '<C-j>'
-                end,
-                expr = true,
-                silent = true,
-                desc = '[LuaSnip] jump next',
-                mode = { 'i', 's' },
-            },
-            {
-                '<C-k>',
-                function()
-                    return require('luasnip').jumpable(-1) and '<Plug>luasnip-jump-prev' or '<C-k>'
-                end,
-                expr = true,
-                silent = true,
-                desc = '[LuaSnip] jump prev',
-                mode = { 'i', 's' },
-            },
+        opts = {
+            friendly_snippets = true,
+            search_paths = { './snippets' },
         },
-        config = function()
-            require('luasnip.loaders.from_vscode').lazy_load()
-            require('luasnip.loaders.from_vscode').lazy_load({ paths = { './snippets' } })
-
-            local luasnip = require('luasnip')
-            luasnip.setup({
-                history = true,
-                delete_check_events = 'TextChanged',
-            })
-        end,
     },
 
     {
@@ -196,7 +163,7 @@ return {
                         { name = 'git' },
                     }, {
                         { name = 'buffer' },
-                        { name = 'luasnip' },
+                        { name = 'snippets' },
                     }),
                 })
             end
