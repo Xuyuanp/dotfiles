@@ -67,10 +67,6 @@ local langs = {
                 },
                 diagnostics = {
                     enable = true,
-                    globals = {
-                        'vim',
-                        'pprint',
-                    },
                     disable = {
                         'unused-vararg',
                         'redefined-local',
