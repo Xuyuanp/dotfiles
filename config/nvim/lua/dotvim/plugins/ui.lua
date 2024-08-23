@@ -497,47 +497,45 @@ return {
         'folke/todo-comments.nvim',
         event = { 'BufReadPost', 'BufNewFile' },
         dependencies = 'nvim-lua/plenary.nvim',
-        config = function()
-            require('todo-comments').setup({
-                keywords = {
-                    FIX = {
-                        icon = ' ', -- icon used for the sign, and in search results
-                        color = 'error', -- can be a hex color, or a named color (see below)
-                        alt = { 'FIXME', 'BUG', 'FIXIT', 'ISSUE' }, -- a set of other keywords that all map to this FIX keywords
-                        -- signs = false, -- configure signs for some keywords individually
-                    },
-                    TODO = { icon = ' ', color = 'info' },
-                    HACK = { icon = ' ', color = 'warning' },
-                    WARN = { icon = ' ', color = 'warning', alt = { 'WARNING', 'XXX' } },
-                    PERF = { icon = '󰅒 ', alt = { 'OPTIM', 'PERFORMANCE', 'OPTIMIZE' } },
-                    NOTE = { icon = '󰍨 ', color = 'hint', alt = { 'INFO' } },
-                    TEST = { icon = '⏲ ', color = 'test', alt = { 'TESTING', 'PASSED', 'FAILED' } },
+        opts = {
+            keywords = {
+                FIX = {
+                    icon = ' ', -- icon used for the sign, and in search results
+                    color = 'error', -- can be a hex color, or a named color (see below)
+                    alt = { 'FIXME', 'BUG', 'FIXIT', 'ISSUE' }, -- a set of other keywords that all map to this FIX keywords
+                    -- signs = false, -- configure signs for some keywords individually
                 },
-                highlight = {
-                    before = '', -- "fg" or "bg" or empty
-                    keyword = 'wide', -- "fg", "bg", "wide", "wide_bg", "wide_fg" or empty. (wide and wide_bg is the same as bg, but will also highlight surrounding characters, wide_fg acts accordingly but with fg)
-                    after = 'fg', -- "fg" or "bg" or empty
-                    pattern = [[.*<(KEYWORDS):?\s+]], -- pattern or table of patterns, used for highlightng (vim regex)
-                    comments_only = true, -- uses treesitter to match keywords in comments only
-                    max_line_len = 400, -- ignore lines longer than this
-                    exclude = {}, -- list of file types to exclude highlighting
+                TODO = { icon = ' ', color = 'info' },
+                HACK = { icon = ' ', color = 'warning' },
+                WARN = { icon = ' ', color = 'warning', alt = { 'WARNING', 'XXX' } },
+                PERF = { icon = '󰅒 ', alt = { 'OPTIM', 'PERFORMANCE', 'OPTIMIZE' } },
+                NOTE = { icon = '󰍨 ', color = 'hint', alt = { 'INFO' } },
+                TEST = { icon = '⏲ ', color = 'test', alt = { 'TESTING', 'PASSED', 'FAILED' } },
+            },
+            highlight = {
+                before = '', -- "fg" or "bg" or empty
+                keyword = 'wide', -- "fg", "bg", "wide", "wide_bg", "wide_fg" or empty. (wide and wide_bg is the same as bg, but will also highlight surrounding characters, wide_fg acts accordingly but with fg)
+                after = 'fg', -- "fg" or "bg" or empty
+                pattern = [[.*<(KEYWORDS):?\s+]], -- pattern or table of patterns, used for highlightng (vim regex)
+                comments_only = true, -- uses treesitter to match keywords in comments only
+                max_line_len = 400, -- ignore lines longer than this
+                exclude = {}, -- list of file types to exclude highlighting
+            },
+            search = {
+                command = 'rg',
+                args = {
+                    '--color=never',
+                    '--no-heading',
+                    '--with-filename',
+                    '--line-number',
+                    '--column',
                 },
-                search = {
-                    command = 'rg',
-                    args = {
-                        '--color=never',
-                        '--no-heading',
-                        '--with-filename',
-                        '--line-number',
-                        '--column',
-                    },
-                    -- regex that will be used to match keywords.
-                    -- don't replace the (KEYWORDS) placeholder
-                    -- pattern = [[\b(KEYWORDS):]], -- ripgrep regex
-                    pattern = [[\b(KEYWORDS):?\b]], -- match without the extra colon. You'll likely get false positives
-                },
-            })
-        end,
+                -- regex that will be used to match keywords.
+                -- don't replace the (KEYWORDS) placeholder
+                -- pattern = [[\b(KEYWORDS):]], -- ripgrep regex
+                pattern = [[\b(KEYWORDS):?\b]], -- match without the extra colon. You'll likely get false positives
+            },
+        },
     },
 
     {
@@ -549,20 +547,17 @@ return {
         'akinsho/git-conflict.nvim',
         version = '*',
         event = 'VeryLazy',
-        config = function()
-            ---@diagnostic disable-next-line: missing-fields
-            require('git-conflict').setup({
-                default_mappings = {
-                    ours = '<leader>co',
-                    theirs = '<leader>ct',
-                    none = '<leader>c0',
-                    both = '<leader>cb',
-                    next = ']x',
-                    prev = '[x',
-                },
-                default_commands = true,
-            })
-        end,
+        opts = {
+            default_mappings = {
+                ours = '<leader>co',
+                theirs = '<leader>ct',
+                none = '<leader>c0',
+                both = '<leader>cb',
+                next = ']x',
+                prev = '[x',
+            },
+            default_commands = true,
+        },
     },
 
     {
@@ -689,71 +684,67 @@ return {
     {
         'folke/which-key.nvim',
         event = 'VeryLazy',
-        config = function()
+        init = function()
             vim.o.timeout = true
             vim.o.timeoutlen = 300
-            local wk = require('which-key')
-            wk.setup({})
         end,
+        opts = {},
     },
 
     {
         'nvim-tree/nvim-web-devicons',
-        config = function()
-            --
-            require('nvim-web-devicons').setup({
-                -- your personal icons can go here (to override)
-                -- you can specify color or cterm_color instead of specifying both of them
-                -- DevIcon will be appended to `name`
-                override = {
-                    zsh = {
-                        icon = '',
-                        color = '#428850',
-                        cterm_color = '65',
-                        name = 'Zsh',
-                    },
+        opts = {
+            -- your personal icons can go here (to override)
+            -- you can specify color or cterm_color instead of specifying both of them
+            -- DevIcon will be appended to `name`
+            override = {
+                zsh = {
+                    icon = '',
+                    color = '#428850',
+                    cterm_color = '65',
+                    name = 'Zsh',
                 },
-                -- globally enable different highlight colors per icon (default to true)
-                -- if set to false all icons will have the default icon's color
-                color_icons = true,
-                -- globally enable default icons (default to false)
-                -- will get overridden by `get_icons` option
-                default = true,
-                -- globally enable "strict" selection of icons - icon will be looked up in
-                -- different tables, first by filename, and if not found by extension; this
-                -- prevents cases when file doesn't have any extension but still gets some icon
-                -- because its name happened to match some extension (default to false)
-                strict = true,
-                -- same as `override` but specifically for overrides by filename
-                -- takes effect when `strict` is true
-                override_by_filename = {
-                    ['.gitignore'] = {
-                        icon = '',
-                        color = '#f1502f',
-                        name = 'Gitignore',
-                    },
+            },
+            -- globally enable different highlight colors per icon (default to true)
+            -- if set to false all icons will have the default icon's color
+            color_icons = true,
+            -- globally enable default icons (default to false)
+            -- will get overridden by `get_icons` option
+            default = true,
+            -- globally enable "strict" selection of icons - icon will be looked up in
+            -- different tables, first by filename, and if not found by extension; this
+            -- prevents cases when file doesn't have any extension but still gets some icon
+            -- because its name happened to match some extension (default to false)
+            strict = true,
+            -- same as `override` but specifically for overrides by filename
+            -- takes effect when `strict` is true
+            override_by_filename = {
+                ['.gitignore'] = {
+                    icon = '',
+                    color = '#f1502f',
+                    name = 'Gitignore',
                 },
-                -- same as `override` but specifically for overrides by extension
-                -- takes effect when `strict` is true
-                override_by_extension = {
-                    ['log'] = {
-                        icon = '',
-                        color = '#81e043',
-                        name = 'Log',
-                    },
+            },
+            -- same as `override` but specifically for overrides by extension
+            -- takes effect when `strict` is true
+            override_by_extension = {
+                ['log'] = {
+                    icon = '',
+                    color = '#81e043',
+                    name = 'Log',
                 },
-                -- same as `override` but specifically for operating system
-                -- takes effect when `strict` is true
-                override_by_operating_system = {
-                    ['apple'] = {
-                        icon = '',
-                        color = '#A2AAAD',
-                        cterm_color = '248',
-                        name = 'Apple',
-                    },
+            },
+            -- same as `override` but specifically for operating system
+            -- takes effect when `strict` is true
+            override_by_operating_system = {
+                ['apple'] = {
+                    icon = '',
+                    color = '#A2AAAD',
+                    cterm_color = '248',
+                    name = 'Apple',
                 },
-            })
-        end,
+            },
+        },
     },
 
     {

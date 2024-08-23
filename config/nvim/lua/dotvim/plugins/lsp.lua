@@ -19,7 +19,7 @@ return {
     {
         'folke/neoconf.nvim',
         cmd = 'Neoconf',
-        config = true,
+        opts = {},
     },
 
     {
@@ -79,11 +79,11 @@ return {
             'hrsh7th/cmp-path',
             'hrsh7th/cmp-calc',
             'garymjr/nvim-snippets',
-            'andersevenrud/compe-tmux',
             'windwp/nvim-autopairs',
             'onsails/lspkind-nvim',
             { 'Exafunction/codeium.nvim', optional = true },
             { 'zbirenbaum/copilot-cmp', optional = true },
+            { 'andersevenrud/compe-tmux', optional = true },
         },
         config = function()
             require('dotvim.config.complete').setup()
@@ -96,16 +96,12 @@ return {
         dependencies = {
             'zbirenbaum/copilot.lua',
         },
-        config = function()
-            require('copilot_cmp').setup()
-        end,
+        opts = {},
     },
     {
         'zbirenbaum/copilot.lua',
         cmd = 'Copilot',
-        config = function()
-            require('copilot').setup({})
-        end,
+        opts = {},
     },
 
     {
@@ -115,28 +111,24 @@ return {
             'nvim-lua/plenary.nvim',
         },
         cmd = 'Codeium',
-        config = function()
-            require('codeium').setup({})
-        end,
+        opts = {},
     },
 
     {
         'Saecki/crates.nvim',
         event = { 'BufRead Cargo.toml' },
-        config = function()
-            require('crates').setup({
-                autoload = true,
-                null_ls = {
-                    enabled = true,
-                },
-                lsp = {
-                    enabled = true,
-                    completion = true,
-                    actions = true,
-                    hover = true,
-                },
-            })
-        end,
+        opts = {
+            autoload = true,
+            null_ls = {
+                enabled = true,
+            },
+            lsp = {
+                enabled = true,
+                completion = true,
+                actions = true,
+                hover = true,
+            },
+        },
     },
 
     {
@@ -172,24 +164,22 @@ return {
 
     {
         'onsails/lspkind-nvim',
-        config = function()
-            require('lspkind').init({
-                mode = 'symbol_text',
-                -- default symbol map
-                -- can be either 'default' or
-                -- 'codicons' for codicon preset (requires vscode-codicons font installed)
-                --
-                -- default: 'default'
-                preset = 'default',
-                symbol_map = {
-                    Codeium = '󱃖',
-                    Copilot = '',
-                    -- crates.nvim
-                    Feature = '󰩉',
-                    Version = '',
-                },
-            })
-        end,
+        opts = {
+            mode = 'symbol_text',
+            -- default symbol map
+            -- can be either 'default' or
+            -- 'codicons' for codicon preset (requires vscode-codicons font installed)
+            --
+            -- default: 'default'
+            preset = 'default',
+            symbol_map = {
+                Codeium = '󱃖',
+                Copilot = '',
+                -- crates.nvim
+                Feature = '󰩉',
+                Version = '',
+            },
+        },
     },
 
     {

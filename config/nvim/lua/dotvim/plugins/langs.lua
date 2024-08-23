@@ -30,9 +30,7 @@ return {
         'KSP-KOS/EditorTools',
         branch = 'develop',
         ft = 'kerboscript',
-        init = function(plugin)
-            vim.opt.rtp:append(plugin.dir .. '/VIM/vim-kerboscript')
-        end,
+        dir = 'VIM/vim-kerboscript',
     },
 
     {
