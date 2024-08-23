@@ -159,10 +159,6 @@ local on_attach = function(client, bufnr)
             vim.lsp.semantic_tokens.stop(bufnr, client.id)
         end, 100)
     end
-
-    vim.bo[bufnr].formatexpr = 'v:lua.vim.lsp.formatexpr()'
-    vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
-    vim.bo[bufnr].tagfunc = 'v:lua.vim.lsp.tagfunc'
 end
 
 local function default_capabilities()
