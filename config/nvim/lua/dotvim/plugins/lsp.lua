@@ -83,7 +83,7 @@ return {
             'onsails/lspkind-nvim',
             { 'Exafunction/codeium.nvim', optional = true },
             { 'zbirenbaum/copilot-cmp', optional = true },
-            { 'andersevenrud/compe-tmux', optional = true },
+            { 'andersevenrud/compe-tmux', cond = not not vim.env.TMUX },
         },
         config = function()
             require('dotvim.config.complete').setup()
