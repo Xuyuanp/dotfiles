@@ -27,13 +27,6 @@ return {
     },
 
     {
-        'KSP-KOS/EditorTools',
-        branch = 'develop',
-        ft = 'kerboscript',
-        dir = 'VIM/vim-kerboscript',
-    },
-
-    {
         'milisims/nvim-luaref',
         ft = 'lua',
     },
