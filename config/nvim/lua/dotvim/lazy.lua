@@ -59,14 +59,10 @@ function M.setup()
             rtp = {
                 disabled_plugins = {
                     'gzip',
-                    'matchit',
-                    -- 'matchparen',
                     'netrwPlugin',
                     'tarPlugin',
-                    -- 'tohtml',
                     'tutor',
                     'zipPlugin',
-                    'shada',
                     'spellfile',
                     'rplugin',
                 },
