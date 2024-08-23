@@ -86,7 +86,7 @@ bindkey '^\'    accept-and-hold
 export PIP_INDEX_URL=https://mirrors.aliyun.com/pypi/simple
 export PIPENV_PYPI_MIRROR=${PIP_INDEX_URL}
 
-export NVM_NODEJS_ORG_MIRROR=https://npm.taobao.org/mirrors/node
+export NVM_NODEJS_ORG_MIRROR=https://npmmirror.com/mirrors/node/
 
 export BAT_THEME='kanagawa'
 
