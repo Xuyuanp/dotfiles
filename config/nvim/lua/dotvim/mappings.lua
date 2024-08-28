@@ -53,6 +53,15 @@ local function setup()
 
     set_keymap('n', 'j', 'gj', opts)
     set_keymap('n', 'k', 'gk', opts)
+
+    ---[[ snippets support
+    set_keymap('i', '<C-j>', function()
+        return vim.snippet.active({ direction = 1 }) and vim.snippet.jump(1) or '<C-j>'
+    end, { desc = '[Snippets] jump forward' })
+    set_keymap('i', '<C-k>', function()
+        return vim.snippet.active({ direction = -1 }) and vim.snippet.jump(-1) or '<C-k>'
+    end, { desc = '[Snippets] jump backward' })
+    ---]]
 end
 
 return {

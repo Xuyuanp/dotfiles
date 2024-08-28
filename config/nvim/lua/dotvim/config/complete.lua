@@ -79,20 +79,6 @@ function M.setup()
                     fallback()
                 end
             end, { 'i', 's' }),
-            ['<C-j>'] = cmp.mapping(function(fallback)
-                if vim.snippet.active({ direction = 1 }) then
-                    vim.snippet.jump(1)
-                else
-                    fallback()
-                end
-            end, { 'i', 's' }),
-            ['<C-k>'] = cmp.mapping(function(fallback)
-                if vim.snippet.active({ direction = -1 }) then
-                    vim.snippet.jump(-1)
-                else
-                    fallback()
-                end
-            end, { 'i', 's' }),
         },
         window = {
             documentation = {
