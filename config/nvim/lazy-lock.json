@@ -86,7 +86,7 @@
   "render-markdown.nvim": { "branch": "main", "commit": "862b7df6bfc66a4af08d786ace0c5f1f21d8891f" },
   "rustaceanvim": { "branch": "master", "commit": "d3a8b145f0b3db4de9a08fcbc604659f52ee4fbc" },
   "scrollbar.nvim": { "branch": "master", "commit": "d7e6966c258cb30c29f50012543d687aec707b9e" },
-  "sqlx-rs.nvim": { "branch": "main", "commit": "9f85eee41f1e0e97ad25b0912314d5e4ce19f307" },
+  "sqlx-rs.nvim": { "branch": "main", "commit": "ad299b9f085fc621fa6d8b7b3a9a15b5cc19e5bd" },
   "telescope-dap.nvim": { "branch": "master", "commit": "8c88d9716c91eaef1cdea13cb9390d8ef447dbfe" },
   "telescope-file-browser.nvim": { "branch": "master", "commit": "a46780830b576049c675680650f773bedfa8677a" },
   "telescope.nvim": { "branch": "master", "commit": "a0bbec21143c7bc5f8bb02e0005fa0b982edc026" },
