@@ -272,7 +272,7 @@ function M.setup()
     })
 
     vim.keymap.set({ 'n', 'i' }, '<A-f>', function()
-        local path = vim.fn.expand('%')
+        local path = vim.fn.expand('%:p')
         local target = tree.root:find_node_by_path(path)
         if not target then
             vim_notify('file "' .. path .. '" is not found or ignored', Levels.WARN)
