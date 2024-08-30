@@ -2,8 +2,12 @@ fork = true
 
 [font]
 normal = "FiraCode Nerd Font Mono"
-style = "Retina"
+style = "Regular"
 size = 12
+
+[font.bold]
+family = "FiraCode Nerd Font Mono"
+style = "Bold"
 
 [font.italic]
 family = "Fira Code"
