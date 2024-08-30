@@ -61,6 +61,10 @@ zinit light jeffreytse/zsh-vi-mode
 zinit ice depth=1
 zinit light romkatv/powerlevel10k
 
+export NVM_COMPLETION=true
+export NVM_SYMLINK_CURRENT="true"
+zinit wait lucid light-mode for lukechilds/zsh-nvm
+
 zinit snippet OMZL::clipboard.zsh
 zinit snippet OMZL::completion.zsh
 zinit snippet OMZL::history.zsh
