@@ -49,3 +49,5 @@
             (#offset! @kubebuilder.example 0 15 0 -1)
             (#absoffset! @kubebuilder.example 0 0 0 7)
             )
+
+("return" @keyword.return.go (#set! "priority" 200))
