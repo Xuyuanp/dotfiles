@@ -1,0 +1,45 @@
+; extends
+(
+ (type_identifier)
+ @type.builtin
+ (#set! "priority" 200)
+ (#any-of?
+  @type.builtin
+  "Send"
+  "Sized"
+  "Sync"
+  "Unpin"
+  "Drop"
+  "Fn"
+  "FnMut"
+  "FnOnce"
+  "AsMut"
+  "AsRef"
+  "From"
+  "Into"
+  "DoubleEndedIterator"
+  "ExactSizeIterator"
+  "Extend"
+  "IntoIterator"
+  "Iterator"
+  "Option"
+  "Result"
+  "Clone"
+  "Copy"
+  "Debug"
+  "Default"
+  "Eq"
+  "Hash"
+  "Ord"
+  "PartialEq"
+  "PartialOrd"
+  "ToOwned"
+  "Box"
+  "String"
+  "ToString"
+  "Vec"
+  "FromIterator"
+  "TryFrom"
+  "TryInto")
+ )
+
