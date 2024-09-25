@@ -35,7 +35,6 @@ function M.setup()
     null_ls.setup({
         debug = vim.env.NULLLS_DEBUG == 'true',
         sources = {
-            -- formatting
             null_ls.builtins.formatting.stylua,
             null_ls.builtins.formatting.prettierd.with({
                 disabled_filetypes = { 'yaml' },
@@ -46,12 +45,18 @@ function M.setup()
             null_ls.builtins.formatting.goimports_reviser.with({
                 generator_opts = {
                     command = 'goimports-reviser',
-                    args = { '-set-alias', '-rm-unused', '-use-cache', '-output', 'file', '$FILENAME' },
+                    args = {
+                        '-set-alias',
+                        '-use-cache',
+                        '-output',
+                        'file',
+                        '$FILENAME',
+                    },
                     to_temp_file = true,
                 },
-            }),
+            }), -- go
+            null_ls.builtins.formatting.gofumpt, -- go
 
-            -- diagnostics
             null_ls.builtins.diagnostics.codespell.with({
                 args = {
                     '--config',
@@ -62,7 +67,6 @@ function M.setup()
                 },
             }),
 
-            -- code_actions
             null_ls.builtins.code_actions.gitsigns,
             null_ls.builtins.code_actions.gomodifytags,
             null_ls.builtins.code_actions.impl,
