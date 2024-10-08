@@ -104,10 +104,12 @@ local ui = {}
 
 function ui.setup()
     local dapui = require('dapui')
+    ---@diagnostic disable-next-line: missing-fields
     dapui.setup({
         icons = {
             expanded = '▾',
             collapsed = '▸',
+            current_frame = '',
         },
         mappings = {
             -- Use a table to apply multiple mappings
