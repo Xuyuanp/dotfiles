@@ -830,4 +830,21 @@ return {
             }
         end,
     },
+
+    {
+        'nvchad/menu',
+        dependencies = {
+            'nvchad/volt',
+        },
+        keys = {
+            {
+                '<A-m>',
+                function()
+                    require('menu').open('default', { mouse = false, border = true })
+                end,
+                mode = 'n',
+                desc = 'Menu',
+            },
+        },
+    },
 }
