@@ -2,7 +2,7 @@ fork = true
 
 [font]
 normal = "FiraCode Nerd Font Mono"
-style = "Regular"
+style = "Retina"
 size = 12
 
 [font.bold]
