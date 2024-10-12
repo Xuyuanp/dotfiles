@@ -158,4 +158,13 @@ return {
             require('colortils').setup({})
         end,
     },
+
+    {
+        'keaising/im-select.nvim',
+        cond = vim.fn.has('mac') == 1,
+        event = 'VeryLazy',
+        config = function()
+            require('im_select').setup({})
+        end,
+    },
 }
