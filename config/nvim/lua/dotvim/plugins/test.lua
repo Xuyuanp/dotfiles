@@ -32,7 +32,7 @@ return {
     {
         'andythigpen/nvim-coverage',
         dependencies = 'nvim-lua/plenary.nvim',
-        lazy = false,
+        cmd = { 'Coverage' },
         config = function()
             require('coverage').setup({
                 signs = {
