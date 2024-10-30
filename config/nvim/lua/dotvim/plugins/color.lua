@@ -1,3 +1,5 @@
+local features = require('dotvim.features')
+
 return {
     {
         'rebelot/kanagawa.nvim',
@@ -16,7 +18,7 @@ return {
                 variablebuiltinStyle = { italic = true },
                 specialReturn = true, -- special highlight for the return keyword
                 specialException = true, -- special highlight for exception handling keywords
-                transparent = false,
+                transparent = features.transparent,
                 colors = {
                     theme = {
                         all = {
