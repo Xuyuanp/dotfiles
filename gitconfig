@@ -1,8 +1,11 @@
+# vim: ft=gitconfig
 [alias]
 
     # add
     a = add                           # add
     chunkyadd = add --patch           # stage commits chunk by chunk
+
+    b = branch
 
     # via http://blog.apiaxle.com/post/handy-git-tips-to-stop-you-getting-fired/
     snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
@@ -14,37 +17,37 @@
     # merge
     mg = merge --no-ff
 
-	# commit
+    # commit
     c = commit -m                     # commit with message
     ca = commit -am                   # commit all with message
     ci = commit                       # commit
     cmv = commit -v
 
-	# checkout
+    # checkout
     co = checkout                     # checkout
     nb = checkout -b                  # create and switch to a new branch (mnemonic: "git new branch branchname...")
 
-	# diff
+    # diff
     d = diff                          # diff unstaged changes
     dc = diff --cached                # diff staged changes
     last = diff HEAD^                 # diff last committed change
 
-	# log
+    # log
     l = log --graph --date=short
     lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
     lds = log --pretty=format:'%C(yellow)%h %ad%Cred%d %Creset%s%Cblue [%cn]' --decorate --date=short
-    changes = log --pretty=format:\"%h %cr %cn %Cgreen%s%Creset\" --name-status
-    short = log --pretty=format:\"%h %cr %cn %Cgreen%s%Creset\"
-    shortnocolor = log --pretty=format:\"%h %cr %cn %s\"
+    changes = log --pretty=format:'%h %cr %cn %Cgreen%s%Creset' --name-status
+    short = log --pretty=format:'%h %cr %cn %Cgreen%s%Creset'
+    shortnocolor = log --pretty=format:'%h %cr %cn %s'
 
-	# status
+    # status
     s = status                        # status
 
     dft = difftool
 [format]
     pretty = format:%C(blue)%aI%Creset %C(yellow)%h%C(green)%d%Creset %C(blue)%s %C(magenta) [%an %C(green)<%ae>%C(magenta)]%Creset
 [color]
-	ui = 1
+    ui = 1
 [color "branch"]
     current = yellow reverse
     local = yellow
@@ -63,8 +66,8 @@
 
 [diff]
     tool = difftastic
-[difftool "vimdiff"]
-    cmd = /usr/bin/env vimdiff \"$LOCAL\" \"$REMOTE\"
+[difftool "nvim"]
+    cmd = nvim -d "$LOCAL" "$REMOTE"
 [difftool "difftastic"]
     cmd = difft "$LOCAL" "$REMOTE"
 [difftool]
@@ -77,4 +80,4 @@
     required = true
 
 [pager]
-    difftool = true
+    difftool = false
