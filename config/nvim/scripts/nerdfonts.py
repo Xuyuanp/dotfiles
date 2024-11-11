@@ -15,6 +15,8 @@ def main():
     glyphs = eval(script)
 
     for name, code in glyphs.items():
+        if name.startswith("nfold-mdi-"):
+            continue
         print(f"{code:<5} {chr(int(code, 16))} {name}")
 
 
