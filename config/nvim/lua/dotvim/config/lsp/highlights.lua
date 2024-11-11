@@ -29,7 +29,7 @@ local function parse_rgb(hl)
         :totable()
 end
 
----@param hl_info vim.api.keyset.hl_info
+---@param hl_info vim.api.keyset.get_hl_info
 ---@return string
 local function hl2ansi(hl_info)
     local params = {}

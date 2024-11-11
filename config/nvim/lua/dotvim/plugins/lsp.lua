@@ -119,9 +119,6 @@ return {
         event = { 'BufRead Cargo.toml' },
         opts = {
             autoload = true,
-            null_ls = {
-                enabled = true,
-            },
             lsp = {
                 enabled = true,
                 completion = true,

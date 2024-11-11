@@ -71,6 +71,12 @@ local langs = {
                         'unused-vararg',
                         'redefined-local',
                     },
+                    globals = {
+                        'vim',
+                        'require',
+                        'assert',
+                        'print',
+                    },
                 },
                 workspace = {
                     checkThirdParty = false,
@@ -101,7 +107,10 @@ local langs = {
 local function setup()
     require('mason-lspconfig').setup_handlers({
         function(server_name)
-            local cfg = default_config
+            local cfg = {
+                capabilities = default_config.capabilities,
+                handlers = default_config.handlers,
+            }
             if langs[server_name] then
                 cfg = vim.tbl_deep_extend('force', cfg, langs[server_name])
             end
@@ -110,6 +119,13 @@ local function setup()
             else
                 lspconfig[server_name].setup(cfg)
             end
+        end,
+    })
+
+    vim.api.nvim_create_autocmd('LspAttach', {
+        callback = function(args)
+            local client = vim.lsp.get_client_by_id(args.data.client_id)
+            default_config.on_attach(client, args.buf)
         end,
     })
 end

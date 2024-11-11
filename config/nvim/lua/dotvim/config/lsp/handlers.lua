@@ -102,30 +102,65 @@ function M.symbol_handler(err, result, ctx)
     fzf_run(wrapped)
 end
 
-function M.references(err, references, ctx)
-    if err or not references or vim.tbl_isempty(references) then
-        print('No references available')
-        return
+function M.new_on_list(title)
+    return function(list)
+        M.on_list(list, { title = title })
+    end
+end
+
+function M.on_list(list, opts)
+    opts = opts or {}
+    -- stolen from vim.lsp.buf.get_locations
+    local win = api.nvim_get_current_win()
+    local from = vim.fn.getpos('.')
+    local tagname = vim.fn.expand('<cword>')
+
+    local function jump_to_item(item)
+        local b = item.bufnr or vim.fn.bufadd(item.filename)
+
+        -- Save position in jumplist
+        vim.cmd("normal! m'")
+        -- Push a new item into tagstack
+        local tagstack = { { tagname = tagname, from = from } }
+        vim.fn.settagstack(vim.fn.win_getid(win), { items = tagstack }, 't')
+
+        vim.bo[b].buflisted = true
+        local w = vim.fn.win_findbuf(b)[1] or win
+        api.nvim_win_set_buf(w, b)
+        api.nvim_win_set_cursor(w, { item.lnum, item.col - 1 })
+        vim._with({ win = w }, function()
+            -- Open folds under the cursor
+            vim.cmd('normal! zv')
+        end)
     end
 
-    local client_id = ctx.client_id
-    local client = vim.lsp.get_client_by_id(client_id)
-    if not client then
+    if #list.items == 1 then
+        jump_to_item(list.items[1])
         return
     end
-    local offset_encoding = client.offset_encoding
 
     local source = {}
-    for i, ref in ipairs(references) do
-        local fname = vim.uri_to_fname(ref.uri)
-        local start_line = ref.range.start.line + 1
-        local end_line = ref.range['end'].line + 1
-        local line =
-            string.format('%s\t%d\t%d\t%d\t%s |%d ~ %d|', fname, start_line, end_line, i, vim.fn.fnamemodify(fname, ':~:.'), start_line, end_line)
+    for i, item in ipairs(list.items) do
+        local fname_display = vim.fn.fnamemodify(item.filename, ':~:.')
+        local start_line = item.lnum
+        local end_line = item.end_lnum or item.lnum
+        local line = string.format(
+            '%s\t%d\t%d\t%d\t%s |%d ~ %d| %s',
+            item.filename,
+            start_line,
+            end_line,
+            i,
+            fname_display,
+            start_line,
+            end_line,
+            vim.trim(item.text)
+        )
         table.insert(source, line)
     end
 
-    local wrapped = fzf_wrap('document_symbols', {
+    local title = opts.title or list.title
+
+    local wrapped = fzf_wrap(title, {
         source = source,
         options = {
             '+m',
@@ -140,7 +175,7 @@ function M.references(err, references, ctx)
             '--color',
             'dark',
             '--prompt',
-            'LSP References> ',
+            'LSP ' .. title .. '> ',
             '--preview',
             'bat --highlight-line={2}:{3} --color=always --map-syntax=vimrc:VimL {1}',
             '--preview-window',
@@ -152,88 +187,13 @@ function M.references(err, references, ctx)
             end
             local parts = vim.fn.split(line, '\t')
             local choice = tonumber(parts[4])
-            local ref_chosen = references[choice]
-            vim.lsp.util.jump_to_location(ref_chosen, offset_encoding, true)
+            local item = list.items[choice]
+
+            jump_to_item(item)
         end,
     })
 
     fzf_run(wrapped)
-end
-
-function M.gen_location_handler(name)
-    return function(_, result, ctx)
-        if result == nil or vim.tbl_isempty(result) then
-            -- local _ = log.info() and log.info(method, 'No location found')
-            return nil
-        end
-
-        local client_id = ctx.client_id
-        local client = vim.lsp.get_client_by_id(client_id)
-        if not client then
-            return
-        end
-        local offset_encoding = client.offset_encoding
-
-        -- textDocument/definition can return Location or Location[]
-        -- https://microsoft.github.io/language-server-protocol/specifications/specification-current/#textDocument_definition
-
-        local util = vim.lsp.util
-        if not vim.islist(result) then
-            util.jump_to_location(result, offset_encoding, true)
-            return
-        end
-
-        if #result == 1 then
-            util.jump_to_location(result[1], offset_encoding, true)
-            return
-        end
-
-        local source = {}
-        for i, ref in ipairs(result) do
-            -- ref is Location or LocationLink
-            local fname = vim.uri_to_fname(ref.uri or ref.targetUri)
-            local range = ref.range or ref.targetRange
-            local start_line = range.start.line + 1
-            local end_line = range['end'].line + 1
-            local line =
-                string.format('%s\t%d\t%d\t%d\t%s |%d ~ %d|', fname, start_line, end_line, i, vim.fn.fnamemodify(fname, ':~:.'), start_line, end_line)
-            table.insert(source, line)
-        end
-
-        local wrapped = fzf_wrap('location', {
-            source = source,
-            options = {
-                '+m',
-                '+x',
-                '--tiebreak=index',
-                '--ansi',
-                '-d',
-                '\t',
-                '--with-nth',
-                '5..',
-                '--reverse',
-                '--color',
-                'dark',
-                '--prompt',
-                'LSP ' .. name .. '> ',
-                '--preview',
-                'bat --highlight-line={2}:{3} --color=always --map-syntax=vimrc:VimL {1}',
-                '--preview-window',
-                '+{2}-10',
-            },
-            sink = function(line)
-                if not line or type(line) ~= 'string' or string.len(line) == 0 then
-                    return
-                end
-                local parts = vim.fn.split(line, '\t')
-                local choice = tonumber(parts[4])
-                local ref_chosen = result[choice]
-                util.jump_to_location(ref_chosen, offset_encoding, true)
-            end,
-        })
-
-        fzf_run(wrapped)
-    end
 end
 
 function M.outgoing_calls(err, result, ctx)

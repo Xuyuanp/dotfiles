@@ -3,78 +3,29 @@ local api = vim.api
 
 local a = require('dotvim.util.async')
 local handlers = require('dotvim.config.lsp.handlers')
+local my_lsp = require('dotvim.config.lsp.my')
 
 local LspMethods = vim.lsp.protocol.Methods
 
---- copy from https://github.com/williamboman/nvim-config/blob/main/lua/wb/lsp/on-attach.lua
-local function find_and_run_codelens()
-    local bufnr = vim.api.nvim_get_current_buf()
-    local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-    local lenses = vim.lsp.codelens.get(bufnr)
-
-    lenses = vim.tbl_filter(function(lense)
-        return lense.range.start.line < row
-    end, lenses)
-
-    if #lenses == 0 then
-        vim.notify('Could not find codelens to run.', vim.log.levels.WARN)
-        return
-    end
-
-    table.sort(lenses, function(a, b)
-        return a.range.start.line > b.range.start.line
-    end)
-
-    vim.api.nvim_win_set_cursor(0, { lenses[1].range.start.line + 1, lenses[1].range.start.character })
-    vim.lsp.codelens.run()
-    vim.api.nvim_win_set_cursor(0, { row, col }) -- restore cursor, TODO: also restore position
-end
-
 local group_id = api.nvim_create_augroup('dotvim_lsp_init_on_attach', { clear = true })
-
-local function my_show_documentation()
-    local clients = vim.lsp.get_clients({ name = 'taplo' })
-    if clients and vim.fn.expand('%:t') == 'Cargo.toml' and require('crates').popup_available() then
-        require('crates').show_popup()
-        return
-    end
-    local ok, ufo = pcall(require, 'ufo')
-    if ok then
-        local winid = ufo.peekFoldedLinesUnderCursor()
-        if winid then
-            return
-        end
-    end
-
-    vim.lsp.buf.hover()
-end
-
-local function code_action(...)
-    local ok, actions_preview = pcall(require, 'actions-preview')
-    if ok then
-        actions_preview.code_actions(...)
-    else
-        vim.lsp.buf.code_action(...)
-    end
-end
 
 local function set_lsp_keymaps(_, bufnr)
     local set_keymap = vim.keymap.set
 
     -- stylua: ignore
     local keymaps = {
-        gd  = { vim.lsp.buf.definition, 'goto definition' },
-        K   = { my_show_documentation, 'show documentation' },
-        gi  = { vim.lsp.buf.implementation, 'goto implementation' },
-        gk  = { vim.lsp.buf.signature_help, 'show signature help' },
-        gtd = { vim.lsp.buf.type_definition, 'goto type definition' },
-        gR  = { vim.lsp.buf.references, 'show references' },
-        grr = { vim.lsp.buf.rename, 'rename' },
-        gds = { vim.lsp.buf.document_symbol, 'show document symbols' },
-        gws = { vim.lsp.buf.workspace_symbol, 'show workspace symbols' },
-        gca = { code_action, 'code action' },
-        go  = { vim.lsp.buf.outgoing_calls, 'show outgoing calls' },
-        gcl = { find_and_run_codelens, 'find and run codelens' },
+        K   = { my_lsp.hover, 'show documentation' },
+        gi  = { my_lsp.implementation, 'goto implementation' },
+        gk  = { my_lsp.signature_help, 'show signature help' },
+        gd  = { my_lsp.definition, 'goto definition' },
+        gtd = { my_lsp.type_definition, 'goto type definition' },
+        grr = { my_lsp.references, 'show references' },
+        grn = { my_lsp.rename, 'rename' },
+        gds = { my_lsp.document_symbol, 'show document symbols' },
+        gws = { my_lsp.workspace_symbol, 'show workspace symbols' },
+        gca = { my_lsp.code_action, 'code action' },
+        go  = { my_lsp.outgoing_calls, 'show outgoing calls' },
+        gcl = { my_lsp.codelens, 'find and run codelens' },
     }
     for key, action in pairs(keymaps) do
         set_keymap('n', key, action[1], {
@@ -116,7 +67,7 @@ local function set_lsp_autocmd(client, bufnr)
             buffer = bufnr,
             desc = '[Lsp] document highlight',
             callback = function()
-                vim.lsp.buf.document_highlight()
+                my_lsp.document_highlight()
             end,
         })
         api.nvim_create_autocmd({ 'CursorMoved' }, {
@@ -124,7 +75,7 @@ local function set_lsp_autocmd(client, bufnr)
             buffer = bufnr,
             desc = '[Lsp] document highlight clear',
             callback = function()
-                vim.lsp.buf.clear_references()
+                my_lsp.clear_references()
             end,
         })
     end
@@ -181,11 +132,7 @@ return {
     -- stylua: ignore
     handlers = {
         [LspMethods.workspace_symbol]            = handlers.symbol_handler,
-        [LspMethods.textDocument_references]     = handlers.references,
         [LspMethods.textDocument_documentSymbol] = handlers.symbol_handler,
-        [LspMethods.textDocument_definition]     = handlers.gen_location_handler('Definition'),
-        [LspMethods.textDocument_typeDefinition] = handlers.gen_location_handler('TypeDefinition'),
-        [LspMethods.textDocument_implementation] = handlers.gen_location_handler('Implementation'),
         [LspMethods.callHierarchy_outgoingCalls] = handlers.outgoing_calls,
     },
 }
