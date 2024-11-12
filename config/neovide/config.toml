@@ -3,16 +3,16 @@ fork = true
 [font]
 normal = "FiraCode Nerd Font Mono"
 style = "Retina"
-size = 12
+size = 13
 
 [font.bold]
 family = "FiraCode Nerd Font Mono"
 style = "Bold"
 
 [font.italic]
-family = "Fira Code"
-style = "RegularItalic"
+family = "Fira Mono"
+style = "Regular Italic"
 
 [font.bold_italic]
-family = "Fira Code"
-style = "BoldItalic"
+family = "Fira Mono"
+style = "Bold Italic"
