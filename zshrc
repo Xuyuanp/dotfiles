@@ -194,17 +194,7 @@ function howto() {
 
     # escape double quotes
     input=${input//\"/\\\"}
-
-    content=$(cat<<EOF
-Please function as a Unix Shell Command Generator.
-Upon receiving a specific task in plain language from me,
-generate an appropriate shell command that would execute the given task.
-The provided command must be runnable directly in the shell
-and should exclude any supplementary information or commentary.
-My task is: "${input}"
-EOF
-)
-    output=$(openai api chat_completions.create -m 'gpt-3.5-turbo' -g user "${content}")
+    output=$(nvim --headless -c "Howto! ${input}")
     print -z "$output"
 }
 

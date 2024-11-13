@@ -76,12 +76,16 @@ return {
     {
         'CopilotC-Nvim/CopilotChat.nvim',
         branch = 'canary',
-        cmd = 'CopilotChat',
+        cmd = { 'CopilotChat', 'Howto' },
         dependencies = {
             'zbirenbaum/copilot.lua',
             'nvim-lua/plenary.nvim',
         },
         build = 'make tiktoken', -- Only on MacOS or Linux
         opts = {},
+        config = function(_, opts)
+            require('CopilotChat').setup(opts)
+            require('dotvim.config.howto').setup()
+        end,
     },
 }
