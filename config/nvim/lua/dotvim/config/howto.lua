@@ -1,4 +1,6 @@
 local Copilot = require('CopilotChat.copilot')
+local async = require('plenary.async')
+local async_util = require('plenary.async.util')
 
 local M = {}
 
@@ -11,24 +13,24 @@ My task is:
 %s
 ]]
 
-local function command(ev)
+local command = async.void(function(ev)
     local copilot = Copilot()
-    local on_done = vim.schedule_wrap(function(rsp)
-        if ev.bang then
-            vim.fn.writefile({ rsp }, '/dev/stdout')
-            vim.cmd([[qa!]])
-        else
-            vim.print(rsp)
-        end
-    end)
     if ev.bang then
         local log = require('plenary.log')
         log.new({ level = 'fatal' }, true)
     end
 
     local prompt = prompt_template:format(ev.args)
-    copilot:ask(prompt, { on_done = on_done })
-end
+    local rsp = copilot:ask(prompt)
+    async_util.scheduler()
+
+    if ev.bang then
+        vim.fn.writefile({ rsp }, '/dev/stdout')
+        vim.cmd([[qa!]])
+    else
+        vim.print(rsp)
+    end
+end)
 
 function M.setup()
     vim.api.nvim_create_user_command('Howto', command, {
