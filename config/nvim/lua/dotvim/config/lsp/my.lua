@@ -52,7 +52,8 @@ end
 --- copy from https://github.com/williamboman/nvim-config/blob/main/lua/wb/lsp/on-attach.lua
 function M.codelens()
     local bufnr = vim.api.nvim_get_current_buf()
-    local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+    local winnr = vim.api.nvim_get_current_win()
+    local row, col = unpack(vim.api.nvim_win_get_cursor(winnr))
     local lenses = vim.lsp.codelens.get(bufnr)
 
     lenses = vim.tbl_filter(function(lense)
@@ -68,9 +69,9 @@ function M.codelens()
         return a.range.start.line > b.range.start.line
     end)
 
-    vim.api.nvim_win_set_cursor(0, { lenses[1].range.start.line + 1, lenses[1].range.start.character })
+    vim.api.nvim_win_set_cursor(winnr, { lenses[1].range.start.line + 1, lenses[1].range.start.character })
     vim.lsp.codelens.run()
-    vim.api.nvim_win_set_cursor(0, { row, col }) -- restore cursor, TODO: also restore position
+    vim.api.nvim_win_set_cursor(winnr, { row, col }) -- restore cursor
 end
 
 return M
