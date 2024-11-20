@@ -121,6 +121,12 @@ local function setup()
             end
         end,
     })
+    -- suppress warning: bufls deprecated
+    -- TODO: remove this after bufls is removed
+    lspconfig['buf_ls'].setup({
+        capabilities = default_config.capabilities,
+        handlers = default_config.handlers,
+    })
 
     vim.api.nvim_create_autocmd('LspAttach', {
         callback = function(args)

@@ -37,12 +37,10 @@ return {
 
     {
         'williamboman/mason.nvim',
-        lazy = false,
-        config = function()
-            require('mason').setup({
-                PATH = 'append',
-            })
-        end,
+        cmd = 'Mason',
+        opts = {
+            PATH = 'append',
+        },
     },
 
     {
@@ -50,23 +48,27 @@ return {
         dependencies = {
             'williamboman/mason.nvim',
         },
-        config = function()
-            require('mason-lspconfig').setup({})
-        end,
+        opts = {},
     },
 
     {
         'jay-babu/mason-null-ls.nvim',
-        event = { 'BufReadPre', 'BufNewFile' },
         dependencies = {
             'williamboman/mason.nvim',
-            'nvimtools/none-ls.nvim',
+        },
+        opts = {
+            automatic_installation = true,
+            ensure_installed = {},
+        },
+    },
+
+    {
+        'nvimtools/none-ls.nvim',
+        dependencies = {
+            'jay-babu/mason-null-ls.nvim',
         },
         config = function()
-            require('mason-null-ls').setup({
-                automatic_installation = true,
-                ensure_installed = {},
-            })
+            require('dotvim.config.lsp.null').setup()
         end,
     },
 
@@ -177,13 +179,6 @@ return {
                 Version = '',
             },
         },
-    },
-
-    {
-        'nvimtools/none-ls.nvim',
-        config = function()
-            require('dotvim.config.lsp.null').setup()
-        end,
     },
 
     {
