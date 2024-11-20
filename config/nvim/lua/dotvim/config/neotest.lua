@@ -3,21 +3,15 @@ local a = require('dotvim.util.async')
 local M = {}
 
 local function run_file()
-    vim.schedule(function()
-        require('neotest').run.run(vim.fn.expand('%'))
-    end)
+    require('neotest').run.run(vim.fn.expand('%'))
 end
 
 local function run_nearest()
-    vim.schedule(function()
-        require('neotest').run.run()
-    end)
+    require('neotest').run.run()
 end
 
 local function debug_nearest()
-    vim.schedule(function()
-        require('neotest').run.run({ strategy = 'dap', suite = false })
-    end)
+    require('neotest').run.run({ strategy = 'dap', suite = false })
 end
 
 local function toggle_summary()
@@ -25,9 +19,7 @@ local function toggle_summary()
 end
 
 local function toggle_output()
-    vim.schedule(function()
-        require('neotest').output.open({ enter = true })
-    end)
+    require('neotest').output.open({ enter = true })
 end
 
 local test_menu = a.wrap(function()
@@ -39,10 +31,15 @@ local test_menu = a.wrap(function()
         ['Show output'] = toggle_output,
     }
 
-    local choice = a.ui.select(vim.tbl_keys(actions), { prompt = 'Select test action:' }).await()
-    if choice then
-        actions[choice]()
+    local choices = vim.tbl_keys(actions)
+    table.sort(choices)
+    local choice = a.ui.select(choices, { prompt = 'Select test action:' }).await()
+    if not choice then
+        return
     end
+    vim.schedule(function()
+        actions[choice]()
+    end)
 end)
 
 function M.setup()
