@@ -45,22 +45,17 @@ local function setup()
     set_keymap('n', '<leader>p', '"+p', opts)
     ---]]
 
-    ---[[ Diagnostics
-    set_keymap('n', ']d', vim.diagnostic.goto_next, opts)
-    set_keymap('n', '[d', vim.diagnostic.goto_prev, opts)
-    set_keymap('n', '<leader>sd', vim.diagnostic.open_float, opts)
-    ---]]
-
     set_keymap('n', 'j', 'gj', opts)
     set_keymap('n', 'k', 'gk', opts)
 
     ---[[ snippets support
-    set_keymap('i', '<C-j>', function()
-        return vim.snippet.active({ direction = 1 }) and vim.snippet.jump(1) or '<C-j>'
-    end, { desc = '[Snippets] jump forward' })
-    set_keymap('i', '<C-k>', function()
-        return vim.snippet.active({ direction = -1 }) and vim.snippet.jump(-1) or '<C-k>'
-    end, { desc = '[Snippets] jump backward' })
+    local snippets_switch = function(direction, fallback)
+        return function()
+            return vim.snippet.active({ direction = direction }) and vim.snippet.jump(direction) or fallback
+        end
+    end
+    set_keymap('i', '<C-j>', snippets_switch(1, '<C-j>'), { desc = '[Snippets] jump forward' })
+    set_keymap('i', '<C-k>', snippets_switch(-1, '<C-k>'), { desc = '[Snippets] jump backward' })
     ---]]
 end
 
