@@ -66,6 +66,46 @@ local function set_lsp_keymaps(client, bufnr)
     })
 end
 
+local function disable_inlayhint_temporary(bufnr)
+    local enabled = vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr })
+    vim.b[bufnr].lsp_inlay_hint_enabled = enabled
+    if not enabled then
+        return
+    end
+    vim.lsp.inlay_hint.enable(false, { bufnr = bufnr })
+end
+
+local function restore_inlayhint(bufnr)
+    if not vim.b[bufnr].lsp_inlay_hint_enabled then
+        return
+    end
+    vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+end
+
+local function smart_inlayhint(bufnr)
+    local ctrlv = vim.api.nvim_replace_termcodes('<C-v>', true, true, true)
+    vim.api.nvim_create_autocmd({ 'InsertEnter', 'InsertLeave', 'ModeChanged' }, {
+        group = group_id,
+        buffer = bufnr,
+        desc = '[Lsp] inlay hint toggle',
+        callback = function(args)
+            if args.event == 'InsertEnter' then
+                disable_inlayhint_temporary(args.buf)
+            elseif args.event == 'InsertLeave' then
+                restore_inlayhint(args.buf)
+            elseif args.event == 'ModeChanged' then
+                local event = vim.v.event
+
+                if event.new_mode == ctrlv then
+                    disable_inlayhint_temporary(args.buf)
+                elseif event.old_mode == ctrlv then
+                    restore_inlayhint(args.buf)
+                end
+            end
+        end,
+    })
+end
+
 local function set_lsp_autocmd(client, bufnr)
     if client.supports_method(LspMethods.textDocument_documentHighlight) and client.name ~= 'rust_analyzer' then
         api.nvim_create_autocmd({ 'CursorHold' }, {
@@ -90,7 +130,7 @@ local function set_lsp_autocmd(client, bufnr)
         api.nvim_create_autocmd({ 'BufEnter', 'InsertLeave', 'BufWritePost', 'CursorHold' }, {
             group = group_id,
             buffer = bufnr,
-            desc = '[lsp] codelens refresh',
+            desc = '[Lsp] codelens refresh',
             callback = function()
                 vim.lsp.codelens.refresh({ bufnr = bufnr })
             end,
@@ -99,17 +139,20 @@ local function set_lsp_autocmd(client, bufnr)
             vim.lsp.codelens.refresh({ bufnr = bufnr })
         end)
     end
+
+    if client.supports_method(LspMethods.textDocument_inlayHint) then
+        vim.schedule(function()
+            vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+            vim.b[bufnr].lsp_inlay_hint_enabled = true
+        end)
+
+        smart_inlayhint(bufnr)
+    end
 end
 
 local on_attach = function(client, bufnr)
     set_lsp_autocmd(client, bufnr)
     set_lsp_keymaps(client, bufnr)
-
-    if client.supports_method(LspMethods.textDocument_inlayHint) then
-        vim.schedule(function()
-            vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
-        end)
-    end
 
     if vim.bo[bufnr].filetype == 'helm' and client.name == 'gopls' then
         vim.defer_fn(function()
