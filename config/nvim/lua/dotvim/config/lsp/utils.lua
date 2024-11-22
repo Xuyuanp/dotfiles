@@ -9,6 +9,8 @@ local LspMethods = vim.lsp.protocol.Methods
 
 local group_id = api.nvim_create_augroup('dotvim_lsp_init_on_attach', { clear = true })
 
+---@param client vim.lsp.Client
+---@param bufnr number
 local function set_lsp_keymaps(client, bufnr)
     local set_keymap = vim.keymap.set
 
@@ -28,9 +30,7 @@ local function set_lsp_keymaps(client, bufnr)
         gcl = { handler = my_lsp.codelens,         desc = 'find and run codelens',  method = nil},
     }
     for key, action in pairs(keymaps) do
-        if action.method and not client.supports_method(action.method) then
-            keymaps[key] = nil
-        else
+        if not action.method or client:supports_method(action.method) then
             set_keymap('n', key, action.handler, {
                 noremap = false,
                 silent = true,
@@ -106,8 +106,10 @@ local function smart_inlayhint(bufnr)
     })
 end
 
+---@param client vim.lsp.Client
+---@param bufnr number
 local function set_lsp_autocmd(client, bufnr)
-    if client.supports_method(LspMethods.textDocument_documentHighlight) and client.name ~= 'rust_analyzer' then
+    if client:supports_method(LspMethods.textDocument_documentHighlight) and client.name ~= 'rust_analyzer' then
         api.nvim_create_autocmd({ 'CursorHold' }, {
             group = group_id,
             buffer = bufnr,
@@ -126,7 +128,7 @@ local function set_lsp_autocmd(client, bufnr)
         })
     end
 
-    if client.supports_method(LspMethods.textDocument_codeLens) then
+    if client:supports_method(LspMethods.textDocument_codeLens) then
         api.nvim_create_autocmd({ 'BufEnter', 'InsertLeave', 'BufWritePost', 'CursorHold' }, {
             group = group_id,
             buffer = bufnr,
@@ -140,7 +142,7 @@ local function set_lsp_autocmd(client, bufnr)
         end)
     end
 
-    if client.supports_method(LspMethods.textDocument_inlayHint) then
+    if client:supports_method(LspMethods.textDocument_inlayHint) then
         vim.schedule(function()
             vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
             vim.b[bufnr].lsp_inlay_hint_enabled = true
@@ -150,6 +152,8 @@ local function set_lsp_autocmd(client, bufnr)
     end
 end
 
+---@param client vim.lsp.Client
+---@param bufnr number
 local on_attach = function(client, bufnr)
     set_lsp_autocmd(client, bufnr)
     set_lsp_keymaps(client, bufnr)
