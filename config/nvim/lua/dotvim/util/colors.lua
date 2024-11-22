@@ -67,10 +67,7 @@ M.colors = setmetatable({
 local hlmap = {}
 
 local function define_highlight(group, color)
-    local style = color.style or 'NONE'
-    local fg = color.fg or 'NONE'
-    local bg = color.bg or 'NONE'
-    vim.cmd('highlight! ' .. group .. ' gui=' .. style .. ' guifg=' .. fg .. ' guibg=' .. bg)
+    vim.api.nvim_set_hl(0, group, color)
 end
 
 function M.add_highlight(group, color)

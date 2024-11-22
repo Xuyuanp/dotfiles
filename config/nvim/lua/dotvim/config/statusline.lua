@@ -190,7 +190,7 @@ section.left = {
                 require('dotvim.util.colors').add_highlight('GalaxyViMode', {
                     fg = mode_color,
                     bg = _HEX_COLORS.bar.side,
-                    style = 'bold',
+                    bold = true,
                 })
 
                 return mode_name .. ' '
