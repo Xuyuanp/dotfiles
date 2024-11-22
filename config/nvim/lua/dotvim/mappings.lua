@@ -45,8 +45,24 @@ local function setup()
     set_keymap('n', '<leader>p', '"+p', opts)
     ---]]
 
+    ---[[
     set_keymap('n', 'j', 'gj', opts)
     set_keymap('n', 'k', 'gk', opts)
+    ---]]
+
+    ---[[
+    local function diagnostic_jump(direction)
+        return function()
+            vim.diagnostic.jump({
+                count = direction,
+                severity = vim.diagnostic.severity.ERROR,
+            })
+        end
+    end
+
+    set_keymap('n', ']e', diagnostic_jump(1), { desc = '[Diagnostic] jump to next error' })
+    set_keymap('n', '[e', diagnostic_jump(-1), { desc = '[Diagnostic] jump to previous error' })
+    ---]]
 
     ---[[ snippets support
     local snippets_switch = function(direction, fallback)
