@@ -578,7 +578,6 @@ return {
                 current_line_blame = true,
                 current_line_blame_formatter = '@<author> / <abbrev_sha> <summary> / <author_time:%R>',
                 on_attach = function(bufnr)
-                    local dotutil = require('dotvim.util')
                     local keymaps = {
                         {
                             ']c',
@@ -603,13 +602,15 @@ return {
                             desc = 'jump to next hunk',
                         },
                         --  Text objects
-                        { 'ih', ':<C-U>lua require"gitsigns".select_hunk()<CR>', mode = { 'x', 'o' }, desc = 'select hunk' },
+                        { 'ih', gitsigns.select_hunk, mode = { 'x', 'o' }, desc = 'select hunk' },
                     }
                     for _, spec in ipairs(keymaps) do
-                        spec.desc = '[gitsigns] ' .. spec.desc
-                        spec.buffer = bufnr
-                        spec.noremap = true
-                        dotutil.set_keymap(spec)
+                        vim.keymap.set(spec.mode or 'n', spec[1], spec[2], {
+                            noremap = true,
+                            silent = true,
+                            buffer = bufnr,
+                            desc = '[gitsigns] ' .. spec.desc,
+                        })
                     end
                 end,
             })

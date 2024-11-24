@@ -1,7 +1,5 @@
-local vim = vim
 local api = vim.api
 local vfn = vim.fn
-local uv = vim.uv
 
 local M = {}
 
@@ -116,31 +114,8 @@ function M.floating_window(bufnr)
     return winnr
 end
 
-function M.dont_too_slow(func, ms, callback)
-    return function(...)
-        local start = uv.now()
-        local ret = { func(...) }
-        local duration = uv.now() - start
-        if duration >= ms then
-            callback(duration)
-        end
-
-        return unpack(ret)
-    end
-end
-
 function M.async()
     return require('dotvim.util.async')
-end
-
-function M.on_lsp_attach(on_attach, opts)
-    opts = opts or {}
-    opts.callback = function(args)
-        local bufnr = args.buf
-        local client = vim.lsp.get_client_by_id(args.data.client_id)
-        on_attach(client, bufnr)
-    end
-    vim.api.nvim_create_autocmd('LspAttach', opts)
 end
 
 function M.wrap_func_before(old, new)
@@ -179,25 +154,6 @@ function M.lazy_require(modname)
             end
         end,
     })
-end
-
----@class KeymapSpec
----@field [1] string lhs
----@field [2] string|function rhs
----@field mode? string|string[] mode short name(s), default 'n'
--- and opts of `vim.keymap.set`
----@param spec KeymapSpec
-function M.set_keymap(spec)
-    assert(spec[1], 'lhs is required')
-    assert(spec[2], 'rhs is required')
-    local mode = spec.mode or 'n'
-    local opts = {}
-    for k, v in pairs(spec) do
-        if type(k) == 'string' and k ~= 'mode' then
-            opts[k] = v
-        end
-    end
-    vim.keymap.set(mode, spec[1], spec[2], opts)
 end
 
 function M.hijack_notify()

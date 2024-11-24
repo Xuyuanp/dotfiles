@@ -84,7 +84,15 @@ function M.setup()
             null_ls.builtins.code_actions.impl,
         },
     })
-    require('dotvim.util').on_lsp_attach(on_lsp_attach, { desc = 'set auto formatting trigger' })
+    vim.api.nvim_create_autocmd('LspAttach', {
+        desc = '[NullLs] set auto formatting',
+        callback = function(args)
+            local bufnr = args.buf
+            local client = vim.lsp.get_client_by_id(args.data.client_id)
+            assert(client, 'client not found')
+            on_lsp_attach(client, bufnr)
+        end,
+    })
 end
 
 return M
