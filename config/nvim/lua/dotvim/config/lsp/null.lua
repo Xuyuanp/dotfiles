@@ -1,34 +1,5 @@
 local M = {}
 
----@param client vim.lsp.Client
----@param bufnr number
-local function on_lsp_attach(client, bufnr)
-    local support_formatting = client:supports_method(vim.lsp.protocol.Methods.textDocument_formatting)
-    if not support_formatting then
-        return
-    end
-
-    local event = 'BufWritePre'
-    local desc = 'Formatting on save by lsp ' .. client.name
-
-    if client.name ~= 'null-ls' and vim.b[bufnr].lsp_disable_auto_format then
-        -- disable auto format
-        return
-    end
-
-    vim.api.nvim_create_autocmd(event, {
-        buffer = bufnr,
-        desc = desc,
-        callback = function()
-            vim.lsp.buf.format({
-                name = client.name,
-                bufnr = bufnr,
-                async = false,
-            })
-        end,
-    })
-end
-
 function M.setup()
     local null_ls = require('null-ls')
 
@@ -83,15 +54,6 @@ function M.setup()
             null_ls.builtins.code_actions.gomodifytags,
             null_ls.builtins.code_actions.impl,
         },
-    })
-    vim.api.nvim_create_autocmd('LspAttach', {
-        desc = '[NullLs] set auto formatting',
-        callback = function(args)
-            local bufnr = args.buf
-            local client = vim.lsp.get_client_by_id(args.data.client_id)
-            assert(client, 'client not found')
-            on_lsp_attach(client, bufnr)
-        end,
     })
 end
 
