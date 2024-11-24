@@ -117,25 +117,33 @@ return {
             end,
         },
         init = function()
-            ---@diagnostic disable-next-line: duplicate-set-field
-            vim.notify = function(...)
-                local notify = require('notify')
-                ---@diagnostic disable-next-line: duplicate-set-field
-                vim.notify = function(msg, level, opts)
-                    opts = opts or {}
-                    local filetype = opts.filetype
-                    if filetype then
-                        opts.filetype = nil
-                        opts.on_open = require('dotvim.util').wrap_func_after(opts.on_open, function(win)
-                            local buf = vim.api.nvim_win_get_buf(win)
-                            vim.api.nvim_set_option_value('filetype', filetype, { buf = buf })
-                        end)
+            local notify = function(msg, level, opts)
+                opts = opts or {}
+                local filetype = opts.filetype
+                if filetype then
+                    opts.filetype = nil
+                    local on_open = opts.on_open or function() end
+                    opts.on_open = function(win)
+                        on_open(win)
+                        local buf = vim.api.nvim_win_get_buf(win)
+                        vim.api.nvim_set_option_value('filetype', filetype, { buf = buf })
                     end
-                    notify(msg, level, opts)
                 end
-
-                vim.notify(...)
+                require('notify')(msg, level, opts)
             end
+            ---@diagnostic disable-next-line: duplicate-set-field
+            vim.notify = setmetatable({}, {
+                __call = function(_, ...)
+                    notify(...)
+                end,
+                __index = function(obj, level)
+                    local f = function(msg, opts)
+                        notify(msg, level, opts)
+                    end
+                    rawset(obj, level, f)
+                    return f
+                end,
+            })
         end,
     },
 

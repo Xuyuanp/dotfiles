@@ -118,32 +118,6 @@ function M.async()
     return require('dotvim.util.async')
 end
 
-function M.wrap_func_before(old, new)
-    if not new then
-        return old
-    end
-    if not old then
-        return new
-    end
-    return function(...)
-        new(...)
-        old(...)
-    end
-end
-
-function M.wrap_func_after(old, new)
-    if not new then
-        return old
-    end
-    if not old then
-        return new
-    end
-    return function(...)
-        old(...)
-        new(...)
-    end
-end
-
 function M.lazy_require(modname)
     local m = {}
 
@@ -152,22 +126,6 @@ function M.lazy_require(modname)
             return function(...)
                 require(modname)[key](...)
             end
-        end,
-    })
-end
-
-function M.hijack_notify()
-    local notify = vim.notify
-    vim.notify = setmetatable({}, {
-        __call = function(_, ...)
-            notify(...)
-        end,
-        __index = function(obj, level)
-            local f = function(msg, opts)
-                notify(msg, level, opts)
-            end
-            rawset(obj, level, f)
-            return f
         end,
     })
 end
