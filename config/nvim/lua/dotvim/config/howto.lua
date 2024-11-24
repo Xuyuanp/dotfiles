@@ -2,6 +2,8 @@ local Copilot = require('CopilotChat.copilot')
 local async = require('plenary.async')
 local async_util = require('plenary.async.util')
 
+local is_headless = #vim.api.nvim_list_uis() == 0
+
 local M = {}
 
 local prompt_template = [[
@@ -15,7 +17,7 @@ My task is:
 
 local command = async.void(function(ev)
     local copilot = Copilot()
-    if ev.bang then
+    if is_headless then
         local log = require('plenary.log')
         log.new({ level = 'fatal' }, true)
     end
@@ -24,7 +26,7 @@ local command = async.void(function(ev)
     local rsp = copilot:ask(prompt)
     async_util.scheduler()
 
-    if ev.bang then
+    if is_headless then
         vim.fn.writefile({ rsp }, '/dev/stdout')
         vim.cmd([[qa!]])
     else
