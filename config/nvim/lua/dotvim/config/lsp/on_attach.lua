@@ -1,6 +1,3 @@
-local vim = vim
-local api = vim.api
-
 local a = require('dotvim.util.async')
 local my_lsp = require('dotvim.config.lsp.my')
 
@@ -125,7 +122,7 @@ local function codelens_auto_refresh(client, bufnr)
         return
     end
     local group_id = vim.api.nvim_create_augroup('lsp_codelens_buf_' .. bufnr, { clear = true })
-    api.nvim_create_autocmd({ 'BufEnter', 'InsertLeave', 'BufWritePost', 'CursorHold' }, {
+    vim.api.nvim_create_autocmd({ 'BufEnter', 'InsertLeave', 'BufWritePost', 'CursorHold' }, {
         group = group_id,
         buffer = bufnr,
         desc = '[Lsp] codelens refresh',
@@ -145,7 +142,7 @@ local function auto_document_highlight(client, bufnr)
         return
     end
     local group_id = vim.api.nvim_create_augroup('lsp_document_highlight_buf_' .. bufnr, { clear = true })
-    api.nvim_create_autocmd({ 'CursorHold', 'CursorMoved' }, {
+    vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorMoved' }, {
         group = group_id,
         buffer = bufnr,
         desc = '[Lsp] document highlight',
