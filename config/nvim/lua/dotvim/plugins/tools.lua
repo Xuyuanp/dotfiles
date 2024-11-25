@@ -148,15 +148,34 @@ return {
     },
 
     {
-        'phaazon/hop.nvim',
-        event = { 'BufReadPost', 'BufNewFile' },
-        branch = 'v1', -- optional but strongly recommended
-        opts = {
-            keys = 'etovxqpdygfblzhckisuran',
-        },
+        'folke/flash.nvim',
         keys = {
-            { '<leader>w', require('dotvim.util').lazy_require('hop').hint_words, mode = 'n', desc = '[Hop] hint words' },
+            {
+                's',
+                mode = { 'n', 'x', 'o' },
+                function()
+                    require('flash').jump()
+                end,
+                desc = 'Flash',
+            },
+            {
+                'S',
+                mode = { 'n', 'x', 'o' },
+                function()
+                    require('flash').treesitter()
+                end,
+                desc = 'Flash Treesitter',
+            },
+            {
+                '<C-s>',
+                mode = { 'c' },
+                function()
+                    require('flash').toggle()
+                end,
+                desc = 'Toggle Flash Search',
+            },
         },
+        opts = {},
     },
 
     {

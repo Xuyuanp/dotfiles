@@ -146,8 +146,8 @@ function M.setup()
             source = true,
         },
         jump = {
-            float = true
-        }
+            float = true,
+        },
     })
 
     if vim.g.neovide then
