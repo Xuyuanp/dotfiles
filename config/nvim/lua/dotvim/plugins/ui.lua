@@ -548,7 +548,7 @@ return {
     {
         'akinsho/git-conflict.nvim',
         version = '*',
-        event = 'VeryLazy',
+        event = 'User GitSigns*',
         opts = {
             default_mappings = {
                 ours = '<leader>co',
