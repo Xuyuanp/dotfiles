@@ -181,7 +181,8 @@ local function format_on_save(client, bufnr)
     local event = 'BufWritePre'
     local desc = 'Formatting on save by lsp ' .. client.name
 
-    local group_id = vim.api.nvim_create_augroup('lsp_format_buf_' .. bufnr, { clear = true })
+    local group_name = string.format('lsp_format_buf_%d_%s', bufnr, client.name)
+    local group_id = vim.api.nvim_create_augroup(group_name, { clear = true })
 
     vim.api.nvim_create_autocmd(event, {
         buffer = bufnr,
@@ -189,6 +190,7 @@ local function format_on_save(client, bufnr)
         desc = desc,
         callback = function()
             vim.lsp.buf.format({
+                name = client.name,
                 bufnr = bufnr,
                 async = false,
             })
