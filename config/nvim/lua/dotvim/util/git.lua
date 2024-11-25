@@ -23,10 +23,11 @@ local choices = {
     },
 }
 
-M.load_head = a.wrap(function()
+local load_head = a.wrap(function(tab)
     for _, choice in ipairs(choices) do
         local res = a.system(choice.args, { text = true }).await()
         if res.code == 0 then
+            vim.t[tab].dotvim_git_head = choice.icon .. ' ' .. vim.trim(res.stdout)
             _G.dotvim_git_head = choice.icon .. ' ' .. vim.trim(res.stdout)
 
             a.schedule().await()
@@ -36,5 +37,10 @@ M.load_head = a.wrap(function()
         end
     end
 end)
+
+function M.load_head()
+    local tab = vim.api.nvim_get_current_tabpage()
+    load_head(tab)
+end
 
 return M

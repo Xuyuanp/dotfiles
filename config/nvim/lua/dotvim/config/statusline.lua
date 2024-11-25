@@ -155,7 +155,7 @@ local lsp_icon = function()
 end
 
 local function git_branch()
-    return _G.dotvim_git_head
+    return vim.t.dotvim_git_head
 end
 
 --[[/* GALAXYLINE CONFIG */]]
