@@ -113,7 +113,25 @@ function M.setup()
             { name = 'snippets' },
             { name = 'lazydev' },
         }, {
-            { name = 'buffer', keyword_length = 5 },
+            {
+                name = 'buffer',
+                keyword_length = 5,
+                option = {
+                    -- Buffer completions from all visible buffers (that aren't huge).
+                    get_bufnrs = function()
+                        local bufs = {}
+
+                        for _, win in ipairs(vim.api.nvim_list_wins()) do
+                            local buf = vim.api.nvim_win_get_buf(win)
+                            if vim.bo[buf].filetype ~= 'bigfile' then
+                                table.insert(bufs, buf)
+                            end
+                        end
+
+                        return bufs
+                    end,
+                },
+            },
             { name = 'path' },
             { name = 'tmux', keyword_length = 5 },
             { name = 'calc' },
