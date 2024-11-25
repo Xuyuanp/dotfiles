@@ -8,7 +8,6 @@ return {
             'folke/neoconf.nvim',
             'williamboman/mason-lspconfig.nvim',
             'nvimtools/none-ls.nvim',
-            'onsails/lspkind-nvim',
             'junegunn/fzf.vim',
         },
         config = function()
