@@ -1,5 +1,3 @@
-local vim = vim
-
 local lspconfig = require('lspconfig')
 
 local default_config = require('dotvim.config.lsp.utils')

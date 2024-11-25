@@ -4,7 +4,7 @@ local my_lsp = require('dotvim.config.lsp.my')
 local LspMethods = vim.lsp.protocol.Methods
 
 ---@alias Client vim.lsp.Client
----@alias on_attach_func fun(client: Client, bufnr: number)
+---@alias OnAttachFunc fun(client: Client, bufnr: number)
 
 ---@param client Client
 ---@param bufnr number
@@ -189,7 +189,6 @@ local function format_on_save(client, bufnr)
         desc = desc,
         callback = function()
             vim.lsp.buf.format({
-                name = client.name,
                 bufnr = bufnr,
                 async = false,
             })
@@ -197,7 +196,7 @@ local function format_on_save(client, bufnr)
     })
 end
 
----@type on_attach_func[]
+---@type OnAttachFunc[]
 local on_attach_funcs = {
     set_keymaps,
     auto_document_highlight,
