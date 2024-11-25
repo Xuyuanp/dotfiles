@@ -28,19 +28,21 @@ local function git_diff(_tree, node)
         return
     end
 
+    local winnr, bufnr = dotutil.open_floating_window()
+    vim.wo[winnr].cursorline = true
+    vim.wo[winnr].winblend = 0
+    vim.wo[winnr].winhl = 'NormalFloat:'
+    vim.wo[winnr].number = true
+    api.nvim_win_set_config(winnr, {
+        border = 'rounded',
+        title = 'Diff Patch',
+    })
+
     -- content
-    local bufnr = api.nvim_create_buf(false, true)
-    api.nvim_set_option_value('filetype', 'diff', { buf = bufnr })
-    api.nvim_set_option_value('bufhidden', 'wipe', { buf = bufnr })
-    api.nvim_set_option_value('swapfile', false, { buf = bufnr })
+    vim.bo[bufnr].filetype = 'diff'
+    vim.bo[bufnr].bufhidden = 'wipe'
+    vim.bo[bufnr].swapfile = false
     api.nvim_buf_set_lines(bufnr, 0, -1, false, diff)
-
-    local winnr = dotutil.floating_window(bufnr)
-
-    api.nvim_set_option_value('cursorline', true, { win = winnr })
-    api.nvim_set_option_value('winblend', 0, { win = winnr })
-    api.nvim_set_option_value('winhl', 'NormalFloat:', { win = winnr })
-    api.nvim_set_option_value('number', true, { win = winnr })
 
     vim.api.nvim_buf_create_user_command(bufnr, 'Apply', function()
         require('yanil/git').apply_buf(bufnr)
@@ -78,7 +80,7 @@ local find_file = a.wrap(function(tree, node)
     if not path or path == '' then
         return
     end
-    path = cwd .. path
+    path = vim.fs.joinpath(cwd, path)
 
     local target = tree.root:find_node_by_path(path)
     if not target then

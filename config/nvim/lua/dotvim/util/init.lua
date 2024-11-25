@@ -14,73 +14,22 @@ M.fzf_wrap = function(name, spec, fullscreen)
     return wrapped
 end
 
-local border_symbols = {
-    vertical = '┃',
-    horizontal = '━',
-    fill = ' ',
-    corner = {
-        topleft = '┏',
-        topright = '┓',
-        bottomleft = '┗',
-        bottomright = '┛',
-    },
-}
-
-function border_symbols:draw(width, height)
-    local border_lines = {
-        table.concat({
-            self.corner.topleft,
-            string.rep(self.horizontal, width),
-            self.corner.topright,
-        }),
-    }
-    local middle_line = table.concat({
-        self.vertical,
-        string.rep(self.fill, width),
-        self.vertical,
-    })
-    for _ = 1, height do
-        table.insert(border_lines, middle_line)
-    end
-    table.insert(
-        border_lines,
-        table.concat({
-            self.corner.bottomleft,
-            string.rep(self.horizontal, width),
-            self.corner.bottomright,
-        })
-    )
-
-    return border_lines
-end
-
-function M.floating_window(bufnr)
+function M.open_floating_window()
     local winnr_bak = vfn.winnr()
     local altwinnr_bak = vfn.winnr('#')
 
-    local width, height = vim.o.columns, vim.o.lines
+    local function resize()
+        local width, height = vim.o.columns, vim.o.lines
 
-    local win_width = math.ceil(width * 0.8) - 4
-    local win_height = math.ceil(height * 0.8)
-    local row = math.ceil((height - win_height) / 2 - 1)
-    local col = math.ceil((width - win_width) / 2)
+        local win_width = math.ceil(width * 0.8) - 4
+        local win_height = math.ceil(height * 0.8)
+        local row = math.ceil((height - win_height) / 2 - 1)
+        local col = math.ceil((width - win_width) / 2)
 
-    -- border
-    local border_opts = {
-        style = 'minimal',
-        relative = 'editor',
-        width = win_width + 2,
-        height = win_height + 2,
-        row = row - 1,
-        col = col - 1,
-    }
+        return win_width, win_height, row, col
+    end
 
-    local border_bufnr = api.nvim_create_buf(false, true)
-    local border_lines = border_symbols:draw(win_width, win_height)
-    api.nvim_buf_set_lines(border_bufnr, 0, -1, false, border_lines)
-    local border_winnr = api.nvim_open_win(border_bufnr, true, border_opts)
-    api.nvim_set_option_value('winhl', 'NormalFloat:', { win = border_winnr })
-    api.nvim_set_option_value('winblend', 0, { win = border_winnr })
+    local win_width, win_height, row, col = resize()
 
     -- content
     local win_opts = {
@@ -91,19 +40,30 @@ function M.floating_window(bufnr)
         row = row,
         col = col,
     }
+    local bufnr = api.nvim_create_buf(false, true)
     local winnr = api.nvim_open_win(bufnr, true, win_opts)
 
-    api.nvim_create_autocmd({ 'BufWipeout' }, {
-        buffer = bufnr,
+    local auto_resize_id = api.nvim_create_autocmd('WinResized', {
         callback = function()
-            vim.cmd(string.format([[silent bwipeout! %d]], border_bufnr))
+            win_width, win_height, row, col = resize()
+            api.nvim_win_set_config(winnr, {
+                relative = 'editor',
+                width = win_width,
+                height = win_height,
+                row = row,
+                col = col,
+            })
         end,
     })
+
     api.nvim_create_autocmd({ 'WinClosed' }, {
-        buffer = bufnr,
+        pattern = '' .. winnr,
+        once = true,
         callback = function()
             vim.cmd(string.format([[%dwincmd w]], altwinnr_bak))
             vim.cmd(string.format([[%dwincmd w]], winnr_bak))
+
+            api.nvim_del_autocmd(auto_resize_id)
         end,
     })
 
@@ -111,7 +71,7 @@ function M.floating_window(bufnr)
     vim.keymap.set('n', 'q', ':q<CR>', key_opts)
     vim.keymap.set('n', '<ESC><ESC>', ':q<CR>', key_opts)
 
-    return winnr
+    return winnr, bufnr
 end
 
 function M.async()

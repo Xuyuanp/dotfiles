@@ -40,6 +40,9 @@ return {
                         LspSignatureActiveParameter = { underline = true },
                         Conceal = { bold = false, italic = false },
 
+                        FloatBorder = { bg = 'NONE' },
+                        FloatTitle = { bg = 'NONE' },
+
                         CmpItemKindNamespace = { link = '@lsp.type.namespace' },
                         CmpItemKindPackage = { link = '@module' },
                         CmpItemKindConstant = { link = 'Constant' },
