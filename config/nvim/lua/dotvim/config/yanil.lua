@@ -8,7 +8,6 @@ local dotutil = require('dotvim.util')
 local yanil = require('yanil')
 local git = require('yanil/git')
 local decorators = require('yanil/decorators')
-local builtin_devicons = require('yanil/devicons')
 local canvas = require('yanil/canvas')
 
 local mini_icons = require('mini.icons')
@@ -202,7 +201,23 @@ if (vim.env.YANIL_BUBBLE or '0') == '1' then
         return '', hl
     end
 else
-    icon_decorator = builtin_devicons.decorator()
+    icon_decorator = function(node)
+        if not node.parent then
+            local text = '󰙅'
+            return text, 'YanilTreeDirectory'
+        end
+        if node:is_dir() then
+            local text = node.is_open and '' or ''
+            return text, node:is_link() and 'YanilTreeLink' or 'YanilTreeDirectory'
+        end
+
+        local icon, hl = mini_icons.get('file', node.name)
+        if icon then
+            return icon, hl
+        end
+
+        return ''
+    end
 end
 
 function M.setup()
