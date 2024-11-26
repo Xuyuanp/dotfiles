@@ -71,22 +71,21 @@ return {
 
     {
         'mhinz/vim-startify',
-        event = 'BufEnter',
+        lazy = vim.fn.argc() > 0,
         dependencies = {
             'echasnovski/mini.icons',
         },
         config = function()
             local vfn = vim.fn
 
-            _G.devicons_get_icon = function(path)
+            _G.startify_get_icon = function(path)
                 local filename = vfn.fnamemodify(path, ':t')
-                local extension = vfn.fnamemodify(path, ':e')
-                return require('nvim-web-devicons').get_icon(filename, extension, { default = true })
+                return require('mini.icons').get('file', filename)
             end
 
             vim.cmd([[
             function! StartifyEntryFormat()
-                return 'v:lua.devicons_get_icon(absolute_path) ." ". entry_path'
+                return 'v:lua.startify_get_icon(absolute_path) ." ". entry_path'
             endfunction
             ]])
         end,
