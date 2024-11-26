@@ -37,15 +37,6 @@ function M.setup()
         group = group_id,
         command = 'checktime',
     })
-
-    vim.api.nvim_create_autocmd('FileType', {
-        group = group_id,
-        desc = 'Disable features in big files',
-        pattern = 'bigfile',
-        callback = vim.schedule_wrap(function(args)
-            vim.bo[args.buf].syntax = vim.filetype.match({ buf = args.buf }) or ''
-        end),
-    })
 end
 
 return M

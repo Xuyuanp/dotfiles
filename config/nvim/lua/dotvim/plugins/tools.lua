@@ -106,45 +106,12 @@ return {
     },
 
     {
-        'rcarriga/nvim-notify',
+        'folke/snacks.nvim',
+        event = 'VeryLazy',
         opts = {
-            timeout = 3000,
-            max_height = function()
-                return math.floor(vim.o.lines * 0.75)
-            end,
-            max_width = function()
-                return math.floor(vim.o.columns * 0.75)
-            end,
+            bigfile = { enabled = true },
+            notifier = { enabled = true },
         },
-        init = function()
-            local notify = function(msg, level, opts)
-                opts = opts or {}
-                local filetype = opts.filetype
-                if filetype then
-                    opts.filetype = nil
-                    local on_open = opts.on_open or function() end
-                    opts.on_open = function(win)
-                        on_open(win)
-                        local buf = vim.api.nvim_win_get_buf(win)
-                        vim.api.nvim_set_option_value('filetype', filetype, { buf = buf })
-                    end
-                end
-                require('notify')(msg, level, opts)
-            end
-            ---@diagnostic disable-next-line: duplicate-set-field
-            vim.notify = setmetatable({}, {
-                __call = function(_, ...)
-                    notify(...)
-                end,
-                __index = function(obj, level)
-                    local f = function(msg, opts)
-                        notify(msg, level, opts)
-                    end
-                    rawset(obj, level, f)
-                    return f
-                end,
-            })
-        end,
     },
 
     {
