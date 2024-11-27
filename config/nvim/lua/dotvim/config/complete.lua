@@ -19,9 +19,64 @@ local function copilot_cmp()
     return function() end
 end
 
+---@param entry cmp.Entry
+---@return string[]
+function M.entry_get_documentation(entry)
+    local item = entry.completion_item
+    if entry.source ~= 'copilot' and entry.context.filetype == 'lua' then
+        item.detail = nil
+    end
+
+    local docs = {}
+    if item.detail then
+        local ft = entry.context.filetype
+        docs = vim.split(('```%s\n%s```'):format(ft, vim.trim(item.detail)), '\n')
+    end
+
+    if item.documentation then
+        if #docs > 0 then
+            table.insert(docs, '---')
+        end
+        docs = vim.lsp.util.convert_input_to_markdown_lines(item.documentation, docs)
+    end
+    return docs
+end
+
+local function override_entry_get_documentation()
+    local entry = require('cmp.entry')
+    local backup = entry.get_documentation
+    entry.get_documentation = function(self)
+        return M.entry_get_documentation(self)
+    end
+    return backup
+end
+
+function M.stylize_markdown(bufnr, contents, opts)
+    contents = vim.lsp.util._normalize_markdown(contents, {
+        width = vim.lsp.util._make_floating_popup_size(contents, opts),
+    })
+
+    vim.treesitter.start(bufnr, 'markdown')
+    vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, contents)
+
+    return contents
+end
+
+local function overwrite_stylize_markdown()
+    local backup = vim.lsp.util.stylize_markdown
+
+    ---@diagnostic disable-next-line: duplicate-set-field
+    vim.lsp.util.stylize_markdown = M.stylize_markdown
+
+    return backup
+end
+
 function M.setup()
     local cmp = require('cmp')
     local compare = require('cmp.config.compare')
+
+    overwrite_stylize_markdown()
+    override_entry_get_documentation()
 
     local compare_kind = function(entry1, entry2)
         local kind1 = entry1:get_kind()

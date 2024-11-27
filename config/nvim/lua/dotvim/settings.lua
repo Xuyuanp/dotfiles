@@ -103,9 +103,6 @@ function M.setup()
 
     vim.g.vimsyn_embed = 'lPr'
 
-    opt.pumblend = 20
-    opt.winblend = 20
-
     opt.fillchars:append({
         eob = ' ',
         horiz = '━',
