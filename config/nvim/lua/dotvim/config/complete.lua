@@ -23,14 +23,16 @@ end
 ---@return string[]
 function M.entry_get_documentation(entry)
     local item = entry.completion_item
-    if entry.source ~= 'copilot' and entry.context.filetype == 'lua' then
+    if entry.source.name ~= 'copilot' and entry.context.filetype == 'lua' then
         item.detail = nil
     end
 
     local docs = {}
     if item.detail then
         local ft = entry.context.filetype
-        docs = vim.split(('```%s\n%s```'):format(ft, vim.trim(item.detail)), '\n')
+        local detail = vim.trim(item.detail)
+        local marked = ('```%s\n%s```'):format(ft, detail)
+        docs = vim.split(marked, '\n')
     end
 
     if item.documentation then
@@ -165,6 +167,7 @@ function M.setup()
             { name = 'codeium' },
             { name = 'copilot' },
             { name = 'nvim_lsp' },
+            { name = 'nvim_lsp_signature_help' },
             { name = 'snippets' },
             { name = 'lazydev' },
         }, {
