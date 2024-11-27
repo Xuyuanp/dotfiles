@@ -158,6 +158,21 @@ local function setup()
             })
         end,
     })
+
+    vim.api.nvim_create_autocmd('BufWinEnter', {
+        group = group_id,
+        desc = '[Lsp] customize floating preview window',
+        callback = function(args)
+            local winnr = vim.api.nvim_get_current_win()
+            vim.schedule(function()
+                local floating_winnr = vim.b.lsp_floating_preview
+                if not floating_winnr or floating_winnr ~= winnr then
+                    return
+                end
+                vim.b[args.buf].miniindentscope_disable = true
+            end)
+        end,
+    })
 end
 
 local M = {
