@@ -166,44 +166,11 @@ local function disable_semantic_token_for_helm(client, bufnr)
     end
 end
 
----@param client Client
----@param bufnr number
-local function format_on_save(client, bufnr)
-    if not client:supports_method(vim.lsp.protocol.Methods.textDocument_formatting) then
-        return
-    end
-
-    if client.name ~= 'null-ls' and vim.b[bufnr].lsp_disable_auto_format then
-        -- disable auto format
-        return
-    end
-
-    local event = 'BufWritePre'
-    local desc = 'Formatting on save by lsp ' .. client.name
-
-    local group_name = string.format('lsp_format_buf_%d_%s', bufnr, client.name)
-    local group_id = vim.api.nvim_create_augroup(group_name, { clear = true })
-
-    vim.api.nvim_create_autocmd(event, {
-        buffer = bufnr,
-        group = group_id,
-        desc = desc,
-        callback = function()
-            vim.lsp.buf.format({
-                name = client.name,
-                bufnr = bufnr,
-                async = false,
-            })
-        end,
-    })
-end
-
 ---@type OnAttachFunc[]
 local on_attach_funcs = {
     set_keymaps,
     auto_document_highlight,
     smart_inlayhint,
-    format_on_save,
     codelens_auto_refresh,
     disable_semantic_token_for_helm,
 }
