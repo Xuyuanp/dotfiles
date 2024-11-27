@@ -75,6 +75,8 @@ function M.hover(opts)
         end
     end
     opts = floating_opts(opts)
+    opts.title = 'Hover'
+    opts.title_pos = 'center'
     vim.lsp.buf.hover(opts)
 end
 
