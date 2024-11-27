@@ -47,6 +47,9 @@ return {
         keys = {
             { '<C-e>', require('dotvim.util').lazy_require('yanil/canvas').toggle, mode = 'n', desc = '[Yanil] toggle' },
         },
+        dependencies = {
+            'nvim-treesitter/nvim-treesitter',
+        },
         config = function()
             require('dotvim.config.yanil').setup()
 
