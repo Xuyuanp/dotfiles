@@ -107,8 +107,8 @@ return {
 
     {
         'folke/snacks.nvim',
-        event = 'VeryLazy',
-        cmd = 'Snacks',
+        lazy = false,
+        priority = 1000,
         opts = {
             bigfile = { enabled = true },
             notifier = { enabled = true },
