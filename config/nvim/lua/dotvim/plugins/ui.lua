@@ -37,6 +37,15 @@ return {
             })
 
             require('telescope').load_extension('file_browser')
+
+            local group_id = vim.api.nvim_create_augroup('dotvim_telescope', { clear = true })
+            vim.api.nvim_create_autocmd('User', {
+                group = group_id,
+                pattern = 'TelescopePreviewerLoaded',
+                callback = function()
+                    vim.wo.number = true
+                end,
+            })
         end,
     },
 

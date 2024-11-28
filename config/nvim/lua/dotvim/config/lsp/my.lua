@@ -1,5 +1,3 @@
-local handlers = require('dotvim.config.lsp.handlers')
-
 local M = setmetatable({}, {
     __index = function(obj, key)
         local f = vim.lsp.buf[key]
@@ -8,12 +6,49 @@ local M = setmetatable({}, {
     end,
 })
 
+---@class ListContext
+---@field method string
+---@field bufnr number
+
+---@class List
+---@field title? string
+---@field context? ListContext
+---@field items vim.quickfix.entry[]
+
+local function new_on_list(title)
+    ---@param list List
+    return function(list)
+        local tel_opts = {
+            layout_strategy = 'flex',
+        }
+
+        local conf = require('telescope.config').values
+        local finders = require('telescope.finders')
+        local make_entry = require('telescope.make_entry')
+        local pickers = require('telescope.pickers')
+
+        pickers
+            .new(tel_opts, {
+                prompt_title = 'LSP ' .. title,
+                finder = finders.new_table({
+                    results = list.items,
+                    entry_maker = make_entry.gen_from_quickfix(tel_opts),
+                }),
+                previewer = conf.qflist_previewer(tel_opts),
+                sorter = conf.generic_sorter(tel_opts),
+                push_cursor_on_edit = true,
+                push_tagstack_on_edit = true,
+            })
+            :find()
+    end
+end
+
 ---@generic Opts: vim.lsp.ListOpts
 ---@param opts? Opts
 ---@return Opts
 local function location_opts(opts, title)
     local default = {
-        on_list = handlers.new_on_list(title),
+        on_list = new_on_list(title),
     }
     opts = vim.tbl_extend('force', default, opts or {})
     return opts
