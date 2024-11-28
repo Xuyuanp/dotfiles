@@ -108,10 +108,45 @@ return {
     {
         'folke/snacks.nvim',
         event = 'VeryLazy',
+        cmd = 'Snacks',
         opts = {
             bigfile = { enabled = true },
             notifier = { enabled = true },
         },
+        config = function(_, opts)
+            local snacks = require('snacks')
+            snacks.setup(opts)
+
+            local subcommands = {
+                notifications = function()
+                    require('snacks.notifier').show_history()
+                end,
+            }
+
+            ---@type vim.api.keyset.user_command
+            local cmdopts = {
+                force = true,
+                nargs = 1,
+                complete = function(lead)
+                    return vim.tbl_filter(function(cmd)
+                        return vim.startswith(cmd, lead)
+                    end, vim.tbl_keys(subcommands))
+                end,
+            }
+
+            local function command(ev)
+                local action = subcommands[ev.args]
+                if not action then
+                    vim.notify('Unknown subcommand: ' .. ev.args, vim.log.levels.ERROR, {
+                        title = 'Snacks',
+                    })
+                    return
+                end
+                action(ev)
+            end
+
+            vim.api.nvim_create_user_command('Snacks', command, cmdopts)
+        end,
     },
 
     {
