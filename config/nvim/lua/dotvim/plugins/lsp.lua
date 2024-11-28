@@ -195,7 +195,7 @@ return {
             },
             notification = {
                 window = {
-                    winblend = 0,
+                    winblend = vim.o.winblend,
                     border = 'rounded',
                 },
             },

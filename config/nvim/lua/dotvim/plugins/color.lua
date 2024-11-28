@@ -43,6 +43,7 @@ return {
                         FloatBorder = { bg = 'NONE' },
                         FloatTitle = { bg = 'NONE' },
                         NormalFloat = { bg = 'NONE' },
+                        TelescopeBorder = { bg = 'NONE' },
 
                         CmpItemKindNamespace = { link = '@lsp.type.namespace' },
                         CmpItemKindPackage = { link = '@module' },

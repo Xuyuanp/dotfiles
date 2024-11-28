@@ -1,3 +1,5 @@
+local features = require('dotvim.features')
+
 local M = {}
 
 function M.setup()
@@ -123,6 +125,8 @@ function M.setup()
     opt.termguicolors = true
 
     opt.conceallevel = 1
+
+    opt.winblend = features.transparent and 0 or 20
 
     vim.filetype.add({
         filename = {

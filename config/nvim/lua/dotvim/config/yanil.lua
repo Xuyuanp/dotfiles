@@ -31,7 +31,6 @@ local function git_diff(_tree, node)
 
     local winnr, bufnr = dotutil.open_floating_window()
     vim.wo[winnr].cursorline = true
-    vim.wo[winnr].winblend = 0
     vim.wo[winnr].winhl = 'NormalFloat:'
     vim.wo[winnr].number = true
     api.nvim_win_set_config(winnr, {
