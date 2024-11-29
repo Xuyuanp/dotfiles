@@ -44,6 +44,7 @@ return {
                         FloatTitle = { bg = 'NONE' },
                         NormalFloat = { bg = 'NONE' },
                         TelescopeBorder = { bg = 'NONE' },
+                        TelescopePreviewLine = { bg = colors.palette.sumiInk6 },
 
                         CmpItemKindNamespace = { link = '@lsp.type.namespace' },
                         CmpItemKindPackage = { link = '@module' },

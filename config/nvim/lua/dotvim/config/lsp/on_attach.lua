@@ -13,18 +13,19 @@ local function set_keymaps(client, bufnr)
 
     -- stylua: ignore
     local keymaps = {
-        K   = { handler = my_lsp.hover,            desc = 'show documentation',     method = nil                                    },
-        gi  = { handler = my_lsp.implementation,   desc = 'goto implementation',    method = LspMethods.textDocument_implementation },
-        gk  = { handler = my_lsp.signature_help,   desc = 'show signature help',    method = LspMethods.textDocument_signatureHelp  },
-        gd  = { handler = my_lsp.definition,       desc = 'goto definition',        method = LspMethods.textDocument_definition     },
-        gtd = { handler = my_lsp.type_definition,  desc = 'goto type definition',   method = LspMethods.textDocument_typeDefinition },
-        grr = { handler = my_lsp.references,       desc = 'show references',        method = LspMethods.textDocument_references     },
-        grn = { handler = my_lsp.rename,           desc = 'rename',                 method = LspMethods.textDocument_rename         },
-        gds = { handler = my_lsp.document_symbol,  desc = 'show document symbols',  method = LspMethods.textDocument_documentSymbol },
-        gws = { handler = my_lsp.workspace_symbol, desc = 'show workspace symbols', method = LspMethods.workspace_symbol            },
-        gca = { handler = my_lsp.code_action,      desc = 'code action',            method = LspMethods.textDocument_codeAction     },
-        go  = { handler = my_lsp.outgoing_calls,   desc = 'show outgoing calls',    method = LspMethods.callHierarchy_outgoingCalls },
-        gcl = { handler = my_lsp.codelens,         desc = 'find and run codelens',  method = nil                                    },
+        K   = { handler = my_lsp.hover,              desc = 'show documentation',     method = nil                                    },
+        gi  = { handler = my_lsp.implementation,     desc = 'goto implementation',    method = LspMethods.textDocument_implementation },
+        gk  = { handler = my_lsp.signature_help,     desc = 'show signature help',    method = LspMethods.textDocument_signatureHelp  },
+        gd  = { handler = my_lsp.definition,         desc = 'goto definition',        method = LspMethods.textDocument_definition     },
+        gpd = { handler = my_lsp.preview_definition, desc = 'preview definition',     method = LspMethods.textDocument_definition     },
+        gtd = { handler = my_lsp.type_definition,    desc = 'goto type definition',   method = LspMethods.textDocument_typeDefinition },
+        grr = { handler = my_lsp.references,         desc = 'show references',        method = LspMethods.textDocument_references     },
+        grn = { handler = my_lsp.rename,             desc = 'rename',                 method = LspMethods.textDocument_rename         },
+        gds = { handler = my_lsp.document_symbol,    desc = 'show document symbols',  method = LspMethods.textDocument_documentSymbol },
+        gws = { handler = my_lsp.workspace_symbol,   desc = 'show workspace symbols', method = LspMethods.workspace_symbol            },
+        gca = { handler = my_lsp.code_action,        desc = 'code action',            method = LspMethods.textDocument_codeAction     },
+        go  = { handler = my_lsp.outgoing_calls,     desc = 'show outgoing calls',    method = LspMethods.callHierarchy_outgoingCalls },
+        gcl = { handler = my_lsp.codelens,           desc = 'find and run codelens',  method = nil                                    },
     }
     for key, action in pairs(keymaps) do
         if not action.method or client:supports_method(action.method) then

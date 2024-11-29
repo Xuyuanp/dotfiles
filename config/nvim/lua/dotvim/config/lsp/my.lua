@@ -1,10 +1,4 @@
-local M = setmetatable({}, {
-    __index = function(obj, key)
-        local f = vim.lsp.buf[key]
-        rawset(obj, key, f)
-        return f
-    end,
-})
+local M = {}
 
 ---@class ListContext
 ---@field method string
@@ -15,40 +9,88 @@ local M = setmetatable({}, {
 ---@field context? ListContext
 ---@field items vim.quickfix.entry[]
 
-local function new_on_list(title)
+---@param item vim.quickfix.entry
+local function jump_to_qfitem(item)
+    local bufnr = item.bufnr or vim.fn.bufadd(item.filename)
+    vim.bo[bufnr].buflisted = true
+    local winnr = vim.fn.win_findbuf(bufnr)[1] or 0
+    vim.api.nvim_win_set_buf(winnr, bufnr)
+    vim.api.nvim_win_set_cursor(winnr, { item.lnum, item.col - 1 })
+end
+
+---@param items vim.quickfix.entry[]
+---@param opts? table
+local function telescope_pick_qflist(items, opts)
+    local conf = require('telescope.config').values
+    local finders = require('telescope.finders')
+    local make_entry = require('telescope.make_entry')
+    local pickers = require('telescope.pickers')
+
+    pickers
+        .new(opts or {}, {
+            finder = finders.new_table({
+                results = items,
+                entry_maker = make_entry.gen_from_quickfix(opts),
+            }),
+            previewer = conf.qflist_previewer(opts),
+            sorter = conf.generic_sorter(opts),
+            push_cursor_on_edit = true,
+            push_tagstack_on_edit = true,
+        })
+        :find()
+end
+
+---@class OnListOpts
+---@field title? string Title of the list, default is 'Locations', prefix with 'Lsp '
+---@field always_select? boolean Whether to always select the only item
+---@field show_current? boolean Whether to show current item in the list
+---@field tel_opts? table Telescope opts
+
+---@param opts? OnListOpts
+local function new_on_list(opts)
+    opts = opts or {}
+
     ---@param list List
     return function(list)
-        local tel_opts = {
+        if not list.items or #list.items == 0 then
+            return
+        end
+
+        local items = list.items
+        if not opts.show_current then
+            local bufnr = list.context and list.context.bufnr or 0
+            local filepath = vim.api.nvim_buf_get_name(bufnr)
+            local winnr = vim.fn.win_findbuf(bufnr)[1] or 0
+            local lnum = vim.api.nvim_win_get_cursor(winnr)[1]
+            items = vim.iter(items)
+                :filter(function(item)
+                    return not (item.filename == filepath and item.lnum == lnum)
+                end)
+                :totable()
+        end
+
+        if #items == 1 and not opts.always_select then
+            local item = items[1]
+            jump_to_qfitem(item)
+            return
+        end
+
+        local tel_opts = vim.tbl_deep_extend('force', {
+            prompt_title = 'Lsp ' .. (opts.title or 'Locations'),
             layout_strategy = 'flex',
-        }
+        }, opts.tel_opts or {})
 
-        local conf = require('telescope.config').values
-        local finders = require('telescope.finders')
-        local make_entry = require('telescope.make_entry')
-        local pickers = require('telescope.pickers')
-
-        pickers
-            .new(tel_opts, {
-                prompt_title = 'LSP ' .. title,
-                finder = finders.new_table({
-                    results = list.items,
-                    entry_maker = make_entry.gen_from_quickfix(tel_opts),
-                }),
-                previewer = conf.qflist_previewer(tel_opts),
-                sorter = conf.generic_sorter(tel_opts),
-                push_cursor_on_edit = true,
-                push_tagstack_on_edit = true,
-            })
-            :find()
+        telescope_pick_qflist(items, tel_opts)
     end
 end
 
 ---@generic Opts: vim.lsp.ListOpts
 ---@param opts? Opts
+---@param on_list_opts? OnListOpts
 ---@return Opts
-local function location_opts(opts, title)
+local function location_opts(opts, on_list_opts)
     local default = {
-        on_list = new_on_list(title),
+        on_list = new_on_list(on_list_opts),
     }
     opts = vim.tbl_extend('force', default, opts or {})
     return opts
@@ -57,25 +99,30 @@ end
 ---@param context? table
 ---@param opts? vim.lsp.ListOpts
 function M.references(context, opts)
-    local opts = location_opts(opts, 'References')
+    local opts = location_opts(opts, { title = 'References', always_select = true })
     vim.lsp.buf.references(context, opts)
 end
 
 ---@param opts? vim.lsp.LocationOpts
 function M.implementation(opts)
-    local opts = location_opts(opts, 'Implementation')
+    local opts = location_opts(opts, { title = 'Implementation' })
     vim.lsp.buf.implementation(opts)
 end
 
 ---@param opts? vim.lsp.LocationOpts
 function M.definition(opts)
-    local opts = location_opts(opts, 'Definition')
+    local opts = location_opts(opts, { title = 'Definition' })
+    vim.lsp.buf.definition(opts)
+end
+
+function M.preview_definition(opts)
+    local opts = location_opts(opts, { title = 'Preview Definition', always_select = true })
     vim.lsp.buf.definition(opts)
 end
 
 ---@param opts? vim.lsp.LocationOpts
 function M.type_definition(opts)
-    local opts = location_opts(opts, 'Type Definition')
+    local opts = location_opts(opts, { title = 'Type Definition' })
     vim.lsp.buf.type_definition(opts)
 end
 
@@ -194,4 +241,10 @@ function M.codelens()
     vim.api.nvim_win_set_cursor(winnr, { row, col }) -- restore cursor
 end
 
-return M
+return setmetatable(M, {
+    __index = function(obj, key)
+        local f = vim.lsp.buf[key]
+        rawset(obj, key, f)
+        return f
+    end,
+})
