@@ -11,11 +11,26 @@ local M = {}
 
 ---@param item vim.quickfix.entry
 local function jump_to_qfitem(item)
+    local win = vim.api.nvim_get_current_win()
+    local from = vim.fn.getpos('.')
+    from[1] = vim.api.nvim_get_current_buf()
+    local tagname = vim.fn.expand('<cword>')
+
     local bufnr = item.bufnr or vim.fn.bufadd(item.filename)
+
+    -- Save position in jumplist
+    vim.cmd("normal! m'")
+    -- Push a new item into tagstack
+    local tagstack = { { tagname = tagname, from = from } }
+    vim.fn.settagstack(vim.fn.win_getid(win), { items = tagstack }, 't')
+
     vim.bo[bufnr].buflisted = true
     local winnr = vim.fn.win_findbuf(bufnr)[1] or 0
     vim.api.nvim_win_set_buf(winnr, bufnr)
-    vim.api.nvim_win_set_cursor(winnr, { item.lnum, item.col - 1 })
+    pcall(vim.api.nvim_win_set_cursor, winnr, { item.lnum, item.col - 1 })
+    vim.api.nvim_buf_call(bufnr, function()
+        vim.cmd([[normal! zz]])
+    end)
 end
 
 ---@param items vim.quickfix.entry[]
@@ -47,15 +62,12 @@ end
 ---@field tel_opts? table Telescope opts
 
 ---@param opts? OnListOpts
+---@return fun(list: List)
 local function new_on_list(opts)
     opts = opts or {}
 
     ---@param list List
     return function(list)
-        if not list.items or #list.items == 0 then
-            return
-        end
-
         local items = list.items
         if not opts.show_current then
             local bufnr = list.context and list.context.bufnr or 0
@@ -67,6 +79,9 @@ local function new_on_list(opts)
                     return not (item.filename == filepath and item.lnum == lnum)
                 end)
                 :totable()
+        end
+        if not items or #items == 0 then
+            return
         end
 
         if #items == 1 and not opts.always_select then
