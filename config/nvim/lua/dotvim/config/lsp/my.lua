@@ -33,24 +33,89 @@ local function jump_to_qfitem(item)
     end)
 end
 
+local lsp_type_highlight = {
+    ['Class'] = 'TelescopeResultsClass',
+    ['Constant'] = 'TelescopeResultsConstant',
+    ['Field'] = 'TelescopeResultsField',
+    ['Function'] = 'TelescopeResultsFunction',
+    ['Method'] = 'TelescopeResultsMethod',
+    ['Property'] = 'TelescopeResultsOperator',
+    ['Struct'] = 'TelescopeResultsStruct',
+    ['Variable'] = 'TelescopeResultsVariable',
+}
+
 ---@param items vim.quickfix.entry[]
----@param opts? table
+---@param opts? table telescope opts
 local function telescope_pick_qflist(items, opts)
     local conf = require('telescope.config').values
     local finders = require('telescope.finders')
     local make_entry = require('telescope.make_entry')
     local pickers = require('telescope.pickers')
 
+    local qf_entry_maker = make_entry.gen_from_quickfix(opts)
+    ---@param qf_entry vim.quickfix.entry
+    local function entry_maker(qf_entry)
+        local entry = qf_entry_maker(qf_entry)
+        entry.lnend = qf_entry.end_lnum
+        entry.colend = qf_entry.end_col
+
+        local user_data = qf_entry.user_data
+        if user_data and user_data.indent then
+            entry.display = function()
+                local hls = {}
+                local text = ''
+
+                local parts = {
+                    { string.rep('  ', user_data.indent) },
+                    { '[', 'TelescopeBorder' },
+                    { user_data.kind },
+                    { ']', 'TelescopeBorder' },
+                    { ' ' },
+                    { user_data.name, lsp_type_highlight[user_data.kind] },
+                    { ' ' },
+                    { user_data.detail or '', 'SpecialComment' },
+                }
+
+                for _, part in ipairs(parts) do
+                    if part[2] then
+                        hls[#hls + 1] = {
+                            { text:len(), text:len() + #part[1] },
+                            part[2],
+                        }
+                    end
+                    text = text .. part[1]
+                end
+
+                if user_data.deprecated then
+                    hls[#hls + 1] = {
+                        { user_data.indent * 2, text:len() },
+                        '@markup.strikethrough',
+                    }
+                end
+
+                return text, hls
+            end
+        end
+
+        return entry
+    end
+
     pickers
         .new(opts or {}, {
             finder = finders.new_table({
                 results = items,
-                entry_maker = make_entry.gen_from_quickfix(opts),
+                entry_maker = entry_maker,
             }),
             previewer = conf.qflist_previewer(opts),
             sorter = conf.generic_sorter(opts),
             push_cursor_on_edit = true,
             push_tagstack_on_edit = true,
+            layout_strategy = 'flex',
+            layout_config = {
+                prompt_position = 'top',
+            },
+            sorting_strategy = 'ascending',
+            results_title = '',
         })
         :find()
 end
@@ -92,7 +157,6 @@ local function new_on_list(opts)
 
         local tel_opts = vim.tbl_deep_extend('force', {
             prompt_title = 'Lsp ' .. (opts.title or 'Locations'),
-            layout_strategy = 'flex',
         }, opts.tel_opts or {})
 
         telescope_pick_qflist(items, tel_opts)
@@ -187,10 +251,86 @@ function M.code_action(opts)
     end
 end
 
----@param opts? vim.lsp.ListOpts
-function M.document_symbol(opts)
-    -- currently not support custom handler in opts
-    vim.lsp.buf.document_symbol(opts)
+---@param symbols lsp.DocumentSymbol[]|lsp.SymbolInformation[]
+---@param bufnr? integer
+---@return vim.quickfix.entry[] # See |setqflist()| for the format
+local function symbols_to_items(symbols, bufnr)
+    local items = {}
+
+    local dfs
+    dfs = function(symbols, depth)
+        if not symbols or vim.tbl_isempty(symbols) then
+            return
+        end
+
+        for _, symbol in ipairs(symbols) do
+            --- @type string?, lsp.Position?, lsp.Position?
+            local filename, pos, end_pos
+            local kind = vim.lsp.protocol.SymbolKind[symbol.kind] or 'Unknown'
+            local user_data = {
+                indent = depth,
+                kind = kind,
+                name = symbol.name,
+            }
+
+            user_data.deprecated = vim.tbl_contains(symbol.tags or {}, 1) or symbol.deprecated
+
+            if symbol.location then
+                --- @cast symbol lsp.SymbolInformation
+                filename = vim.uri_to_fname(symbol.location.uri)
+                pos = symbol.location.range.start
+                end_pos = symbol.location.range['end']
+            elseif symbol.range then
+                --- @cast symbol lsp.DocumentSymbol
+                filename = vim.api.nvim_buf_get_name(bufnr or 0)
+                pos = symbol.range.start
+                end_pos = symbol.range['end']
+                user_data.detail = symbol.detail
+            end
+
+            if filename and pos then
+                ---@type vim.quickfix.entry
+                local item = {
+                    filename = filename,
+                    bufnr = bufnr,
+                    lnum = pos.line + 1,
+                    col = pos.character + 1,
+                    text = string.format('[%s] %s', kind, symbol.name),
+                    user_data = user_data,
+                }
+                if end_pos then
+                    item.end_lnum = end_pos.line + 1
+                    item.end_col = end_pos.character + 1
+                end
+                items[#items + 1] = item
+            end
+
+            dfs(symbol.children, depth + 1)
+        end
+    end
+
+    dfs(symbols, 0)
+    return items
+end
+
+---@param err lsp.ResponseError
+---@param result? lsp.DocumentSymbol[] | lsp.SymbolInformation[]
+---@param context lsp.HandlerContext
+local function symbols_handler(err, result, context)
+    if err or not result or vim.tbl_isempty(result) then
+        return
+    end
+    local items = symbols_to_items(result, context.bufnr)
+    telescope_pick_qflist(items, {
+        prompt_title = 'Lsp Document Symbols',
+    })
+end
+
+function M.document_symbol()
+    local params = {
+        textDocument = vim.lsp.util.make_text_document_params(),
+    }
+    vim.lsp.buf_request(0, vim.lsp.protocol.Methods.textDocument_documentSymbol, params, symbols_handler)
 end
 
 ---@param query? string
