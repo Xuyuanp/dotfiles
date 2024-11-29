@@ -148,7 +148,7 @@ local function auto_document_highlight(client, bufnr)
         buffer = bufnr,
         desc = '[Lsp] document highlight',
         callback = function(args)
-            if args.evetn == 'CursorHold' then
+            if args.event == 'CursorHold' then
                 my_lsp.document_highlight()
             elseif args.event == 'CursorMoved' then
                 my_lsp.clear_references()
