@@ -139,7 +139,7 @@ end
 ---@param client Client
 ---@param bufnr number
 local function auto_document_highlight(client, bufnr)
-    if client:supports_method(LspMethods.textDocument_documentHighlight) and client.name ~= 'rust_analyzer' then
+    if not client:supports_method(LspMethods.textDocument_documentHighlight) or client.name == 'rust_analyzer' then
         return
     end
     local group_id = vim.api.nvim_create_augroup('lsp_document_highlight_buf_' .. bufnr, { clear = true })
