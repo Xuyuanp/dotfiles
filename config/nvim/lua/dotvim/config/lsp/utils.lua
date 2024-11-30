@@ -23,8 +23,6 @@ return {
     capabilities = default_capabilities(),
     -- stylua: ignore
     handlers = {
-        [LspMethods.workspace_symbol]            = handlers.symbol_handler,
-        [LspMethods.textDocument_documentSymbol] = handlers.symbol_handler,
         [LspMethods.callHierarchy_outgoingCalls] = handlers.outgoing_calls,
     },
 }

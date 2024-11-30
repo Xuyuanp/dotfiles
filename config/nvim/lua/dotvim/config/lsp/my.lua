@@ -1,37 +1,27 @@
+local a = require('dotvim.util.async')
+
 local M = {}
 
----@class ListContext
+---@class mylsp.ListContext
 ---@field method string
 ---@field bufnr number
 
----@class List
+---@class mylsp.List
 ---@field title? string
----@field context? ListContext
+---@field context? mylsp.ListContext
 ---@field items vim.quickfix.entry[]
 
----@param item vim.quickfix.entry
-local function jump_to_qfitem(item)
-    local win = vim.api.nvim_get_current_win()
-    local from = vim.fn.getpos('.')
-    from[1] = vim.api.nvim_get_current_buf()
-    local tagname = vim.fn.expand('<cword>')
+---@class mylsp.OnListOpts
+---@field title? string Title of the list, default is 'Locations', prefix with 'Lsp '
+---@field always_select? boolean Whether to always select the only item
+---@field show_current? boolean Whether to show current item in the list
+---@field tel_opts? table Telescope opts
 
-    local bufnr = item.bufnr or vim.fn.bufadd(item.filename)
-
-    -- Save position in jumplist
-    vim.cmd("normal! m'")
-    -- Push a new item into tagstack
-    local tagstack = { { tagname = tagname, from = from } }
-    vim.fn.settagstack(vim.fn.win_getid(win), { items = tagstack }, 't')
-
-    vim.bo[bufnr].buflisted = true
-    local winnr = vim.fn.win_findbuf(bufnr)[1] or 0
-    vim.api.nvim_win_set_buf(winnr, bufnr)
-    pcall(vim.api.nvim_win_set_cursor, winnr, { item.lnum, item.col - 1 })
-    vim.api.nvim_buf_call(bufnr, function()
-        vim.cmd([[normal! zz]])
-    end)
-end
+---@class SymbolUserData
+---@field depth number
+---@field kind string
+---@field deprecated boolean
+---@field symbol lsp.DocumentSymbol | lsp.SymbolInformation
 
 local lsp_type_highlight = {
     ['Class'] = 'TelescopeResultsClass',
@@ -44,64 +34,38 @@ local lsp_type_highlight = {
     ['Variable'] = 'TelescopeResultsVariable',
 }
 
+---@param entry_maker fun(qf_entry: vim.quickfix.entry): table
+---@param custom? fun(qf_entry: vim.quickfix.entry, entry: table): table
+local function wrap_qf_entry_maker(entry_maker, custom)
+    ---@param qf_entry vim.quickfix.entry
+    ---@return table
+    return function(qf_entry)
+        local entry = entry_maker(qf_entry)
+        entry.lnend = qf_entry.end_lnum
+        entry.colend = qf_entry.end_col
+
+        if custom then
+            entry = custom(qf_entry, entry)
+        end
+        return entry
+    end
+end
+
 ---@param items vim.quickfix.entry[]
 ---@param opts? table telescope opts
 local function telescope_pick_qflist(items, opts)
+    opts = opts or {}
+
     local conf = require('telescope.config').values
     local finders = require('telescope.finders')
     local make_entry = require('telescope.make_entry')
     local pickers = require('telescope.pickers')
 
     local qf_entry_maker = make_entry.gen_from_quickfix(opts)
-    ---@param qf_entry vim.quickfix.entry
-    local function entry_maker(qf_entry)
-        local entry = qf_entry_maker(qf_entry)
-        entry.lnend = qf_entry.end_lnum
-        entry.colend = qf_entry.end_col
-
-        local user_data = qf_entry.user_data
-        if user_data and user_data.indent then
-            entry.display = function()
-                local hls = {}
-                local text = ''
-
-                local parts = {
-                    { string.rep('  ', user_data.indent) },
-                    { '[', 'TelescopeBorder' },
-                    { user_data.kind },
-                    { ']', 'TelescopeBorder' },
-                    { ' ' },
-                    { user_data.name, lsp_type_highlight[user_data.kind] },
-                    { ' ' },
-                    { user_data.detail or '', 'SpecialComment' },
-                }
-
-                for _, part in ipairs(parts) do
-                    if part[2] then
-                        hls[#hls + 1] = {
-                            { text:len(), text:len() + #part[1] },
-                            part[2],
-                        }
-                    end
-                    text = text .. part[1]
-                end
-
-                if user_data.deprecated then
-                    hls[#hls + 1] = {
-                        { user_data.indent * 2, text:len() },
-                        '@markup.strikethrough',
-                    }
-                end
-
-                return text, hls
-            end
-        end
-
-        return entry
-    end
+    local entry_maker = wrap_qf_entry_maker(qf_entry_maker, opts.custom_entry_maker)
 
     pickers
-        .new(opts or {}, {
+        .new(opts, {
             finder = finders.new_table({
                 results = items,
                 entry_maker = entry_maker,
@@ -120,18 +84,12 @@ local function telescope_pick_qflist(items, opts)
         :find()
 end
 
----@class OnListOpts
----@field title? string Title of the list, default is 'Locations', prefix with 'Lsp '
----@field always_select? boolean Whether to always select the only item
----@field show_current? boolean Whether to show current item in the list
----@field tel_opts? table Telescope opts
-
----@param opts? OnListOpts
----@return fun(list: List)
+---@param opts? mylsp.OnListOpts
+---@return fun(list: mylsp.List)
 local function new_on_list(opts)
     opts = opts or {}
 
-    ---@param list List
+    ---@param list mylsp.List
     return function(list)
         local items = list.items
         if not opts.show_current then
@@ -150,8 +108,8 @@ local function new_on_list(opts)
         end
 
         if #items == 1 and not opts.always_select then
-            local item = items[1]
-            jump_to_qfitem(item)
+            vim.fn.setqflist({}, ' ', { items = items })
+            vim.cmd('cfirst')
             return
         end
 
@@ -165,7 +123,7 @@ end
 
 ---@generic Opts: vim.lsp.ListOpts
 ---@param opts? Opts
----@param on_list_opts? OnListOpts
+---@param on_list_opts? mylsp.OnListOpts
 ---@return Opts
 local function location_opts(opts, on_list_opts)
     local default = {
@@ -255,9 +213,13 @@ end
 ---@param bufnr? integer
 ---@return vim.quickfix.entry[] # See |setqflist()| for the format
 local function symbols_to_items(symbols, bufnr)
-    local items = {}
+    bufnr = bufnr or 0
+
+    local items = {} --- @type vim.quickfix.entry[]
 
     local dfs
+    ---@param symbols lsp.DocumentSymbol[]|lsp.SymbolInformation[]
+    ---@param depth number
     dfs = function(symbols, depth)
         if not symbols or vim.tbl_isempty(symbols) then
             return
@@ -268,12 +230,11 @@ local function symbols_to_items(symbols, bufnr)
             local filename, pos, end_pos
             local kind = vim.lsp.protocol.SymbolKind[symbol.kind] or 'Unknown'
             local user_data = {
-                indent = depth,
+                depth = depth,
                 kind = kind,
-                name = symbol.name,
+                deprecated = vim.tbl_contains(symbol.tags or {}, 1) or symbol.deprecated,
+                symbol = symbol,
             }
-
-            user_data.deprecated = vim.tbl_contains(symbol.tags or {}, 1) or symbol.deprecated
 
             if symbol.location then
                 --- @cast symbol lsp.SymbolInformation
@@ -282,7 +243,7 @@ local function symbols_to_items(symbols, bufnr)
                 end_pos = symbol.location.range['end']
             elseif symbol.range then
                 --- @cast symbol lsp.DocumentSymbol
-                filename = vim.api.nvim_buf_get_name(bufnr or 0)
+                filename = vim.api.nvim_buf_get_name(bufnr)
                 pos = symbol.range.start
                 end_pos = symbol.range['end']
                 user_data.detail = symbol.detail
@@ -313,30 +274,81 @@ local function symbols_to_items(symbols, bufnr)
     return items
 end
 
----@param err lsp.ResponseError
----@param result? lsp.DocumentSymbol[] | lsp.SymbolInformation[]
----@param context lsp.HandlerContext
-local function symbols_handler(err, result, context)
-    if err or not result or vim.tbl_isempty(result) then
-        return
+-- NOTE: overwrite the default function
+vim.lsp.util.symbols_to_items = symbols_to_items
+
+local function custom_entry_maker(qf_entry, entry)
+    local user_data = qf_entry.user_data --[[@type SymbolUserData?]]
+    if not user_data or not user_data.symbol then
+        return entry
     end
-    local items = symbols_to_items(result, context.bufnr)
-    telescope_pick_qflist(items, {
-        prompt_title = 'Lsp Document Symbols',
-    })
+    local symbol = user_data.symbol
+
+    entry.display = function()
+        local hls = {}
+        local text = ''
+
+        local parts = {
+            { string.rep('  ', user_data.depth) },
+            { '[', 'TelescopeBorder' },
+            { user_data.kind },
+            { ']', 'TelescopeBorder' },
+            { ' ' },
+            { symbol.name, lsp_type_highlight[user_data.kind] },
+            { ' ' },
+            { symbol.detail or '', 'SpecialComment' },
+        }
+
+        for _, part in ipairs(parts) do
+            if part[2] then
+                hls[#hls + 1] = {
+                    { text:len(), text:len() + #part[1] },
+                    part[2],
+                }
+            end
+            text = text .. part[1]
+        end
+
+        if user_data.deprecated then
+            hls[#hls + 1] = {
+                { user_data.depth * 2, text:len() },
+                '@markup.strikethrough',
+            }
+        end
+
+        return text, hls
+    end
+
+    return entry
 end
 
-function M.document_symbol()
-    local params = {
-        textDocument = vim.lsp.util.make_text_document_params(),
-    }
-    vim.lsp.buf_request(0, vim.lsp.protocol.Methods.textDocument_documentSymbol, params, symbols_handler)
+function M.document_symbol(opts)
+    local opts = location_opts(opts, {
+        title = 'Symbols',
+        always_select = true,
+        tel_opts = {
+            custom_entry_maker = custom_entry_maker,
+        },
+    })
+    vim.lsp.buf.document_symbol(opts)
 end
 
 ---@param query? string
 ---@param opts? vim.lsp.ListOpts
 function M.workspace_symbol(query, opts)
-    vim.lsp.buf.workspace_symbol(query, opts)
+    local opts = location_opts(opts, {
+        title = 'Symbols',
+        always_select = true,
+        tel_opts = {
+            custom_entry_maker = custom_entry_maker,
+        },
+    })
+    a.run(function()
+        if not query then
+            query = a.ui.input('Query: ').await()
+        end
+        vim.lsp.buf.workspace_symbol(query, opts)
+    end)
 end
 
 function M.outgoing_calls()
@@ -396,10 +408,12 @@ function M.codelens()
     vim.api.nvim_win_set_cursor(winnr, { row, col }) -- restore cursor
 end
 
-return setmetatable(M, {
+local _mt = {
     __index = function(obj, key)
         local f = vim.lsp.buf[key]
         rawset(obj, key, f)
         return f
     end,
-})
+}
+
+return setmetatable(M, _mt)
