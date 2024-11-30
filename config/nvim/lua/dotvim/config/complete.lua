@@ -58,13 +58,13 @@ function M.stylize_markdown(bufnr, contents, opts)
         width = vim.lsp.util._make_floating_popup_size(contents, opts),
     })
 
-    vim.treesitter.start(bufnr, 'markdown')
+    pcall(vim.treesitter.start, bufnr, 'markdown')
     vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, contents)
 
     return contents
 end
 
-local function overwrite_stylize_markdown()
+local function override_stylize_markdown()
     local backup = vim.lsp.util.stylize_markdown
 
     ---@diagnostic disable-next-line: duplicate-set-field
@@ -77,7 +77,7 @@ function M.setup()
     local cmp = require('cmp')
     local compare = require('cmp.config.compare')
 
-    overwrite_stylize_markdown()
+    override_stylize_markdown()
     override_entry_get_documentation()
 
     local compare_kind = function(entry1, entry2)
