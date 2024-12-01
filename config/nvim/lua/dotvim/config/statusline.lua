@@ -176,6 +176,7 @@ galaxyline.short_line_list = {
     'dapui_watches',
     'dap_repl',
     'spectre_panel',
+    'TelescopePrompt',
 }
 
 section.left = {
