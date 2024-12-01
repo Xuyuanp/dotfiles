@@ -2,6 +2,7 @@ local mode = vim.fn.mode
 
 local galaxyline = require('galaxyline')
 local section = galaxyline.section
+local mini_icons = require('mini.icons')
 local dotcolors = require('dotvim.util.colors').colors
 
 require('dotvim.util.git').load_head()
@@ -120,7 +121,9 @@ local function find_git_root()
 end
 
 local function get_file_icon_color()
-    return require('galaxyline.provider_fileinfo').get_file_icon_color()
+    local filename = vim.fn.expand('%')
+    local _, hl = mini_icons.get('file', filename)
+    return vim.fn.synIDattr(vim.fn.hlID(hl), 'fg')
 end
 
 local function printer(str)
