@@ -24,7 +24,8 @@ local function set_keymaps(client, bufnr)
         gds = { handler = my_lsp.document_symbol,    desc = 'show document symbols',  method = LspMethods.textDocument_documentSymbol },
         gws = { handler = my_lsp.workspace_symbol,   desc = 'show workspace symbols', method = LspMethods.workspace_symbol            },
         gca = { handler = my_lsp.code_action,        desc = 'code action',            method = LspMethods.textDocument_codeAction     },
-        go  = { handler = my_lsp.outgoing_calls,     desc = 'show outgoing calls',    method = LspMethods.callHierarchy_outgoingCalls },
+        goc = { handler = my_lsp.outgoing_calls,     desc = 'show outgoing calls',    method = LspMethods.callHierarchy_outgoingCalls },
+        gic = { handler = my_lsp.incoming_calls,     desc = 'show incoming calls',    method = LspMethods.callHierarchy_incomingCalls },
         gcl = { handler = my_lsp.codelens,           desc = 'find and run codelens',  method = nil                                    },
     }
     for key, action in pairs(keymaps) do
