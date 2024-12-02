@@ -249,15 +249,14 @@ return {
     },
 
     {
-        'nvimdev/galaxyline.nvim',
-        event = 'UiEnter',
-        branch = 'main',
-        config = function()
-            require('dotvim.config.statusline')
-        end,
+        'rebelot/heirline.nvim',
         dependencies = {
             'echasnovski/mini.icons',
         },
+        event = 'UiEnter',
+        config = function()
+            require('dotvim.config.heirline').setup()
+        end,
     },
 
     {

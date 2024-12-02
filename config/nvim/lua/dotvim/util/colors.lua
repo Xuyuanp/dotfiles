@@ -43,25 +43,23 @@ local _COLORS = {
     purple_light = '#af60af',
 }
 
-M.colors = setmetatable({
-    Git = {
-        Add = _COLORS.green_light,
-        Delete = _COLORS.red_light,
-        Change = _COLORS.orange_light,
+M.colors = setmetatable(_COLORS, {
+    __index = {
+        Git = {
+            Add = _COLORS.green_light,
+            Delete = _COLORS.red_light,
+            Change = _COLORS.orange_light,
+        },
+        Diagnostic = {
+            Error = _COLORS.red,
+            Warn = _COLORS.yellow,
+            Info = _COLORS.blue,
+            Hint = _COLORS.aqua,
+        },
+        Sign = {
+            bg = _COLORS.black2,
+        },
     },
-    Diagnostic = {
-        Error = _COLORS.red,
-        Warn = _COLORS.yellow,
-        Info = _COLORS.blue,
-        Hint = _COLORS.aqua,
-    },
-    Sign = {
-        bg = _COLORS.black2,
-    },
-}, {
-    __index = function(_, key)
-        return _COLORS[key]
-    end,
 })
 
 local hlmap = {}

@@ -2,6 +2,20 @@ local features = require('dotvim.features')
 
 local M = {}
 
+M.icons = {
+    diagnostic = {
+        error = '',
+        warn = '',
+        info = '',
+        hint = '',
+    },
+    git = {
+        add = '',
+        delete = '',
+        change = '',
+    },
+}
+
 function M.setup()
     -- redefine leader key
     vim.g.mapleader = ','
@@ -137,10 +151,10 @@ function M.setup()
     vim.diagnostic.config({
         signs = {
             text = {
-                [vim.diagnostic.severity.ERROR] = '',
-                [vim.diagnostic.severity.WARN] = '',
-                [vim.diagnostic.severity.INFO] = '',
-                [vim.diagnostic.severity.HINT] = '',
+                [vim.diagnostic.severity.ERROR] = M.icons.diagnostic.error,
+                [vim.diagnostic.severity.WARN] = M.icons.diagnostic.warn,
+                [vim.diagnostic.severity.INFO] = M.icons.diagnostic.info,
+                [vim.diagnostic.severity.HINT] = M.icons.diagnostic.hint,
             },
         },
         float = {
