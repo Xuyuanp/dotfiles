@@ -1,4 +1,5 @@
 local conditions = require('heirline.conditions')
+local utils = require('heirline.utils')
 
 local components = require('dotvim.config.heirline.components')
 local colors = require('dotvim.config.heirline.colors')
@@ -80,15 +81,16 @@ function M.setup()
     local heirline = require('heirline')
     heirline.setup({
         opts = {
-            colors = colors.get(),
+            colors = colors.get,
         },
         statusline = M.statusline(),
     })
 
+    local group_id = vim.api.nvim_create_augroup('dotvim_heirlines', { clear = true })
     vim.api.nvim_create_autocmd('ColorScheme', {
+        group = group_id,
         callback = function()
-            heirline.reset_highlights()
-            heirline.load_colors(colors.get())
+            utils.on_colorscheme(colors.get)
         end,
     })
 end
