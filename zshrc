@@ -1,7 +1,8 @@
 [ -f ~/.zshrc.before ] && source ~/.zshrc.before
 
-if [[ $FORCE_TMUX == '1' ]] && [[ ! -v TMUX ]]; then
+if [[ $FORCE_TMUX == '1' ]] && [[ ! -v TMUX ]] && [[ ! -v NVIM ]]; then
     tmux attach || tmux
+    exit 0
 fi
 
 if [ $(uname) = 'Darwin' ] && ! [ -x "$(command -v brew)" ]; then
@@ -111,10 +112,6 @@ export FZF_DEFAULT_OPTS="
 
 export GOPATH=${HOME}/go
 
-# python
-[ -f ~/.startup.py ] && export PYTHONSTARTUP=${HOME}/.startup.py
-export PYENV_ROOT="$HOME/.pyenv"
-
 function _prepend_path() {
     if [[ -d "$1" ]] && [[ ":${PATH}:" != *":$1:"* ]]; then
         PATH="${1}${PATH:+":$PATH"}"
@@ -138,6 +135,10 @@ export PATH
 
 unfunction _prepend_path
 unfunction _append_path
+
+# python
+[ -f ~/.startup.py ] && export PYTHONSTARTUP=${HOME}/.startup.py
+export PYENV_ROOT="$HOME/.pyenv"
 
 if [[ -d "${PYENV_ROOT}" ]]; then
     eval "$(pyenv init --path)"
