@@ -3,7 +3,7 @@ fork = true
 [font]
 normal = "FiraCode Nerd Font Mono"
 style = "Retina"
-size = 13
+size = 15
 
 [font.bold]
 family = "FiraCode Nerd Font Mono"
