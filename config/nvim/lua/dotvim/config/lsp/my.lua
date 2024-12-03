@@ -109,7 +109,7 @@ local function new_on_list(opts)
 
         if #items == 1 and not opts.always_select then
             vim.fn.setqflist({}, ' ', { items = items })
-            vim.cmd('cfirst')
+            vim.cmd('silent cfirst')
             return
         end
 
