@@ -45,7 +45,7 @@
 
     dft = difftool
 [format]
-    pretty = format:%C(blue)%aI%Creset %C(yellow)%h%C(green)%d%Creset %C(blue)%s %C(magenta) [%an %C(green)<%ae>%C(magenta)]%Creset
+    pretty = format:%C(blue)%ai%Creset %C(yellow)%h%C(green)%d%Creset %C(blue)%s %C(magenta) [%an %C(green)<%ae>%C(magenta)]%Creset
 [color]
     ui = 1
 [color "branch"]
