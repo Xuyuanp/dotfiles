@@ -111,7 +111,8 @@ M.WorkDir = {
 
 M.FileName = {
     init = function(self)
-        self.lfilename = vim.fn.fnamemodify(self.filename, ':.')
+        local filename = self.filename or vim.api.nvim_buf_get_name(0)
+        self.lfilename = vim.fn.fnamemodify(filename, ':.')
         if self.lfilename == '' then
             self.lfilename = '[No Name]'
         end

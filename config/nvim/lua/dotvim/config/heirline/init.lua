@@ -32,14 +32,14 @@ function M.statusline()
         condition = conditions.is_not_active,
         components.FileType,
         components.Space,
-        components.FileName,
+        components.FileNameBlock,
         components.Align,
     }
     local special = {
         condition = function()
             return conditions.buffer_matches({
                 buftype = { 'nofile', 'prompt', 'help', 'quickfix' },
-                filetype = { '^git.*', 'fugitive', 'startify' },
+                filetype = { 'gitcommit', 'startify' },
             })
         end,
         components.FileType,
