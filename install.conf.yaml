@@ -43,3 +43,11 @@
     ~/.Xresources.d:
       path: config/Xresources.d
       if: '[ `uname` = Linux ]'
+    ~/.config/kitty/os.conf:
+      path: config/kitty/linux.conf
+      if: '[ `uname` = Linux ]'
+
+    # for macos
+    ~/.config/kitty/os.conf:
+      path: config/kitty/macos.conf
+      if: '[ `uname` = Darwin ]'
