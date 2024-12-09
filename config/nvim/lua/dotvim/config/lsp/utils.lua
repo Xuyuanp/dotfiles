@@ -9,12 +9,8 @@ local function default_capabilities()
 
     local cmp_lsp = vim.F.npcall(require, 'cmp_nvim_lsp')
     if cmp_lsp then
-        capabilities = cmp_lsp.default_capabilities()
+        capabilities = vim.tbl_deep_extend('force', capabilities, cmp_lsp.default_capabilities())
     end
-    capabilities.textDocument.foldingRange = {
-        dynamicRegistration = false,
-        lineFoldingOnly = true,
-    }
     return capabilities
 end
 
