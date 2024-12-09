@@ -7,12 +7,23 @@
 - create:
   - ~/.config/bat/themes
   - ~/.fonts
+  - ~/.ssh
 
 - shell:
   - git config --global include.path ${PWD}/gitconfig
   - cp -R fonts/* ~/.fonts/
   - if [ `uname` = Linux ]; then fc-cache; fi
   - curl -o ~/.config/bat/themes/kanagawa.tmTheme -sSL https://raw.githubusercontent.com/rebelot/kanagawa.nvim/master/extras/kanagawa.tmTheme
+  - |
+    include='Include ~/.dotfiles/config/ssh/config'
+    config_file="$HOME/.ssh/config"
+    if [ ! -f "$config_file" ]; then
+      touch "$config_file"
+    fi
+
+    if ! grep -qF "$include" "$config_file"; then
+      echo "$include" >> "$config_file"
+    fi
 
 - link:
     ~/.tmux.conf: tmux.conf
