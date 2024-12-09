@@ -3,10 +3,12 @@ local vfn = vim.fn
 
 local M = {}
 
-M.fzf_run = vfn['fzf#run']
-local _fzf_wrap = vfn['fzf#wrap']
+M.fzf_run = function(...)
+    return vfn['fzf#run'](...)
+end
+
 M.fzf_wrap = function(name, spec, fullscreen)
-    local wrapped = _fzf_wrap(name, spec, fullscreen or false)
+    local wrapped = vim.fn['fzf#wrap'](name, spec, fullscreen or false)
 
     wrapped['sink*'] = spec['sink*']
     wrapped.sink = spec['sink']

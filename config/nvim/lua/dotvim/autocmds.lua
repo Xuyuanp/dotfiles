@@ -1,16 +1,7 @@
-local group_id = vim.api.nvim_create_augroup('dotvim_init', { clear = true })
-
 local M = {}
 
 function M.setup()
-    vim.api.nvim_create_autocmd({ 'DirChanged' }, {
-        group = group_id,
-        desc = 'refresh git head',
-        pattern = { '*' },
-        callback = function()
-            require('dotvim.util.git').load_head()
-        end,
-    })
+    local group_id = vim.api.nvim_create_augroup('dotvim_init', { clear = true })
 
     vim.api.nvim_create_autocmd({ 'TextYankPost' }, {
         group = group_id,

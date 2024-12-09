@@ -317,7 +317,7 @@ M.Git = {
 
     { -- git branch name
         provider = function()
-            return ' ' .. vim.t.dotvim_git_head
+            return ' ' .. (vim.b.dotvim_git_head or (' ' .. vim.b.gitsigns_head))
         end,
         hl = { fg = 'green_light', bold = true },
     },

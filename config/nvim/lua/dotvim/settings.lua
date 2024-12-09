@@ -13,6 +13,10 @@ M.icons = {
         add = '',
         delete = '',
         change = '',
+
+        branch = '',
+        tag = '',
+        commit = '',
     },
 }
 

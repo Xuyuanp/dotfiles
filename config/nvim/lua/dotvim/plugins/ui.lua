@@ -540,9 +540,12 @@ return {
                             noremap = true,
                             silent = true,
                             buffer = bufnr,
-                            desc = '[gitsigns] ' .. spec.desc,
+                            desc = '[Gitsigns] ' .. spec.desc,
                         })
                     end
+
+                    local root = vim.b.gitsigns_status_dict and vim.b.gitsigns_status_dict.root or vim.fn.getcwd()
+                    require('dotvim.util.git').load_head(bufnr, root)
                 end,
             })
         end,

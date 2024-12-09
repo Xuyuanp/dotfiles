@@ -5,8 +5,6 @@ local section = galaxyline.section
 local mini_icons = require('mini.icons')
 local dotcolors = require('dotvim.util.colors').colors
 
-require('dotvim.util.git').load_head()
-
 --[[/* CONSTANTS */]]
 -- Defined in https://github.com/Iron-E/nvim-highlite
 local _COLORS = {

@@ -3,7 +3,6 @@ local utils = require('heirline.utils')
 
 local components = require('dotvim.config.heirline.components')
 local colors = require('dotvim.config.heirline.colors')
-require('dotvim.util.git').load_head()
 
 local M = {}
 
