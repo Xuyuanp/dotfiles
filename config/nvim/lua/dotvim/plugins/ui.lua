@@ -99,6 +99,9 @@ return {
                 return 'v:lua.startify_get_icon(absolute_path) ." ". entry_path'
             endfunction
             ]])
+            vim.cmd([[
+            autocmd User Startified setlocal buftype=nofile
+            ]])
         end,
     },
 
@@ -309,19 +312,30 @@ return {
     {
         'echasnovski/mini.indentscope',
         version = '*',
-        event = { 'BufReadPre', 'BufNewFile' },
-        opts = {
-            symbol = '│',
-            options = { try_as_border = true },
-        },
+        event = { 'CursorMoved' },
         init = function()
+            local group_id = vim.api.nvim_create_augroup('dotvim_mini_indentscope', { clear = true })
+            vim.api.nvim_create_autocmd('BufEnter', {
+                group = group_id,
+                callback = function()
+                    if vim.b.buftype == '' then
+                        return
+                    end
+                    vim.b.miniindentscope_disable = true
+                end,
+            })
             vim.api.nvim_create_autocmd('FileType', {
-                pattern = { 'help', 'Yanil', 'lazy', 'mason', 'terminal' },
+                group = group_id,
+                pattern = { 'startify' },
                 callback = function()
                     vim.b.miniindentscope_disable = true
                 end,
             })
         end,
+        opts = {
+            symbol = '│',
+            options = { try_as_border = true },
+        },
         config = function(_, opts)
             require('mini.indentscope').setup(opts)
         end,
