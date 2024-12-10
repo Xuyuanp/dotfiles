@@ -1,4 +1,4 @@
-;; inherits: haskll
+;; inherits: haskell
 ;; extends
 
 ((operator) @conceal (#eq? @conceal ">>=") (#set! conceal ""))
