@@ -55,9 +55,6 @@ return {
         keys = {
             { '<C-e>', require('dotvim.util').lazy_require('yanil/canvas').toggle, mode = 'n', desc = '[Yanil] toggle' },
         },
-        dependencies = {
-            'nvim-treesitter/nvim-treesitter',
-        },
         config = function()
             require('dotvim.config.yanil').setup()
 
@@ -259,85 +256,6 @@ return {
         event = 'UiEnter',
         config = function()
             require('dotvim.config.heirline').setup()
-        end,
-    },
-
-    {
-        'lukas-reineke/indent-blankline.nvim',
-        event = { 'BufReadPost', 'BufNewFile' },
-        version = 'v2',
-        opts = {
-            char = '│',
-            show_trailing_blankline_indent = false,
-            show_current_context = false,
-            show_first_indent_level = true,
-            filetype_exclude = {
-                'help',
-                'lazy',
-                'man',
-                'vista',
-                'vista_kind',
-                'vista_markdown',
-                'Yanil',
-                'FTerm',
-                'packer',
-                'startify',
-                'TelescopePrompt',
-                'lsp-installer',
-                'mason',
-            },
-            context_patterns = {
-                'class',
-                'function',
-                'method',
-                'table',
-                'array',
-                'body',
-                'type',
-                '^with',
-                '^try',
-                '^except',
-                '^catch',
-                '^if',
-                '^else',
-                '^while',
-                '^for',
-                '^loop',
-                '^call',
-            },
-        },
-    },
-
-    -- active indent guide and indent text objects
-    {
-        'echasnovski/mini.indentscope',
-        version = '*',
-        event = { 'CursorMoved' },
-        init = function()
-            local group_id = vim.api.nvim_create_augroup('dotvim_mini_indentscope', { clear = true })
-            vim.api.nvim_create_autocmd('BufEnter', {
-                group = group_id,
-                callback = function()
-                    if vim.b.buftype == '' then
-                        return
-                    end
-                    vim.b.miniindentscope_disable = true
-                end,
-            })
-            vim.api.nvim_create_autocmd('FileType', {
-                group = group_id,
-                pattern = { 'startify' },
-                callback = function()
-                    vim.b.miniindentscope_disable = true
-                end,
-            })
-        end,
-        opts = {
-            symbol = '│',
-            options = { try_as_border = true },
-        },
-        config = function(_, opts)
-            require('mini.indentscope').setup(opts)
         end,
     },
 

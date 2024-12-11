@@ -109,14 +109,7 @@ return {
         'folke/snacks.nvim',
         lazy = false,
         priority = 1000,
-        opts = {
-            bigfile = { enabled = true },
-            notifier = { enabled = true },
-        },
-        config = function(_, opts)
-            local snacks = require('snacks')
-            snacks.setup(opts)
-
+        init = function()
             local subcommands = {
                 notifications = function()
                     require('snacks.notifier').show_history()
@@ -147,6 +140,13 @@ return {
 
             vim.api.nvim_create_user_command('Snacks', command, cmdopts)
         end,
+        opts = {
+            bigfile = { enabled = true },
+            quickfile = { enabled = true },
+            notifier = { enabled = true },
+            indent = {},
+            scroll = { enabled = true },
+        },
     },
 
     {
