@@ -77,6 +77,9 @@ local function telescope_pick_qflist(items, opts)
             layout_strategy = 'flex',
             layout_config = {
                 prompt_position = 'top',
+                horizontal = {
+                    preview_width = 0.5,
+                },
             },
             sorting_strategy = 'ascending',
             results_title = '',
