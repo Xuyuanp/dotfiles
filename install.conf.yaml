@@ -33,7 +33,7 @@
     ~/.config/nvim: config/nvim
     ~/.config/neovide: config/neovide
     ~/.local/bin/osc52-yank: scripts/osc52-yank
-    ~/.editorconfig: .editorconfig
+    ~/.editorconfig: editorconfig
 
     # for linux
     ~/.config/bspwm:
