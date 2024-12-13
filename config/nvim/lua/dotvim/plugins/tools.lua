@@ -190,6 +190,7 @@ return {
     {
         'keaising/im-select.nvim',
         cond = vim.fn.has('mac') == 1,
+        commit = '6425bea', -- lock to a specific commit
         event = 'InsertEnter',
         config = function()
             require('im_select').setup({})
