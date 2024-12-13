@@ -89,6 +89,7 @@ function M.setup()
     vim.api.nvim_create_autocmd('ColorScheme', {
         group = group_id,
         callback = function()
+            colors.update()
             utils.on_colorscheme(colors.get)
         end,
     })

@@ -61,19 +61,6 @@ return {
                 theme = theme,
             })
 
-            local dotcolors = require('dotvim.util.colors')
-            dotcolors.enable_auto_update()
-
-            local colors = require('kanagawa.colors').setup({ theme = theme })
-            dotcolors.colors.Git.Add = colors.theme.vcs.added
-            dotcolors.colors.Git.Delete = colors.theme.vcs.removed
-            dotcolors.colors.Git.Change = colors.theme.vcs.changed
-
-            dotcolors.colors.Diagnostic.Error = colors.theme.diag.error
-            dotcolors.colors.Diagnostic.Warn = colors.theme.diag.warning
-            dotcolors.colors.Diagnostic.Info = colors.theme.diag.info
-            dotcolors.colors.Diagnostic.Hint = colors.theme.diag.hint
-
             vim.cmd('colorscheme kanagawa')
         end,
     },
