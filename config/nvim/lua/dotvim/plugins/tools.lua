@@ -145,7 +145,6 @@ return {
             quickfile = { enabled = true },
             notifier = { enabled = true },
             indent = {},
-            scroll = { enabled = true },
         },
     },
 
