@@ -24,6 +24,12 @@
     if ! grep -qF "$include" "$config_file"; then
       echo "$include" >> "$config_file"
     fi
+  - |
+    if [ `uname` = Darwin ]; then
+      echo 'include macos.conf' > config/kitty/os.conf
+    elif [ `uname` = Linux ]; then
+      echo 'include linux.conf' > config/kitty/os.conf
+    fi
 
 - link:
     ~/.tmux.conf: tmux.conf
@@ -54,11 +60,3 @@
     ~/.Xresources.d:
       path: config/Xresources.d
       if: '[ `uname` = Linux ]'
-    ~/.config/kitty/os.conf:
-      path: config/kitty/linux.conf
-      if: '[ `uname` = Linux ]'
-
-    # for macos
-    ~/.config/kitty/os.conf:
-      path: config/kitty/macos.conf
-      if: '[ `uname` = Darwin ]'
