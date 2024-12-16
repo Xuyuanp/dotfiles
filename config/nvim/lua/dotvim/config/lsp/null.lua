@@ -5,17 +5,6 @@ function M.setup()
 
     null_ls.setup({
         debug = vim.env.NULLLS_DEBUG == 'true',
-        on_init = function(client)
-            local _supports_method = client.supports_method
-
-            local function wrapped(obj_or_method, method)
-                if type(obj_or_method) == 'string' then
-                    method = obj_or_method
-                end
-                return _supports_method(method)
-            end
-            client.supports_method = wrapped
-        end,
         sources = {
             null_ls.builtins.formatting.stylua,
             null_ls.builtins.formatting.prettierd.with({
