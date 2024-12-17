@@ -81,6 +81,8 @@ local function restore_inlayhint(bufnr)
     vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
 end
 
+local ctrlv = vim.api.nvim_replace_termcodes('<C-v>', true, true, true)
+
 ---@param client Client
 ---@param bufnr number
 local function smart_inlayhint(client, bufnr)
@@ -93,28 +95,26 @@ local function smart_inlayhint(client, bufnr)
         vim.b[bufnr].lsp_inlay_hint_enabled = true
     end)
 
-    local group_id = vim.api.nvim_create_augroup('lsp_inlay_hint_buf_' .. bufnr, { clear = true })
-    local ctrlv = vim.api.nvim_replace_termcodes('<C-v>', true, true, true)
-    vim.api.nvim_create_autocmd({ 'InsertEnter', 'InsertLeave', 'ModeChanged' }, {
-        group = group_id,
-        buffer = bufnr,
-        desc = '[Lsp] inlay hint toggle',
-        callback = function(args)
-            if args.event == 'InsertEnter' then
-                disable_inlayhint_temporary(args.buf)
-            elseif args.event == 'InsertLeave' then
-                restore_inlayhint(args.buf)
-            elseif args.event == 'ModeChanged' then
-                local event = vim.v.event
-
-                if event.new_mode == ctrlv then
+    vim.b[bufnr].lsp_inlay_hint_autocmd_id = vim.b[bufnr].lsp_inlay_hint_autocmd_id
+        or vim.api.nvim_create_autocmd({ 'InsertEnter', 'InsertLeave', 'ModeChanged' }, {
+            buffer = bufnr,
+            desc = '[Lsp] inlay hint toggle',
+            callback = function(args)
+                if args.event == 'InsertEnter' then
                     disable_inlayhint_temporary(args.buf)
-                elseif event.old_mode == ctrlv then
+                elseif args.event == 'InsertLeave' then
                     restore_inlayhint(args.buf)
+                elseif args.event == 'ModeChanged' then
+                    local event = vim.v.event
+
+                    if event.new_mode == ctrlv then
+                        disable_inlayhint_temporary(args.buf)
+                    elseif event.old_mode == ctrlv then
+                        restore_inlayhint(args.buf)
+                    end
                 end
-            end
-        end,
-    })
+            end,
+        })
 end
 
 ---@param client Client
@@ -123,15 +123,14 @@ local function codelens_auto_refresh(client, bufnr)
     if not client:supports_method(LspMethods.textDocument_codeLens) then
         return
     end
-    local group_id = vim.api.nvim_create_augroup('lsp_codelens_buf_' .. bufnr, { clear = true })
-    vim.api.nvim_create_autocmd({ 'BufEnter', 'InsertLeave', 'BufWritePost', 'CursorHold' }, {
-        group = group_id,
-        buffer = bufnr,
-        desc = '[Lsp] codelens refresh',
-        callback = function()
-            vim.lsp.codelens.refresh({ bufnr = bufnr })
-        end,
-    })
+    vim.b[bufnr].lsp_codelens_autocmd_id = vim.b[bufnr].lsp_codelens_autocmd_id
+        or vim.api.nvim_create_autocmd({ 'BufEnter', 'InsertLeave', 'BufWritePost', 'CursorHold' }, {
+            buffer = bufnr,
+            desc = '[Lsp] codelens refresh',
+            callback = function()
+                vim.lsp.codelens.refresh({ bufnr = bufnr })
+            end,
+        })
     vim.schedule(function()
         vim.lsp.codelens.refresh({ bufnr = bufnr })
     end)
@@ -143,19 +142,18 @@ local function auto_document_highlight(client, bufnr)
     if not client:supports_method(LspMethods.textDocument_documentHighlight) or client.name == 'rust_analyzer' then
         return
     end
-    local group_id = vim.api.nvim_create_augroup('lsp_document_highlight_buf_' .. bufnr, { clear = true })
-    vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorMoved' }, {
-        group = group_id,
-        buffer = bufnr,
-        desc = '[Lsp] document highlight',
-        callback = function(args)
-            if args.event == 'CursorHold' then
-                my_lsp.document_highlight()
-            elseif args.event == 'CursorMoved' then
-                my_lsp.clear_references()
-            end
-        end,
-    })
+    vim.b[bufnr].lsp_document_highlight_autocmd_id = vim.b[bufnr].lsp_document_highlight_autocmd_id
+        or vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorMoved' }, {
+            buffer = bufnr,
+            desc = '[Lsp] document highlight',
+            callback = function(args)
+                if args.event == 'CursorHold' then
+                    my_lsp.document_highlight()
+                elseif args.event == 'CursorMoved' then
+                    my_lsp.clear_references()
+                end
+            end,
+        })
 end
 
 ---@param client Client
