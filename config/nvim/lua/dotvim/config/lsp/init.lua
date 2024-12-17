@@ -111,6 +111,8 @@ local langs = {
 local M = {}
 
 function M.setup()
+    require('dotvim.config.lsp.buf').overwrite()
+
     require('mason-lspconfig').setup_handlers({
         function(server_name)
             local cfg = {
