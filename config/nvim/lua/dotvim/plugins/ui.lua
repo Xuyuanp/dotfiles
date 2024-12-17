@@ -16,6 +16,13 @@ return {
             local ts = require('telescope')
             ts.setup({
                 defaults = {
+                    layout_config = {
+                        prompt_position = 'top',
+                        horizontal = {
+                            preview_width = 0.5,
+                        },
+                    },
+                    sorting_strategy = 'ascending',
                     vimgrep_arguments = {
                         'rg',
                         '--color=never',
