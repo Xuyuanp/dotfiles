@@ -76,8 +76,14 @@ local langs = {
                         'print',
                     },
                 },
+                runtime = {
+                    version = 'LuaJIT',
+                },
                 workspace = {
                     checkThirdParty = false,
+                    library = {
+                        vim.env.VIMRUNTIME,
+                    },
                 },
             },
         },
@@ -102,7 +108,9 @@ local langs = {
     },
 }
 
-local function setup()
+local M = {}
+
+function M.setup()
     require('mason-lspconfig').setup_handlers({
         function(server_name)
             local cfg = {
@@ -135,33 +143,6 @@ local function setup()
             default_config.on_attach(client, args.buf)
         end,
     })
-
-    vim.api.nvim_create_autocmd('BufWritePre', {
-        group = group_id,
-        desc = '[Lsp] format on save',
-        callback = function(args)
-            local bufnr = args.buf
-            ---@param client Client client passed here supports textDocument_formatting
-            local filter = function(client)
-                if client.name == 'null-ls' then
-                    return true
-                end
-                if vim.b[bufnr].lsp_disable_auto_format then
-                    return false
-                end
-                return true
-            end
-            require('dotvim.config.lsp.my').format({
-                bufnr = bufnr,
-                async = false,
-                filter = filter,
-            })
-        end,
-    })
 end
-
-local M = {
-    setup = setup,
-}
 
 return M

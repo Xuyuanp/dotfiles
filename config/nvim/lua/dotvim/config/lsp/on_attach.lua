@@ -3,10 +3,10 @@ local my_lsp = require('dotvim.config.lsp.my')
 
 local LspMethods = vim.lsp.protocol.Methods
 
----@alias Client vim.lsp.Client
----@alias OnAttachFunc fun(client: Client, bufnr: number)
+---@alias LspClient vim.lsp.Client
+---@alias OnAttachFunc fun(client: LspClient, bufnr: number)
 
----@param client Client
+---@param client LspClient
 ---@param bufnr number
 local function set_keymaps(client, bufnr)
     local set_keymap = vim.keymap.set
@@ -83,7 +83,7 @@ end
 
 local ctrlv = vim.api.nvim_replace_termcodes('<C-v>', true, true, true)
 
----@param client Client
+---@param client LspClient
 ---@param bufnr number
 local function smart_inlayhint(client, bufnr)
     if not client:supports_method(LspMethods.textDocument_inlayHint) then
@@ -107,8 +107,10 @@ local function smart_inlayhint(client, bufnr)
                 elseif args.event == 'ModeChanged' then
                     local event = vim.v.event
 
+                    ---@diagnostic disable-next-line: undefined-field
                     if event.new_mode == ctrlv then
                         disable_inlayhint_temporary(args.buf)
+                    ---@diagnostic disable-next-line: undefined-field
                     elseif event.old_mode == ctrlv then
                         restore_inlayhint(args.buf)
                     end
@@ -117,7 +119,7 @@ local function smart_inlayhint(client, bufnr)
         })
 end
 
----@param client Client
+---@param client LspClient
 ---@param bufnr number
 local function codelens_auto_refresh(client, bufnr)
     if not client:supports_method(LspMethods.textDocument_codeLens) then
@@ -136,7 +138,7 @@ local function codelens_auto_refresh(client, bufnr)
     end)
 end
 
----@param client Client
+---@param client LspClient
 ---@param bufnr number
 local function auto_document_highlight(client, bufnr)
     if not client:supports_method(LspMethods.textDocument_documentHighlight) or client.name == 'rust_analyzer' then
@@ -156,7 +158,42 @@ local function auto_document_highlight(client, bufnr)
         })
 end
 
----@param client Client
+---@param client LspClient
+---@param bufnr number
+local function auto_format_on_save(client, bufnr)
+    if not client:supports_method(LspMethods.textDocument_formatting) then
+        return
+    end
+    if client.name ~= 'null-ls' and vim.b[bufnr].lsp_disable_auto_format then
+        return
+    end
+
+    vim.b[bufnr].lsp_format_on_save_autocmd_id = vim.b[bufnr].lsp_format_on_save_autocmd_id
+        or vim.api.nvim_create_autocmd('BufWritePre', {
+            buffer = bufnr,
+            desc = '[Lsp] format on save',
+            callback = function(args)
+                local bufnr = args.buf
+                ---@param client LspClient client passed here supports textDocument_formatting
+                local filter = function(client)
+                    if client.name == 'null-ls' then
+                        return true
+                    end
+                    if vim.b[bufnr].lsp_disable_auto_format then
+                        return false
+                    end
+                    return true
+                end
+                my_lsp.format({
+                    bufnr = bufnr,
+                    async = false,
+                    filter = filter,
+                })
+            end,
+        })
+end
+
+---@param client LspClient
 ---@param bufnr number
 local function disable_semantic_token_for_helm(client, bufnr)
     if vim.bo[bufnr].filetype == 'helm' and client.name == 'gopls' then
@@ -170,12 +207,13 @@ end
 local on_attach_funcs = {
     set_keymaps,
     auto_document_highlight,
+    auto_format_on_save,
     smart_inlayhint,
     codelens_auto_refresh,
     disable_semantic_token_for_helm,
 }
 
----@param client Client
+---@param client LspClient
 ---@param bufnr number
 local on_attach = function(client, bufnr)
     vim.iter(on_attach_funcs):each(function(fn)
