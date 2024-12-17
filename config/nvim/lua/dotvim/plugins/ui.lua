@@ -487,6 +487,19 @@ return {
                     require('dotvim.util.git').load_head(bufnr, root)
                 end,
             })
+
+            vim.api.nvim_create_autocmd('WinClosed', {
+                group = vim.api.nvim_create_augroup('dotvim_gitsigns_refresh', { clear = true }),
+                callback = function(args)
+                    if not vim.api.nvim_buf_is_valid(args.buf) then
+                        return
+                    end
+                    if vim.bo[args.buf].buftype ~= 'terminal' then
+                        return
+                    end
+                    require('gitsigns').refresh()
+                end,
+            })
         end,
     },
 
