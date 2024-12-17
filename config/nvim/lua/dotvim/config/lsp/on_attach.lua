@@ -95,7 +95,8 @@ local function smart_inlayhint(client, bufnr)
         vim.b[bufnr].lsp_inlay_hint_enabled = true
     end)
 
-    vim.b[bufnr].lsp_inlay_hint_autocmd_id = vim.b[bufnr].lsp_inlay_hint_autocmd_id
+    local lsp_autocmds = vim.b[bufnr].lsp_autocmds or {}
+    lsp_autocmds.inlay_hint = lsp_autocmds.inlay_hint
         or vim.api.nvim_create_autocmd({ 'InsertEnter', 'InsertLeave', 'ModeChanged' }, {
             buffer = bufnr,
             desc = '[Lsp] inlay hint toggle',
@@ -117,6 +118,7 @@ local function smart_inlayhint(client, bufnr)
                 end
             end,
         })
+    vim.b[bufnr].lsp_autocmds = lsp_autocmds
 end
 
 ---@param client LspClient
@@ -125,7 +127,8 @@ local function codelens_auto_refresh(client, bufnr)
     if not client:supports_method(LspMethods.textDocument_codeLens) then
         return
     end
-    vim.b[bufnr].lsp_codelens_autocmd_id = vim.b[bufnr].lsp_codelens_autocmd_id
+    local lsp_autocmds = vim.b[bufnr].lsp_autocmds or {}
+    lsp_autocmds.codelens = lsp_autocmds.codelens
         or vim.api.nvim_create_autocmd({ 'BufEnter', 'InsertLeave', 'BufWritePost', 'CursorHold' }, {
             buffer = bufnr,
             desc = '[Lsp] codelens refresh',
@@ -133,6 +136,8 @@ local function codelens_auto_refresh(client, bufnr)
                 vim.lsp.codelens.refresh({ bufnr = bufnr })
             end,
         })
+    vim.b[bufnr].lsp_autocmds = lsp_autocmds
+
     vim.schedule(function()
         vim.lsp.codelens.refresh({ bufnr = bufnr })
     end)
@@ -144,7 +149,8 @@ local function auto_document_highlight(client, bufnr)
     if not client:supports_method(LspMethods.textDocument_documentHighlight) or client.name == 'rust_analyzer' then
         return
     end
-    vim.b[bufnr].lsp_document_highlight_autocmd_id = vim.b[bufnr].lsp_document_highlight_autocmd_id
+    local lsp_autocmds = vim.b[bufnr].lsp_autocmds or {}
+    lsp_autocmds.document_highlight = lsp_autocmds.document_highlight
         or vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorMoved' }, {
             buffer = bufnr,
             desc = '[Lsp] document highlight',
@@ -156,6 +162,7 @@ local function auto_document_highlight(client, bufnr)
                 end
             end,
         })
+    vim.b[bufnr].lsp_autocmds = lsp_autocmds
 end
 
 ---@param client LspClient
@@ -168,7 +175,8 @@ local function auto_format_on_save(client, bufnr)
         return
     end
 
-    vim.b[bufnr].lsp_format_on_save_autocmd_id = vim.b[bufnr].lsp_format_on_save_autocmd_id
+    local lsp_autocmds = vim.b[bufnr].lsp_autocmds or {}
+    lsp_autocmds.format = lsp_autocmds.format
         or vim.api.nvim_create_autocmd('BufWritePre', {
             buffer = bufnr,
             desc = '[Lsp] format on save',
@@ -191,6 +199,7 @@ local function auto_format_on_save(client, bufnr)
                 })
             end,
         })
+    vim.b[bufnr].lsp_autocmds = lsp_autocmds
 end
 
 ---@param client LspClient
