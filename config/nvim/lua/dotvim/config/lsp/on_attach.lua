@@ -13,28 +13,37 @@ local function set_keymaps(client, bufnr)
 
     -- stylua: ignore
     local keymaps = {
-        K   = { handler = my_lsp.hover,              desc = 'show documentation',     method = nil                                    },
-        gi  = { handler = my_lsp.implementation,     desc = 'goto implementation',    method = LspMethods.textDocument_implementation },
-        gk  = { handler = my_lsp.signature_help,     desc = 'show signature help',    method = LspMethods.textDocument_signatureHelp  },
-        gd  = { handler = my_lsp.definition,         desc = 'goto definition',        method = LspMethods.textDocument_definition     },
-        gpd = { handler = my_lsp.preview_definition, desc = 'preview definition',     method = LspMethods.textDocument_definition     },
-        gtd = { handler = my_lsp.type_definition,    desc = 'goto type definition',   method = LspMethods.textDocument_typeDefinition },
-        grr = { handler = my_lsp.references,         desc = 'show references',        method = LspMethods.textDocument_references     },
-        grn = { handler = my_lsp.rename,             desc = 'rename',                 method = LspMethods.textDocument_rename         },
-        gds = { handler = my_lsp.document_symbol,    desc = 'show document symbols',  method = LspMethods.textDocument_documentSymbol },
-        gws = { handler = my_lsp.workspace_symbol,   desc = 'show workspace symbols', method = LspMethods.workspace_symbol            },
-        gca = { handler = my_lsp.code_action,        desc = 'code action',            method = LspMethods.textDocument_codeAction     },
-        goc = { handler = my_lsp.outgoing_calls,     desc = 'show outgoing calls',    method = LspMethods.callHierarchy_outgoingCalls },
-        gic = { handler = my_lsp.incoming_calls,     desc = 'show incoming calls',    method = LspMethods.callHierarchy_incomingCalls },
-        gcl = { handler = my_lsp.codelens,           desc = 'find and run codelens',  method = nil                                    },
+        K   = { 'hover',            desc = 'show documentation',     method = nil                                    },
+        gi  = { 'implementation',   desc = 'goto implementation',    method = LspMethods.textDocument_implementation },
+        gk  = { 'signature_help',   desc = 'show signature help',    method = LspMethods.textDocument_signatureHelp  },
+        gd  = { 'definition',       desc = 'goto definition',        method = LspMethods.textDocument_definition     },
+        gtd = { 'type_definition',  desc = 'goto type definition',   method = LspMethods.textDocument_typeDefinition },
+        grr = { 'references',       desc = 'show references',        method = LspMethods.textDocument_references     },
+        grn = { 'rename',           desc = 'rename',                 method = LspMethods.textDocument_rename         },
+        gds = { 'document_symbol',  desc = 'show document symbols',  method = LspMethods.textDocument_documentSymbol },
+        gws = { 'workspace_symbol', desc = 'show workspace symbols', method = LspMethods.workspace_symbol            },
+        gca = { 'code_action',      desc = 'code action',            method = LspMethods.textDocument_codeAction     },
+        goc = { 'outgoing_calls',   desc = 'show outgoing calls',    method = LspMethods.callHierarchy_outgoingCalls },
+        gic = { 'incoming_calls',   desc = 'show incoming calls',    method = LspMethods.callHierarchy_incomingCalls },
+        gcl = { my_lsp.codelens,    desc = 'find and run codelens',  method = nil                                    },
     }
-    for key, action in pairs(keymaps) do
-        if not action.method or client:supports_method(action.method) then
-            set_keymap('n', key, action.handler, {
+    local function make_action(rhs)
+        return function(...)
+            if type(rhs) == 'function' then
+                rhs(...)
+            else
+                vim.lsp.buf[rhs](...)
+            end
+        end
+    end
+
+    for key, rhs in pairs(keymaps) do
+        if not rhs.method or client:supports_method(rhs.method) then
+            set_keymap('n', key, make_action(rhs[1]), {
                 noremap = false,
                 silent = true,
                 buffer = bufnr,
-                desc = '[Lsp] ' .. action.desc,
+                desc = '[Lsp] ' .. rhs.desc,
             })
         end
     end
@@ -54,7 +63,7 @@ local function set_keymaps(client, bufnr)
         if not choice then
             return
         end
-        choice.handler()
+        make_action(choice[1])()
     end)
 
     set_keymap('n', '<space><space>', show_menu, {
@@ -222,12 +231,32 @@ local on_attach_funcs = {
     disable_semantic_token_for_helm,
 }
 
+local M = {}
+
 ---@param client LspClient
 ---@param bufnr number
-local on_attach = function(client, bufnr)
+local function on_attach(client, bufnr)
     vim.iter(on_attach_funcs):each(function(fn)
         return fn(client, bufnr)
     end)
 end
 
-return on_attach
+function M.setup()
+    local group_id = vim.api.nvim_create_augroup('dotvim_lsp_on_attach', { clear = true })
+    vim.api.nvim_create_autocmd('LspAttach', {
+        group = group_id,
+        callback = function(args)
+            local client = vim.lsp.get_client_by_id(args.data.client_id)
+            assert(client, 'client not found')
+            on_attach(client, args.buf)
+        end,
+    })
+end
+
+setmetatable(M, {
+    __call = function(_, client, bufnr)
+        on_attach(client, bufnr)
+    end,
+})
+
+return M

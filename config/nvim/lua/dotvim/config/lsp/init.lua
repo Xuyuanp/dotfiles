@@ -1,6 +1,14 @@
 local lspconfig = require('lspconfig')
 
-local default_config = require('dotvim.config.lsp.utils')
+local function default_capabilities()
+    local capabilities = vim.lsp.protocol.make_client_capabilities()
+
+    local cmp_lsp = vim.F.npcall(require, 'cmp_nvim_lsp')
+    if cmp_lsp then
+        capabilities = vim.tbl_deep_extend('force', capabilities, cmp_lsp.default_capabilities())
+    end
+    return capabilities
+end
 
 local function make_on_new_config(opts)
     opts = opts or {}
@@ -111,14 +119,16 @@ local langs = {
 local M = {}
 
 function M.setup()
+    local default_config = {
+        capabilities = default_capabilities(),
+    }
+
     require('dotvim.config.lsp.buf').overwrite()
+    require('dotvim.config.lsp.on_attach').setup()
 
     require('mason-lspconfig').setup_handlers({
         function(server_name)
-            local cfg = {
-                capabilities = default_config.capabilities,
-                handlers = default_config.handlers,
-            }
+            local cfg = vim.deepcopy(default_config)
             if langs[server_name] then
                 cfg = vim.tbl_deep_extend('force', cfg, langs[server_name])
             end
@@ -131,20 +141,7 @@ function M.setup()
     })
     -- suppress warning: bufls deprecated
     -- TODO: remove this after bufls is removed
-    lspconfig['buf_ls'].setup({
-        capabilities = default_config.capabilities,
-        handlers = default_config.handlers,
-    })
-
-    local group_id = vim.api.nvim_create_augroup('dotvim_lsp_init', { clear = true })
-    vim.api.nvim_create_autocmd('LspAttach', {
-        group = group_id,
-        callback = function(args)
-            local client = vim.lsp.get_client_by_id(args.data.client_id)
-            assert(client, 'client not found')
-            default_config.on_attach(client, args.buf)
-        end,
-    })
+    lspconfig['buf_ls'].setup(default_config)
 end
 
 return M

@@ -17,15 +17,11 @@ if this_os:find('Windows') then
 end
 
 function M.setup()
-    local default_config = require('dotvim.config.lsp.utils')
     vim.g.rustaceanvim = {
         -- Plugin configuration
         tools = {},
         -- LSP configuration
         server = {
-            on_attach = default_config.on_attach,
-            handlers = default_config.handlers,
-            capabilities = default_config.capabilities,
             default_settings = {
                 -- rust-analyzer language server configuration
                 ['rust-analyzer'] = {

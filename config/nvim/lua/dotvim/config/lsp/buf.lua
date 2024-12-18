@@ -1,14 +1,5 @@
 local buf = {}
 
----@class mylsp.ListContext
----@field method string
----@field bufnr number
-
----@class mylsp.List
----@field title? string
----@field context? mylsp.ListContext
----@field items vim.quickfix.entry[]
-
 ---@class mylsp.OnListOpts
 ---@field title? string Title of the list, default is 'Locations', prefix with 'Lsp '
 ---@field always_select? boolean Whether to always select the only item
@@ -86,11 +77,11 @@ local function telescope_pick_qflist(items, opts)
 end
 
 ---@param opts? mylsp.OnListOpts
----@return fun(list: mylsp.List)
+---@return fun(list: vim.lsp.LocationOpts.OnList)
 local function new_on_list(opts)
     opts = opts or {}
 
-    ---@param list mylsp.List
+    ---@param list vim.lsp.LocationOpts.OnList
     return function(list)
         local items = list.items
         if not opts.show_current then
@@ -124,6 +115,7 @@ end
 
 local function with_default_opts(f, default, n)
     n = n or 1
+    default = default or {}
     return function(...)
         local params = { ... }
         local opts = params[n] or {}
@@ -174,14 +166,6 @@ buf.definition = with_default_opts(
     vim.lsp.buf.definition,
     location_opts({
         title = 'Definition',
-    })
-)
-
-buf.preview_definition = with_default_opts(
-    vim.lsp.buf.definition,
-    location_opts({
-        title = 'Definition',
-        always_select = true,
     })
 )
 
@@ -272,7 +256,6 @@ local function symbols_to_items(symbols, bufnr)
     return items
 end
 
--- NOTE: overwrite the default function
 vim.lsp.util.symbols_to_items = symbols_to_items
 
 local function custom_entry_maker(qf_entry, entry)
@@ -346,31 +329,7 @@ buf.workspace_symbol = with_default_opts(
 buf.outgoing_calls = with_default_opts(vim.lsp.buf.outgoing_calls)
 buf.incoming_calls = with_default_opts(vim.lsp.buf.incoming_calls)
 
----@param min_level integer
----@return function
-local function suppress_notify(min_level)
-    local notify = vim.notify
-    ---@diagnostic disable-next-line: duplicate-set-field
-    vim.notify = function(msg, level, opts)
-        if not level or level <= min_level then
-            return
-        end
-        notify(msg, level, opts)
-    end
-    return function()
-        vim.notify = notify
-    end
-end
-
-local format_backup = vim.lsp.buf.format
-
----@param opts? vim.lsp.buf.format.Opts
-function buf.format(opts)
-    -- suppress no clients found warning
-    local restore = suppress_notify(vim.log.levels.WARN)
-    format_backup(opts)
-    restore()
-end
+buf.format = with_default_opts(vim.lsp.buf.format)
 
 local M = {
     _backup = {},
