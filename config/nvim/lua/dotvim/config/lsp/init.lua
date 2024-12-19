@@ -1,5 +1,8 @@
 local lspconfig = require('lspconfig')
 
+---@alias LspClient vim.lsp.Client
+---@alias OnAttachFunc fun(client: LspClient, bufnr: number):boolean?
+
 local function default_capabilities()
     local capabilities = vim.lsp.protocol.make_client_capabilities()
 
@@ -124,7 +127,9 @@ function M.setup()
     }
 
     require('dotvim.config.lsp.buf').overwrite()
-    require('dotvim.config.lsp.on_attach').setup()
+    require('dotvim.config.lsp.utils').setup()
+    require('dotvim.config.lsp.keymaps').setup()
+    require('dotvim.config.lsp.autocmds').setup()
 
     require('mason-lspconfig').setup_handlers({
         function(server_name)

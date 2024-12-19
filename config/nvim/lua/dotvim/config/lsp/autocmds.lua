@@ -1,78 +1,7 @@
-local a = require('dotvim.util.async')
+---@diagnostic disable: unused-local
 local my_lsp = require('dotvim.config.lsp.my')
 
 local LspMethods = vim.lsp.protocol.Methods
-
----@alias LspClient vim.lsp.Client
----@alias OnAttachFunc fun(client: LspClient, bufnr: number)
-
----@param client LspClient
----@param bufnr number
-local function set_keymaps(client, bufnr)
-    local set_keymap = vim.keymap.set
-
-    -- stylua: ignore
-    local keymaps = {
-        K   = { 'hover',            desc = 'show documentation',     method = nil                                    },
-        gi  = { 'implementation',   desc = 'goto implementation',    method = LspMethods.textDocument_implementation },
-        gk  = { 'signature_help',   desc = 'show signature help',    method = LspMethods.textDocument_signatureHelp  },
-        gd  = { 'definition',       desc = 'goto definition',        method = LspMethods.textDocument_definition     },
-        gtd = { 'type_definition',  desc = 'goto type definition',   method = LspMethods.textDocument_typeDefinition },
-        grr = { 'references',       desc = 'show references',        method = LspMethods.textDocument_references     },
-        grn = { 'rename',           desc = 'rename',                 method = LspMethods.textDocument_rename         },
-        gds = { 'document_symbol',  desc = 'show document symbols',  method = LspMethods.textDocument_documentSymbol },
-        gws = { 'workspace_symbol', desc = 'show workspace symbols', method = LspMethods.workspace_symbol            },
-        gca = { 'code_action',      desc = 'code action',            method = LspMethods.textDocument_codeAction     },
-        goc = { 'outgoing_calls',   desc = 'show outgoing calls',    method = LspMethods.callHierarchy_outgoingCalls },
-        gic = { 'incoming_calls',   desc = 'show incoming calls',    method = LspMethods.callHierarchy_incomingCalls },
-        gcl = { my_lsp.codelens,    desc = 'find and run codelens',  method = nil                                    },
-    }
-    local function make_action(rhs)
-        return function(...)
-            if type(rhs) == 'function' then
-                rhs(...)
-            else
-                vim.lsp.buf[rhs](...)
-            end
-        end
-    end
-
-    for key, rhs in pairs(keymaps) do
-        if not rhs.method or client:supports_method(rhs.method) then
-            set_keymap('n', key, make_action(rhs[1]), {
-                noremap = false,
-                silent = true,
-                buffer = bufnr,
-                desc = '[Lsp] ' .. rhs.desc,
-            })
-        end
-    end
-
-    local show_menu = a.wrap(function()
-        local choices = vim.tbl_values(keymaps)
-        local choice = a.ui
-            .select(choices, {
-                prompt = 'Lsp actions:',
-                format_item = function(item)
-                    -- uppercase the first letter
-                    local display = item.desc:gsub('^%l', string.upper)
-                    return display
-                end,
-            })
-            .await()
-        if not choice then
-            return
-        end
-        make_action(choice[1])()
-    end)
-
-    set_keymap('n', '<space><space>', show_menu, {
-        noremap = false,
-        silent = true,
-        buffer = bufnr,
-        desc = '[Lsp] show menu',
-    })
-end
 
 local function disable_inlayhint_temporary(bufnr)
     local enabled = vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr })
@@ -95,10 +24,6 @@ local ctrlv = vim.api.nvim_replace_termcodes('<C-v>', true, true, true)
 ---@param client LspClient
 ---@param bufnr number
 local function smart_inlayhint(client, bufnr)
-    if not client:supports_method(LspMethods.textDocument_inlayHint) then
-        return
-    end
-
     vim.schedule(function()
         vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
         vim.b[bufnr].lsp_inlay_hint_enabled = true
@@ -133,9 +58,6 @@ end
 ---@param client LspClient
 ---@param bufnr number
 local function codelens_auto_refresh(client, bufnr)
-    if not client:supports_method(LspMethods.textDocument_codeLens) then
-        return
-    end
     local lsp_autocmds = vim.b[bufnr].lsp_autocmds or {}
     lsp_autocmds.codelens = lsp_autocmds.codelens
         or vim.api.nvim_create_autocmd({ 'BufEnter', 'InsertLeave', 'BufWritePost', 'CursorHold' }, {
@@ -155,7 +77,8 @@ end
 ---@param client LspClient
 ---@param bufnr number
 local function auto_document_highlight(client, bufnr)
-    if not client:supports_method(LspMethods.textDocument_documentHighlight) or client.name == 'rust_analyzer' then
+    if client.name == 'rust_analyzer' then
+        -- leave it to rustaceanvim
         return
     end
     local lsp_autocmds = vim.b[bufnr].lsp_autocmds or {}
@@ -177,9 +100,6 @@ end
 ---@param client LspClient
 ---@param bufnr number
 local function auto_format_on_save(client, bufnr)
-    if not client:supports_method(LspMethods.textDocument_formatting) then
-        return
-    end
     if client.name ~= 'null-ls' and vim.b[bufnr].lsp_disable_auto_format then
         return
     end
@@ -214,49 +134,52 @@ end
 ---@param client LspClient
 ---@param bufnr number
 local function disable_semantic_token_for_helm(client, bufnr)
-    if vim.bo[bufnr].filetype == 'helm' and client.name == 'gopls' then
+    if vim.bo[bufnr].filetype == 'helm' then
         vim.defer_fn(function()
             vim.lsp.semantic_tokens.stop(bufnr, client.id)
         end, 100)
     end
 end
 
----@type OnAttachFunc[]
-local on_attach_funcs = {
-    set_keymaps,
-    auto_document_highlight,
-    auto_format_on_save,
-    smart_inlayhint,
-    codelens_auto_refresh,
-    disable_semantic_token_for_helm,
+local autocmds = {
+    {
+        smart_inlayhint,
+        method = LspMethods.textDocument_inlayHint,
+        desc = 'toggle inlay hint',
+    },
+    {
+        codelens_auto_refresh,
+        method = LspMethods.textDocument_codeLens,
+        desc = 'auto refresh codelens',
+    },
+    {
+        auto_document_highlight,
+        method = LspMethods.textDocument_documentHighlight,
+        desc = 'auto document highlight',
+    },
+    {
+        auto_format_on_save,
+        method = LspMethods.textDocument_formatting,
+        desc = 'format on save',
+    },
+    {
+        disable_semantic_token_for_helm,
+        name = 'gopls',
+        desc = 'disable semantic token for helm',
+    },
 }
 
 local M = {}
 
----@param client LspClient
----@param bufnr number
-local function on_attach(client, bufnr)
-    vim.iter(on_attach_funcs):each(function(fn)
-        return fn(client, bufnr)
-    end)
-end
-
 function M.setup()
-    local group_id = vim.api.nvim_create_augroup('dotvim_lsp_on_attach', { clear = true })
-    vim.api.nvim_create_autocmd('LspAttach', {
-        group = group_id,
-        callback = function(args)
-            local client = vim.lsp.get_client_by_id(args.data.client_id)
-            assert(client, 'client not found')
-            on_attach(client, args.buf)
-        end,
-    })
+    local lsputils = require('dotvim.config.lsp.utils')
+    for _, autocmd in ipairs(autocmds) do
+        if autocmd.method then
+            lsputils.on_supports_method(autocmd.method, autocmd[1], { name = autocmd.name, desc = autocmd.desc })
+        else
+            lsputils.on_attach(autocmd[1], { name = autocmd.name, desc = autocmd.desc })
+        end
+    end
 end
-
-setmetatable(M, {
-    __call = function(_, client, bufnr)
-        on_attach(client, bufnr)
-    end,
-})
 
 return M
