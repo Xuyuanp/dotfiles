@@ -6,7 +6,8 @@ local M = {}
 ---@type table<string, table<string, table<number, boolean>>>
 M._supports_method = {}
 
-function M.hack_register_capability()
+---@private
+function M._hack_register_capability()
     local method = vim.lsp.protocol.Methods.client_registerCapability
     local register_capability = vim.lsp.handlers[method]
     vim.lsp.handlers[method] = function(err, res, ctx)
@@ -115,7 +116,7 @@ function M.on_supports_method(method, fn, opts)
 end
 
 function M.setup()
-    M.hack_register_capability()
+    M._hack_register_capability()
     M.on_attach(M._check_methods)
     M.on_dynamic_capability(M._check_methods)
 end

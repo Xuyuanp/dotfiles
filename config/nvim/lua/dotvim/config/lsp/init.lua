@@ -122,27 +122,24 @@ local langs = {
 local M = {}
 
 function M.setup()
-    local default_config = {
-        capabilities = default_capabilities(),
-    }
-
     require('dotvim.config.lsp.buf').overwrite()
     require('dotvim.config.lsp.utils').setup()
     require('dotvim.config.lsp.keymaps').setup()
     require('dotvim.config.lsp.autocmds').setup()
 
+    local default_config = {
+        capabilities = default_capabilities(),
+    }
     require('mason-lspconfig').setup_handlers({
         function(server_name)
             local cfg = vim.deepcopy(default_config)
             if langs[server_name] then
                 cfg = vim.tbl_deep_extend('force', cfg, langs[server_name])
             end
-            if server_name == 'rust_analyzer' then
-            -- require('dotvim.config.lsp.rust').setup(cfg)
-            else
-                lspconfig[server_name].setup(cfg)
-            end
+            lspconfig[server_name].setup(cfg)
         end,
+        -- nothing to do, leave it to rustaceanvim
+        ['rust_analyzer'] = function() end,
     })
     -- suppress warning: bufls deprecated
     -- TODO: remove this after bufls is removed
