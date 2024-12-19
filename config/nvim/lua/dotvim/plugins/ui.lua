@@ -445,6 +445,9 @@ return {
                     changedelete = { text = '┃' },
                     untracked = { text = '┃' },
                 },
+                preview_config = {
+                    border = 'rounded',
+                },
                 current_line_blame = true,
                 current_line_blame_formatter = '@<author> / <abbrev_sha> <summary> / <author_time:%R>',
                 on_attach = function(bufnr)
@@ -455,7 +458,7 @@ return {
                                 if vim.wo.diff then
                                     vim.cmd.normal({ ']c', bang = true })
                                 else
-                                    gitsigns.nav_hunk('next')
+                                    gitsigns.nav_hunk('next', { preview = true })
                                 end
                             end,
                             desc = 'jump to next hunk',
@@ -466,7 +469,7 @@ return {
                                 if vim.wo.diff then
                                     vim.cmd.normal({ '[c', bang = true })
                                 else
-                                    gitsigns.nav_hunk('prev')
+                                    gitsigns.nav_hunk('prev', { preview = true })
                                 end
                             end,
                             desc = 'jump to next hunk',
