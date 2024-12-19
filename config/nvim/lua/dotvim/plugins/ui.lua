@@ -545,6 +545,26 @@ return {
             vim.o.foldlevelstart = 99
             vim.o.foldenable = true
         end,
+        keys = {
+            {
+                ']f',
+                function()
+                    local ufo = require('ufo')
+                    ufo.goNextClosedFold()
+                    ufo.peekFoldedLinesUnderCursor()
+                end,
+                desc = '[Ufo] got to next fold',
+            },
+            {
+                '[f',
+                function()
+                    local ufo = require('ufo')
+                    ufo.goPreviousClosedFold()
+                    ufo.peekFoldedLinesUnderCursor()
+                end,
+                desc = '[Ufo] got to previous fold',
+            },
+        },
         opts = {
             fold_virt_text_handler = function(virtText, lnum, endLnum, width, truncate)
                 local newVirtText = {}
@@ -573,11 +593,17 @@ return {
                 table.insert(newVirtText, { suffix, 'MoreMsg' })
                 return newVirtText
             end,
-            mappings = {
-                scrollU = '<C-u>',
-                scrollD = '<C-d>',
-                jumpTop = '[',
-                jumpBot = ']',
+            preview = {
+                win_config = {
+                    border = 'rounded',
+                    winblend = vim.o.winblend,
+                },
+                mappings = {
+                    scrollU = '<C-u>',
+                    scrollD = '<C-d>',
+                    jumpTop = '[',
+                    jumpBot = ']',
+                },
             },
         },
     },
