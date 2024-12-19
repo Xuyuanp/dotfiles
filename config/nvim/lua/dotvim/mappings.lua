@@ -50,6 +50,15 @@ local function setup()
     set_keymap('n', 'k', 'gk', opts)
     ---]]
 
+    ---[[ Move Lines
+    set_keymap('n', '<A-j>', "<CMD>execute 'move .+' . v:count1<CR>==", { desc = 'Move Down' })
+    set_keymap('n', '<A-k>', "<CMD>execute 'move .-' . (v:count1 + 1)<CR>==", { desc = 'Move Up' })
+    set_keymap('i', '<A-j>', '<ESC><CMD>m .+1<CR>==gi', { desc = 'Move Down' })
+    set_keymap('i', '<A-k>', '<ESC><CMD>m .-2<CR>==gi', { desc = 'Move Up' })
+    set_keymap('v', '<A-j>', ":<C-u>execute \"'<,'>move '>+\" . v:count1<CR>gv=gv", { desc = 'Move Down' })
+    set_keymap('v', '<A-k>', ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<CR>gv=gv", { desc = 'Move Up' })
+    ---]]
+
     ---[[
     local function diagnostic_jump(direction)
         return function()
