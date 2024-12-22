@@ -34,15 +34,17 @@ local load_head = a.wrap(function(bufnr, root)
             vim.b[bufnr].dotvim_git_head = choice.icon .. ' ' .. head
 
             a.schedule().await()
-            vim.cmd('redrawstatus')
-
+            vim.api.nvim_exec_autocmds('User', {
+                pattern = 'DotVimGitHeadUpdate',
+                data = { bufnr = bufnr, head = head, icon = choice.icon },
+            })
             return
         end
     end
 end)
 
 function M.load_head(bufnr, root)
-    bufnr = bufnr or 0
+    bufnr = bufnr or vim.api.nvim_get_current_buf()
     load_head(bufnr, root)
 end
 
