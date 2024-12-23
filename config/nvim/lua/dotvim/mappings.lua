@@ -60,17 +60,19 @@ local function setup()
     ---]]
 
     ---[[
-    local function diagnostic_jump(direction)
+    local function diagnostic_jump(direction, severity)
         return function()
             vim.diagnostic.jump({
                 count = direction,
-                severity = vim.diagnostic.severity.ERROR,
+                severity = severity,
             })
         end
     end
 
-    set_keymap('n', ']e', diagnostic_jump(1), { desc = '[Diagnostic] jump to next error' })
-    set_keymap('n', '[e', diagnostic_jump(-1), { desc = '[Diagnostic] jump to previous error' })
+    set_keymap('n', ']e', diagnostic_jump(1, vim.diagnostic.severity.ERROR), { desc = '[Diagnostic] jump to next error' })
+    set_keymap('n', '[e', diagnostic_jump(-1, vim.diagnostic.severity.ERROR), { desc = '[Diagnostic] jump to previous error' })
+    set_keymap('n', ']w', diagnostic_jump(1, vim.diagnostic.severity.WARN), { desc = '[Diagnostic] jump to next warning' })
+    set_keymap('n', '[w', diagnostic_jump(-1, vim.diagnostic.severity.WARN), { desc = '[Diagnostic] jump to previous warning' })
     ---]]
 
     ---[[ snippets support

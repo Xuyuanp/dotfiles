@@ -165,7 +165,9 @@ function M.setup()
             source = true,
         },
         jump = {
-            float = true,
+            float = {
+                border = 'rounded',
+            },
         },
     })
 end
