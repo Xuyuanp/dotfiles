@@ -7,11 +7,6 @@ local function setup()
     set_keymap('n', '<C-k>', '<C-w>k', opts)
     set_keymap('n', '<C-h>', '<C-w>h', opts)
     set_keymap('n', '<C-l>', '<C-w>l', opts)
-
-    set_keymap('n', '<Up>', '<C-w>+', opts)
-    set_keymap('n', '<Down>', '<C-w>-', opts)
-    set_keymap('n', '<Left>', '<C-w><', opts)
-    set_keymap('n', '<Right>', '<C-w>>', opts)
     ---]]
 
     ---[[ Reselect visual block after indent/outdent
