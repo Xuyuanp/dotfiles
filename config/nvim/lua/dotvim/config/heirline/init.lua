@@ -28,7 +28,9 @@ function M.statusline()
         components.ScrollBar,
     }
     local inactive = {
-        condition = conditions.is_not_active,
+        condition = function()
+            return vim.o.laststatus < 3 and conditions.is_not_active()
+        end,
         components.FileType,
         components.Space,
         components.FileNameBlock,
@@ -92,6 +94,14 @@ function M.setup()
             colors.update()
             utils.on_colorscheme(colors.get)
         end,
+    })
+
+    vim.api.nvim_create_autocmd('User', {
+        group = group_id,
+        pattern = 'DotVimGitHeadUpdate',
+        callback = vim.schedule_wrap(function()
+            vim.cmd('redrawstatus')
+        end),
     })
 end
 

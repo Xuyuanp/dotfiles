@@ -310,14 +310,6 @@ M.Diagnostics = {
 M.Git = {
     condition = conditions.is_git_repo,
 
-    update = {
-        'User',
-        pattern = 'DotVimGitHeadUpdate',
-        callback = vim.schedule_wrap(function()
-            vim.cmd('redrawstatus')
-        end),
-    },
-
     init = function(self)
         self.status_dict = vim.b.gitsigns_status_dict
         self.has_changes = (self.status_dict.added or 0) ~= 0 or (self.status_dict.removed or 0) ~= 0 or (self.status_dict.changed or 0) ~= 0
