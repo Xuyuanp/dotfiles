@@ -2,60 +2,6 @@ local vim = vim
 
 return {
     {
-        'nvim-telescope/telescope.nvim',
-        cmd = { 'Telescope' },
-        dependencies = {
-            'nvim-lua/popup.nvim',
-            'nvim-lua/plenary.nvim',
-            'nvim-telescope/telescope-file-browser.nvim',
-        },
-        keys = {
-            { '<A-l>', '<cmd>Telescope file_browser<CR>', mode = 'n', desc = '[Telescope] file browser' },
-        },
-        config = function()
-            local ts = require('telescope')
-            ts.setup({
-                defaults = {
-                    layout_config = {
-                        prompt_position = 'top',
-                        horizontal = {
-                            preview_width = 0.5,
-                        },
-                    },
-                    sorting_strategy = 'ascending',
-                    vimgrep_arguments = {
-                        'rg',
-                        '--color=never',
-                        '--no-heading',
-                        '--with-filename',
-                        '--line-number',
-                        '--column',
-                        '--smart-case',
-                    },
-                    prompt_prefix = ' 󰍉 ',
-                    selection_caret = ' ',
-                },
-                extensions = {
-                    file_browser = {
-                        git_status = true,
-                    },
-                },
-            })
-
-            require('telescope').load_extension('file_browser')
-
-            local group_id = vim.api.nvim_create_augroup('dotvim_telescope', { clear = true })
-            vim.api.nvim_create_autocmd('User', {
-                group = group_id,
-                pattern = 'TelescopePreviewerLoaded',
-                callback = function()
-                    vim.wo.number = true
-                end,
-            })
-        end,
-    },
-
-    {
         'Xuyuanp/yanil',
         dev = true,
         branch = 'main',
