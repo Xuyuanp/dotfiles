@@ -1,4 +1,3 @@
----@diagnostic disable: unused-local
 local my_lsp = require('dotvim.config.lsp.my')
 
 local LspMethods = vim.lsp.protocol.Methods
@@ -24,6 +23,7 @@ local ctrlv = vim.api.nvim_replace_termcodes('<C-v>', true, true, true)
 ---@param client LspClient
 ---@param bufnr number
 local function smart_inlayhint(client, bufnr)
+    client = client
     vim.schedule(function()
         vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
         vim.b[bufnr].lsp_inlay_hint_enabled = true
@@ -58,6 +58,7 @@ end
 ---@param client LspClient
 ---@param bufnr number
 local function codelens_auto_refresh(client, bufnr)
+    client = client
     local lsp_autocmds = vim.b[bufnr].lsp_autocmds or {}
     lsp_autocmds.codelens = lsp_autocmds.codelens
         or vim.api.nvim_create_autocmd({ 'BufEnter', 'InsertLeave', 'BufWritePost', 'CursorHold' }, {

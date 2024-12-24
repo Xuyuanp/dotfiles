@@ -17,7 +17,7 @@ function M._hack_register_capability()
             return ret
         end
 
-        for _, bufnr in ipairs(client.attached_buffers) do
+        for bufnr in ipairs(client.attached_buffers) do
             vim.api.nvim_exec_autocmds('User', {
                 pattern = 'DotVimLspDynamicCapability',
                 data = { client_id = client.id, buffer = bufnr },

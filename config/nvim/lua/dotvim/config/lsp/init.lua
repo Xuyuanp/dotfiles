@@ -1,16 +1,11 @@
-local lspconfig = require('lspconfig')
-
 ---@alias LspClient vim.lsp.Client
 ---@alias OnAttachFunc fun(client: LspClient, bufnr: number):boolean?
 
 local function default_capabilities()
-    local capabilities = vim.lsp.protocol.make_client_capabilities()
-
-    local cmp_lsp = vim.F.npcall(require, 'cmp_nvim_lsp')
-    if cmp_lsp then
-        capabilities = vim.tbl_deep_extend('force', capabilities, cmp_lsp.default_capabilities())
+    if vim.g.dotvim_lsp_capabilities then
+        return vim.g.dotvim_lsp_capabilities()
     end
-    return capabilities
+    return {}
 end
 
 local function make_on_new_config(opts)
@@ -90,17 +85,8 @@ local langs = {
                 runtime = {
                     version = 'LuaJIT',
                 },
-                workspace = {
-                    checkThirdParty = false,
-                    library = {
-                        vim.env.VIMRUNTIME,
-                    },
-                },
             },
         },
-    },
-    sqls = {
-        root_dir = lspconfig.util.root_pattern('.nlsp-settings/sqls.json'),
     },
     sourcery = {
         on_new_config = make_on_new_config({ disable_hover = true }),
@@ -130,6 +116,7 @@ function M.setup()
     local default_config = {
         capabilities = default_capabilities(),
     }
+    local lspconfig = require('lspconfig')
     require('mason-lspconfig').setup_handlers({
         function(server_name)
             local cfg = vim.deepcopy(default_config)
