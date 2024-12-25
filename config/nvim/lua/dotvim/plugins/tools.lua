@@ -94,11 +94,6 @@ return {
     },
 
     {
-        'matze/vim-move',
-        event = { 'BufNewFile', 'BufReadPost' },
-    },
-
-    {
         'jbyuki/venn.nvim',
         keys = {
             { '<Leader>vb', ':<C-e>VBox<CR>', mode = 'v', desc = '[Venn] draw vbox' },
