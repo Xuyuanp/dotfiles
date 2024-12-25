@@ -57,6 +57,7 @@
   "neochat.nvim": { "branch": "main", "commit": "90bed19ec60e0b17147b0426286859abd404ffea" },
   "neoconf.nvim": { "branch": "main", "commit": "8e41731147b31953baeec7e68f12adee8af1c4b9" },
   "neorg": { "branch": "main", "commit": "62671a7b03a1f38a6e5e03b006a9b6f8d804be0e" },
+  "neorg-interim-ls": { "branch": "main", "commit": "619bd8217c3f9252557c44e85dacb24ea19a53b4" },
   "neotest": { "branch": "master", "commit": "6d3d22cdad49999ef774ebe1bc250a4994038964" },
   "neotest-go": { "branch": "main", "commit": "92950ad7be2ca02a41abca5c6600ff6ffaf5b5d6" },
   "none-ls.nvim": { "branch": "main", "commit": "c279e541f73a2deea9deb5231b9c037678dd6353" },
