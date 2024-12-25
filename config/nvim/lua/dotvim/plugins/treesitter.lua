@@ -4,13 +4,11 @@ return {
     {
         'nvim-treesitter/nvim-treesitter',
         dependencies = {
-            'nvim-treesitter/nvim-treesitter-context',
             'nvim-treesitter/nvim-treesitter-textobjects',
-            'nvim-treesitter/playground',
             'RRethy/nvim-treesitter-textsubjects',
             {
                 'JoosepAlviste/nvim-ts-context-commentstring',
-                config = function()
+                init = function()
                     vim.g.skip_ts_context_commentstring_module = true
                 end,
             },
@@ -41,7 +39,7 @@ return {
             disable_virtual_lines_ft = { 'yaml', 'python' },
             -- How many lines required after starting position to show virtual text
             -- Default: 1 (equals two lines total)
-            min_rows = 80,
+            min_rows = 20,
         },
     },
 
