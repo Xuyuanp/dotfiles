@@ -144,21 +144,34 @@ function M.setup()
     local default_config = {
         capabilities = default_capabilities(),
     }
-    local lspconfig = require('lspconfig')
+    vim.lsp.config('*', default_config)
+
+    local native_setup = function(server_name)
+        local cfg = vim.tbl_deep_extend('force', require('lspconfig.configs.' .. server_name).default_config, langs[server_name] or {})
+        vim.lsp.config(server_name, cfg)
+        vim.lsp.enable(server_name)
+    end
+    local oldstyle_setup = function(server_name)
+        local cfg = vim.deepcopy(default_config)
+        if langs[server_name] then
+            cfg = vim.tbl_deep_extend('force', cfg, langs[server_name])
+        end
+        local lspconfig = require('lspconfig')
+        lspconfig[server_name].setup(cfg)
+    end
+
+    local use_native = false
+    local setup = use_native and native_setup or oldstyle_setup
+
     require('mason-lspconfig').setup_handlers({
-        function(server_name)
-            local cfg = vim.deepcopy(default_config)
-            if langs[server_name] then
-                cfg = vim.tbl_deep_extend('force', cfg, langs[server_name])
-            end
-            lspconfig[server_name].setup(cfg)
-        end,
-        -- nothing to do, leave it to rustaceanvim
+        setup,
         ['rust_analyzer'] = function() end,
     })
     -- suppress warning: bufls deprecated
     -- TODO: remove this after bufls is removed
-    lspconfig['buf_ls'].setup(default_config)
+    vim.schedule(function()
+        setup('buf_ls')
+    end)
 end
 
 return M

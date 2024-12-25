@@ -5,8 +5,6 @@ return {
         dependencies = {
             'folke/neoconf.nvim',
             'williamboman/mason-lspconfig.nvim',
-            'nvimtools/none-ls.nvim',
-            'junegunn/fzf.vim',
         },
         config = function()
             require('dotvim.config.lsp').setup()
@@ -30,7 +28,7 @@ return {
             },
         },
     },
-    { 'Bilal2453/luvit-meta', lazy = true }, -- optional `vim.uv` typings
+    { 'Bilal2453/luvit-meta' }, -- optional `vim.uv` typings
 
     {
         'williamboman/mason.nvim',
@@ -49,21 +47,8 @@ return {
     },
 
     {
-        'jay-babu/mason-null-ls.nvim',
-        dependencies = {
-            'williamboman/mason.nvim',
-        },
-        opts = {
-            automatic_installation = true,
-            ensure_installed = {},
-        },
-    },
-
-    {
         'nvimtools/none-ls.nvim',
-        dependencies = {
-            'jay-babu/mason-null-ls.nvim',
-        },
+        event = 'VeryLazy',
         config = function()
             require('dotvim.config.lsp.null').setup()
         end,
