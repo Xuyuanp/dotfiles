@@ -1,9 +1,10 @@
 local features = require('dotvim.features')
 
-return {
+local M = {
     {
         'hrsh7th/nvim-cmp',
         event = { 'InsertEnter' },
+        cond = not features.blink,
         dependencies = {
             'hrsh7th/cmp-buffer',
             'hrsh7th/cmp-nvim-lsp',
@@ -17,8 +18,14 @@ return {
             { 'zbirenbaum/copilot-cmp', optional = true },
             { 'andersevenrud/compe-tmux', cond = not not vim.env.TMUX },
         },
+        init = function()
+            ---@diagnostic disable-next-line: duplicate-set-field
+            vim.g.dotvim_lsp_capabilities = function()
+                return require('cmp_nvim_lsp').default_capabilities()
+            end
+        end,
         config = function()
-            require('dotvim.config.complete').setup()
+            require('dotvim.config.coding.cmp').setup()
         end,
     },
 
@@ -28,21 +35,6 @@ return {
         dependencies = {
             'zbirenbaum/copilot.lua',
         },
-        opts = {},
-    },
-    {
-        'zbirenbaum/copilot.lua',
-        cmd = 'Copilot',
-        opts = {},
-    },
-
-    {
-        'Exafunction/codeium.nvim',
-        cond = features.codeium,
-        dependencies = {
-            'nvim-lua/plenary.nvim',
-        },
-        cmd = 'Codeium',
         opts = {},
     },
 
@@ -59,6 +51,7 @@ return {
 
     {
         'petertriho/cmp-git',
+        cond = not features.blink,
         ft = { 'gitcommit' },
         config = function()
             local cmp = require('cmp')
@@ -97,3 +90,5 @@ return {
         },
     },
 }
+
+return M

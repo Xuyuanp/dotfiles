@@ -1,3 +1,5 @@
+local features = require('dotvim.features')
+
 return {
     {
         'jackMort/ChatGPT.nvim',
@@ -91,19 +93,45 @@ return {
 
     {
         'olimorris/codecompanion.nvim',
-        dependencies = {
-            'nvim-lua/plenary.nvim',
-            'nvim-treesitter/nvim-treesitter',
-            'hrsh7th/nvim-cmp', -- Optional: For using slash commands and variables in the chat buffer
-            'nvim-telescope/telescope.nvim', -- Optional: For using slash commands
-            { 'MeanderingProgrammer/render-markdown.nvim', ft = { 'markdown', 'codecompanion' } }, -- Optional: For prettier markdown rendering
-            { 'stevearc/dressing.nvim' }, -- Optional: Improves `vim.ui.select`
-        },
         cmd = {
             'CodeCompanion',
             'CodeCompanionChat',
             'CodeCompanionActions',
         },
+        opts = {},
+    },
+    features.blink
+            and {
+                'saghen/blink.cmp',
+                optional = true,
+                opts = {
+                    sources = {
+                        providers = {
+                            codecompanion = {
+                                name = 'CodeCompanion',
+                                module = 'codecompanion.providers.completion.blink',
+                                score_offset = 100,
+
+                                -- extra
+                                filetypes = { 'codecompanion' },
+                            },
+                        },
+                    },
+                },
+            }
+        or nil,
+
+    {
+        'zbirenbaum/copilot.lua',
+        cond = features.copilot,
+        cmd = 'Copilot',
+        opts = {},
+    },
+
+    {
+        'Exafunction/codeium.nvim',
+        cond = features.codeium,
+        cmd = 'Codeium',
         opts = {},
     },
 }

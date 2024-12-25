@@ -5,7 +5,35 @@ local function default_capabilities()
     if vim.g.dotvim_lsp_capabilities then
         return vim.g.dotvim_lsp_capabilities()
     end
-    return {}
+    return {
+        textDocument = {
+            completion = {
+                completionItem = {
+                    commitCharactersSupport = false,
+                    deprecatedSupport = true,
+                    documentationFormat = { 'markdown', 'plaintext' },
+                    insertReplaceSupport = true,
+                    insertTextModeSupport = {
+                        valueSet = { 1 },
+                    },
+                    labelDetailsSupport = true,
+                    preselectSupport = false,
+                    resolveSupport = {
+                        properties = { 'documentation', 'detail', 'additionalTextEdits' },
+                    },
+                    snippetSupport = true,
+                    tagSupport = {
+                        valueSet = { 1 },
+                    },
+                },
+                completionList = {
+                    itemDefaults = { 'commitCharacters', 'editRange', 'insertTextFormat', 'insertTextMode', 'data' },
+                },
+                contextSupport = true,
+                insertTextMode = 1,
+            },
+        },
+    }
 end
 
 local function make_on_new_config(opts)

@@ -10,7 +10,6 @@ return {
         ft = { 'norg' },
         dependencies = {
             'vhyrro/luarocks.nvim',
-            'hrsh7th/nvim-cmp',
         },
         config = function()
             require('neorg').setup({
@@ -24,11 +23,6 @@ return {
                         },
                     },
                     ['core.concealer'] = {}, -- Adds pretty icons to your documents
-                    ['core.completion'] = {
-                        config = {
-                            engine = 'nvim-cmp',
-                        },
-                    },
                     ['core.dirman'] = { -- Manages Neorg workspaces
                         config = {
                             workspaces = {
@@ -37,15 +31,6 @@ return {
                         },
                     },
                 },
-            })
-
-            local cmp = require('cmp')
-            cmp.setup.filetype('norg', {
-                sources = cmp.config.sources({
-                    { name = 'neorg' },
-                }, {
-                    { name = 'buffer' },
-                }),
             })
         end,
     },
