@@ -90,6 +90,9 @@ function M.setup()
     heirline.setup({
         opts = {
             colors = colors.get,
+            disable_winbar_cb = function(args)
+                return vim.bo[args.buf].buftype ~= '' or vim.bo[args.buf].filetype == 'gitcommit'
+            end,
         },
         statusline = M.statusline(),
         winbar = M.winbar(),
