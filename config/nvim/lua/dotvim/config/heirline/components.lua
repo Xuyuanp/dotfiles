@@ -259,6 +259,15 @@ M.LSPActive = {
     },
 }
 
+M.Navic = {
+    condition = function()
+        return require('nvim-navic').is_available()
+    end,
+    provider = function()
+        return require('nvim-navic').get_location()
+    end,
+}
+
 M.Diagnostics = {
     condition = conditions.has_diagnostics,
 

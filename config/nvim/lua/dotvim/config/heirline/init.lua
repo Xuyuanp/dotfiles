@@ -78,6 +78,13 @@ function M.statusline()
     }
 end
 
+function M.winbar()
+    return {
+        condition = conditions.lsp_attached,
+        components.Navic,
+    }
+end
+
 function M.setup()
     local heirline = require('heirline')
     heirline.setup({
@@ -85,9 +92,10 @@ function M.setup()
             colors = colors.get,
         },
         statusline = M.statusline(),
+        winbar = M.winbar(),
     })
 
-    local group_id = vim.api.nvim_create_augroup('dotvim_heirlines', { clear = true })
+    local group_id = vim.api.nvim_create_augroup('dotvim_heirline', { clear = true })
     vim.api.nvim_create_autocmd('ColorScheme', {
         group = group_id,
         callback = function()

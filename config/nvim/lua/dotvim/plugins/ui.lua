@@ -202,9 +202,27 @@ return {
     },
 
     {
+        'SmiteshP/nvim-navic',
+        init = function()
+            require('dotvim.config.lsp.utils').on_attach(function(client, bufnr)
+                if not client:supports_method(vim.lsp.protocol.Methods.textDocument_documentSymbol) then
+                    return
+                end
+
+                require('nvim-navic').attach(client, bufnr)
+            end)
+        end,
+        opts = {
+            depth_limit = 5,
+            highlight = true,
+        },
+    },
+
+    {
         'rebelot/heirline.nvim',
         dependencies = {
             'echasnovski/mini.icons',
+            'SmiteshP/nvim-navic',
         },
         event = 'UiEnter',
         config = function()
