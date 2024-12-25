@@ -42,7 +42,7 @@ local test_menu = a.wrap(function()
     end)
 end)
 
-function M.setup()
+function M.setup(opts)
     -- get neotest namespace (api call creates or returns namespace)
     local neotest_ns = vim.api.nvim_create_namespace('neotest')
     vim.diagnostic.config({
@@ -54,7 +54,15 @@ function M.setup()
         },
     }, neotest_ns)
 
-    vim.keymap.set({ 'n', 'i' }, '<A-t>', test_menu, {
+    local done = false
+
+    vim.keymap.set({ 'n', 'i' }, '<A-t>', function()
+        if not done then
+            require('neotest').setup(opts)
+            done = true
+        end
+        test_menu()
+    end, {
         remap = true,
         silent = true,
         desc = '[Neotest] menu',

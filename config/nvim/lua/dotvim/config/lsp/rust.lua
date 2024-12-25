@@ -44,16 +44,11 @@ function M.setup()
         },
     }
 
-    local ok, neotest = pcall(require, 'neotest')
-    if ok then
-        local adapter = require('rustaceanvim.neotest')
-        ---@diagnostic disable-next-line: missing-fields
-        neotest.setup({
-            adapters = {
-                adapter,
-            },
-        })
-    end
+    require('dotvim.config.neotest').setup({
+        adapters = {
+            require('rustaceanvim.neotest'),
+        },
+    })
 
     vim.api.nvim_create_autocmd('FileType', {
         pattern = 'rust',

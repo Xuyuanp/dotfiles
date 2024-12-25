@@ -6,6 +6,7 @@ return {
             'nvim-lua/plenary.nvim',
             'nvim-treesitter/nvim-treesitter',
         },
+        cmd = 'Neotest',
         config = function()
             require('dotvim.config.neotest').setup()
         end,
@@ -16,7 +17,7 @@ return {
         ft = 'go',
         config = function()
             ---@diagnostic disable-next-line: missing-fields
-            require('neotest').setup({
+            require('dotvim.config.neotest').setup({
                 adapters = {
                     require('neotest-go')({
                         experimental = {
