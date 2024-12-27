@@ -1,0 +1,26 @@
+font-family = "FiraCode Nerd Font Mono"
+font-family-italic = "Fira Mono Regular Italic"
+font-family-bold-italic = "Fira Mono Bold Italic"
+
+font-size = 16
+font-thicken = true
+
+adjust-cell-height = 1
+
+theme = "Kanagawa Wave"
+
+mouse-shift-capture = true
+
+window-theme = system
+window-save-state = always
+
+background-opacity = 0.9
+background-blur-radius = 5
+
+quit-after-last-window-closed = true
+confirm-close-surface = false
+
+macos-option-as-alt = true
+macos-titlebar-style = native
+
+config-file = ?linux.config

@@ -47,6 +47,7 @@
     ~/.tmux.conf: tmux.conf
     ~/.zshrc: zshrc
     ~/.config/kitty: config/kitty
+    ~/.config/ghostty: config/ghostty
     ~/.config/zellij: config/zellij
     ~/.config/nvim: config/nvim
     ~/.config/neovide: config/neovide
