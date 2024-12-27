@@ -1,39 +1,13 @@
 ---@alias LspClient vim.lsp.Client
 ---@alias OnAttachFunc fun(client: LspClient, bufnr: number):boolean?
 
-local function default_capabilities()
+local default_capabilities = require('dotvim.config.lsp.capabilities')
+
+local function make_capabilities()
     if vim.g.dotvim_lsp_capabilities then
         return vim.g.dotvim_lsp_capabilities()
     end
-    return {
-        textDocument = {
-            completion = {
-                completionItem = {
-                    commitCharactersSupport = false,
-                    deprecatedSupport = true,
-                    documentationFormat = { 'markdown', 'plaintext' },
-                    insertReplaceSupport = true,
-                    insertTextModeSupport = {
-                        valueSet = { 1 },
-                    },
-                    labelDetailsSupport = true,
-                    preselectSupport = false,
-                    resolveSupport = {
-                        properties = { 'documentation', 'detail', 'additionalTextEdits' },
-                    },
-                    snippetSupport = true,
-                    tagSupport = {
-                        valueSet = { 1 },
-                    },
-                },
-                completionList = {
-                    itemDefaults = { 'commitCharacters', 'editRange', 'insertTextFormat', 'insertTextMode', 'data' },
-                },
-                contextSupport = true,
-                insertTextMode = 1,
-            },
-        },
-    }
+    return default_capabilities
 end
 
 local function make_on_new_config(opts)
@@ -142,7 +116,7 @@ function M.setup()
     require('dotvim.config.lsp.autocmds').setup()
 
     local default_config = {
-        capabilities = default_capabilities(),
+        capabilities = make_capabilities(),
     }
     vim.lsp.config('*', default_config)
 

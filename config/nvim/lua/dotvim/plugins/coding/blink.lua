@@ -78,6 +78,10 @@ local M = {
                     },
                     buffer = {
                         min_keyword_length = 5,
+                        max_items = 5,
+                    },
+                    snippets = {
+                        max_items = 5,
                     },
                 },
             },
@@ -116,6 +120,21 @@ local M = {
                 opts.sources.per_filetype[ft] = append_default(opts.sources.per_filetype[ft] or opts.sources.default, names)
             end
             require('blink.cmp').setup(opts)
+
+            local default_capabilities = require('dotvim.config.lsp.capabilities')
+            local blink_capabilities = require('blink.cmp').get_lsp_capabilities()
+            if not vim.deep_equal(default_capabilities, blink_capabilities) then
+                vim.notify_once('Blink capabilities are different from default capabilities', vim.log.levels.WARN)
+
+                local source = 'return ' .. vim.inspect(blink_capabilities, { indent = '    ' })
+                local fname = vim.fs.normalize('~/.config/nvim/lua/dotvim/config/lsp/capabilities.lua')
+
+                local uv = vim.uv
+                local fd = uv.fs_open(fname, 'w', 0644)
+                assert(fd, 'Failed to open file')
+                uv.fs_write(fd, source)
+                uv.fs_close(fd)
+            end
         end,
     },
     {

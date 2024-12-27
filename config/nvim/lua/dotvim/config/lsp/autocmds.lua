@@ -25,6 +25,9 @@ local ctrlv = vim.api.nvim_replace_termcodes('<C-v>', true, true, true)
 local function smart_inlayhint(client, bufnr)
     client = client
     vim.schedule(function()
+        if not vim.api.nvim_buf_is_valid(bufnr) then
+            return
+        end
         vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
         vim.b[bufnr].lsp_inlay_hint_enabled = true
     end)
