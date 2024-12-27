@@ -195,7 +195,19 @@ function howto() {
 
     # escape double quotes
     input=${input//\"/\\\"}
+
+    # suppressing '[job_id] pid' output
+    setopt LOCAL_OPTIONS NO_MONITOR NO_NOTIFY
+    spinner --style dots &
+    spinner_pid=$!
+    # trap SIGINT to handle Ctrl-C
+    trap 'kill $spinner_pid 2>/dev/null' INT
+
     output=$(nvim --headless -c "Howto! ${input}")
+
+    kill $spinner_pid 2>/dev/null
+    wait
+
     print -z "$output"
 }
 
