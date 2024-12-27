@@ -1,3 +1,5 @@
 .cache/
 .luacheckcache
 config/kitty/os.conf
+config/ghostty/os.config
+config/ghostty/default.config

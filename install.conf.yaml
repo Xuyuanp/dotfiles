@@ -41,7 +41,17 @@
         else
           touch $os_conf
         fi
-      description: include os
+      description: kitty include os
+    - command: |
+        os_conf=config/ghostty/os.config
+        if [ `uname` = Darwin ]; then
+          echo 'config-file = ?macos.config' > $os_conf
+        elif [ `uname` = Linux ]; then
+          echo 'config-file = ?linux.config' > $os_conf
+        else
+          touch $os_conf
+        fi
+      description: ghostty include os
 
 - link:
     ~/.tmux.conf: tmux.conf

@@ -23,4 +23,4 @@ confirm-close-surface = false
 macos-option-as-alt = true
 macos-titlebar-style = native
 
-config-file = ?linux.config
+config-file = ?os.config
