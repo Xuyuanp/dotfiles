@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+# Function to handle cleanup on exit
+cleanup() {
+  tput cnorm  # Restore cursor
+  echo -ne "\r"
+  exit
+}
+
+# Trap SIGINT and SIGTERM signals
+trap cleanup SIGINT SIGTERM
+
+# Default values
+style="line"
+prefix=""
+timeout=60
+interval=0.1
+
+# Parse arguments
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        --style) style="$2"; shift ;;
+        --prefix) prefix="$2"; shift ;;
+        --timeout) timeout="$2"; shift ;;
+        --interval) interval="$2"; shift ;;
+        *) echo "Unknown parameter passed: $1"; exit 1 ;;
+    esac
+    shift
+done
+
+# Define spinners
+spinners_line=('-' '\' '|' '/')
+spinners_dots=('⠋' '⠙' '⠹' '⠸' '⠼' '⠴' '⠦' '⠧' '⠇' '⠏')
+spinners_meter=('▰▱▱▱▱▱▱' '▰▰▱▱▱▱▱' '▰▰▰▱▱▱▱' '▰▰▰▰▱▱▱' '▰▰▰▰▰▱▱' '▰▰▰▰▰▰▱' '▰▰▰▰▰▰▰' '▰▱▱▱▱▱▱')
+spinners_bouncing_ball=('( ●    )' '(  ●   )' '(   ●  )' '(    ● )' '(     ●)' '(    ● )' '(   ●  )' '(  ●   )' '( ●    )' '(●     )')
+
+# Select spinner frames based on style
+case $style in
+    line) frames=("${spinners_line[@]}") ;;
+    dots) frames=("${spinners_dots[@]}") ;;
+    meter) frames=("${spinners_meter[@]}") ;;
+    bouncing_ball) frames=("${spinners_bouncing_ball[@]}") ;;
+    *) echo "Unknown style: $style"; exit 1 ;;
+esac
+
+idx=0
+
+# Hide cursor
+tput civis
+
+# Start spinner
+end_time=$((SECONDS + timeout))
+while [[ $SECONDS -lt $end_time ]]; do
+    printf "\r%s%s" "$prefix" "${frames[$idx]}"
+    idx=$(( (idx + 1) % ${#frames[@]} ))
+    sleep "$interval"
+done
+
+# Show cursor and clear line
+tput cnorm
+printf "\r"

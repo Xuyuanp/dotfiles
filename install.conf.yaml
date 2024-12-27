@@ -7,40 +7,41 @@
 - clean: ['~']
 
 - create:
-  - ~/.config/bat/themes
-  - ~/.fonts
-  - ~/.ssh
+    - ~/.config/bat/themes
+    - ~/.fonts
+    - ~/.ssh
+    - ~/.local/bin
 
 - shell:
-  - command: git config --global include.path ${PWD}/gitconfig
-    description: include gitconfig
-  - command: |
-      cp -R fonts/* ~/.fonts/
-      if [ `uname` = Linux ]; then fc-cache; fi
-    description: install fonts
-  - command: curl -o ~/.config/bat/themes/kanagawa.tmTheme -sSL https://raw.githubusercontent.com/rebelot/kanagawa.nvim/master/extras/kanagawa.tmTheme
-    description: download kanagawa theme for bat
-  - command: |
-      include='Include ~/.dotfiles/config/ssh/config'
-      config_file="$HOME/.ssh/config"
-      if [ ! -f "$config_file" ]; then
-        touch "$config_file"
-      fi
+    - command: git config --global include.path ${PWD}/gitconfig
+      description: include gitconfig
+    - command: |
+        cp -R fonts/* ~/.fonts/
+        if [ `uname` = Linux ]; then fc-cache; fi
+      description: install fonts
+    - command: curl -o ~/.config/bat/themes/kanagawa.tmTheme -sSL https://raw.githubusercontent.com/rebelot/kanagawa.nvim/master/extras/kanagawa.tmTheme
+      description: download kanagawa theme for bat
+    - command: |
+        include='Include ~/.dotfiles/config/ssh/config'
+        config_file="$HOME/.ssh/config"
+        if [ ! -f "$config_file" ]; then
+          touch "$config_file"
+        fi
 
-      if ! grep -qF "$include" "$config_file"; then
-        echo "$include" >> "$config_file"
-      fi
-    description: include ssh config
-  - command: |
-      os_conf=config/kitty/os.conf
-      if [ `uname` = Darwin ]; then
-        echo 'include macos.conf' > $os_conf
-      elif [ `uname` = Linux ]; then
-        echo 'include linux.conf' > $os_conf
-      else
-        touch $os_conf
-      fi
-    description: include os
+        if ! grep -qF "$include" "$config_file"; then
+          echo "$include" >> "$config_file"
+        fi
+      description: include ssh config
+    - command: |
+        os_conf=config/kitty/os.conf
+        if [ `uname` = Darwin ]; then
+          echo 'include macos.conf' > $os_conf
+        elif [ `uname` = Linux ]; then
+          echo 'include linux.conf' > $os_conf
+        else
+          touch $os_conf
+        fi
+      description: include os
 
 - link:
     ~/.tmux.conf: tmux.conf
@@ -50,6 +51,7 @@
     ~/.config/nvim: config/nvim
     ~/.config/neovide: config/neovide
     ~/.local/bin/osc52-yank: scripts/osc52-yank
+    ~/.local/bin/spinner: scripts/spinner
     ~/.editorconfig: editorconfig
 
     # for linux
