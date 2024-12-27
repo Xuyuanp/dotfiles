@@ -191,7 +191,7 @@ unfunction _exists
 
 function howto() {
     # read input from flags or stdin if no tty
-    input=$(if [ -t 0 ]; then echo $@; else cat -; fi)
+    local input=$(if [ -t 0 ]; then echo $@; else cat -; fi)
 
     # escape double quotes
     input=${input//\"/\\\"}
@@ -199,11 +199,12 @@ function howto() {
     # suppressing '[job_id] pid' output
     setopt LOCAL_OPTIONS NO_MONITOR NO_NOTIFY
     spinner --style dots &
-    spinner_pid=$!
+    local spinner_pid=$!
+
     # trap SIGINT to handle Ctrl-C
     trap 'kill $spinner_pid 2>/dev/null' INT
 
-    output=$(nvim --headless -c "Howto! ${input}")
+    local output=$(nvim --headless -c "Howto! ${input}")
 
     kill $spinner_pid 2>/dev/null
     wait
@@ -212,12 +213,12 @@ function howto() {
 }
 
 function tgo() {
-    tgo_path="${HOME}/.tmp/tgo"
+    local tgo_path="${HOME}/.tmp/tgo"
     mkdir -p "${tgo_path}"
 
     # check if the first argument is exists
     if [[ -n "${1}" ]]; then
-        tmp="$(mktemp -p ${tgo_path} -d "${1}_$(date +%Y%m%d)_XXXXXXXX")"
+        local tmp="$(mktemp -p ${tgo_path} -d "${1}_$(date +%Y%m%d)_XXXXXXXX")"
         (
             cd ${tmp}
             go mod init "$(basename "${tmp}")"
@@ -252,7 +253,7 @@ EOF
             echo ${tmp}
         )
     else
-        choice=$(find "${tgo_path}" -maxdepth 1 -type d -exec basename {} \; | fzf) && \
+        local choice=$(find "${tgo_path}" -maxdepth 1 -type d -exec basename {} \; | fzf) && \
             (cd "${tgo_path}/${choice}" && \
             nvim -p main.go main_test.go)
     fi
