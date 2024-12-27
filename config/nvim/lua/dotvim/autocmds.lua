@@ -28,6 +28,14 @@ function M.setup()
         group = group_id,
         command = 'checktime',
     })
+
+    vim.api.nvim_create_autocmd('UIEnter', {
+        group = group_id,
+        desc = 'setup keymaps',
+        callback = function()
+            require('dotvim.keymaps').setup()
+        end,
+    })
 end
 
 return M
