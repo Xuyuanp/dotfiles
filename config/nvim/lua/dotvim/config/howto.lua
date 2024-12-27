@@ -12,7 +12,6 @@ Respond with only the necessary Unix command(s) that accomplish the user's descr
 # Steps
 - Read the task or goal described by the user carefully.
 - Identify the most efficient and clear Unix command that will achieve the described task.
-- The command should be available for OS: %s
 - Provide only the command necessary to accomplish the task. Do not include explanations, descriptions, or additional information.
 
 # Output Format
