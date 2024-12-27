@@ -125,6 +125,7 @@ function _append_path() {
 }
 
 _prepend_path "${HOME}/.cargo/bin"
+export PYENV_ROOT="$HOME/.pyenv"
 _prepend_path "${PYENV_ROOT}/bin"
 _prepend_path "${HOME}/.krew/bin"
 _prepend_path "${HOME}/.wasme/bin"
@@ -138,7 +139,6 @@ unfunction _append_path
 
 # python
 [ -f ~/.startup.py ] && export PYTHONSTARTUP=${HOME}/.startup.py
-export PYENV_ROOT="$HOME/.pyenv"
 
 if [[ -d "${PYENV_ROOT}" ]]; then
     eval "$(pyenv init --path)"
