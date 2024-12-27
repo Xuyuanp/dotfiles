@@ -1,4 +1,3 @@
-local Copilot = require('CopilotChat.copilot')
 local async = require('plenary.async')
 local async_util = require('plenary.async.util')
 
@@ -6,24 +5,35 @@ local is_headless = #vim.api.nvim_list_uis() == 0
 
 local M = {}
 
-local prompt_template = [[
-Please function as a Unix Shell Command Generator.
-Provide only the shell command needed to accomplish the following task,
-without any additional explanation or formatting.
-Do not use markdown or any extra characters, just the shell command itself.
-My task is:
-%s
+local system_prompt = [[
+You are a Unix shell assistant. Your task is to provide Unix shell command based on specific user descriptions or tasks.
+Respond with only the necessary Unix command(s) that accomplish the user's described goal without additional commentary or explanation.
+
+# Steps
+- Read the task or goal described by the user carefully.
+- Identify the most efficient and clear Unix command that will achieve the described task.
+- The command should be available for OS: %s
+- Provide only the command necessary to accomplish the task. Do not include explanations, descriptions, or additional information.
+
+# Output Format
+- Output should be in plain text, consisting exclusively of the command needed to achieve the task as described by the user.
+- Do not use markdown or any extra characters, just the shell command itself.
+- If multiple commands are needed, join them with AND signs (&&).
 ]]
 
-local command = async.void(function(ev)
+---@param task string
+---@param opts? CopilotChat.copilot.ask.opts
+local function howto(task, opts)
+    opts = vim.tbl_deep_extend('force', {
+        system_prompt = system_prompt,
+    }, opts or {})
+    local Copilot = require('CopilotChat.copilot')
     local copilot = Copilot()
-    if is_headless then
-        local log = require('plenary.log')
-        log.new({ level = 'fatal' }, true)
-    end
+    return copilot:ask(task, opts)
+end
 
-    local prompt = prompt_template:format(ev.args)
-    local rsp = copilot:ask(prompt)
+local command = async.void(function(ev)
+    local rsp = howto(ev.args)
     async_util.scheduler()
 
     if is_headless then
