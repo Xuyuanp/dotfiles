@@ -194,6 +194,7 @@ return {
         },
         opts = {
             border = 'rounded',
+            blend = vim.o.winblend,
             dimensions = {
                 height = 0.9,
                 widgets = 0.9,
