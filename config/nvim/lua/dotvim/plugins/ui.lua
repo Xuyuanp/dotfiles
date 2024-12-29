@@ -183,26 +183,6 @@ return {
     },
 
     {
-        'numToStr/FTerm.nvim',
-        keys = {
-            {
-                '<A-o>',
-                require('dotvim.util').lazy_require('FTerm').toggle,
-                mode = { 'n', 't' },
-                desc = '[FTerm] toggle',
-            },
-        },
-        opts = {
-            border = 'rounded',
-            blend = vim.o.winblend,
-            dimensions = {
-                height = 0.9,
-                widgets = 0.9,
-            },
-        },
-    },
-
-    {
         'SmiteshP/nvim-navic',
         init = function()
             require('dotvim.config.lsp.utils').on_attach(function(client, bufnr)
