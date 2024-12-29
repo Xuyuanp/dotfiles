@@ -22,19 +22,6 @@ function Term.new()
         __index = Term,
     })
 
-    vim.api.nvim_create_autocmd('WinResized', {
-        callback = function()
-            term:update()
-        end,
-    })
-
-    vim.api.nvim_create_autocmd('TermClose', {
-        nested = true,
-        callback = function(args)
-            term:on_term_closed(args.buf)
-        end,
-    })
-
     return term
 end
 
@@ -96,13 +83,21 @@ function Term:open(opts)
         self.winnr = self:_open_float_window(self.bufnr)
     end
 
+    local bufnr = self.bufnr
     vim.api.nvim_win_call(self.winnr, function()
         if vim.bo.buftype ~= 'terminal' then
-            vim.cmd.terminal()
+            vim.fn.jobstart({ vim.o.shell }, {
+                term = true,
+                env = {
+                    TERM = vim.env.TERM,
+                },
+                on_exit = function()
+                    self:on_term_closed(bufnr)
+                end,
+            })
 
             vim.b.floaterm = true
             vim.bo.filetype = 'floaterm'
-            vim.bo.buflisted = false
         end
         vim.cmd.startinsert()
     end)

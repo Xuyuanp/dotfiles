@@ -42,3 +42,11 @@ end, {
     remap = true,
     desc = '[Floaterm] prev session',
 })
+
+local group_id = vim.api.nvim_create_augroup('dotvim_floaterm', { clear = true })
+vim.api.nvim_create_autocmd('WinResized', {
+    group = group_id,
+    callback = function()
+        term:update()
+    end,
+})
