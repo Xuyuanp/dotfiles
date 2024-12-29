@@ -26,8 +26,6 @@ function M.setup()
 
     local opt = vim.opt
 
-    opt.shell = '/bin/sh'
-
     -- Set to auto read when a file is changed from the outside
     opt.autoread = true
 
