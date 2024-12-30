@@ -13,6 +13,18 @@ local function append_default(default, names)
     end
 end
 
+local function transform_items_for_kind(kind)
+    return function(_, items)
+        local CompletionItemKind = require('blink.cmp.types').CompletionItemKind
+        local kind_idx = #CompletionItemKind + 1
+        CompletionItemKind[kind_idx] = kind
+        for _, item in ipairs(items) do
+            item.kind = kind_idx
+        end
+        return items
+    end
+end
+
 local M = {
     {
         'saghen/blink.cmp',
@@ -22,12 +34,6 @@ local M = {
         cond = features.blink,
         version = '*',
         event = { 'InsertEnter' },
-        -- init = function()
-        --     ---@diagnostic disable-next-line: duplicate-set-field
-        --     vim.g.dotvim_lsp_capabilities = function()
-        --         return require('blink.cmp').get_lsp_capabilities()
-        --     end
-        -- end,
         ---@module 'blink.cmp'
         ---@type blink.cmp.Config
         opts = {
@@ -67,6 +73,9 @@ local M = {
             sources = {
                 default = { 'lsp', 'path', 'snippets', 'buffer' },
                 cmdline = {},
+                per_filetype = {
+                    DressingInput = {}, -- disable completion for DressingInput filetype
+                },
                 providers = {
                     lazydev = {
                         name = 'LazyDev',
@@ -86,27 +95,14 @@ local M = {
                 },
             },
         },
+        opts_extend = { 'sources.default' },
         config = function(_, opts)
             local ft_providers = {}
             for name, provider in pairs(opts.sources.providers) do
                 if provider.kind then
-                    local kind = provider.kind
-                    provider.transform_items = function(_, items)
-                        local CompletionItemKind = require('blink.cmp.types').CompletionItemKind
-                        local kind_idx = #CompletionItemKind + 1
-                        CompletionItemKind[kind_idx] = kind
-                        for _, item in ipairs(items) do
-                            item.kind = kind_idx
-                        end
-                        return items
-                    end
+                    provider.transform_items = transform_items_for_kind(provider.kind)
                     provider.kind = nil
                 end
-
-                if provider.default then
-                    opts.sources.default = append_default(opts.sources.default, name)
-                end
-                provider.default = nil
 
                 for _, ft in ipairs(provider.filetypes or {}) do
                     ft_providers[ft] = ft_providers[ft] or {}
@@ -117,7 +113,12 @@ local M = {
 
             opts.sources.per_filetype = opts.sources.per_filetype or {}
             for ft, names in pairs(ft_providers) do
-                opts.sources.per_filetype[ft] = append_default(opts.sources.per_filetype[ft] or opts.sources.default, names)
+                local old = opts.sources.per_filetype[ft]
+                if not old then
+                    opts.sources.per_filetype[ft] = append_default(opts.sources.default, names)
+                elseif #old > 0 then
+                    opts.sources.per_filetype[ft] = append_default(old, names)
+                end
             end
             require('blink.cmp').setup(opts)
 
@@ -159,6 +160,7 @@ local M = {
                         },
                     },
                     sources = {
+                        default = { 'copilot' },
                         providers = {
                             copilot = {
                                 name = 'Github',
@@ -168,7 +170,6 @@ local M = {
 
                                 -- extra
                                 kind = 'Copilot',
-                                default = true,
                             },
                         },
                     },
