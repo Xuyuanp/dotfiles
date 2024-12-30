@@ -1,3 +1,5 @@
+local Session = require('dotvim.lib.floaterm.session')
+
 local function get_size()
     local win_width, win_height = vim.o.columns, vim.o.lines
 
@@ -9,42 +11,46 @@ local function get_size()
     return width, height, row, col
 end
 
----@class FloatermSession
----@field bufnr number
----@field code? number
-
----@alias SessionId number
-
 ---@class Term
+---@field id number
 ---@field winnr number
----@field bufnr number
+---@field current_session? FloatermSession
 ---@field private sessions table<SessionId, FloatermSession>
 ---@field private _next_session_id SessionId
 local Term = {}
 
+local next_term_id = 1
+
+local function gen_term_id()
+    local term_id = next_term_id
+    next_term_id = next_term_id + 1
+    return term_id
+end
+
 ---@return Term
 function Term.new()
-    local term = setmetatable({}, {
+    local term = setmetatable({
+        id = gen_term_id(),
+        sessions = {},
+    }, {
         __index = Term,
     })
+
+    term:subscribe_session_close()
 
     return term
 end
 
 ---@private
----@return number
-function Term:_create_buf()
-    local bufnr = vim.api.nvim_create_buf(false, true)
-
-    local session_id = self._next_session_id or 1
-    self._next_session_id = session_id + 1
-
-    self.sessions = self.sessions or {}
-    self.sessions[session_id] = {
-        bufnr = bufnr,
-    }
-
-    return bufnr
+function Term:subscribe_session_close()
+    vim.api.nvim_create_autocmd('User', {
+        pattern = 'FloatermSessionClose' .. self.id,
+        callback = function(args)
+            local session_id = args.data.id
+            local code = args.data.code
+            self:on_session_closed(session_id, code)
+        end,
+    })
 end
 
 ---@private
@@ -69,27 +75,6 @@ function Term:_open_float_window(bufnr, opts)
     return winnr
 end
 
----@private
-function Term:_init_term()
-    if vim.bo.buftype == 'terminal' then
-        return
-    end
-
-    local bufnr = self.bufnr
-    local job_id = vim.fn.jobstart({ vim.o.shell }, {
-        term = true,
-        env = {
-            TERM = vim.env.TERM,
-        },
-        on_exit = function(_, code)
-            self:on_term_closed(bufnr, code)
-        end,
-    })
-    vim.b.floaterm_job_id = job_id
-    vim.b.floaterm = true
-    vim.bo.filetype = 'floaterm'
-end
-
 ---@class FloatermOpenOpts
 ---@field force_new? boolean
 
@@ -97,23 +82,31 @@ end
 function Term:open(opts)
     opts = opts or {}
 
-    if not self.bufnr or not vim.api.nvim_buf_is_valid(self.bufnr) then
-        self.bufnr = nil
+    if self.current_session and not self.current_session:is_valid() then
+        self.sessions[self.current_session.id] = nil
+        self.current_session = nil
     end
 
-    if not self.bufnr or opts.force_new then
-        self.bufnr = self:_create_buf()
+    local new_session
+    if not self.current_session or opts.force_new then
+        new_session = Session.new(self.id)
+        self.sessions[new_session.id] = new_session
+        self.current_session = new_session
     end
 
     if not self:hidden() then
-        vim.api.nvim_win_set_buf(self.winnr, self.bufnr)
+        vim.api.nvim_win_set_buf(self.winnr, self.current_session.bufnr)
         self:update()
     else
-        self.winnr = self:_open_float_window(self.bufnr)
+        self.winnr = self:_open_float_window(self.current_session.bufnr)
+    end
+
+    if new_session then
+        -- we should call init after the window is opened
+        new_session:init()
     end
 
     vim.api.nvim_win_call(self.winnr, function()
-        self:_init_term()
         vim.cmd.startinsert()
     end)
 end
@@ -122,7 +115,7 @@ end
 function Term:_format_sessions()
     local icons = {}
     for _, sess in pairs(self.sessions or {}) do
-        local icon = self.bufnr == sess.bufnr and '●' or '○'
+        local icon = self.current_session.id == sess.id and '●' or '○'
         table.insert(icons, icon)
     end
     if #icons == 1 then
@@ -168,27 +161,8 @@ function Term:toggle()
 end
 
 ---@private
-function Term:_get_session_id(bufnr)
-    for sid, sess in pairs(self.sessions or {}) do
-        if bufnr == sess.bufnr then
-            return sid
-        end
-    end
-end
-
----@private
 function Term:_current_session_id()
-    return self:_get_session_id(self.bufnr)
-end
-
----@param bufnr number
----@param code? number
-function Term:on_term_closed(bufnr, code)
-    local session_id = self:_get_session_id(bufnr)
-    if not session_id then
-        return
-    end
-    self:on_session_closed(session_id, code)
+    return self.current_session and self.current_session.id
 end
 
 ---@private
@@ -261,25 +235,27 @@ function Term:on_session_closed(session_id, code)
     code = code or 0 -- TODO: keep the failed session
 
     local fallback = self:_next_session(session_id, false) or self:_prev_session(session_id, false)
-    local bufnr = self.sessions[session_id].bufnr
     self.sessions[session_id] = nil
 
-    if bufnr ~= self.bufnr then
+    if self.current_session and session_id ~= self.current_session.id then
         self:update()
         return
     end
 
     if not fallback then
         self.winnr = nil
-        self.bufnr = nil
-        self.sessions = nil
+        self.current_session = nil
+        self.sessions = {}
         return
     end
 
-    self.bufnr = self.sessions[fallback].bufnr
+    self.current_session = self.sessions[fallback]
     self:open()
 
     vim.defer_fn(function()
+        if self:hidden() then
+            return
+        end
         vim.api.nvim_win_call(self.winnr, function()
             vim.cmd.startinsert()
         end)
@@ -293,7 +269,7 @@ function Term:next_session(cycle)
         return
     end
 
-    self.bufnr = self.sessions[sid].bufnr
+    self.current_session = self.sessions[sid]
     self:open()
 end
 
@@ -304,7 +280,7 @@ function Term:prev_session(cycle)
         return
     end
 
-    self.bufnr = self.sessions[sid].bufnr
+    self.current_session = self.sessions[sid]
     self:open()
 end
 
