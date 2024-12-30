@@ -12,7 +12,7 @@ end
 ---@class Term
 ---@field winnr number
 ---@field bufnr number
----@field private sessions table
+---@field private sessions table session_id -> bufnr
 ---@field private _next_session_id number
 local Term = {}
 
@@ -61,10 +61,31 @@ function Term:_open_float_window(bufnr, opts)
     return winnr
 end
 
----@class TermOpenOpts
+---@private
+function Term:_init_term()
+    if vim.bo.buftype == 'terminal' then
+        return
+    end
+
+    local bufnr = self.bufnr
+    local job_id = vim.fn.jobstart({ vim.o.shell }, {
+        term = true,
+        env = {
+            TERM = vim.env.TERM,
+        },
+        on_exit = function(_, code)
+            self:on_term_closed(bufnr, code)
+        end,
+    })
+    vim.b.floaterm_job_id = job_id
+    vim.b.floaterm = true
+    vim.bo.filetype = 'floaterm'
+end
+
+---@class FloatermOpenOpts
 ---@field force_new? boolean
 
----@param opts? TermOpenOpts
+---@param opts? FloatermOpenOpts
 function Term:open(opts)
     opts = opts or {}
 
@@ -83,22 +104,8 @@ function Term:open(opts)
         self.winnr = self:_open_float_window(self.bufnr)
     end
 
-    local bufnr = self.bufnr
     vim.api.nvim_win_call(self.winnr, function()
-        if vim.bo.buftype ~= 'terminal' then
-            vim.fn.jobstart({ vim.o.shell }, {
-                term = true,
-                env = {
-                    TERM = vim.env.TERM,
-                },
-                on_exit = function()
-                    self:on_term_closed(bufnr)
-                end,
-            })
-
-            vim.b.floaterm = true
-            vim.bo.filetype = 'floaterm'
-        end
+        self:_init_term()
         vim.cmd.startinsert()
     end)
 end
@@ -167,12 +174,13 @@ function Term:_current_session_id()
 end
 
 ---@param bufnr number
-function Term:on_term_closed(bufnr)
+---@param code? number
+function Term:on_term_closed(bufnr, code)
     local session_id = self:_get_session_id(bufnr)
     if not session_id then
         return
     end
-    self:on_session_closed(session_id)
+    self:on_session_closed(session_id, code)
 end
 
 ---@private
@@ -240,7 +248,10 @@ function Term:_prev_session(session_id, cycle)
 end
 
 ---@param session_id number
-function Term:on_session_closed(session_id)
+---@param code? number
+function Term:on_session_closed(session_id, code)
+    code = code or 0 -- TODO: keep the failed session
+
     local fallback = self:_next_session(session_id, false) or self:_prev_session(session_id, false)
     local bufnr = self.sessions[session_id]
     self.sessions[session_id] = nil
