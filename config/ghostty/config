@@ -1,7 +1,3 @@
-font-family = "Fira Code Nerd Font Mono"
-
-font-size = 16
-
 theme = "Kanagawa Wave"
 
 mouse-shift-capture = true
