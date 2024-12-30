@@ -27,6 +27,7 @@ function M.setup()
                 },
             }), -- go
             null_ls.builtins.formatting.gofumpt, -- go
+            null_ls.builtins.formatting.yamlfmt,
 
             null_ls.builtins.diagnostics.golangci_lint,
             null_ls.builtins.diagnostics.codespell.with({
