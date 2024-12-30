@@ -9,11 +9,17 @@ local function get_size()
     return width, height, row, col
 end
 
+---@class FloatermSession
+---@field bufnr number
+---@field code? number
+
+---@alias SessionId number
+
 ---@class Term
 ---@field winnr number
 ---@field bufnr number
----@field private sessions table session_id -> bufnr
----@field private _next_session_id number
+---@field private sessions table<SessionId, FloatermSession>
+---@field private _next_session_id SessionId
 local Term = {}
 
 ---@return Term
@@ -34,7 +40,9 @@ function Term:_create_buf()
     self._next_session_id = session_id + 1
 
     self.sessions = self.sessions or {}
-    self.sessions[session_id] = bufnr
+    self.sessions[session_id] = {
+        bufnr = bufnr,
+    }
 
     return bufnr
 end
@@ -113,8 +121,8 @@ end
 ---@private
 function Term:_format_sessions()
     local icons = {}
-    for _, bufnr in pairs(self.sessions or {}) do
-        local icon = self.bufnr == bufnr and '●' or '○'
+    for _, sess in pairs(self.sessions or {}) do
+        local icon = self.bufnr == sess.bufnr and '●' or '○'
         table.insert(icons, icon)
     end
     if #icons == 1 then
@@ -161,9 +169,9 @@ end
 
 ---@private
 function Term:_get_session_id(bufnr)
-    for session_id, _bufnr in pairs(self.sessions or {}) do
-        if bufnr == _bufnr then
-            return session_id
+    for sid, sess in pairs(self.sessions or {}) do
+        if bufnr == sess.bufnr then
+            return sid
         end
     end
 end
@@ -184,7 +192,7 @@ function Term:on_term_closed(bufnr, code)
 end
 
 ---@private
----@param session_id number
+---@param session_id SessionId
 ---@param cycle? boolean
 ---@return number?
 function Term:_next_session(session_id, cycle)
@@ -216,7 +224,7 @@ function Term:_next_session(session_id, cycle)
 end
 
 ---@private
----@param session_id number
+---@param session_id SessionId
 ---@param cycle? boolean
 ---@return number?
 function Term:_prev_session(session_id, cycle)
@@ -240,20 +248,20 @@ function Term:_prev_session(session_id, cycle)
     else
         idx = idx - 1
     end
-    local next_session_id = session_ids[idx]
-    if next_session_id == session_id then
+    local prev_session_id = session_ids[idx]
+    if prev_session_id == session_id then
         return
     end
-    return next_session_id
+    return prev_session_id
 end
 
----@param session_id number
+---@param session_id SessionId
 ---@param code? number
 function Term:on_session_closed(session_id, code)
     code = code or 0 -- TODO: keep the failed session
 
     local fallback = self:_next_session(session_id, false) or self:_prev_session(session_id, false)
-    local bufnr = self.sessions[session_id]
+    local bufnr = self.sessions[session_id].bufnr
     self.sessions[session_id] = nil
 
     if bufnr ~= self.bufnr then
@@ -268,7 +276,7 @@ function Term:on_session_closed(session_id, code)
         return
     end
 
-    self.bufnr = self.sessions[fallback]
+    self.bufnr = self.sessions[fallback].bufnr
     self:open()
 
     vim.defer_fn(function()
@@ -285,7 +293,7 @@ function Term:next_session(cycle)
         return
     end
 
-    self.bufnr = self.sessions[sid]
+    self.bufnr = self.sessions[sid].bufnr
     self:open()
 end
 
@@ -296,7 +304,7 @@ function Term:prev_session(cycle)
         return
     end
 
-    self.bufnr = self.sessions[sid]
+    self.bufnr = self.sessions[sid].bufnr
     self:open()
 end
 
