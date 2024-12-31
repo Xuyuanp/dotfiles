@@ -2,13 +2,13 @@
 
 ---@class FloatermSession
 ---@field id SessionId
----@field term_id number
+---@field term_id FloatermId
 ---@field bufnr number
 ---@field code? number
 local M = {}
 
 ---@param id SessionId
----@param term_id number
+---@param term_id FloatermId
 ---@return FloatermSession
 function M.new(id, term_id)
     local sess = setmetatable({
@@ -24,6 +24,17 @@ end
 ---@param fn fun()
 function M:call(fn)
     vim.api.nvim_buf_call(self.bufnr, fn)
+end
+
+function M:prompt()
+    self:call(function()
+        self:_prompt()
+    end)
+end
+
+---@private
+function M:_prompt()
+    vim.cmd.startinsert()
 end
 
 function M:init()
@@ -50,7 +61,7 @@ function M:_init()
     vim.b.floaterm = true
     vim.bo.filetype = 'floaterm'
 
-    vim.cmd.startinsert()
+    self:_prompt()
 
     -- timeline:
     -- when the job exit successfully, the terminal buffer will be wiped out firstly, then on_exit will be called
@@ -64,13 +75,12 @@ function M:_init()
             })
         end,
     })
-
-    -- vim.api.nvim_create_autocmd('BufWinEnter', {
-    --     buffer = self.bufnr,
-    --     callback = function()
-    --         vim.cmd.startinsert()
-    --     end,
-    -- })
+    vim.api.nvim_create_autocmd({ 'BufWinEnter' }, {
+        buffer = self.bufnr,
+        callback = function()
+            self:_prompt()
+        end,
+    })
 end
 
 ---@private
