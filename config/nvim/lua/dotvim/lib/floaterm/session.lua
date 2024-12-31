@@ -2,64 +2,95 @@
 
 ---@class FloatermSession
 ---@field id SessionId
----@field bufnr number
 ---@field term_id number
+---@field bufnr number
 ---@field code? number
-local Session = {}
+local M = {}
 
-local next_session_id = 1
-
-local function gen_session_id()
-    local session_id = next_session_id
-    next_session_id = next_session_id + 1
-    return session_id
-end
-
+---@param id SessionId
 ---@param term_id number
 ---@return FloatermSession
-function Session.new(term_id)
+function M.new(id, term_id)
     local sess = setmetatable({
-        id = gen_session_id(),
-        bufnr = vim.api.nvim_create_buf(false, true),
+        id = id,
         term_id = term_id,
-    }, { __index = Session })
+        bufnr = vim.api.nvim_create_buf(false, true),
+    }, { __index = M })
 
     return sess
 end
 
-function Session:init()
-    vim.api.nvim_buf_call(self.bufnr, function()
-        if vim.bo.buftype == 'terminal' then
-            return
-        end
-        local job_id = vim.fn.jobstart({ vim.o.shell }, {
-            term = true,
-            env = {
-                TERM = vim.env.TERM,
-            },
-            on_exit = function(_, code)
-                self:_on_exit(code)
-            end,
-        })
-        vim.b.floaterm_job_id = job_id
-        vim.b.floaterm = true
-        vim.bo.filetype = 'floaterm'
+---@private
+---@param fn fun()
+function M:call(fn)
+    vim.api.nvim_buf_call(self.bufnr, fn)
+end
+
+function M:init()
+    self:call(function()
+        self:_init()
     end)
 end
 
 ---@private
+function M:_init()
+    if vim.bo.buftype == 'terminal' then
+        return
+    end
+    local job_id = vim.fn.jobstart({ vim.o.shell }, {
+        term = true,
+        env = {
+            TERM = vim.env.TERM,
+        },
+        on_exit = function(_, code)
+            self:_on_exit(code)
+        end,
+    })
+    vim.b.floaterm_job_id = job_id
+    vim.b.floaterm = true
+    vim.bo.filetype = 'floaterm'
+
+    vim.cmd.startinsert()
+
+    -- timeline:
+    -- when the job exit successfully, the terminal buffer will be wiped out firstly, then on_exit will be called
+    -- otherwise, on_exit is called firstly and prompt user to the close buffer
+    vim.api.nvim_create_autocmd({ 'BufWipeout' }, {
+        buffer = self.bufnr,
+        callback = function()
+            vim.api.nvim_exec_autocmds('User', {
+                pattern = 'FloatermSessionClose' .. self.term_id,
+                data = { id = self.id, bufnr = self.bufnr, code = self.code },
+            })
+        end,
+    })
+
+    -- vim.api.nvim_create_autocmd('BufWinEnter', {
+    --     buffer = self.bufnr,
+    --     callback = function()
+    --         vim.cmd.startinsert()
+    --     end,
+    -- })
+end
+
+---@private
 ---@param code number
-function Session:_on_exit(code)
+function M:_on_exit(code)
+    if not self:is_valid() then
+        return
+    end
+
     self.code = code
+
     vim.api.nvim_exec_autocmds('User', {
-        pattern = 'FloatermSessionClose' .. self.term_id,
-        data = { id = self.id, bufnr = self.bufnr, code = code },
+        pattern = 'FloatermSessionError' .. self.term_id,
+        data = { id = self.id, bufnr = self.bufnr, code = self.code },
     })
 end
 
 ---@return boolean
-function Session:is_valid()
+function M:is_valid()
     return self.bufnr and vim.api.nvim_buf_is_valid(self.bufnr)
 end
 
-return Session
+return M

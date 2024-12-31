@@ -1,8 +1,9 @@
 local Term = require('dotvim.lib.floaterm')
 
 local term = Term.new()
+_G.floaterm = term
 
-vim.keymap.set({ 'n', 't' }, '<A-t>', function()
+vim.keymap.set({ 'n', 't' }, '<A-o>', function()
     term:toggle()
 end, {
     noremap = false,
@@ -41,12 +42,4 @@ end, {
     noremap = false,
     remap = true,
     desc = '[Floaterm] prev session',
-})
-
-local group_id = vim.api.nvim_create_augroup('dotvim_floaterm', { clear = true })
-vim.api.nvim_create_autocmd('WinResized', {
-    group = group_id,
-    callback = function()
-        term:update()
-    end,
 })
