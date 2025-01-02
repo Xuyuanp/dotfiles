@@ -500,20 +500,20 @@ return {
         end,
         keys = {
             {
-                ']f',
+                ']z',
                 function()
                     local ufo = require('ufo')
                     ufo.goNextClosedFold()
-                    ufo.peekFoldedLinesUnderCursor()
+                    ufo.peekFoldedLinesUnderCursor(true)
                 end,
                 desc = '[Ufo] got to next fold',
             },
             {
-                '[f',
+                '[z',
                 function()
                     local ufo = require('ufo')
                     ufo.goPreviousClosedFold()
-                    ufo.peekFoldedLinesUnderCursor()
+                    ufo.peekFoldedLinesUnderCursor(true)
                 end,
                 desc = '[Ufo] got to previous fold',
             },
