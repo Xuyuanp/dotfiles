@@ -214,6 +214,26 @@ local M = {
             },
         },
     } or nil,
+
+    {
+        'saghen/blink.cmp',
+        optional = true,
+        dependencies = {
+            'hrsh7th/cmp-calc',
+        },
+        opts = {
+            sources = {
+                default = { 'calc' },
+                providers = {
+                    calc = {
+                        name = 'calc',
+                        module = 'blink.compat.source',
+                        score_offset = -1,
+                    },
+                },
+            },
+        },
+    },
 }
 
 return M
