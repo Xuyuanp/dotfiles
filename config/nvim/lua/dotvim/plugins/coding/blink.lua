@@ -57,7 +57,6 @@ local M = {
                 menu = {
                     draw = {
                         treesitter = { 'lsp', 'copilot' },
-                        align_to_component = 'label', -- or 'none' to disable
                         padding = 1,
                         gap = 4,
                         columns = {
