@@ -25,6 +25,23 @@ local function transform_items_for_kind(kind)
     end
 end
 
+local function overwrite_default_capabilities()
+    local default_capabilities = require('dotvim.config.lsp.capabilities')
+    local blink_capabilities = require('blink.cmp').get_lsp_capabilities()
+    if not vim.deep_equal(default_capabilities, blink_capabilities) then
+        vim.notify_once('Blink capabilities are different from default capabilities', vim.log.levels.WARN)
+
+        local source = 'return ' .. vim.inspect(blink_capabilities, { indent = '    ' })
+        local fname = vim.fs.normalize('~/.config/nvim/lua/dotvim/config/lsp/capabilities.lua')
+
+        local uv = vim.uv
+        local fd = uv.fs_open(fname, 'w', 0644)
+        assert(fd, 'Failed to open file ' .. fname)
+        uv.fs_write(fd, source)
+        uv.fs_close(fd)
+    end
+end
+
 local M = {
     {
         'saghen/blink.cmp',
@@ -121,22 +138,16 @@ local M = {
             end
             require('blink.cmp').setup(opts)
 
-            local default_capabilities = require('dotvim.config.lsp.capabilities')
-            local blink_capabilities = require('blink.cmp').get_lsp_capabilities()
-            if not vim.deep_equal(default_capabilities, blink_capabilities) then
-                vim.notify_once('Blink capabilities are different from default capabilities', vim.log.levels.WARN)
-
-                local source = 'return ' .. vim.inspect(blink_capabilities, { indent = '    ' })
-                local fname = vim.fs.normalize('~/.config/nvim/lua/dotvim/config/lsp/capabilities.lua')
-
-                local uv = vim.uv
-                local fd = uv.fs_open(fname, 'w', 0644)
-                assert(fd, 'Failed to open file')
-                uv.fs_write(fd, source)
-                uv.fs_close(fd)
-            end
+            overwrite_default_capabilities()
         end,
     },
+
+    {
+        'saghen/blink.compat',
+        version = '*',
+        opts = {},
+    },
+
     {
         'giuxtaposition/blink-cmp-copilot',
         cond = features.copilot and features.blink,
@@ -177,10 +188,32 @@ local M = {
         or nil,
 
     {
-        'saghen/blink.compat',
-        version = '*',
-        opts = {},
+        'andersevenrud/cmp-tmux',
+        cond = vim.env.TMUX,
     },
+
+    vim.env.TMUX and {
+        'saghen/blink.cmp',
+        optional = true,
+        dependencies = {
+            'andersevenrud/cmp-tmux',
+        },
+        opts = {
+            sources = {
+                default = { 'tmux' },
+                providers = {
+                    tmux = {
+                        name = 'tmux',
+                        module = 'blink.compat.source',
+                        max_items = 5,
+                        min_keyword_length = 5,
+                        score_offset = -4,
+                        async = true,
+                    },
+                },
+            },
+        },
+    } or nil,
 }
 
 return M
