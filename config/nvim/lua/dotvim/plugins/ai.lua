@@ -98,22 +98,46 @@ return {
             'CodeCompanionChat',
             'CodeCompanionActions',
         },
-        opts = {},
-    },
-
-    {
-        'saghen/blink.cmp',
-        optional = true,
+        dependencies = {
+            {
+                'MeanderingProgrammer/render-markdown.nvim',
+                ft = { 'markdown', 'codecompanion' },
+                opts = {
+                    file_types = { 'codecompanion' },
+                },
+                opts_extend = { 'file_types' },
+            },
+        },
         opts = {
-            sources = {
-                providers = {
-                    codecompanion = {
-                        name = 'CodeCompanion',
-                        module = 'codecompanion.providers.completion.blink',
-                        score_offset = 100,
+            strategies = {
+                chat = {
+                    roles = {
+                        llm = ' CodeCompanion',
+                    },
+                },
+            },
+            display = {
+                chat = {
+                    start_in_insert_mode = true, -- Open the chat buffer in insert mode?
+                },
+            },
+        },
+        specs = {
+            {
+                'saghen/blink.cmp',
+                optional = true,
+                opts = {
+                    sources = {
+                        providers = {
+                            codecompanion = {
+                                name = 'CodeCompanion',
+                                module = 'codecompanion.providers.completion.blink',
+                                score_offset = 100,
 
-                        -- extra
-                        filetypes = { 'codecompanion' },
+                                -- extra
+                                filetypes = { 'codecompanion' },
+                            },
+                        },
                     },
                 },
             },

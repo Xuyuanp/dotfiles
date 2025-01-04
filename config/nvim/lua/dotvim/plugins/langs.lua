@@ -113,9 +113,30 @@ return {
 
     {
         'MeanderingProgrammer/render-markdown.nvim',
-        ft = 'markdown',
-        opts = {},
+        ft = { 'markdown' },
+        opts = {
+            file_types = { 'markdown' },
+        },
         dependencies = { 'nvim-treesitter/nvim-treesitter' },
+        specs = {
+            {
+                'saghen/blink.cmp',
+                optional = true,
+                opts = {
+                    sources = {
+                        providers = {
+                            markdown = {
+                                name = 'RenderMarkdown',
+                                module = 'render-markdown.integ.blink',
+
+                                -- extra
+                                filetypes = { 'markdown' },
+                            },
+                        },
+                    },
+                },
+            },
+        },
     },
     {
         'mistweaverco/kulala.nvim',
