@@ -100,26 +100,25 @@ return {
         },
         opts = {},
     },
-    features.blink
-            and {
-                'saghen/blink.cmp',
-                optional = true,
-                opts = {
-                    sources = {
-                        providers = {
-                            codecompanion = {
-                                name = 'CodeCompanion',
-                                module = 'codecompanion.providers.completion.blink',
-                                score_offset = 100,
 
-                                -- extra
-                                filetypes = { 'codecompanion' },
-                            },
-                        },
+    {
+        'saghen/blink.cmp',
+        optional = true,
+        opts = {
+            sources = {
+                providers = {
+                    codecompanion = {
+                        name = 'CodeCompanion',
+                        module = 'codecompanion.providers.completion.blink',
+                        score_offset = 100,
+
+                        -- extra
+                        filetypes = { 'codecompanion' },
                     },
                 },
-            }
-        or nil,
+            },
+        },
+    },
 
     {
         'zbirenbaum/copilot.lua',

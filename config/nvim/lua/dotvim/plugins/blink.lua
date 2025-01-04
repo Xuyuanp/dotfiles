@@ -6,7 +6,6 @@ local M = {
         dependencies = {
             'rafamadriz/friendly-snippets',
         },
-        cond = features.blink,
         version = '*',
         event = { 'InsertEnter' },
         ---@module 'blink.cmp'
@@ -83,7 +82,7 @@ local M = {
 
     {
         'giuxtaposition/blink-cmp-copilot',
-        cond = features.copilot and features.blink,
+        cond = features.copilot,
         dependencies = {
             'zbirenbaum/copilot.lua',
             opts = {
