@@ -5,9 +5,11 @@ if [[ $FORCE_TMUX == '1' ]] && [[ ! -v TMUX ]] && [[ ! -v NVIM ]]; then
     exit 0
 fi
 
-if [ $(uname) = 'Darwin' ] && ! [ -x "$(command -v brew)" ]; then
-    bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    brew bundle install --file ~/.dotfiles/Brewfile
+if [ $(uname) = 'Darwin' ]; then
+    if  ! [ ! -x "$(command -v brew)" ]; then
+        bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    fi
+    FPATH=$FPATH:$(brew --prefix)/share/zsh/site-functions
 fi
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
@@ -18,40 +20,30 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 # =============================== zinit start ================================ #
-export ZINIT_HOME_DIR=${ZINIT_HOME_DIR:-$HOME/.zinit}
-if [[ ! -d ${ZINIT_HOME_DIR} ]]; then
-    print -P "%F{33}▓▒░ %F{220}Installing zinit…%f"
-    command mkdir -p ${ZINIT_HOME_DIR}
-    command git clone --depth=1 https://github.com/zdharma-continuum/zinit.git ${ZINIT_HOME_DIR}/bin && \
-        print -P "%F{33}▓▒░ %F{34}Installation successful.%F" || \
-        print -P "%F{160}▓▒░ The clone has failed.%F"
-fi
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+[ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
+[ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+source "${ZINIT_HOME}/zinit.zsh"
 
-source ${ZINIT_HOME_DIR}/bin/zinit.zsh
+zinit light zdharma-continuum/zinit-annex-bin-gem-node
+zinit light zdharma-continuum/zinit-annex-patch-dl
 
-zinit light-mode for \
-    zsh-users/zsh-autosuggestions \
-    zdharma-continuum/fast-syntax-highlighting
+zinit ice depth=1
+zinit light romkatv/powerlevel10k
 
-zinit light-mode for \
-    hlissner/zsh-autopair \
-    skywind3000/z.lua
-
-zinit light-mode for \
-    blockf \
-    zsh-users/zsh-completions \
-    atclone="dircolors -b LS_COLORS > c.zsh" atpull='%atclone' pick='c.zsh' \
-    trapd00r/LS_COLORS
-
-zinit ice as"program" atclone'perl Makefile.PL PREFIX=$ZPFX' \
-    atpull'%atclone' make'install' pick"$ZPFX/bin/git-cal"
-zinit light k4rthik/git-cal
-
+zinit light zsh-users/zsh-autosuggestions
+zinit light zdharma-continuum/fast-syntax-highlighting
+zinit light hlissner/zsh-autopair
+zinit light zsh-users/zsh-completions
 zinit ice wait lucid as=program pick="$ZPFX/bin/(fzf|fzf-tmux)" \
     atclone="./install --bin; cp bin/(fzf|fzf-tmux) $ZPFX/bin" \
     atpull='%atclone' \
     multisrc='shell/*.zsh'
 zinit light junegunn/fzf
+
+export NVM_COMPLETION=true
+export NVM_SYMLINK_CURRENT="true"
+zinit wait lucid light-mode for lukechilds/zsh-nvm
 
 function zvm_config() {
     ZVM_CURSOR_STYLE_ENABLED=false
@@ -59,30 +51,19 @@ function zvm_config() {
 zinit ice depth=1
 zinit light jeffreytse/zsh-vi-mode
 
-zinit ice depth=1
-zinit light romkatv/powerlevel10k
-
-export NVM_COMPLETION=true
-export NVM_SYMLINK_CURRENT="true"
-zinit wait lucid light-mode for lukechilds/zsh-nvm
-
 zinit snippet OMZL::clipboard.zsh
 zinit snippet OMZL::completion.zsh
 zinit snippet OMZL::history.zsh
 zinit snippet OMZP::colored-man-pages
 zinit snippet OMZP::gitignore
 
-# ================================ zinit end ================================= #
-if type brew &>/dev/null; then
-    FPATH=$FPATH:$(brew --prefix)/share/zsh/site-functions
-    autoload -Uz compinit
-    compinit
-fi
+autoload -Uz compinit && compinit
+zinit light Aloxaf/fzf-tab
 
-bindkey -v
+# ================================ zinit end ================================= #
 
 # run the command, but won't clear the actual commandline
-bindkey '^\'    accept-and-hold
+bindkey '^\' accept-and-hold
 
 # Customize to your needs...
 [ -f ~/.shared_profile.zsh ] && source ~/.shared_profile.zsh
@@ -141,11 +122,9 @@ unfunction _append_path
 [ -f ~/.startup.py ] && export PYTHONSTARTUP=${HOME}/.startup.py
 
 if [[ -d "${PYENV_ROOT}" ]]; then
-    eval "$(pyenv init --path)"
     eval "$(pyenv init -)"
+    eval "$(pyenv init --path)"
     eval "$(pyenv virtualenv-init -)"
-else
-    unset PYENV_ROOT
 fi
 
 # ================================ aliases ================================= #
@@ -163,10 +142,11 @@ _exists kubectl && alias kubesys='kubectl --namespace kube-system'
 _exists ag      && alias grep='ag'
 _exists rg      && alias grep='rg'
 _exists curlie  && alias curl='curlie'
-export DIRENV_LOG_FORMAT=
-_exists direnv  && eval "$(direnv hook zsh)"
+_exists direnv  && DIRENV_LOG_FORMAT='' eval "$(direnv hook zsh)"
 _exists docker  && alias dis='docker images | sort -k7 -h'
 _exists neovide && alias vide='neovide'
+_exists zoxide  && eval "$(zoxide init zsh)"
+_exists pyenv   && eval "$(pyenv init --path)"
 
 alias ll='ls -l'
 alias llh='ls -lh'
@@ -269,3 +249,6 @@ function zsh-stats() {
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls -l --color $realpath'
+zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls -l --color $realpath'
