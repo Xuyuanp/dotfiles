@@ -1,12 +1,13 @@
-dotfiles
-========
+# dotfiles
 
 dotfiles
 
 # Install
 
-`git clone https://github.com/Xuyuanp/dotfiles ~/.dotfiles`
+```sh
+git clone https://github.com/Xuyuanp/dotfiles ~/.dotfiles
 
-`cd ~/.dotfiles`
+cd ~/.dotfiles
 
-`./install`
+./install
+```
