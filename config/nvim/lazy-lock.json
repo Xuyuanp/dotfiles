@@ -45,7 +45,7 @@
   "mason.nvim": { "branch": "main", "commit": "e2f7f9044ec30067bc11800a9e266664b88cda22" },
   "menu": { "branch": "main", "commit": "657bfc91382c0928453d9a4d0a10ec92db5de2bb" },
   "mini.icons": { "branch": "main", "commit": "a2742459f0ee32806c2438ca06b4d8b331f3f4d4" },
-  "neochat.nvim": { "branch": "main", "commit": "90bed19ec60e0b17147b0426286859abd404ffea" },
+  "neochat.nvim": { "branch": "main", "commit": "be862512bd62e5fffb6a839a58e5a3824ebc7bd3" },
   "neoconf.nvim": { "branch": "main", "commit": "1e6c856d062b92ef201b35e0a4fc798331750118" },
   "neorg": { "branch": "main", "commit": "6b945909d84b5aeadc875f9b3f529ec44b9bc60f" },
   "neorg-interim-ls": { "branch": "main", "commit": "5aec3bb82a774dce797e5796d3be906aa3361650" },

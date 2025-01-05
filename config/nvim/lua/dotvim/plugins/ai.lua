@@ -51,7 +51,7 @@ return {
                 spinners = 'line',
                 openai = {
                     chat_completions = {
-                        model = 'gpt-3.5-turbo',
+                        model = 'deepseek-chat',
                     },
                 },
             })
