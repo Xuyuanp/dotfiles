@@ -25,9 +25,6 @@ ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 source "${ZINIT_HOME}/zinit.zsh"
 
-zinit light zdharma-continuum/zinit-annex-bin-gem-node
-zinit light zdharma-continuum/zinit-annex-patch-dl
-
 zinit ice depth=1
 zinit light romkatv/powerlevel10k
 
@@ -35,11 +32,6 @@ zinit light zsh-users/zsh-autosuggestions
 zinit light zdharma-continuum/fast-syntax-highlighting
 zinit light hlissner/zsh-autopair
 zinit light zsh-users/zsh-completions
-zinit ice wait lucid as=program pick="$ZPFX/bin/(fzf|fzf-tmux)" \
-    atclone="./install --bin; cp bin/(fzf|fzf-tmux) $ZPFX/bin" \
-    atpull='%atclone' \
-    multisrc='shell/*.zsh'
-zinit light junegunn/fzf
 
 export NVM_COMPLETION=true
 export NVM_SYMLINK_CURRENT="true"
