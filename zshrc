@@ -52,7 +52,14 @@ zinit snippet OMZP::gitignore
 autoload -Uz compinit && compinit
 zinit light Aloxaf/fzf-tab
 
+export ZSH_FZF_HISTORY_SEARCH_EVENT_NUMBERS=0
+zinit ice lucid wait'0'
+zinit light joshskidmore/zsh-fzf-history-search
+
 # ================================ zinit end ================================= #
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # run the command, but won't clear the actual commandline
 bindkey '^\' accept-and-hold
@@ -138,7 +145,6 @@ _exists direnv  && DIRENV_LOG_FORMAT='' eval "$(direnv hook zsh)"
 _exists docker  && alias dis='docker images | sort -k7 -h'
 _exists neovide && alias vide='neovide'
 _exists zoxide  && eval "$(zoxide init zsh)"
-_exists pyenv   && eval "$(pyenv init --path)"
 
 alias ll='ls -l'
 alias llh='ls -lh'
@@ -238,9 +244,6 @@ function mkcd() {
 function zsh-stats() {
   fc -l 1 | awk '{CMD[$2]++;count++;}END { for (a in CMD)print CMD[a] " " CMD[a]/count*100 "% " a;}' | grep -v "./" | column -c3 -s " " -t | sort -nr | nl | head -n25
 }
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls -l --color $realpath'
 zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls -l --color $realpath'
