@@ -42,10 +42,7 @@ return {
                 desc = '[Floaterm] toggle',
             },
         },
-        config = function()
-            local Term = require('floaterm')
-            _G.Floaterm = Term.new()
-        end,
+        opts = {},
     },
 
     {
