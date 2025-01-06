@@ -19,7 +19,7 @@
         cp -R fonts/* ~/.fonts/
         if [ `uname` = Linux ]; then fc-cache; fi
       description: install fonts
-    - command: curl -o ~/.config/bat/themes/kanagawa.tmTheme -sSL https://raw.githubusercontent.com/rebelot/kanagawa.nvim/master/extras/kanagawa.tmTheme
+    - command: curl -o ~/.config/bat/themes/kanagawa.tmTheme -sSL https://raw.githubusercontent.com/rebelot/kanagawa.nvim/master/extras/tmTheme/kanagawa.tmTheme
       description: download kanagawa theme for bat
     - command: |
         include='Include ~/.dotfiles/config/ssh/config'
