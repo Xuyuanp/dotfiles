@@ -40,6 +40,7 @@ zinit wait lucid light-mode for lukechilds/zsh-nvm
 function zvm_config() {
     ZVM_CURSOR_STYLE_ENABLED=false
 }
+zvm_after_init_commands+=('[ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh')
 zinit ice depth=1
 zinit light jeffreytse/zsh-vi-mode
 
@@ -51,10 +52,6 @@ zinit snippet OMZP::gitignore
 
 autoload -Uz compinit && compinit
 zinit light Aloxaf/fzf-tab
-
-export ZSH_FZF_HISTORY_SEARCH_EVENT_NUMBERS=0
-zinit ice lucid wait'0'
-zinit light joshskidmore/zsh-fzf-history-search
 
 # ================================ zinit end ================================= #
 
@@ -145,6 +142,7 @@ _exists direnv  && DIRENV_LOG_FORMAT='' eval "$(direnv hook zsh)"
 _exists docker  && alias dis='docker images | sort -k7 -h'
 _exists neovide && alias vide='neovide'
 _exists zoxide  && eval "$(zoxide init zsh)"
+_exists fzf     && [ ! -f $HOME/.fzf.zsh ] && fzf --zsh > ~/.fzf.zsh
 
 alias ll='ls -l'
 alias llh='ls -lh'
