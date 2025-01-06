@@ -6,7 +6,7 @@ if [[ $FORCE_TMUX == '1' ]] && [[ ! -v TMUX ]] && [[ ! -v NVIM ]]; then
 fi
 
 if [ $(uname) = 'Darwin' ]; then
-    if  ! [ -x "$(command -v brew)" ]; then
+    if ! [ -x "$(command -v brew)" ]; then
         bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     fi
     FPATH=$FPATH:$(brew --prefix)/share/zsh/site-functions
@@ -52,6 +52,14 @@ zinit snippet OMZP::gitignore
 
 autoload -Uz compinit && compinit
 zinit light Aloxaf/fzf-tab
+# disable sort when completing `git checkout`
+zstyle ':completion:*:git-checkout:*' sort false
+# set list-colors to enable filename colorizing
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+# force zsh not to show completion menu, which allows fzf-tab to capture the unambiguous prefix
+zstyle ':completion:*' menu no
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza --icons --git -l --color=always $realpath'
+zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'eza --icons --git -l --color=always $realpath'
 
 # ================================ zinit end ================================= #
 
@@ -77,15 +85,6 @@ export LANG=en_US.UTF-8
 
 # https://github.com/romkatv/powerlevel10k/issues/524
 export GPG_TTY=$TTY
-
-export FZF_DEFAULT_OPTS="
---color fg:#ebdbb2,bg:#282828,hl:#fabd2f,fg+:#ebdbb2,bg+:#3c3836,hl+:#fabd2f
---color info:#83a598,prompt:#bdae93,spinner:#fabd2f,pointer:#83a598,marker:#fe8019,header:#665c54
---black
---pointer ➤
---exact
---info=inline
-"
 
 export GOPATH=${HOME}/go
 
@@ -242,6 +241,3 @@ function mkcd() {
 function zsh-stats() {
   fc -l 1 | awk '{CMD[$2]++;count++;}END { for (a in CMD)print CMD[a] " " CMD[a]/count*100 "% " a;}' | grep -v "./" | column -c3 -s " " -t | sort -nr | nl | head -n25
 }
-
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls -l --color $realpath'
-zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls -l --color $realpath'
