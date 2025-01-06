@@ -36,7 +36,7 @@ return {
             {
                 '<A-o>',
                 function()
-                    Floaterm:toggle()
+                    require('floaterm').toggle()
                 end,
                 mode = { 'n', 't' },
                 desc = '[Floaterm] toggle',

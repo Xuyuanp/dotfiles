@@ -1,5 +1,7 @@
+local term = require('floaterm')
+
 vim.keymap.set({ 't' }, '<A-n>', function()
-    Floaterm:open({ force_new = true })
+    term.open({ force_new = true })
 end, {
     buffer = true,
     noremap = false,
@@ -7,7 +9,7 @@ end, {
 })
 
 vim.keymap.set({ 't' }, '<A-l>', function()
-    Floaterm:next_session(true)
+    term.next_session(true)
 end, {
     noremap = false,
     buffer = true,
@@ -15,7 +17,7 @@ end, {
 })
 
 vim.keymap.set({ 't' }, '<A-h>', function()
-    Floaterm:prev_session(true)
+    term.prev_session(true)
 end, {
     noremap = false,
     buffer = true,
