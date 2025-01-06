@@ -6,7 +6,7 @@ if [[ $FORCE_TMUX == '1' ]] && [[ ! -v TMUX ]] && [[ ! -v NVIM ]]; then
 fi
 
 if [ $(uname) = 'Darwin' ]; then
-    if  ! [ ! -x "$(command -v brew)" ]; then
+    if  ! [ -x "$(command -v brew)" ]; then
         bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     fi
     FPATH=$FPATH:$(brew --prefix)/share/zsh/site-functions
