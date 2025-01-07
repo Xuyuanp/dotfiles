@@ -44,6 +44,9 @@ function M.setup()
     local plugins = get_plugins()
     local opts = {
         concurrency = 8,
+        ui = {
+            border = 'rounded',
+        },
         defaults = {
             lazy = true,
         },
