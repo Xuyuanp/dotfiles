@@ -1,12 +1,11 @@
-local vim = vim
-local vfn = vim.fn
+local features = require('dotvim.features')
 
 local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
-local std_data_path = vfn.stdpath('data')
+local std_data_path = vim.fn.stdpath('data')
 if type(std_data_path) == 'table' then
     std_data_path = std_data_path[1]
 end
-local lazypath = vim.fs.joinpath(std_data_path, '/lazy/lazy.nvim')
+local lazypath = vim.fs.joinpath(std_data_path, 'lazy/lazy.nvim')
 
 ---@return boolean, string?
 local function install_lazy_nvim()
@@ -26,7 +25,7 @@ local M = {}
 local function get_plugins()
     return {
         { 'folke/lazy.nvim', version = '*' },
-        { import = 'dotvim.plugins' },
+        features.mini and { import = 'dotvim.mini' } or { import = 'dotvim.plugins' },
     }
 end
 
