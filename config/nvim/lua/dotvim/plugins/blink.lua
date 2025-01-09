@@ -84,10 +84,12 @@ local M = {
         'giuxtaposition/blink-cmp-copilot',
         cond = features.copilot,
         dependencies = {
-            'zbirenbaum/copilot.lua',
-            opts = {
-                suggestion = { enabled = false },
-                panel = { enabled = false },
+            {
+                'zbirenbaum/copilot.lua',
+                opts = {
+                    suggestion = { enabled = false },
+                    panel = { enabled = false },
+                },
             },
         },
     },
@@ -95,6 +97,7 @@ local M = {
             and {
                 'saghen/blink.cmp',
                 optional = true,
+                dependencies = 'giuxtaposition/blink-cmp-copilot',
                 opts = {
                     appearance = {
                         kind_icons = {

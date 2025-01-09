@@ -101,11 +101,11 @@ return {
         dependencies = {
             {
                 'MeanderingProgrammer/render-markdown.nvim',
+                optional = true,
                 ft = { 'markdown', 'codecompanion' },
                 opts = {
                     file_types = { 'codecompanion' },
                 },
-                opts_extend = { 'file_types' },
             },
         },
         opts = {

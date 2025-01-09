@@ -11,11 +11,11 @@ local function append_default(default, names)
     end
 end
 
-local function transform_items_for_kind(kind)
-    return function(_, items)
-        local CompletionItemKind = require('blink.cmp.types').CompletionItemKind
-        local kind_idx = #CompletionItemKind + 1
-        CompletionItemKind[kind_idx] = kind
+local function transform_items_for_kind(kind_idx, default)
+    return function(o, items)
+        if default then
+            items = default(o, items)
+        end
         for _, item in ipairs(items) do
             item.kind = kind_idx
         end
@@ -49,7 +49,11 @@ function M.setup(opts)
     local ft_providers = {}
     for name, provider in pairs(opts.sources.providers) do
         if provider.kind then
-            provider.transform_items = transform_items_for_kind(provider.kind)
+            local CompletionItemKind = require('blink.cmp.types').CompletionItemKind
+            local kind_idx = #CompletionItemKind + 1
+            CompletionItemKind[kind_idx] = provider.kind
+            CompletionItemKind[provider.kind] = kind_idx
+            provider.transform_items = transform_items_for_kind(kind_idx, provider.transform_items)
             provider.kind = nil
         end
 

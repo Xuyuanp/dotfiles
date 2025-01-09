@@ -117,6 +117,7 @@ return {
         opts = {
             file_types = { 'markdown' },
         },
+        opts_extend = { 'file_types' },
         dependencies = { 'nvim-treesitter/nvim-treesitter' },
         specs = {
             {
