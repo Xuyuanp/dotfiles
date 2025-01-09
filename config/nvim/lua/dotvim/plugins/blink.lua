@@ -55,6 +55,7 @@ local M = {
                         module = 'lazydev.integrations.blink',
                         -- make lazydev completions top priority (see `:h blink.cmp`)
                         score_offset = 100,
+                        fallbacks = { 'lsp' },
 
                         filetypes = { 'lua' },
                     },
