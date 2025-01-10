@@ -16,12 +16,6 @@ local M = {
             },
             appearance = {
                 nerd_font_variant = 'mono',
-                kind_icons = {
-                    Codeium = '󱃖',
-                    -- crates.nvim
-                    Feature = '󰩉',
-                    Version = '',
-                },
             },
             completion = {
                 documentation = {
@@ -82,48 +76,6 @@ local M = {
     },
 
     {
-        'giuxtaposition/blink-cmp-copilot',
-        cond = features.copilot,
-        dependencies = {
-            {
-                'zbirenbaum/copilot.lua',
-                opts = {
-                    suggestion = { enabled = false },
-                    panel = { enabled = false },
-                },
-            },
-        },
-    },
-    features.copilot
-            and {
-                'saghen/blink.cmp',
-                optional = true,
-                dependencies = 'giuxtaposition/blink-cmp-copilot',
-                opts = {
-                    appearance = {
-                        kind_icons = {
-                            Copilot = '',
-                        },
-                    },
-                    sources = {
-                        default = { 'copilot' },
-                        providers = {
-                            copilot = {
-                                name = 'Github',
-                                module = 'blink-cmp-copilot',
-                                score_offset = 100,
-                                async = true,
-
-                                -- extra
-                                kind = 'Copilot',
-                            },
-                        },
-                    },
-                },
-            }
-        or nil,
-
-    {
         'andersevenrud/cmp-tmux',
     },
 
@@ -148,7 +100,7 @@ local M = {
                 },
             },
         },
-    } or nil,
+    } or {},
 
     {
         'saghen/blink.cmp',
