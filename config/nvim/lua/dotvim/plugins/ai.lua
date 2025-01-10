@@ -108,11 +108,16 @@ return {
                 },
             },
         },
+        init = function()
+            vim.cmd('cabbrev cc  CodeCompanion')
+            vim.cmd('cabbrev ccc CodeCompanionChat')
+            vim.cmd('cabbrev cca CodeCompanionActions')
+        end,
         opts = {
             strategies = {
                 chat = {
                     roles = {
-                        llm = ' CodeCompanion',
+                        llm = ' Copilot',
                     },
                 },
             },
