@@ -148,9 +148,6 @@ function M.setup()
         filename = {
             ['.envrc'] = 'sh',
         },
-        pattern = {
-            ['.*/ghostty/.*'] = 'conf',
-        },
     })
 
     vim.diagnostic.config({
