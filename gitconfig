@@ -81,3 +81,18 @@
 
 [pager]
     difftool = false
+
+[gpg]
+	program = gpg2
+
+[url "git@github.com:Xuyuanp"]
+	pushInsteadOf = https://github.com/Xuyuanp
+
+[commit]
+	gpgsign = true
+
+[user]
+	name = Xuyuan Pang
+	email = xuyuanp@gmail.com
+[tag]
+	gpgSign = true
