@@ -13,7 +13,7 @@
     - ~/.local/bin
 
 - shell:
-    - command: git config --global include.path ${PWD}/gitconfig
+    - command: git config --global include.path ${PWD}/config/git/config
       description: include gitconfig
     - command: |
         cp -R fonts/* ~/.fonts/

@@ -1,6 +1,5 @@
 # vim: ft=gitconfig
 [alias]
-
     # add
     a = add                           # add
     chunkyadd = add --patch           # stage commits chunk by chunk
@@ -85,11 +84,8 @@
 [url "git@github.com:Xuyuanp"]
 	pushInsteadOf = https://github.com/Xuyuanp
 
-[commit]
-	gpgsign = true
+[includeIf "hasconfig:remote.*.url:https://github.com/**"]
+path = ~/.dotfiles/config/git/github.config
 
-[user]
-	name = Xuyuan Pang
-	email = xuyuanp@gmail.com
-[tag]
-	gpgSign = true
+[includeIf "hasconfig:remote.*.url:git@github.com:**/**"]
+path = ~/.dotfiles/config/git/github.config
