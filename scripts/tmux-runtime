@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# check if env TMUX exists
+if [ -z "$TMUX" ]; then
+  exit 0
+fi
+
+sh_pid=$(tmux display-message -p "#{pane_pid}")
+pid=$(pgrep -P $sh_pid)
+if [ ! -n "$pid" ]; then
+    exit 0
+fi
+etime=$(ps -o etime= -p $pid)
+echo $etime
