@@ -33,12 +33,7 @@ local function overwrite_default_capabilities()
         local config_path = vim.fn.stdpath('config')
         config_path = type(config_path) == 'string' and config_path or config_path[1]
         local fname = vim.fs.joinpath(config_path, 'lua/dotvim/config/lsp/capabilities.lua')
-
-        local uv = vim.uv
-        local fd = uv.fs_open(fname, 'w', 0644)
-        assert(fd, 'Failed to open file ' .. fname)
-        uv.fs_write(fd, source)
-        uv.fs_close(fd)
+        vim.fn.writefile(vim.split(source, '\n'), fname)
     end
 end
 
