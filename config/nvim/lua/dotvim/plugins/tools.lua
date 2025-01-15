@@ -147,6 +147,17 @@ return {
             picker = {
                 enabled = true,
                 ui_select = true,
+                sources = {
+                    git_log = {
+                        confirm = function(picker, item)
+                            picker:close()
+                            vim.fn.setreg(vim.v.register, item.commit)
+                            vim.notify(string.format('Commit %s is copied', item.commit), vim.log.levels.INFO, {
+                                title = 'Git Log',
+                            })
+                        end,
+                    },
+                },
             },
         },
     },
