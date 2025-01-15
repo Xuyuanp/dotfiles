@@ -1,6 +1,3 @@
-local vim = vim
-local api = vim.api
-
 local Levels = vim.log.levels
 
 local dotutil = require('dotvim.util')
@@ -33,7 +30,7 @@ local function git_diff(_tree, node)
     vim.wo[winnr].cursorline = true
     vim.wo[winnr].winhl = 'NormalFloat:'
     vim.wo[winnr].number = true
-    api.nvim_win_set_config(winnr, {
+    vim.api.nvim_win_set_config(winnr, {
         border = 'rounded',
         title = 'Diff Patch',
     })
@@ -42,31 +39,26 @@ local function git_diff(_tree, node)
     vim.bo[bufnr].filetype = 'diff'
     vim.bo[bufnr].bufhidden = 'wipe'
     vim.bo[bufnr].swapfile = false
-    api.nvim_buf_set_lines(bufnr, 0, -1, false, diff)
+    vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, diff)
 
     vim.api.nvim_buf_create_user_command(bufnr, 'Apply', function()
         require('yanil/git').apply_buf(bufnr)
     end, { desc = 'apply the patch in this buffer' })
 end
 
-local telescope_find_file = a.async(function(cwd, callback)
-    local actions = require('telescope.actions')
-    local actions_state = require('telescope.actions.state')
-    require('telescope.builtin').find_files({
+---@async
+---@param cwd string
+---@param callback fun(path?: string)
+local async_find_file = a.async(function(cwd, callback)
+    ---@diagnostic disable-next-line: missing-fields
+    require('snacks.picker').files({
         cwd = cwd,
-        ---@diagnostic disable-next-line: unused-local
-        attach_mappings = function(prompt_bufnr, _map)
-            actions.select_default:replace(function()
-                actions.close(prompt_bufnr)
-                local selection = actions_state.get_selected_entry()
-                local path = selection[1]
-                if vim.startswith(path, './') then
-                    path = string.sub(path, 3)
-                end
-                callback(path)
-            end)
-            return true
-        end,
+        actions = {
+            confirm = function(picker, item)
+                picker:close()
+                callback(item.file)
+            end,
+        },
     })
 end)
 
@@ -76,7 +68,7 @@ local find_file = a.wrap(function(tree, node)
 
     local cwd = node:is_dir() and node.abs_path or node.parent.abs_path
 
-    local path = telescope_find_file(cwd).await()
+    local path = async_find_file(cwd).await()
     if not path or path == '' then
         return
     end
@@ -140,9 +132,9 @@ local create_node = a.wrap(function(tree, node)
 end)
 
 local function clear_buffer(path)
-    for _, bufnr in ipairs(api.nvim_list_bufs()) do
-        if path == api.nvim_buf_get_name(bufnr) then
-            api.nvim_buf_delete(bufnr, { force = true })
+    for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+        if path == vim.api.nvim_buf_get_name(bufnr) then
+            vim.api.nvim_buf_delete(bufnr, { force = true })
             return
         end
     end
