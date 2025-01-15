@@ -109,6 +109,9 @@ return {
                 notifications = function()
                     require('snacks.notifier').show_history()
                 end,
+                picker = function()
+                    require('snacks.picker').pick()
+                end,
             }
 
             ---@type vim.api.keyset.user_command
@@ -139,7 +142,12 @@ return {
             bigfile = { enabled = true },
             quickfile = { enabled = true },
             notifier = { enabled = true },
+            input = { enabled = true },
             indent = {},
+            picker = {
+                enabled = true,
+                ui_select = true,
+            },
         },
     },
 

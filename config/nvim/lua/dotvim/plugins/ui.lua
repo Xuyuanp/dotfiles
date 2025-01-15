@@ -266,48 +266,6 @@ return {
     },
 
     {
-        'stevearc/dressing.nvim',
-        init = function()
-            ---@diagnostic disable-next-line: duplicate-set-field
-            vim.ui.select = function(...)
-                require('lazy').load({ plugins = { 'dressing.nvim' } })
-                return vim.ui.select(...)
-            end
-            ---@diagnostic disable-next-line: duplicate-set-field
-            vim.ui.input = function(...)
-                require('lazy').load({ plugins = { 'dressing.nvim' } })
-                return vim.ui.input(...)
-            end
-        end,
-        config = function()
-            require('dressing').setup({
-                input = {
-                    enabled = true,
-                    default_prompt = 'Input:',
-                    prompt_align = 'left',
-                    border = 'rounded',
-                },
-                select = {
-                    -- Set to false to disable the vim.ui.select implementation
-                    enabled = true,
-                    -- Priority list of preferred vim.select implementations
-                    backend = { 'telescope', 'builtin' },
-                    -- Options for telescope selector
-                    -- These are passed into the telescope picker directly. Can be used like:
-                    telescope = require('telescope.themes').get_dropdown({}),
-                    -- Options for built-in selector
-                    builtin = {
-                        -- These are passed to nvim_open_win
-                        border = 'rounded',
-                        -- 'editor' and 'win' will default to being centered
-                        relative = 'editor',
-                    },
-                },
-            })
-        end,
-    },
-
-    {
         'kevinhwang91/nvim-hlslens',
         event = 'VeryLazy',
         opts = {},
