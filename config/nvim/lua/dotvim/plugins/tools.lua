@@ -109,9 +109,6 @@ return {
                 notifications = function()
                     require('snacks.notifier').show_history()
                 end,
-                picker = function()
-                    require('snacks.picker').pick()
-                end,
             }
 
             ---@type vim.api.keyset.user_command
@@ -144,21 +141,6 @@ return {
             notifier = { enabled = true },
             input = { enabled = true },
             indent = {},
-            picker = {
-                enabled = true,
-                ui_select = true,
-                sources = {
-                    git_log = {
-                        confirm = function(picker, item)
-                            picker:close()
-                            vim.fn.setreg(vim.v.register, item.commit)
-                            vim.notify(string.format('Commit %s is copied', item.commit), vim.log.levels.INFO, {
-                                title = 'Git Log',
-                            })
-                        end,
-                    },
-                },
-            },
         },
     },
 

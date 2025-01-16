@@ -36,8 +36,6 @@ local function setup()
     ---[[ Yank to system clipboard
     set_keymap('v', '<leader>y', '"+y', opts)
     set_keymap('n', '<leader>yy', '"+yy', opts)
-
-    set_keymap('n', '<leader>p', '"+p', opts)
     ---]]
 
     ---[[

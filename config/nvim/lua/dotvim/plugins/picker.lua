@@ -1,5 +1,56 @@
 return {
     {
+        'folke/snacks.nvim',
+        dependencies = {
+            'folke/which-key.nvim',
+            optional = true,
+            opts = {
+                spec = {
+                    { '<leader>p', group = 'picker', icon = { icon = '', color = 'green' } },
+                },
+            },
+        },
+        optional = true,
+        keys = function()
+            local prefix = '<leader>p'
+            local keys = {
+                { key = 'p', source = 'pick', desc = 'pickers' },
+                { key = 'r', source = 'resume' },
+                { key = 'f', source = 'files' },
+                { key = 'b', source = 'buffers' },
+                { key = 'g', source = 'grep' },
+            }
+            return vim.iter(keys)
+                :map(function(k)
+                    local lhs = prefix .. k.key
+                    local rhs = function()
+                        require('snacks.picker').pick(k.source)
+                    end
+                    local desc = '[Picker] ' .. (k.desc or k.source)
+                    return { lhs, rhs, desc = desc }
+                end)
+                :totable()
+        end,
+        opts = {
+            picker = {
+                enabled = true,
+                ui_select = true,
+                sources = {
+                    git_log = {
+                        confirm = function(picker, item)
+                            picker:close()
+                            vim.fn.setreg(vim.v.register, item.commit)
+                            vim.notify(string.format('Commit %s is copied', item.commit), vim.log.levels.INFO, {
+                                title = 'Git Log',
+                            })
+                        end,
+                    },
+                },
+            },
+        },
+    },
+
+    {
         'nvim-telescope/telescope.nvim',
         cmd = { 'Telescope' },
         dependencies = {
