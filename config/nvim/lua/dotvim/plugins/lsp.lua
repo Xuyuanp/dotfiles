@@ -119,6 +119,19 @@ return {
     {
         'mrcjkb/rustaceanvim',
         version = '*',
+        dependencies = {
+            {
+                'jay-babu/mason-nvim-dap.nvim',
+                optional = true,
+                opts = {
+                    automatic_setup = {
+                        filetypes = {
+                            rust = false,
+                        },
+                    },
+                },
+            },
+        },
         ft = 'rust',
         config = function()
             require('dotvim.config.lsp.rust').setup()

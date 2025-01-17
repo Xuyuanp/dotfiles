@@ -2,18 +2,13 @@ local a = require('dotvim.util.async')
 
 local M = {}
 
-function M.close_dap()
+function M.terminate()
     local dap = require('dap')
-    dap.disconnect()
-    dap.close()
-    local ui = vim.F.npcall(require, 'dapui')
-    if ui then
-        ui.close()
-    end
-    local vt = vim.F.npcall(require, 'nvim-dap-virtual-text.virtual_text')
-    if vt then
-        vt.clear_virtual_text()
-    end
+    dap.terminate()
+end
+
+function M.widget_hover()
+    require('dap.ui.widgets').hover()
 end
 
 function M.set_condition_breakpoint()
@@ -61,34 +56,29 @@ M.dap_proxy = setmetatable({}, {
 })
 
 function M.setup()
-    -- required
-    vim.schedule(function()
-        require('mason-nvim-dap').setup({
-            ensure_installed = {},
-            automatic_installation = false,
-            automatic_setup = {
-                filetypes = {
-                    python = false,
-                    rust = false,
-                },
-            },
-            handlers = {
-                function(config)
-                    local options = config.adapters.options or {}
-                    options.initialize_timeout_sec = 60
-                    config.adapters.options = options
-
-                    require('mason-nvim-dap').default_setup(config)
-                end,
-            },
-        })
-    end)
-
+    local group_id = vim.api.nvim_create_augroup('dotvim_dap', { clear = true })
     vim.api.nvim_create_autocmd({ 'FileType' }, {
-        group = vim.api.nvim_create_augroup('dotvim_dap_cmp', { clear = true }),
+        group = group_id,
         pattern = { 'dap-repl' },
         callback = function()
             require('dap.ext.autocompl').attach()
+        end,
+    })
+    vim.api.nvim_create_autocmd({ 'FileType' }, {
+        group = group_id,
+        pattern = { 'dap-float' },
+        callback = function()
+            vim.keymap.set('n', 'q', '<cmd>q<cr>', { buffer = true })
+        end,
+    })
+    vim.api.nvim_create_autocmd({ 'FileType' }, {
+        group = group_id,
+        pattern = { 'dap-repl' },
+        callback = function(args)
+            vim.api.nvim_create_autocmd('BufWinEnter', {
+                buffer = args.buf,
+                command = 'startinsert',
+            })
         end,
     })
 
@@ -102,84 +92,25 @@ end
 
 local ui = {}
 
-function ui.setup()
+function ui.setup(opts)
     local dapui = require('dapui')
-    ---@diagnostic disable-next-line: missing-fields
-    dapui.setup({
-        icons = {
-            expanded = '▾',
-            collapsed = '▸',
-            current_frame = '',
-        },
-        mappings = {
-            -- Use a table to apply multiple mappings
-            expand = { '<CR>' },
-            open = 'o',
-            remove = 'd',
-            edit = 'e',
-            repl = 'r',
-        },
-        layouts = {
-            {
-                elements = {
-                    'scopes',
-                    'breakpoints',
-                    'stacks',
-                    'watches',
-                },
-                size = 40,
-                position = 'left',
-            },
-            {
-                elements = {
-                    'repl',
-                    'console',
-                },
-                size = 10,
-                position = 'bottom',
-            },
-        },
-
-        floating = {
-            border = {},
-            mappings = {
-                close = { 'q', '<Esc>' },
-            },
-            max_height = nil, -- These can be integers or a float between 0 and 1.
-            max_width = nil, -- Floats will be treated as percentage of your screen.
-        },
-    })
+    dapui.setup(opts)
 
     local dap = require('dap')
-    dap.listeners.after.event_initialized['dapui_config'] = function()
+    dap.listeners.before.attach.dapui_config = function()
         dapui.open()
-        vim.opt.mouse = 'n'
     end
-    dap.listeners.before.event_terminated['dapui_config'] = function()
-        dapui.close()
-        vim.opt.mouse = ''
+    dap.listeners.before.launch.dapui_config = function()
+        dapui.open()
     end
-    dap.listeners.before.event_exited['dapui_config'] = function()
+    dap.listeners.before.event_terminated.dapui_config = function()
         dapui.close()
-        vim.opt.mouse = ''
+    end
+    dap.listeners.before.event_exited.dapui_config = function()
+        dapui.close()
     end
 end
 
 M.ui = ui
-
-local virtual_text = {}
-
-function virtual_text.setup()
-    require('nvim-dap-virtual-text').setup({
-        enabled = true,
-        enabled_commands = true,
-        highlight_changed_variables = true,
-        highlight_new_as_changed = false,
-        show_stop_reason = true,
-        all_frames = false,
-    })
-end
-
-M.virtual_text = virtual_text
 
 return M

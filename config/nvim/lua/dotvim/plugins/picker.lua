@@ -4,6 +4,7 @@ return {
         dependencies = {
             'folke/which-key.nvim',
             optional = true,
+            opts_extend = { 'spec' },
             opts = {
                 spec = {
                     { '<leader>p', group = 'picker', icon = { icon = '', color = 'green' } },
