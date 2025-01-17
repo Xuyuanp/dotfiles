@@ -4,62 +4,57 @@ return {
     {
         'rebelot/kanagawa.nvim',
         lazy = false,
-        config = function()
-            local theme = 'wave'
-
-            local kanagawa = require('kanagawa')
-            kanagawa.setup({
-                undercurl = true, -- enable undercurls
-                commentStyle = { italic = false },
-                functionStyle = {},
-                keywordStyle = { italic = true, bold = true },
-                statementStyle = { bold = true },
-                typeStyle = {},
-                variablebuiltinStyle = { italic = true },
-                specialReturn = true, -- special highlight for the return keyword
-                specialException = true, -- special highlight for exception handling keywords
-                transparent = features.transparent,
-                colors = {
-                    theme = {
-                        all = {
-                            ui = {
-                                bg_gutter = 'none',
-                            },
+        opts = {
+            theme = 'wave',
+            compile = true,
+            undercurl = true, -- enable undercurls
+            commentStyle = { italic = false },
+            functionStyle = {},
+            keywordStyle = { italic = true, bold = true },
+            statementStyle = { bold = true },
+            typeStyle = {},
+            variablebuiltinStyle = { italic = true },
+            specialReturn = true, -- special highlight for the return keyword
+            specialException = true, -- special highlight for exception handling keywords
+            transparent = features.transparent,
+            colors = {
+                theme = {
+                    all = {
+                        ui = {
+                            bg_gutter = 'none',
                         },
                     },
                 },
-                overrides = function(colors)
-                    return {
-                        YanilTreeDirectory = { fg = colors.palette.springGreen, bold = true },
-                        YanilTreeFile = { fg = colors.palette.fujiWhite },
-                        DapCustomPC = { fg = colors.palette.autumnGreen },
-                        DapBreakpoint = { fg = colors.palette.autumnRed },
-                        DapBreakpointCondition = { fg = colors.palette.autumnYellow },
-                        DapBreakpointReject = { fg = colors.palette.fujiGray },
-                        DapLogPoint = { fg = colors.palette.autumnRed },
-                        LspSignatureActiveParameter = { underline = true },
-                        Conceal = { bold = false, italic = false },
+            },
+            ---@param colors KanagawaColors
+            overrides = function(colors)
+                local theme = colors.theme
+                return {
+                    YanilTreeDirectory = { fg = theme.syn.string, bold = true, italic = false },
+                    YanilTreeFile = { fg = theme.ui.fg },
 
-                        FloatBorder = { bg = 'NONE' },
-                        FloatTitle = { bg = 'NONE' },
-                        NormalFloat = { bg = 'NONE' },
-                        TelescopeBorder = { bg = 'NONE' },
-                        TelescopePreviewLine = { bg = colors.palette.sumiInk6 },
+                    CursorLine = { bg = theme.ui.bg_p1 },
+                    Visual = { bg = theme.ui.bg_m1 },
 
-                        CmpItemKindNamespace = { link = '@lsp.type.namespace' },
-                        CmpItemKindPackage = { link = '@module' },
-                        CmpItemKindConstant = { link = 'Constant' },
-                        CmpItemKindString = { link = 'String' },
-                        CmpItemKindNumber = { link = 'Number' },
-                        CmpItemKindBoolean = { link = 'Boolean' },
-                        -- CmpItemKindArray         = {},
-                        -- CmpItemKindObject        = {},
-                        -- CmpItemKindKey           = {},
-                        -- CmpItemKindNull          = {},
-                    }
-                end,
-                theme = theme,
-            })
+                    DapCustomPC = { fg = theme.diag.ok },
+                    DapBreakpoint = { fg = theme.diag.error },
+                    DapBreakpointCondition = { fg = theme.diag.warning },
+                    DapBreakpointReject = { fg = theme.diff.delete },
+                    DapLogPoint = { fg = theme.diag.info },
+
+                    LspSignatureActiveParameter = { underline = true, bold = true, italic = true },
+
+                    FloatBorder = { bg = 'NONE' },
+                    FloatTitle = { bg = 'NONE' },
+                    NormalFloat = { bg = 'NONE' },
+
+                    TelescopeBorder = { bg = 'NONE' },
+                }
+            end,
+        },
+        config = function(_, opts)
+            local kanagawa = require('kanagawa')
+            kanagawa.setup(opts)
 
             vim.cmd('colorscheme kanagawa')
         end,
