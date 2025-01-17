@@ -15,7 +15,11 @@ function M.setup()
     -- auto save/load cursor position
     vim.api.nvim_create_autocmd('BufReadPost', {
         group = group_id,
+        desc = 'restore cursor',
         callback = function()
+            if vim.bo.filetype == 'gitcommit' then
+                return
+            end
             local mark = vim.api.nvim_buf_get_mark(0, '"')
             local lcount = vim.api.nvim_buf_line_count(0)
             if mark[1] > 0 and mark[1] <= lcount then
