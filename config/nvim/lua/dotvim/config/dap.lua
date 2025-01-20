@@ -59,26 +59,9 @@ function M.setup()
     local group_id = vim.api.nvim_create_augroup('dotvim_dap', { clear = true })
     vim.api.nvim_create_autocmd({ 'FileType' }, {
         group = group_id,
-        pattern = { 'dap-repl' },
-        callback = function()
-            require('dap.ext.autocompl').attach()
-        end,
-    })
-    vim.api.nvim_create_autocmd({ 'FileType' }, {
-        group = group_id,
         pattern = { 'dap-float' },
         callback = function()
             vim.keymap.set('n', 'q', '<cmd>q<cr>', { buffer = true })
-        end,
-    })
-    vim.api.nvim_create_autocmd({ 'FileType' }, {
-        group = group_id,
-        pattern = { 'dap-repl' },
-        callback = function(args)
-            vim.api.nvim_create_autocmd('BufWinEnter', {
-                buffer = args.buf,
-                command = 'startinsert',
-            })
         end,
     })
 
@@ -88,13 +71,14 @@ function M.setup()
     sign_define('DapBreakpointCondition', { text = '', texthl = 'DapBreakpointCondition' })
     sign_define('DapBreakpointRejected', { text = '', texthl = 'DapBreakpointRejected' })
     sign_define('DapLogPoint', { text = '', texthl = 'DapLogPoint' })
+
+    M.ui.setup()
 end
 
 local ui = {}
 
-function ui.setup(opts)
+function ui.setup()
     local dapui = require('dapui')
-    dapui.setup(opts)
 
     local dap = require('dap')
     dap.listeners.before.attach.dapui_config = function()
@@ -109,6 +93,14 @@ function ui.setup(opts)
     dap.listeners.before.event_exited.dapui_config = function()
         dapui.close()
     end
+
+    vim.api.nvim_create_autocmd({ 'FileType' }, {
+        pattern = { 'dap-repl' },
+        group = vim.api.nvim_create_augroup('dotvim_dap_ui_repl', { clear = true }),
+        callback = function(args)
+            require('dap.ext.autocompl').attach(args.buf)
+        end,
+    })
 end
 
 M.ui = ui
