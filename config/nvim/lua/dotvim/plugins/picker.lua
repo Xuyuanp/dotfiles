@@ -15,7 +15,7 @@ return {
         keys = function()
             local prefix = '<leader>p'
             local keys = {
-                { key = 'p', source = 'pick', desc = 'pickers' },
+                { key = 'p', source = 'pickers' },
                 { key = 'r', source = 'resume' },
                 { key = 'f', source = 'files' },
                 { key = 'b', source = 'buffers' },
