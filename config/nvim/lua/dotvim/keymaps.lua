@@ -52,7 +52,7 @@ local function setup()
     set_keymap('v', '<A-k>', ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<CR>gv=gv", { desc = 'Move Up' })
     ---]]
 
-    ---[[
+    ---[[ diagnostic navigation
     local function diagnostic_jump(direction, severity)
         return function()
             vim.diagnostic.jump({
@@ -76,8 +76,8 @@ local function setup()
             return vim.snippet.active({ direction = direction }) and vim.snippet.jump(direction) or fallback
         end
     end
-    set_keymap('i', '<C-j>', snippets_switch(1, '<C-j>'), { desc = '[Snippets] jump forward' })
-    set_keymap('i', '<C-k>', snippets_switch(-1, '<C-k>'), { desc = '[Snippets] jump backward' })
+    set_keymap('i', '<C-j>', snippets_switch(F, '<C-j>'), { desc = '[Snippets] jump forward' })
+    set_keymap('i', '<C-k>', snippets_switch(B, '<C-k>'), { desc = '[Snippets] jump backward' })
     ---]]
 end
 
