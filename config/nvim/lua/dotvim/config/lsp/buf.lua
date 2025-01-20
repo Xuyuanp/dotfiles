@@ -131,6 +131,7 @@ end
 local function location_opts(opts)
     return {
         on_list = new_on_list(opts),
+        loclist = false,
     }
 end
 
