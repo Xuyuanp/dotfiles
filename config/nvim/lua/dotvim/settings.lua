@@ -161,11 +161,11 @@ function M.setup()
         },
         float = {
             source = true,
+            border = 'rounded',
         },
+        virtual_text = true,
         jump = {
-            float = {
-                border = 'rounded',
-            },
+            float = true,
         },
     })
 
