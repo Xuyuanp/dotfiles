@@ -169,21 +169,21 @@ return {
 
             local keymaps = {
                 -- Magic buffer-picking mode
-                { '<A-s>', ':BufferLinePick<CR>', 'magic buffer-picking' },
+                { '<A-s>', '<cmd>BufferLinePick<CR>', 'magic buffer-picking' },
                 -- Move to previous/next
-                { '<Tab>', ':BufferLineCycleNext<CR>', 'move to next' },
-                { '<S-Tab>', ':BufferLineCyclePrev<CR>', 'move to previous' },
+                { '<Tab>', '<cmd>BufferLineCycleNext<CR>', 'move to next' },
+                { '<S-Tab>', '<cmd>BufferLineCyclePrev<CR>', 'move to previous' },
                 -- Re-order to previous/next
-                { '<A-h>', ':BufferLineMovePrev<CR>', 'reorder to previous' },
-                { '<A-l>', ':BufferLineMoveNext<CR>', 'reorder to next' },
+                { '<A-h>', '<cmd>BufferLineMovePrev<CR>', 'reorder to previous' },
+                { '<A-l>', '<cmd>BufferLineMoveNext<CR>', 'reorder to next' },
                 -- Sort automatically by...
-                { '<Leader>bd', ':BufferLineSortByDirectory<CR>', 'sort automatically by directory' },
-                { '<Leader>bl', ':BufferLineSortByExtension<CR>', 'sort automatically by extension' },
+                { '<Leader>bd', '<cmd>BufferLineSortByDirectory<CR>', 'sort automatically by directory' },
+                { '<Leader>bl', '<cmd>BufferLineSortByExtension<CR>', 'sort automatically by extension' },
             }
-
             for _, spec in pairs(keymaps) do
                 vim.keymap.set('n', spec[1], spec[2], { silent = true, remap = false, desc = '[BufferLine] ' .. spec[3] })
             end
+
             local function gen_goto(idx)
                 return function()
                     bufferline.go_to(idx, true)
@@ -191,7 +191,7 @@ return {
             end
 
             -- Goto buffer in position...
-            for i = 1, 10, 1 do
+            for i = 1, 9, 1 do
                 vim.keymap.set('n', string.format('<A-%d>', i), gen_goto(i), { desc = string.format('[BufferLine] goto buffer %d', i) })
             end
         end,
