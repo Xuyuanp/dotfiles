@@ -46,7 +46,14 @@ function M.open_repl(...)
     require('dap').repl.open(...)
 end
 
-M.dap_proxy = setmetatable({}, {
+function M.list_breakpoints()
+    require('dap').list_breakpoints(false)
+    require('snacks.picker').pick('qflist', {
+        title = 'Breakpoints',
+    })
+end
+
+M.proxy = setmetatable({}, {
     __index = function(_, key)
         return function(...)
             local dap = require('dap')
@@ -66,7 +73,7 @@ function M.setup()
     })
 
     local sign_define = vim.fn.sign_define
-    sign_define('DapStopped', { text = '', texthl = 'DapCustomPC' })
+    sign_define('DapStopped', { text = '', texthl = 'DapCustomPC' })
     sign_define('DapBreakpoint', { text = '', texthl = 'DapBreakpoint' })
     sign_define('DapBreakpointCondition', { text = '', texthl = 'DapBreakpointCondition' })
     sign_define('DapBreakpointRejected', { text = '', texthl = 'DapBreakpointRejected' })
