@@ -139,7 +139,14 @@ return {
             bigfile = { enabled = true },
             quickfile = { enabled = true },
             notifier = { enabled = true },
-            input = { enabled = true },
+            input = {
+                enabled = true,
+                win = {
+                    relative = 'cursor',
+                    row = -3,
+                    col = 0,
+                },
+            },
             indent = {},
         },
     },
