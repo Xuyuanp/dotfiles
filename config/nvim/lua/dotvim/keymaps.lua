@@ -52,6 +52,10 @@ local function setup()
     set_keymap('v', '<A-k>', ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<CR>gv=gv", { desc = 'Move Up' })
     ---]]
 
+    ---[[
+    set_keymap('n', '<leader>s', '<cmd>w<CR>', { desc = 'Save' })
+    ---]]
+
     ---[[ diagnostic navigation
     local function diagnostic_jump(direction, severity)
         return function()
