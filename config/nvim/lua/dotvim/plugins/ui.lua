@@ -109,12 +109,19 @@ return {
 
             local group_id = vim.api.nvim_create_augroup('dotvim_scrollbar', { clear = true })
 
-            vim.api.nvim_create_autocmd({ 'WinScrolled', 'WinResized' }, {
+            vim.api.nvim_create_autocmd({ 'WinScrolled', 'WinResized', 'InsertLeave' }, {
                 group = group_id,
-                desc = 'Show or refresh scrollbar',
+                desc = '[Scrollbar] show',
                 pattern = { '*' },
                 callback = function()
                     require('scrollbar').show()
+                end,
+            })
+            vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI', 'InsertEnter' }, {
+                group = group_id,
+                desc = '[Scrollbar] hide',
+                callback = function()
+                    require('scrollbar').clear()
                 end,
             })
         end,
