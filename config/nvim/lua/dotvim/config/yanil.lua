@@ -61,6 +61,10 @@ local async_find_file = a.async(function(cwd, callback)
                 picker:close()
                 callback(item.file)
             end,
+            close = function(picker)
+                picker:close()
+                callback()
+            end,
         },
     })
 end)
@@ -72,6 +76,11 @@ local find_file = a.wrap(function(tree, node)
     local cwd = node:is_dir() and node.abs_path or node.parent.abs_path
 
     local path = async_find_file(cwd).await()
+
+    -- restore window stack asap
+    vim.cmd(string.format([[silent! %dwincmd w]], altwinnr_bak))
+    vim.cmd(string.format([[silent! %dwincmd w]], winnr_bak))
+
     if not path or path == '' then
         return
     end
@@ -83,9 +92,6 @@ local find_file = a.wrap(function(tree, node)
         return
     end
     tree:go_to_node(target)
-
-    vim.cmd(string.format([[execute "%dwincmd w"]], altwinnr_bak))
-    vim.cmd(string.format([[execute "%dwincmd w"]], winnr_bak))
 end)
 
 local create_node = a.wrap(function(tree, node)
