@@ -33,6 +33,7 @@ local function git_diff(_tree, node)
     vim.api.nvim_win_set_config(winnr, {
         border = 'rounded',
         title = 'Diff Patch',
+        title_pos = 'center',
     })
 
     -- content
@@ -44,6 +45,8 @@ local function git_diff(_tree, node)
     vim.api.nvim_buf_create_user_command(bufnr, 'Apply', function()
         require('yanil/git').apply_buf(bufnr)
     end, { desc = 'apply the patch in this buffer' })
+
+    vim.keymap.set('n', '<leader>a', '<cmd>Apply<CR>', { buffer = bufnr })
 end
 
 ---@async
