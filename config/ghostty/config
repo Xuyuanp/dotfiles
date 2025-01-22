@@ -1,6 +1,6 @@
 font-family = "MonaspiceNe Nerd Font Mono"
 # font-family-italic = "MonaspiceRn Nerd Font Mono"
-font-family-bold-italic = "MonaspiceRn Nerd Font Mono"
+# font-family-bold-italic = "MonaspiceRn Nerd Font Mono"
 font-feature = calt
 font-feature = ss01
 font-feature = ss02
