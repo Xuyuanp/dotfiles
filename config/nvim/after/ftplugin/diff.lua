@@ -1,10 +1,7 @@
 local M = {}
 function M.hunk_text_object()
     local node = vim.treesitter.get_node()
-    while node do
-        if node:type() == 'hunk' then
-            break
-        end
+    while node and node:type() ~= 'hunk' do
         node = node:parent()
     end
 
@@ -12,12 +9,13 @@ function M.hunk_text_object()
         vim.notify('hunk not found', vim.log.levels.WARN)
         return
     end
-    local start_row, _, end_row = node:range()
-    local end_line = vim.api.nvim_buf_get_lines(0, end_row - 1, end_row, true)[1]
-    local end_col = string.len(end_line)
+    local start_row = node:start() + 1
+    local start_col = 0
+    local end_row = node:end_()
+    local end_col = string.len(vim.fn.getline(end_row))
 
     -- Select the range
-    vim.fn.setpos("'<", { 0, start_row + 1, 0, 0 })
+    vim.fn.setpos("'<", { 0, start_row, start_col, 0 })
     vim.fn.setpos("'>", { 0, end_row, end_col, 0 })
     vim.cmd('normal! gv')
 end
