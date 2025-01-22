@@ -95,13 +95,16 @@ return {
                 'Yanil',
             }
             vim.g.scrollbar_highlight = {
-                head = 'String',
-                body = 'String',
-                tail = 'String',
+                head = 'Comment',
+                body = 'Comment',
+                tail = 'Comment',
             }
             vim.g.scrollbar_shape = {
-                head = '⍋',
-                tail = '⍒',
+                -- head = '⍋',
+                -- tail = '⍒',
+                head = '┃',
+                body = '┃',
+                tail = '┃',
             }
 
             local group_id = vim.api.nvim_create_augroup('dotvim_scrollbar', { clear = true })
