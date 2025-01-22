@@ -137,7 +137,7 @@ _exists kubectl && alias kubesys='kubectl --namespace kube-system'
 _exists ag      && alias grep='ag'
 _exists rg      && alias grep='rg'
 _exists curlie  && alias curl='curlie'
-_exists direnv  && DIRENV_LOG_FORMAT='' eval "$(direnv hook zsh)"
+_exists direnv  && export DIRENV_LOG_FORMAT='' && eval "$(direnv hook zsh)"
 _exists docker  && alias dis='docker images | sort -k7 -h'
 _exists neovide && alias vide='neovide'
 _exists zoxide  && eval "$(zoxide init zsh)"
