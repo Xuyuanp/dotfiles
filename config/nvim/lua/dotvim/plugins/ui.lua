@@ -541,6 +541,14 @@ return {
                     jumpBot = ']',
                 },
             },
+            provider_selector = function(bufnr)
+                local clients = vim.lsp.get_clients({
+                    bufnr = bufnr,
+                    method = vim.lsp.protocol.Methods.textDocument_foldingRange,
+                })
+                local main = next(clients) and 'lsp' or 'treesitter'
+                return { main, 'indent' }
+            end,
         },
     },
 
