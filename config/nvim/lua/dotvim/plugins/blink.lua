@@ -1,5 +1,3 @@
-local features = require('dotvim.features')
-
 local M = {
     {
         'saghen/blink.cmp',
@@ -23,6 +21,13 @@ local M = {
                     window = { border = 'rounded' },
                 },
                 menu = {
+                    auto_show = function(ctx, items)
+                        local auto_show = vim.b[ctx.bufnr].blink_auto_show_menu
+                        if auto_show == nil then
+                            return true
+                        end
+                        return type(auto_show) == 'function' and auto_show(ctx, items) or auto_show
+                    end,
                     draw = {
                         treesitter = { 'lsp', 'copilot' },
                         padding = 1,
