@@ -78,7 +78,7 @@
   "rasi.vim": { "branch": "main", "commit": "7ce90590d007a7d15fc292313565e04a2ba57182" },
   "render-markdown.nvim": { "branch": "main", "commit": "ad055861d17afe058bd835e82292e14a64b51b1d" },
   "rustaceanvim": { "branch": "master", "commit": "0a1876b970ab946be3f4d341e9d743a5d62d646a" },
-  "scrollbar.nvim": { "branch": "master", "commit": "b68e3aa9f8d7ae7bdc3d192764fa132730c01dd4" },
+  "scrollbar.nvim": { "branch": "master", "commit": "3f0d4170db4c4e148c2796f9cdd211970432fec4" },
   "snacks.nvim": { "branch": "main", "commit": "f7fddf8dfb295756f86fa6c95417e2d783ae2148" },
   "sqlx-rs.nvim": { "branch": "main", "commit": "ad299b9f085fc621fa6d8b7b3a9a15b5cc19e5bd" },
   "telescope-file-browser.nvim": { "branch": "master", "commit": "626998e5c1b71c130d8bc6cf7abb6709b98287bb" },
@@ -101,6 +101,6 @@
   "vista.vim": { "branch": "master", "commit": "1e90efad6e32c4f7d16b1ca8f49bf63d0693802e" },
   "volt": { "branch": "main", "commit": "91fe3e82842a709443cdd61fc1a1315a5eb57a8d" },
   "which-key.nvim": { "branch": "main", "commit": "1f8d414f61e0b05958c342df9b6a4c89ce268766" },
-  "yanil": { "branch": "main", "commit": "6061963e1272906915bf0f66306ce13a14dfed84" },
+  "yanil": { "branch": "main", "commit": "e4be5e74a1bdaa4911aeb6222eb35507b6b314a4" },
   "zinit-vim-syntax": { "branch": "main", "commit": "109eea5ff87dc046b2bc9f5e9a765941936f30e0" }
 }
