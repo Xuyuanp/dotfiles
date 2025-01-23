@@ -145,6 +145,7 @@ return {
                     relative = 'cursor',
                     row = -3,
                     col = 0,
+                    noautocmd = false,
                 },
             },
             indent = {},

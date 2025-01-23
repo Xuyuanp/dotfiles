@@ -52,6 +52,40 @@ function M.setup()
             })
         end,
     })
+
+    local function is_floating(win)
+        local config = vim.api.nvim_win_get_config(win or 0)
+        return config.relative ~= ''
+    end
+
+    vim.api.nvim_create_autocmd('WinEnter', {
+        group = group_id,
+        desc = 'Auto restore prev window',
+        callback = function()
+            local prev_winnr = vim.fn.winnr('#')
+
+            if is_floating() then
+                -- for floating window
+                local winid = vim.fn.win_getid(prev_winnr)
+                if is_floating(winid) then
+                    -- jumps from a floating window to another floating window
+                    return
+                end
+                vim.w[winid].restore_prev_window = true
+                return
+            end
+
+            if vim.w.restore_prev_window and vim.w.prev_window then
+                local winnr = vim.fn.winnr()
+                vim.w.restore_prev_window = nil
+                vim.cmd('noautocmd ' .. vim.w.prev_window .. 'wincmd w')
+                vim.cmd('noautocmd ' .. winnr .. 'wincmd w')
+                return
+            end
+
+            vim.w.prev_window = prev_winnr
+        end,
+    })
 end
 
 return M

@@ -17,9 +17,6 @@ M.fzf_wrap = function(name, spec, fullscreen)
 end
 
 function M.open_floating_window()
-    local winnr_bak = vfn.winnr()
-    local altwinnr_bak = vfn.winnr('#')
-
     local function resize()
         local width, height = vim.o.columns, vim.o.lines
 
@@ -62,9 +59,6 @@ function M.open_floating_window()
         pattern = '' .. winnr,
         once = true,
         callback = function()
-            vim.cmd(string.format([[%dwincmd w]], altwinnr_bak))
-            vim.cmd(string.format([[%dwincmd w]], winnr_bak))
-
             api.nvim_del_autocmd(auto_resize_id)
         end,
     })

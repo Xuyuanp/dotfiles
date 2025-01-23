@@ -49,50 +49,31 @@ local function git_diff(_tree, node)
     vim.keymap.set('n', '<leader>a', '<cmd>Apply<CR>', { buffer = bufnr })
 end
 
----@async
----@param cwd string
----@param callback fun(path?: string)
-local async_find_file = a.async(function(cwd, callback)
+local find_file = function(tree, node)
+    local cwd = node:is_dir() and node.abs_path or node.parent.abs_path
+    local on_confirm = function(_, item)
+        local path = item.file
+        if not path or path == '' then
+            return
+        end
+        path = vim.fs.joinpath(cwd, path)
+
+        local target = tree.root:find_node_by_path(path)
+        if not target then
+            vim_notify('file "' .. path .. '" is not found or ignored', Levels.WARN)
+            return
+        end
+        tree:go_to_node(target)
+    end
+
     ---@diagnostic disable-next-line: missing-fields
     require('snacks.picker').files({
         cwd = cwd,
         actions = {
-            confirm = function(picker, item)
-                picker:close()
-                callback(item.file)
-            end,
-            close = function(picker)
-                picker:close()
-                callback()
-            end,
+            confirm = { 'close', on_confirm },
         },
     })
-end)
-
-local find_file = a.wrap(function(tree, node)
-    local winnr_bak = vim.fn.winnr()
-    local altwinnr_bak = vim.fn.winnr('#')
-
-    local cwd = node:is_dir() and node.abs_path or node.parent.abs_path
-
-    local path = async_find_file(cwd).await()
-
-    -- restore window stack asap
-    vim.cmd(string.format([[silent! %dwincmd w]], altwinnr_bak))
-    vim.cmd(string.format([[silent! %dwincmd w]], winnr_bak))
-
-    if not path or path == '' then
-        return
-    end
-    path = vim.fs.joinpath(cwd, path)
-
-    local target = tree.root:find_node_by_path(path)
-    if not target then
-        vim_notify('file "' .. path .. '" is not found or ignored', Levels.WARN)
-        return
-    end
-    tree:go_to_node(target)
-end)
+end
 
 local create_node = a.wrap(function(tree, node)
     node = node:is_dir() and node or node.parent
