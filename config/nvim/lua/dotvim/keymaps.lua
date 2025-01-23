@@ -34,8 +34,8 @@ local function setup()
     ---]]
 
     ---[[ Yank to system clipboard
-    set_keymap('v', '<leader>y', '"+y', opts)
-    set_keymap('n', '<leader>yy', '"+yy', opts)
+    set_keymap('v', '<leader>y', '"+y', { desc = 'Yank selection to system clipboard' })
+    set_keymap('n', '<leader>Y', '"+yy', { desc = 'Yank line to system clipboard' })
     ---]]
 
     ---[[
