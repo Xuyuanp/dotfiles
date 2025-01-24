@@ -3,9 +3,9 @@ local Levels = vim.log.levels
 local dotutil = require('dotvim.util')
 
 local yanil = require('yanil')
-local git = require('yanil/git')
-local decorators = require('yanil/decorators')
-local canvas = require('yanil/canvas')
+local git = require('yanil.git')
+local decorators = require('yanil.decorators')
+local canvas = require('yanil.canvas')
 
 local mini_icons = require('mini.icons')
 
@@ -43,7 +43,7 @@ local function git_diff(_tree, node)
     vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, diff)
 
     vim.api.nvim_buf_create_user_command(bufnr, 'Apply', function()
-        require('yanil/git').apply_buf(bufnr)
+        require('yanil.git').apply_buf(bufnr)
     end, { desc = 'apply the patch in this buffer' })
 
     vim.keymap.set('n', '<leader>a', '<cmd>Apply<CR>', { buffer = bufnr })
@@ -204,7 +204,7 @@ end
 function M.setup()
     yanil.setup()
 
-    local tree = require('yanil/sections/tree'):new()
+    local tree = require('yanil.sections.tree'):new()
 
     tree:setup({
         draw_opts = {

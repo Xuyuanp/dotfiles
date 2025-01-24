@@ -101,6 +101,6 @@
   "vista.vim": { "branch": "master", "commit": "1e90efad6e32c4f7d16b1ca8f49bf63d0693802e" },
   "volt": { "branch": "main", "commit": "91fe3e82842a709443cdd61fc1a1315a5eb57a8d" },
   "which-key.nvim": { "branch": "main", "commit": "1f8d414f61e0b05958c342df9b6a4c89ce268766" },
-  "yanil": { "branch": "main", "commit": "e4be5e74a1bdaa4911aeb6222eb35507b6b314a4" },
+  "yanil": { "branch": "main", "commit": "43e0c75a9efac50f14aa57c7752955aebe40c832" },
   "zinit-vim-syntax": { "branch": "main", "commit": "109eea5ff87dc046b2bc9f5e9a765941936f30e0" }
 }

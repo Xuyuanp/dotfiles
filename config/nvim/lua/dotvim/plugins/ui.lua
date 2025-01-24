@@ -6,7 +6,7 @@ return {
         dev = true,
         branch = 'main',
         keys = {
-            { '<C-e>', require('dotvim.util').lazy_require('yanil/canvas').toggle, mode = 'n', desc = '[Yanil] toggle' },
+            { '<C-e>', require('dotvim.util').lazy_require('yanil.canvas').toggle, mode = 'n', desc = '[Yanil] toggle' },
         },
         config = function()
             require('dotvim.config.yanil').setup()
@@ -24,7 +24,7 @@ return {
                 group = group_id,
                 desc = 'Auto refresh git status of Yanil',
                 callback = function()
-                    require('yanil/git').update()
+                    require('yanil.git').update()
                 end,
             })
         end,
