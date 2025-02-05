@@ -30,11 +30,17 @@ return {
             overrides = function(colors)
                 local theme = colors.theme
                 return {
-                    YanilTreeDirectory = { fg = theme.syn.string, bold = true, italic = false },
-                    YanilTreeFile = { fg = theme.ui.fg },
+                    Directory = { bold = true },
+
+                    FloatBorder = { bg = 'NONE' },
+                    FloatTitle = { bg = 'NONE' },
+                    NormalFloat = { bg = 'NONE' },
 
                     CursorLine = { bg = theme.ui.bg_p1 },
                     Visual = { bg = theme.ui.bg_m1 },
+
+                    YanilTreeDirectory = { link = 'Directory' },
+                    YanilTreeFile = { fg = theme.ui.fg },
 
                     DapCustomPC = { fg = theme.diag.ok },
                     DapBreakpoint = { fg = theme.diag.error },
@@ -43,10 +49,6 @@ return {
                     DapLogPoint = { fg = theme.diag.info },
 
                     LspSignatureActiveParameter = { underline = true, bold = true, italic = true },
-
-                    FloatBorder = { bg = 'NONE' },
-                    FloatTitle = { bg = 'NONE' },
-                    NormalFloat = { bg = 'NONE' },
 
                     TelescopeBorder = { bg = 'NONE' },
                 }
