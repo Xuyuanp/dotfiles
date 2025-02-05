@@ -1,20 +1,6 @@
 local api = vim.api
-local vfn = vim.fn
 
 local M = {}
-
-M.fzf_run = function(...)
-    return vfn['fzf#run'](...)
-end
-
-M.fzf_wrap = function(name, spec, fullscreen)
-    local wrapped = vim.fn['fzf#wrap'](name, spec, fullscreen or false)
-
-    wrapped['sink*'] = spec['sink*']
-    wrapped.sink = spec['sink']
-
-    return wrapped
-end
 
 function M.open_floating_window()
     local function resize()
