@@ -40,6 +40,6 @@
   "Vec"
   "FromIterator"
   "TryFrom"
-  "TryInto")
+  "TryInto"
+  )
  )
-
