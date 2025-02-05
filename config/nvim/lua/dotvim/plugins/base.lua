@@ -24,9 +24,7 @@ return {
         },
         cmd = { 'FZF', 'AF' },
         keys = {
-            { '<leader>ag', ':Ag<CR>', desc = '[FZF] search by ag' },
             { '<leader>rg', ':Rg<CR>', desc = '[FZF] search by rg' },
-            { '<leader>af', ':AF<CR>', desc = '[FZF] find files' },
         },
         config = function()
             vim.g.fzf_layout = {
