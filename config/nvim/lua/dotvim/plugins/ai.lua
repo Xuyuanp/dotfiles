@@ -112,6 +112,8 @@ return {
             vim.cmd('cabbrev cc  CodeCompanion')
             vim.cmd('cabbrev ccc CodeCompanionChat')
             vim.cmd('cabbrev cca CodeCompanionActions')
+
+            require('dotvim.config.ai'):init()
         end,
         opts = {
             strategies = {
