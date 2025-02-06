@@ -129,20 +129,4 @@ return {
             })
         end,
     },
-    {
-        'nvim-telescope/telescope-file-browser.nvim',
-        keys = {
-            { '<leader>l', '<cmd>Telescope file_browser<CR>', remap = true, desc = '[Telescope] file browser' },
-        },
-        dependencies = {
-            'nvim-telescope/telescope.nvim',
-            opts = {
-                extensions = {
-                    file_browser = {
-                        git_status = true,
-                    },
-                },
-            },
-        },
-    },
 }

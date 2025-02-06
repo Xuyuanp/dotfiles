@@ -78,7 +78,6 @@
   "scrollbar.nvim": { "branch": "master", "commit": "3f0d4170db4c4e148c2796f9cdd211970432fec4" },
   "snacks.nvim": { "branch": "main", "commit": "b773368f8aa6e84a68e979f0e335d23de71f405a" },
   "sqlx-rs.nvim": { "branch": "main", "commit": "ad299b9f085fc621fa6d8b7b3a9a15b5cc19e5bd" },
-  "telescope-file-browser.nvim": { "branch": "master", "commit": "626998e5c1b71c130d8bc6cf7abb6709b98287bb" },
   "telescope.nvim": { "branch": "master", "commit": "415af52339215926d705cccc08145f3782c4d132" },
   "todo-comments.nvim": { "branch": "main", "commit": "304a8d204ee787d2544d8bc23cd38d2f929e7cc5" },
   "venn.nvim": { "branch": "main", "commit": "b09c2f36ddf70b498281845109bedcf08a7e0de0" },
