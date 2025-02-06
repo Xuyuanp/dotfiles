@@ -1,4 +1,4 @@
-; extends
+;; extends
 (
  (type_identifier)
  @type.builtin

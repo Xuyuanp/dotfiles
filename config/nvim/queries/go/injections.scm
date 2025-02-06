@@ -1,4 +1,4 @@
-; extends
+;; extends
 
 ((raw_string_literal_content)
   @injection.content
@@ -8,6 +8,6 @@
 
 ((raw_string_literal_content)
   @injection.content
-  (#lua-match? @injection.content "^%s*[SELECT|UPDATE|DELETE|ALTER]%s")
+  (#lua-match? @injection.content "^%s*(SELECT|UPDATE|DELETE|ALTER)%s")
   (#set! injection.language "sql")
   )
