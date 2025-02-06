@@ -1,4 +1,0 @@
-[
- (hunk)
- (hunks)
-] @fold

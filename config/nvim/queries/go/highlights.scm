@@ -1,4 +1,3 @@
-;; inherits: go
 ;; extends
 
 ; stupid
