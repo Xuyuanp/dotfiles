@@ -21,6 +21,7 @@ return {
                 { key = 'b', source = 'buffers' },
                 { key = 'g', source = 'grep' },
                 { key = 'e', source = 'explorer' },
+                { key = 'n', source = 'notifications' },
             }
             return vim.iter(keys)
                 :map(function(k)
@@ -28,7 +29,7 @@ return {
                     local rhs = function()
                         require('snacks.picker').pick(k.source)
                     end
-                    local desc = '[Picker] ' .. (k.desc or k.source)
+                    local desc = string.gsub(k.desc or k.source, '^%l', string.upper)
                     return { lhs, rhs, desc = desc }
                 end)
                 :totable()
