@@ -6,7 +6,6 @@ return {
         lazy = false,
         opts = {
             theme = 'wave',
-            compile = true,
             undercurl = true, -- enable undercurls
             commentStyle = { italic = false },
             functionStyle = {},
@@ -21,7 +20,11 @@ return {
                 theme = {
                     all = {
                         ui = {
-                            bg_gutter = 'none',
+                            bg_gutter = 'NONE',
+                            float = {
+                                bg = 'NONE',
+                                bg_border = 'NONE',
+                            },
                         },
                     },
                 },
@@ -31,10 +34,6 @@ return {
                 local theme = colors.theme
                 return {
                     Directory = { bold = true },
-
-                    FloatBorder = { bg = 'NONE' },
-                    FloatTitle = { bg = 'NONE' },
-                    NormalFloat = { bg = 'NONE' },
 
                     CursorLine = { bg = theme.ui.bg_p1 },
                     Visual = { bg = theme.ui.bg_m1 },
