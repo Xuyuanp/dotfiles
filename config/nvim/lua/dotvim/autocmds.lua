@@ -63,27 +63,33 @@ function M.setup()
         desc = 'Auto restore prev window',
         callback = function()
             local prev_winnr = vim.fn.winnr('#')
+            local prev_winid = vim.fn.win_getid(prev_winnr)
+            local prev_is_floating = is_floating(prev_winid)
 
             if is_floating() then
-                -- for floating window
-                local winid = vim.fn.win_getid(prev_winnr)
-                if is_floating(winid) then
+                if prev_is_floating then
                     -- jumps from a floating window to another floating window
                     return
                 end
-                vim.w[winid].restore_prev_window = true
+                -- mark the previous window to restore its previous window
+                vim.w[prev_winid].restore_prev_window = true
                 return
             end
 
+            -- enter a normal window
             if vim.w.restore_prev_window and vim.w.prev_window then
-                local winnr = vim.fn.winnr()
                 vim.w.restore_prev_window = nil
+                local winid = vim.fn.win_getid(vim.w.prev_winnr)
+                if not vim.api.nvim_win_is_valid(winid) then
+                    return
+                end
+                local winnr = vim.fn.winnr()
                 vim.cmd('noautocmd ' .. vim.w.prev_window .. 'wincmd w')
                 vim.cmd('noautocmd ' .. winnr .. 'wincmd w')
                 return
             end
 
-            vim.w.prev_window = prev_winnr
+            vim.w.prev_window = (not prev_is_floating) and prev_winnr or nil
         end,
     })
 end
