@@ -1,13 +1,5 @@
 return {
-    {
-        'nvim-lua/plenary.nvim',
-    },
-
-    {
-        'nvim-lua/popup.nvim',
-    },
-
-    {
-        'MunifTanjim/nui.nvim',
-    },
+    'nvim-lua/plenary.nvim',
+    'nvim-lua/popup.nvim',
+    'MunifTanjim/nui.nvim',
 }

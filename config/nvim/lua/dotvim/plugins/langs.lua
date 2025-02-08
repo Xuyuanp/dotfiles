@@ -81,31 +81,6 @@ return {
         'imsnif/kdl.vim',
         ft = { 'kdl' },
     },
-
-    {
-        'Xuyuanp/sqlx-rs.nvim',
-        ft = { 'rust' },
-        cmd = { 'SqlxFormat' },
-        build = function()
-            vim.fn.system({
-                'pip',
-                'install',
-                '-U',
-                'sqlparse',
-            })
-        end,
-        config = function()
-            local sqlx = require('sqlx')
-            sqlx.setup({})
-
-            vim.api.nvim_create_autocmd('BufWritePre', {
-                pattern = '*.rs',
-                group = vim.api.nvim_create_augroup('sqlx-rs-auto-format', { clear = true }),
-                command = 'SqlxFormat',
-                desc = '[sqlx-rs] format on save',
-            })
-        end,
-    },
     {
         'martinda/Jenkinsfile-vim-syntax',
         ft = 'Jenkinsfile',

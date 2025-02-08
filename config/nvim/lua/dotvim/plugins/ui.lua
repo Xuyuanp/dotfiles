@@ -2,50 +2,6 @@ local vim = vim
 
 return {
     {
-        'Xuyuanp/yanil',
-        dev = true,
-        branch = 'main',
-        keys = {
-            { '<C-e>', require('dotvim.util').lazy_require('yanil.canvas').toggle, mode = 'n', desc = '[Yanil] toggle' },
-        },
-        config = function()
-            require('dotvim.config.yanil').setup()
-
-            local group_id = vim.api.nvim_create_augroup('dotvim_yanil', { clear = true })
-            vim.api.nvim_create_autocmd({ 'BufEnter' }, {
-                group = group_id,
-                desc = 'Auto quit yanil',
-                pattern = { 'Yanil' },
-                command = 'if len(nvim_list_wins()) ==1 | q | endif',
-            })
-
-            vim.api.nvim_create_autocmd('User', {
-                pattern = 'GitSignsUpdate',
-                group = group_id,
-                desc = 'Auto refresh git status of Yanil',
-                callback = function()
-                    require('yanil.git').update()
-                end,
-            })
-        end,
-    },
-
-    {
-        'Xuyuanp/floaterm.nvim',
-        keys = {
-            {
-                '<A-o>',
-                function()
-                    require('floaterm').toggle()
-                end,
-                mode = { 'n', 't' },
-                desc = '[Floaterm] toggle',
-            },
-        },
-        opts = {},
-    },
-
-    {
         'mhinz/vim-startify',
         lazy = vim.fn.argc() > 0,
         dependencies = {
