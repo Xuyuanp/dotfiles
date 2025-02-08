@@ -59,18 +59,17 @@ return {
 
     {
         'junegunn/vim-easy-align',
-        event = { 'BufReadPost', 'BufNewFile' },
-        config = function()
-            local set_keymap = vim.keymap.set
-            set_keymap('v', '<CR><Space>', ':EasyAlign\\<CR>', { noremap = true })
-            set_keymap('v', '<CR>2<Space>', ':EasyAlign2\\<CR>', { noremap = true })
-            set_keymap('v', '<CR>-<Space>', ':EasyAlign-\\<CR>', { noremap = true })
-            set_keymap('v', '<CR>-2<Space>', ':EasyAlign-2\\<CR>', { noremap = true })
-            set_keymap('v', '<CR>:', ':EasyAlign:<CR>', { noremap = true })
-            set_keymap('v', '<CR>=', ':EasyAlign=<CR>', { noremap = true })
-            set_keymap('v', '<CR><CR>=', ':EasyAlign!=<CR>', { noremap = true })
-            set_keymap('v', '<CR>"', ':EasyAlign"<CR>', { noremap = true })
-        end,
+        -- stylua: ignore
+        keys = {
+            { '<CR><Space>',   ':EasyAlign\\<CR>',   mode = 'v' },
+            { '<CR>2<Space>',  ':EasyAlign2\\<CR>',  mode = 'v' },
+            { '<CR>-<Space>',  ':EasyAlign-\\<CR>',  mode = 'v' },
+            { '<CR>-2<Space>', ':EasyAlign-2\\<CR>', mode = 'v' },
+            { '<CR>:',         ':EasyAlign:<CR>',    mode = 'v' },
+            { '<CR>=',         ':EasyAlign=<CR>',    mode = 'v' },
+            { '<CR><CR>=',     ':EasyAlign!=<CR>',   mode = 'v' },
+            { '<CR>"',         ':EasyAlign"<CR>',    mode = 'v' },
+        },
     },
 
     {
