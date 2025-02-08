@@ -22,6 +22,7 @@ return {
                 { key = 'g', source = 'grep' },
                 { key = 'e', source = 'explorer' },
                 { key = 'n', source = 'notifications' },
+                { key = 'h', source = 'help' },
             }
             return vim.iter(keys)
                 :map(function(k)
