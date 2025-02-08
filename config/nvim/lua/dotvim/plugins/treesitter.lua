@@ -4,7 +4,17 @@ return {
         build = ':TSUpdate',
         lazy = false,
         opts = {
-            ensure_installed = {},
+            ensure_installed = {
+                'lua',
+                'vim',
+                'vimdoc',
+                'markdown',
+                'markdown_inline',
+                'query',
+                'go',
+                'rust',
+                'python',
+            },
             ignore_install = {},
             sync_install = false,
             auto_install = false,
@@ -28,7 +38,7 @@ return {
     {
 
         'nvim-treesitter/nvim-treesitter-textobjects',
-        event = 'VeryLazy',
+        lazy = false,
         dependencies = {
             {
                 'nvim-treesitter/nvim-treesitter',
@@ -82,7 +92,7 @@ return {
     {
 
         'RRethy/nvim-treesitter-textsubjects',
-        event = 'VeryLazy',
+        lazy = false,
         dependencies = {
             {
                 'nvim-treesitter/nvim-treesitter',
@@ -103,7 +113,7 @@ return {
 
     {
         'JoosepAlviste/nvim-ts-context-commentstring',
-        event = 'VeryLazy',
+        lazy = false,
         init = function()
             vim.g.skip_ts_context_commentstring_module = true
         end,
