@@ -169,4 +169,11 @@ return {
             require('im_select').setup({})
         end,
     },
+
+    {
+        'echasnovski/mini.ai',
+        version = '*',
+        lazy = false,
+        opts = {},
+    },
 }
