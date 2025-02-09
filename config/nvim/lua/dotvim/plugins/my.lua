@@ -68,4 +68,45 @@ return {
         },
         opts = {},
     },
+
+    {
+        'Xuyuanp/scrollbar.nvim',
+        init = function()
+            vim.g.scrollbar_excluded_filetypes = {
+                'nerdtree',
+                'vista_kind',
+                'Yanil',
+            }
+            vim.g.scrollbar_highlight = {
+                head = 'Comment',
+                body = 'Comment',
+                tail = 'Comment',
+            }
+            vim.g.scrollbar_shape = {
+                -- head = '⍋',
+                -- tail = '⍒',
+                head = '┃',
+                body = '┃',
+                tail = '┃',
+            }
+
+            local group_id = vim.api.nvim_create_augroup('dotvim_scrollbar', { clear = true })
+
+            vim.api.nvim_create_autocmd({ 'WinScrolled', 'WinResized', 'InsertLeave' }, {
+                group = group_id,
+                desc = '[Scrollbar] show',
+                pattern = { '*' },
+                callback = function()
+                    require('scrollbar').show()
+                end,
+            })
+            vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI', 'InsertEnter' }, {
+                group = group_id,
+                desc = '[Scrollbar] hide',
+                callback = function()
+                    require('scrollbar').clear()
+                end,
+            })
+        end,
+    },
 }
