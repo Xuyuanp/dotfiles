@@ -34,6 +34,7 @@ return {
                 local theme = colors.theme
                 return {
                     Directory = { bold = true },
+                    ['@comment.documentation'] = { link = 'SpecialComment' },
 
                     CursorLine = { bg = theme.ui.bg_p1 },
                     Visual = { bg = theme.ui.bg_m1 },
