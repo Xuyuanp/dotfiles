@@ -24,6 +24,9 @@ return {
             'CodeCompanionChat',
             'CodeCompanionActions',
         },
+        keys = {
+            { '<A-g>', '<cmd>CodeCompanionChat Toggle<CR>', mode = { 'n', 'i' }, desc = '[AI] CodeCompanionChat toggle' },
+        },
         dependencies = {
             {
                 'MeanderingProgrammer/render-markdown.nvim',
@@ -52,6 +55,13 @@ return {
             display = {
                 chat = {
                     start_in_insert_mode = true, -- Open the chat buffer in insert mode?
+                    window = {
+                        layout = 'float',
+                        height = 0.8,
+                        width = 0.8,
+                        border = 'rounded',
+                        relative = 'win',
+                    },
                 },
             },
         },
