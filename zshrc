@@ -165,8 +165,17 @@ unfunction _exists
 # ================================ functions ================================= #
 
 function howto() {
-    # read input from flags or stdin if no tty
-    local input=$(if [ -t 0 ]; then echo $@; else cat -; fi)
+    local input
+    if [ $# -gt 0 ]; then
+        input="$@"
+    elif [ ! -t 0 ]; then
+        # read input from flags or stdin if no tty
+        input=$(cat -)
+    else
+        # prompt user to enter input
+        echo -n "> "
+        read input
+    fi
 
     # escape double quotes
     input=${input//\"/\\\"}
