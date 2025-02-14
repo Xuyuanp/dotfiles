@@ -64,9 +64,14 @@ return {
         opts = {
             handlers = {
                 function(config)
-                    local options = config.adapters.options or {}
-                    options.initialize_timeout_sec = 60
-                    config.adapters.options = options
+                    config = vim.tbl_deep_extend('force', {
+                        adapters = {
+                            options = {
+                                initialize_timeout_sec = 60,
+                            },
+                        },
+                        filetypes = {},
+                    }, config)
 
                     require('mason-nvim-dap').default_setup(config)
                 end,
