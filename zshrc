@@ -188,7 +188,7 @@ function howto() {
     # trap SIGINT to handle Ctrl-C
     trap 'kill $spinner_pid 2>/dev/null' INT
 
-    local output=$(nvim --headless -c "Howto! ${input}")
+    local output=$(echo $input | copilot-howto)
 
     kill $spinner_pid 2>/dev/null
     wait

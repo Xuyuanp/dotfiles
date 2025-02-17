@@ -63,6 +63,7 @@
     ~/.config/neovide: config/neovide
     ~/.local/bin/osc52-yank: scripts/osc52-yank
     ~/.local/bin/spinner: scripts/spinner
+    ~/.local/bin/copilot-howto: scripts/copilot-howto
     ~/.editorconfig: editorconfig
 
     # for linux

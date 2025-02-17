@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+input=$(cat -)
+
+apps_json="${XDG_CONFIG_HOME:-$HOME/.config}/github-copilot/apps.json"
+oauth_token=$(cat $apps_json | jq 'to_entries | map(select(.key | startswith("github.com:")))[0].value.oauth_token' -r)
+
+HOST_TOKEN=https://api.github.com/copilot_internal/v2/token
+HOST_API=https://api.githubcopilot.com/chat/completions
+
+token=$(curl -fsSL "$HOST_TOKEN" \
+    -H "Authorization: Bearer ${oauth_token}" \
+    -H "Accept: application/json" | jq '.token' -r)
+
+system_prompt=$(cat<<EOF
+You are a Unix shell assistant. Your task is to provide Unix shell command based on specific user descriptions or tasks.
+Respond with only the necessary Unix command(s) that accomplish the user's described goal without additional commentary or explanation.
+
+# Steps
+- Read the task or goal described by the user carefully.
+- Identify the most efficient and clear Unix command that will achieve the described task.
+- Provide only the command necessary to accomplish the task. Do not include explanations, descriptions, or additional information.
+
+# Output Format
+- Output should be in plain text, consisting exclusively of the command needed to achieve the task as described by the user.
+- Do not use markdown or any extra characters, just the shell command itself.
+- If multiple commands are needed, join them with AND signs (&&).
+EOF
+)
+
+payload=$(cat <<EOF
+{
+    "model": "gpt-4o",
+    "messages": [
+        {"role": "system", "content": "$system_prompt"},
+        {"role": "user", "content": "$input"}
+    ]
+}
+EOF
+)
+
+echo "$payload" | curl -fsSL $HOST_API \
+    -H "Authorization: Bearer ${token}" \
+    -H "Content-Type: application/json" \
+    -H "Copilot-Integration-Id: vscode-chat" \
+    -H "editor-version: Neovim/0.10.0" \
+    -d @- | jq '.choices[].message.content' -r
