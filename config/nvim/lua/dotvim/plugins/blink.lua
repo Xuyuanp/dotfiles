@@ -21,13 +21,6 @@ local M = {
                     window = { border = 'rounded' },
                 },
                 menu = {
-                    auto_show = function(ctx, items)
-                        local auto_show = vim.b[ctx.bufnr].blink_auto_show_menu
-                        if auto_show == nil then
-                            return true
-                        end
-                        return type(auto_show) == 'function' and auto_show(ctx, items) or auto_show
-                    end,
                     draw = {
                         treesitter = { 'lsp', 'copilot' },
                         padding = 1,
@@ -40,6 +33,15 @@ local M = {
                     },
                 },
                 ghost_text = { enabled = true },
+                trigger = {
+                    show_on_blocked_trigger_characters = function()
+                        if vim.bo.filetype == 'go' then
+                            return { ':' }
+                        end
+
+                        return { ' ', '\n', '\t' }
+                    end,
+                },
             },
             signature = { enabled = true, window = { border = 'rounded' } },
             sources = {
