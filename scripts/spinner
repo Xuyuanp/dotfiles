@@ -31,7 +31,7 @@ done
 # Define spinners
 spinners_line=('-' '\' '|' '/')
 spinners_dots=('⠋' '⠙' '⠹' '⠸' '⠼' '⠴' '⠦' '⠧' '⠇' '⠏')
-spinners_meter=('▰▱▱▱▱▱▱' '▰▰▱▱▱▱▱' '▰▰▰▱▱▱▱' '▰▰▰▰▱▱▱' '▰▰▰▰▰▱▱' '▰▰▰▰▰▰▱' '▰▰▰▰▰▰▰' '▰▱▱▱▱▱▱')
+spinners_meter=('▱▱▱▱▱▱▱' '▰▱▱▱▱▱▱' '▰▰▱▱▱▱▱' '▰▰▰▱▱▱▱' '▰▰▰▰▱▱▱' '▰▰▰▰▰▱▱' '▰▰▰▰▰▰▱' '▰▰▰▰▰▰▰')
 spinners_bouncing_ball=('( ●    )' '(  ●   )' '(   ●  )' '(    ● )' '(     ●)' '(    ● )' '(   ●  )' '(  ●   )' '( ●    )' '(●     )')
 
 # Select spinner frames based on style
@@ -51,11 +51,11 @@ tput civis
 # Start spinner
 end_time=$((SECONDS + timeout))
 while [[ $SECONDS -lt $end_time ]]; do
-    printf "\r%s%s" "$prefix" "${frames[$idx]}"
+    printf "\033[2K\r%s%s" "$prefix" "${frames[$idx]}"
     idx=$(( (idx + 1) % ${#frames[@]} ))
     sleep "$interval"
 done
+printf "\033[2K\r"
 
 # Show cursor and clear line
 tput cnorm
-printf "\r"
