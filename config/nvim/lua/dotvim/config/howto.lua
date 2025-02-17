@@ -25,6 +25,8 @@ Respond with only the necessary Unix command(s) that accomplish the user's descr
 local function howto(task, opts)
     opts = vim.tbl_deep_extend('force', {
         system_prompt = system_prompt,
+        agent = 'copilot',
+        model = 'gpt-4o',
     }, opts or {})
     local Copilot = require('CopilotChat.copilot')
     local copilot = Copilot()
