@@ -10,6 +10,7 @@ return {
                 'vimdoc',
                 'markdown',
                 'markdown_inline',
+                'diff',
                 'query',
                 'go',
                 'rust',
