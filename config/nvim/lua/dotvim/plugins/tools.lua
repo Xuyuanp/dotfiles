@@ -117,6 +117,7 @@ return {
                 },
             },
             indent = {},
+            image = {},
         },
     },
 
