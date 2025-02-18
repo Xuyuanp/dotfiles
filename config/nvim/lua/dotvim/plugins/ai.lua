@@ -13,7 +13,6 @@ return {
         opts = {},
         config = function(_, opts)
             require('CopilotChat').setup(opts)
-            require('dotvim.config.howto').setup()
         end,
     },
 
