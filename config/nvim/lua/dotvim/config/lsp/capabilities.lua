@@ -12,7 +12,7 @@ return {
                 labelDetailsSupport = true,
                 preselectSupport = false,
                 resolveSupport = {
-                    properties = { 'documentation', 'detail', 'additionalTextEdits' },
+                    properties = { 'documentation', 'detail', 'additionalTextEdits', 'command', 'data' },
                 },
                 snippetSupport = true,
                 tagSupport = {

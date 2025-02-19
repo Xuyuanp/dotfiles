@@ -44,9 +44,11 @@ local M = {
                 },
             },
             signature = { enabled = true, window = { border = 'rounded' } },
+            cmdline = {
+                sources = {},
+            },
             sources = {
                 default = { 'lsp', 'path', 'snippets', 'buffer' },
-                cmdline = {},
                 per_filetype = {
                     DressingInput = {}, -- disable completion for DressingInput filetype
                 },
