@@ -14,6 +14,9 @@ local M = {
             },
             appearance = {
                 nerd_font_variant = 'mono',
+                kind_icons = {
+                    Copilot = '',
+                },
             },
             completion = {
                 documentation = {
@@ -44,14 +47,25 @@ local M = {
                 },
             },
             signature = { enabled = true, window = { border = 'rounded' } },
-            cmdline = {
-                sources = {},
-            },
+            cmdline = { enabled = false },
             sources = {
                 default = { 'lsp', 'path', 'snippets', 'buffer' },
-                per_filetype = {
-                    DressingInput = {}, -- disable completion for DressingInput filetype
-                },
+                per_filetype = {},
+                transform_items = function(ctx, items)
+                    local ft = vim.bo[ctx.bufnr].filetype
+                    for _, item in ipairs(items) do
+                        ---@diagnostic disable-next-line: undefined-field
+                        if item.inline and item.client_name == 'copilot-lsp' then
+                            item.kind = require('blink.cmp.types').CompletionItemKind.Copilot
+                            item.score_offset = 100
+                            local doc = item.documentation
+                            if type(doc) == 'string' and not vim.startswith(doc, '```') then
+                                item.documentation = string.format('```%s\n%s\n```', ft, doc)
+                            end
+                        end
+                    end
+                    return items
+                end,
                 providers = {
                     lazydev = {
                         name = 'LazyDev',

@@ -102,6 +102,8 @@ function M.setup()
     }
     vim.lsp.config('*', default_config)
 
+    vim.lsp.enable('copilot-lsp')
+
     local native_setup = function(server_name)
         local cfg = vim.tbl_deep_extend('force', require('lspconfig.configs.' .. server_name).default_config, langs[server_name] or {})
         vim.lsp.config(server_name, cfg)

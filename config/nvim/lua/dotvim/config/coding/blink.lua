@@ -42,9 +42,14 @@ local M = {}
 function M.setup(opts)
     opts = opts or {}
     local ft_providers = {}
+
+    local CompletionItemKind = require('blink.cmp.types').CompletionItemKind
+    local kind_idx = #CompletionItemKind + 1
+    CompletionItemKind[kind_idx] = 'Copilot'
+    CompletionItemKind['Copilot'] = kind_idx
+
     for name, provider in pairs(opts.sources.providers) do
         if provider.kind then
-            local CompletionItemKind = require('blink.cmp.types').CompletionItemKind
             local kind_idx = #CompletionItemKind + 1
             CompletionItemKind[kind_idx] = provider.kind
             CompletionItemKind[provider.kind] = kind_idx

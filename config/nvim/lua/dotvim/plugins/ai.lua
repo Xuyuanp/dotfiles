@@ -96,44 +96,6 @@ return {
         cond = features.copilot,
         cmd = 'Copilot',
         opts = {},
-        specs = {
-            {
-                'saghen/blink.cmp',
-                optional = true,
-                dependencies = {
-                    {
-                        'zbirenbaum/copilot.lua',
-                        opts = {
-                            suggestion = { enabled = false },
-                            panel = { enabled = false },
-                        },
-                    },
-                    'giuxtaposition/blink-cmp-copilot',
-                },
-                opts_extend = { 'sources.default' },
-                opts = {
-                    appearance = {
-                        kind_icons = {
-                            Copilot = '',
-                        },
-                    },
-                    sources = {
-                        default = { 'copilot' },
-                        providers = {
-                            copilot = {
-                                name = 'Github',
-                                module = 'blink-cmp-copilot',
-                                score_offset = 100,
-                                async = true,
-
-                                -- extra
-                                kind = 'Copilot',
-                            },
-                        },
-                    },
-                },
-            },
-        },
     },
 
     {
