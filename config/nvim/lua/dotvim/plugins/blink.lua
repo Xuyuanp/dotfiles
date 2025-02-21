@@ -9,12 +9,7 @@ local M = {
         ---@module 'blink.cmp'
         ---@type blink.cmp.Config
         opts = {
-            keymap = {
-                preset = 'enter',
-            },
-            appearance = {
-                nerd_font_variant = 'mono',
-            },
+            keymap = { preset = 'enter' },
             completion = {
                 documentation = {
                     auto_show = true,
@@ -44,14 +39,10 @@ local M = {
                 },
             },
             signature = { enabled = true, window = { border = 'rounded' } },
-            cmdline = {
-                sources = {},
-            },
+            cmdline = { enabled = false },
             sources = {
                 default = { 'lsp', 'path', 'snippets', 'buffer' },
-                per_filetype = {
-                    DressingInput = {}, -- disable completion for DressingInput filetype
-                },
+                per_filetype = {},
                 providers = {
                     lazydev = {
                         name = 'LazyDev',
