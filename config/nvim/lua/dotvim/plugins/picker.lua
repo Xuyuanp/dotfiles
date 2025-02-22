@@ -52,6 +52,13 @@ return {
                             end,
                         },
                     },
+                    notifications = {
+                        win = {
+                            preview = {
+                                wo = { wrap = true },
+                            },
+                        },
+                    },
                     explorer = {
                         layout = {
                             cycle = false,
