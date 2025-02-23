@@ -42,7 +42,13 @@ local function iter_injections(bufnr)
     if not tree then
         return
     end
-    return query:iter_captures(tree:root(), bufnr)
+
+    local function is_injection(id)
+        return query.captures[id] == 'injection.content'
+    end
+
+    local caps = query:iter_captures(tree:root(), bufnr)
+    return vim.iter(caps):filter(is_injection)
 end
 
 local function prepend(t, x)
@@ -73,7 +79,8 @@ local function parse_injections(bufnr)
         return true
     end
 
-    local function to_injection(_, node, metadata)
+    ---@param node TSNode
+    local function to_injection(_id, node, metadata)
         return {
             lang = metadata['injection.language'],
             type = node:type(),
@@ -82,7 +89,7 @@ local function parse_injections(bufnr)
         }
     end
 
-    return vim.iter(caps):filter(no_skip):map(to_injection):fold({}, prepend)
+    return caps:filter(no_skip):map(to_injection):fold({}, prepend)
 end
 
 function M.format_injections(bufnr)
@@ -98,7 +105,6 @@ function M.format_injections(bufnr)
         if not ok then
             return
         end
-        formatted = vim.trim(formatted)
         if formatted == inj.content then
             return
         end
