@@ -57,29 +57,19 @@ local function prepend(t, x)
 end
 
 ---@param bufnr integer
----@return dotvim.util.ts.Injection[]|nil
+---@return dotvim.util.ts.Injection[]?
 local function parse_injections(bufnr)
     local caps = iter_injections(bufnr)
     if not caps then
         return
     end
 
-    ---@param node TSNode?
-    local function no_skip(_, node)
-        while node do
-            local prev_sib = node:prev_sibling()
-            if prev_sib and prev_sib:type() == 'comment' then
-                local comment = ts.get_node_text(prev_sib, bufnr)
-                -- if the comment contains 'skip-format-injection', skip
-                return not comment:find('skip%-format%-injection')
-            end
-            node = node:parent()
-        end
-
-        return true
+    local function should_format(_, _node, metadata)
+        return metadata['format'] == 1
     end
 
     ---@param node TSNode
+    ---@param metadata vim.treesitter.query.TSMetadata
     local function to_injection(_id, node, metadata)
         return {
             lang = metadata['injection.language'],
@@ -89,7 +79,7 @@ local function parse_injections(bufnr)
         }
     end
 
-    return caps:filter(no_skip):map(to_injection):fold({}, prepend)
+    return caps:filter(should_format):map(to_injection):fold({}, prepend)
 end
 
 function M.format_injections(bufnr)
@@ -110,9 +100,9 @@ function M.format_injections(bufnr)
         end
 
         local lines = vim.split(formatted, '\n')
-        local start_line, start_col = inj.range[1], inj.range[2]
-        local end_line, end_col = inj.range[3], inj.range[4]
-        vim.api.nvim_buf_set_text(bufnr, start_line, start_col, end_line, end_col, lines)
+        local start_row, start_col = inj.range[1], inj.range[2]
+        local end_row, end_col = inj.range[3], inj.range[4]
+        vim.api.nvim_buf_set_text(bufnr, start_row, start_col, end_row, end_col, lines)
     end
 
     vim.iter(injections):each(format_injection)

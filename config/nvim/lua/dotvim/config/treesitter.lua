@@ -1,14 +1,17 @@
 local M = {}
 
+---@type table<string, fun(match: table<integer,TSNode[]>, pattern: integer, source: integer|string, predicate: any[], metadata: vim.treesitter.query.TSMetadata)>
 local custom_directives = {
-    ['absoffset!'] = function(match, _, _, pred, metadata)
-        ---@cast pred integer[]
+    ['absoffset!'] = function(_match, _, _, pred, metadata)
         local capture_id = pred[2]
         if not metadata[capture_id] then
-            metadata[capture_id] = {}
+            return
         end
 
-        local range = metadata[capture_id].range or { match[capture_id]:range() }
+        local range = metadata[capture_id].range
+        if not range then
+            return
+        end
         local start_row_offset = pred[3] or 0
         local start_col_offset = pred[4] or 0
         local end_row_offset = pred[5] or 0
@@ -23,6 +26,41 @@ local custom_directives = {
         if range[1] < range[3] or (range[1] == range[3] and range[2] <= range[4]) then
             metadata[capture_id].range = range
         end
+    end,
+    ['set-ref!'] = function(_match, _, _, pred, metadata)
+        -- (#set-ref! foo @bar)
+        local key = pred[2]
+        local ref = pred[3]
+        local val = metadata[ref].text
+        metadata[key] = val
+    end,
+    ['inject-lang-ref!'] = function(_match, _, _, pred, metadata)
+        -- (#inject-lang-ref! @_cap.lang)
+        local ref = pred[2]
+        local val = metadata[ref].text
+        if not val then
+            return
+        end
+        local _, _, lang = val:find('lang:(%w+!?)')
+        if not lang then
+            return
+        end
+        local format = vim.endswith(lang, '!')
+        if format then
+            metadata['format'] = 1
+            lang = lang:sub(1, -2)
+        end
+        metadata['injection.language'] = lang
+    end,
+    ['inject-lang!'] = function(_match, _, _, pred, metadata)
+        -- (#inject-lang-ref! "json!")
+        local lang = pred[2]
+        local format = vim.endswith(lang, '!')
+        if format then
+            metadata['format'] = 1
+            lang = lang:sub(1, -2)
+        end
+        metadata['injection.language'] = lang
     end,
 }
 
