@@ -100,17 +100,24 @@ return {
             },
         },
         opts = {
-            telescope = {
-                sorting_strategy = 'ascending',
-                layout_strategy = 'vertical',
-                layout_config = {
-                    width = 0.8,
-                    height = 0.9,
-                    prompt_position = 'top',
-                    preview_cutoff = 20,
-                    preview_height = function(_, _, max_lines)
-                        return max_lines - 15
-                    end,
+            backend = { 'snacks' },
+            snacks = {
+                layout = {
+                    -- copy from preset layout 'vertical'
+                    layout = {
+                        backdrop = false,
+                        width = 0.5,
+                        min_width = 80,
+                        height = 0.8,
+                        min_height = 30,
+                        box = 'vertical',
+                        border = 'rounded',
+                        title = '{title} {live} {flags}',
+                        title_pos = 'center',
+                        { win = 'input', height = 1, border = 'bottom' },
+                        { win = 'list', height = 5, border = 'none' }, -- set height
+                        { win = 'preview', title = '{preview}', height = 0.4, border = 'top' },
+                    },
                 },
             },
         },
