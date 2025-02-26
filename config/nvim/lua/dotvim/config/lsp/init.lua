@@ -120,11 +120,6 @@ function M.setup()
         setup,
         ['rust_analyzer'] = function() end,
     })
-    -- suppress warning: bufls deprecated
-    -- TODO: remove this after bufls is removed
-    vim.schedule(function()
-        setup('buf_ls')
-    end)
 end
 
 return M
