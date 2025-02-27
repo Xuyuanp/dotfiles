@@ -19,11 +19,10 @@ local langs = {
                 templateExtensions = { 'tpl', 'yaml' },
                 experimentalPostfixCompletions = true,
                 semanticTokens = true,
-                noSemanticString = true,
-                -- semanticTokenTypes = {
-                --     string = false,
-                --     keyword = false,
-                -- },
+                semanticTokenTypes = {
+                    string = false,
+                    keyword = false,
+                },
                 staticcheck = true,
                 vulncheck = 'Imports',
                 codelenses = {
