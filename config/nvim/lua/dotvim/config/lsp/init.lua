@@ -120,6 +120,8 @@ function M.setup()
         setup,
         ['rust_analyzer'] = function() end,
     })
+
+    vim.lsp.enable('copilot-ls')
 end
 
 return M

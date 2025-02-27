@@ -17,7 +17,7 @@ local M = {
                 },
                 menu = {
                     draw = {
-                        treesitter = { 'lsp', 'copilot' },
+                        treesitter = { 'lsp', 'copilot', 'inline' },
                         padding = 1,
                         gap = 4,
                         columns = {
@@ -41,7 +41,7 @@ local M = {
             signature = { enabled = true, window = { border = 'rounded' } },
             cmdline = { enabled = false },
             sources = {
-                default = { 'lsp', 'path', 'snippets', 'buffer' },
+                default = { 'lsp', 'path', 'snippets', 'buffer', 'inline' },
                 per_filetype = {},
                 providers = {
                     lazydev = {
@@ -52,6 +52,11 @@ local M = {
                         fallbacks = { 'lsp' },
 
                         filetypes = { 'lua' },
+                    },
+                    inline = {
+                        name = 'Inline',
+                        module = 'dotvim.config.coding.inline',
+                        score_offset = 100,
                     },
                     buffer = {
                         min_keyword_length = 5,
