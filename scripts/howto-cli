@@ -56,11 +56,6 @@ class Adapter(ABC):
                 {"role": "user", "content": input},
             ],
         }
-        rsp = requests.post(
-            f"{self.base_url}/chat/completions",
-            headers=self.headers,
-            json=payload,
-        ).json()
         try:
             response = requests.post(
                 f"{self.base_url}/chat/completions",
@@ -75,6 +70,9 @@ class Adapter(ABC):
 
 
 class Copilot(Adapter):
+    _USER_AGENT = "vscode-chat/dev"
+    _OAUTH_TOKEN_URL = "https://api.github.com/copilot_internal/v2/token"
+
     @property
     def _oauth_token(self) -> str:
         config_dir = os.environ.get(
@@ -90,13 +88,17 @@ class Copilot(Adapter):
 
     @property
     def token(self) -> str:
-        return requests.get(
-            "https://api.github.com/copilot_internal/v2/token",
+        rsp = requests.get(
+            self._OAUTH_TOKEN_URL,
             headers={
                 "Authorization": f"Bearer {self._oauth_token}",
                 "Accept": "application/json",
+                "User-Agent": self._USER_AGENT,
             },
-        ).json()["token"]
+        )
+        rsp.raise_for_status()
+        token = rsp.json()["token"]
+        return token
 
     @property
     def base_url(self) -> str:
@@ -108,10 +110,13 @@ class Copilot(Adapter):
 
     @property
     def headers(self) -> dict[str, str]:
-        headers = super().headers
-        headers["Copilot-Integration-Id"] = "vscode-chat"
-        headers["editor-version"] = "Neovim/0.10.0"
-        return headers
+        return {
+            "Authorization": f"Bearer {self.token}",
+            "Content-Type": "application/json",
+            "Copilot-Integration-Id": "vscode-chat",
+            "editor-version": "Neovim/0.10.0",
+            "User-Agent": self._USER_AGENT,
+        }
 
 
 class Deepseek(Adapter):
