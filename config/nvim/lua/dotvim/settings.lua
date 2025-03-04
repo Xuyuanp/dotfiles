@@ -148,6 +148,12 @@ function M.setup()
         filename = {
             ['.envrc'] = 'sh',
         },
+        extension = {
+            ['tpl'] = 'helm',
+        },
+        pattern = {
+            ['.*/templates/.*%.yaml'] = 'helm',
+        },
     })
 
     vim.diagnostic.config({

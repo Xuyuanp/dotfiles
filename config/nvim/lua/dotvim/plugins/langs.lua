@@ -5,24 +5,6 @@ return {
     },
 
     {
-        'towolf/vim-helm',
-        ft = 'helm',
-        config = function()
-            local group_id = vim.api.nvim_create_augroup('dotvim_helm', { clear = true })
-            vim.api.nvim_create_autocmd({ 'BufReadPre' }, {
-                group = group_id,
-                pattern = '_helpers.tpl',
-                command = 'setlocal nomodeline',
-            })
-            vim.api.nvim_create_autocmd({ 'BufReadPost' }, {
-                group = group_id,
-                pattern = '_helpers.tpl',
-                command = 'set filetype=helm',
-            })
-        end,
-    },
-
-    {
         'martinda/Jenkinsfile-vim-syntax',
         ft = 'Jenkinsfile',
     },
