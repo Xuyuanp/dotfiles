@@ -32,14 +32,16 @@ done
 spinners_line=('-' '\' '|' '/')
 spinners_dots=('⠋' '⠙' '⠹' '⠸' '⠼' '⠴' '⠦' '⠧' '⠇' '⠏')
 spinners_meter=('▱▱▱▱▱▱▱' '▰▱▱▱▱▱▱' '▰▰▱▱▱▱▱' '▰▰▰▱▱▱▱' '▰▰▰▰▱▱▱' '▰▰▰▰▰▱▱' '▰▰▰▰▰▰▱' '▰▰▰▰▰▰▰')
-spinners_bouncing_ball=('( ●    )' '(  ●   )' '(   ●  )' '(    ● )' '(     ●)' '(    ● )' '(   ●  )' '(  ●   )' '( ●    )' '(●     )')
+spinners_ball=('( ●    )' '(  ●   )' '(   ●  )' '(    ● )' '(     ●)' '(    ● )' '(   ●  )' '(  ●   )' '( ●    )' '(●     )')
+spinners_moon=( '' '' '' '' '' '' '' '' '' '' '' '' '' '' '' '' '' '' '' '' '' '' '' '' '' '' '' '')
 
 # Select spinner frames based on style
 case $style in
-    line) frames=("${spinners_line[@]}") ;;
-    dots) frames=("${spinners_dots[@]}") ;;
+    line)  frames=("${spinners_line[@]}") ;;
+    dots)  frames=("${spinners_dots[@]}") ;;
     meter) frames=("${spinners_meter[@]}") ;;
-    bouncing_ball) frames=("${spinners_bouncing_ball[@]}") ;;
+    ball)  frames=("${spinners_ball[@]}") ;;
+    moon)  frames=("${spinners_moon[@]}") ;;
     *) echo "Unknown style: $style"; exit 1 ;;
 esac
 
