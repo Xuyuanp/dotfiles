@@ -1,49 +1,7 @@
-local vim = vim
-
 return {
-    {
-        'Vimjas/vim-python-pep8-indent',
-        ft = { 'python' },
-    },
-
-    {
-        'neoclide/jsonc.vim',
-        ft = { 'jsonc' },
-    },
-
-    {
-        'stephpy/vim-yaml',
-        ft = { 'yaml' },
-    },
-
     {
         'zdharma-continuum/zinit-vim-syntax',
         ft = { 'zsh' },
-    },
-
-    {
-        'neovimhaskell/haskell-vim',
-        ft = { 'haskell', 'hs' },
-    },
-
-    {
-        'milisims/nvim-luaref',
-        ft = 'lua',
-    },
-
-    {
-        'nanotee/luv-vimdocs',
-        event = { 'CmdlineEnter' },
-    },
-
-    {
-        'baskerville/vim-sxhkdrc',
-        ft = 'sxhkdrc',
-    },
-
-    {
-        'tmux-plugins/vim-tmux',
-        ft = 'tmux',
     },
 
     {
@@ -64,23 +22,6 @@ return {
         end,
     },
 
-    {
-        'Fymyte/rasi.vim',
-        ft = 'rasi',
-        dependencies = {
-            'ap/vim-css-color',
-        },
-    },
-
-    {
-        'NoahTheDuke/vim-just',
-        ft = { 'just' },
-    },
-
-    {
-        'imsnif/kdl.vim',
-        ft = { 'kdl' },
-    },
     {
         'martinda/Jenkinsfile-vim-syntax',
         ft = 'Jenkinsfile',
