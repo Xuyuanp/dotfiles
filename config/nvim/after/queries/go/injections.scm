@@ -86,3 +86,14 @@
  (#gsub! @_comment.lang "/%*%s*([%w%p]+)%s*%*/" "%1")
  (#inject-lang-ref! @_comment.lang)
  )
+
+((call_expression
+  function: (selector_expression
+    field: (field_identifier) @_method)
+  arguments: (argument_list
+    .
+    (interpreted_string_literal
+      (interpreted_string_literal_content) @injection.content)))
+  (#any-of? @_method "Tracef" "Debugf" "Infof" "Warnf" "WarningF" "Errorf")
+  (#set! injection.language "printf"))
+
