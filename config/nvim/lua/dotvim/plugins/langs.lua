@@ -47,9 +47,7 @@ return {
                 },
             })
         end,
-        opts = {
-            winbar = true,
-        },
+        opts = {},
         config = function(_, opts)
             local kulala = require('kulala')
             kulala.setup(opts)
