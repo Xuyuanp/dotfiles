@@ -19,52 +19,41 @@ local function notify_once(msg, level, opts)
     vim.notify_once(msg, level, opts)
 end
 
+local methods = {
+    signIn = 'signIn',
+    textDocument_didFocus = 'textDocument/didFocus',
+}
+
 ---@param client vim.lsp.Client
 ---@param ctx lsp.HandlerContext
 local function sign_in(client, ctx)
-    local method = 'signIn'
-
     for _, req in pairs(client.requests) do
-        if req.type == 'pending' and req.method == method then
+        if req.type == 'pending' and req.method == methods.signIn then
             return
         end
     end
-
-    local bufnr = ctx.bufnr
-
-    client:request(method, vim.empty_dict(), function(err, res)
-        assert(not err, err)
-        vim.print(res.userCode)
-        client:exec_cmd(res.command, { bufnr = bufnr }, function(err, res)
-            assert(not err, err)
-            local __res_example = {
-                status = 'OK',
-                user = '<username>',
-            }
-
-            vim.print(res)
-        end)
-    end)
+    client:request(methods.signIn, vim.empty_dict(), nil, ctx.bufnr)
 end
 
 ---@type table<string, lsp.Handler>
 local handlers = {
-    didChangeStatus = function(_err, params, ctx)
+    ---@param res {busy: boolean, kind: 'Normal'|'Error'|'Warning'|'Inactive', message: string}
+    didChangeStatus = function(_err, res, ctx)
         local __params_example = {
             busy = false,
             kind = 'Error',
             message = 'You are not signed into GitHub. Please sign in to use Copilot.',
         }
 
-        if params.busy then
+        if res.busy then
             return
         end
 
-        if params.kind == 'Normal' and not params.message then
+        if res.kind == 'Normal' and not res.message then
             return
         end
 
-        if params.kind == 'Error' and params.message:find('not signed') then
+        if res.kind == 'Error' and res.message:find('not signed') then
             local client = vim.lsp.get_client_by_id(ctx.client_id)
             if not client then
                 return
@@ -73,17 +62,65 @@ local handlers = {
             return
         end
 
-        notify(params.message, KindToLevel[params.kind])
+        notify(res.message, KindToLevel[res.kind])
     end,
-    featureFlagsNotification = function(_err, params, _ctx)
-        if not params or not params.ic then
+
+    ---@param res {ic: boolean}
+    featureFlagsNotification = function(_err, res, _ctx)
+        if not res or not res.ic then
             notify_once('Inline completion is disabled', vim.log.levels.WARN)
             return
         end
     end,
+
+    ---@param res {command: lsp.Command, userCode: string, verificationUri: string}
+    signIn = function(err, res, ctx)
+        if err then
+            notify('Failed to sign in: ' .. vim.inspect(err), vim.log.levels.ERROR)
+            return
+        end
+
+        local client = vim.lsp.get_client_by_id(ctx.client_id)
+        if not client then
+            return
+        end
+
+        vim.fn.setreg('+', res.userCode)
+
+        vim.print(string.format(
+            [[If browser does not open automatically, please visit: %s
+Enter the code: %s]],
+            res.verificationUri,
+            res.userCode
+        ))
+
+        client:exec_cmd(res.command, { bufnr = ctx.bufnr }, function(err, res)
+            if err then
+                notify('Failed to open browser: ' .. vim.inspect(err), vim.log.levels.WARN)
+                return
+            end
+            if res.status == 'OK' then
+                notify('Successfully signed in as: ' .. res.user, vim.log.levels.INFO)
+            else
+                notify('Failed to sign in: ' .. vim.inspect(res), vim.log.levels.ERROR)
+            end
+        end)
+    end,
 }
 
 local version = vim.version()
+
+vim.api.nvim_create_autocmd('BufWinEnter', {
+    group = vim.api.nvim_create_augroup('dotvim.lsp.copilot_ls', { clear = true }),
+    callback = function(args)
+        local client = vim.lsp.get_clients({ bufnr = args.buf, name = 'copilot-ls' })[1]
+        if not client then
+            return
+        end
+        local params = vim.lsp.util.make_text_document_params(args.buf)
+        client:notify(methods.textDocument_didFocus, params)
+    end,
+})
 
 ---@type vim.lsp.Config
 return {
