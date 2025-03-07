@@ -186,7 +186,7 @@ function howto() {
     local spinner_pid=$!
 
     # trap SIGINT to handle Ctrl-C
-    trap 'kill $spinner_pid 2>/dev/null' INT
+    trap 'kill $spinner_pid 2>/dev/null' INT TERM
 
     local output=$(echo $input | llm-cli)
 
@@ -194,6 +194,33 @@ function howto() {
     wait
 
     print -z "$output"
+}
+
+# commit for me
+function cfm() {
+    # suppressing '[job_id] pid' output
+    setopt LOCAL_OPTIONS NO_MONITOR NO_NOTIFY
+    spinner --style dots --suffix " Generating commit message..." &
+    local spinner_pid=$!
+
+    # trap SIGINT to handle Ctrl-C
+    trap 'kill $spinner_pid 2>/dev/null' INT TERM
+
+    local commit_msg
+    if ! commit_msg=$(git diff --staged | llm-cli --role=commit 2>&1); then
+        # Stop the spinning animation by killing its process
+        kill $spinner_pid
+        wait $spinner_pid 2>/dev/null  # Wait for the process to terminate and suppress error messages
+
+      echo ''
+      echo "Failed to generate the commit message: ${commit_msg}"
+      echo "Set SKIP_LLM_GITHOOK=1 to skip this hook"
+      exit 1
+    fi
+
+    kill $spinner_pid
+    wait $spinner_pid 2>/dev/null
+    git commit -e -m "${commit_msg}" $@
 }
 
 function tgo() {

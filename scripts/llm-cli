@@ -30,7 +30,7 @@ Create a commit message based on the Conventional Commit Convention using the pr
 
 - Title: Start with a commit type (e.g., fix, feat, refactor), include an optional scope in parentheses, and add a concise description within 74 characters, not ending with a period.
 - Body: Provide more context or rationale behind the changes with detailed descriptions or bullet points.
-- Footer: Add metadata like BREAKING CHANGE, Closes #<issue_id>, etc., if appropriate.
+- Footer: Add metadata like BREAKING CHANGE, if appropriate.
 - Emojis: NO emojis.
 - Line Breaks: Insert line breaks thoughtfully, mainly after periods.
 - Semantic Release: Ensure the message aligns with semantic release guidelines for classifying release types.
@@ -41,9 +41,7 @@ Commit Types:
 - fix: Address issues to ensure functionality.
 - feat: Introduce new features or functionalities.
 - Additional types: build, chore, style, test, docs, perf, ci, revert, wip as previously detailed.
-- Footer Types:
 
-Include BREAKING CHANGE, Closes, Implements, Author, Co-authored-by, Signed-off-by, Acked-by, Reviewed-by, Tested-by, Refs as outlined earlier.
 Craft the commit message focusing solely on the provided details, avoiding extraneous information or assumptions. Do not wrap your response in any markdown or code block syntax!
 """,
 }
