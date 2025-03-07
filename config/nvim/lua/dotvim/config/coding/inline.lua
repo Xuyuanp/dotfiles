@@ -20,8 +20,9 @@ local default_opts = {
         end
         return item
     end,
-    new_params = function(client, _bufnr, params)
+    new_params = function(client, bufnr, params)
         if client.name == 'copilot-ls' then
+            params.textDocument.version = vim.lsp.util.buf_versions[bufnr]
             params.formattingOptions = {
                 tabSize = vim.fn.shiftwidth(),
                 insertSpaces = vim.o.expandtab,
@@ -137,7 +138,10 @@ function source:get_completions(ctx, callback)
     local triggerKind = ctx.trigger.kind == 'Invoked' and TriggerKind.Invoked or TriggerKind.Automatic
     local new_params = function(client, bufnr)
         local params = vim.lsp.util.make_position_params(0, client.offset_encoding) --[[@as lsp.InlineCompletionParams]]
-        params.context = { triggerKind = triggerKind }
+        params.context = {
+            triggerKind = triggerKind,
+            selectedCompletionInfo = nil,
+        }
         return self.opts.new_params(client, bufnr, params)
     end
 
