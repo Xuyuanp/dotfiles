@@ -63,7 +63,7 @@
     ~/.config/neovide: config/neovide
     ~/.local/bin/osc52-yank: scripts/osc52-yank
     ~/.local/bin/spinner: scripts/spinner
-    ~/.local/bin/howto-cli: scripts/howto-cli
+    ~/.local/bin/llm-cli: scripts/llm-cli
     ~/.editorconfig: editorconfig
 
     # for linux

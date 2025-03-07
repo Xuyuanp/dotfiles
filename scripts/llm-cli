@@ -3,12 +3,14 @@ import json
 import os
 import sys
 from abc import ABC, abstractmethod
+from argparse import ArgumentParser
 
 import requests
 
 os_name = "MacOS" if os.uname().sysname == "Darwin" else "Linux"
 
-system_prompt = f"""
+prompts_lib = {
+    "howto": f"""
 You are a Unix shell assistant. Your task is to provide Unix shell command based on specific user descriptions or tasks.
 Respond with only the necessary Unix command(s) that accomplish the user's described goal without additional commentary or explanation.
 
@@ -22,7 +24,29 @@ Respond with only the necessary Unix command(s) that accomplish the user's descr
 - Output should be in plain text, consisting exclusively of the command needed to achieve the task as described by the user.
 - Do not use markdown or any extra characters, just the shell command itself.
 - If multiple commands are needed, join them with AND signs (&&).
-"""
+""",
+    "commit": """
+Create a commit message based on the Conventional Commit Convention using the provided 'git diff --staged' output. The message should succinctly summarize the changes and their impact, following these guidelines:
+
+- Title: Start with a commit type (e.g., fix, feat, refactor), include an optional scope in parentheses, and add a concise description within 74 characters, not ending with a period.
+- Body: Provide more context or rationale behind the changes with detailed descriptions or bullet points.
+- Footer: Add metadata like BREAKING CHANGE, Closes #<issue_id>, etc., if appropriate.
+- Emojis: NO emojis.
+- Line Breaks: Insert line breaks thoughtfully, mainly after periods.
+- Semantic Release: Ensure the message aligns with semantic release guidelines for classifying release types.
+
+Commit Types:
+
+- refactor: Improve internal structure without altering external behavior.
+- fix: Address issues to ensure functionality.
+- feat: Introduce new features or functionalities.
+- Additional types: build, chore, style, test, docs, perf, ci, revert, wip as previously detailed.
+- Footer Types:
+
+Include BREAKING CHANGE, Closes, Implements, Author, Co-authored-by, Signed-off-by, Acked-by, Reviewed-by, Tested-by, Refs as outlined earlier.
+Craft the commit message focusing solely on the provided details, avoiding extraneous information or assumptions. Do not wrap your response in any markdown or code block syntax!
+""",
+}
 
 
 class Adapter(ABC):
@@ -48,7 +72,7 @@ class Adapter(ABC):
             "Content-Type": "application/json",
         }
 
-    def howto(self, input: str) -> str:
+    def ask(self, input: str, system_prompt: str = "") -> str:
         payload = {
             "model": self.model,
             "messages": [
@@ -106,7 +130,7 @@ class Copilot(Adapter):
 
     @property
     def model(self) -> str:
-        return "gpt-4o"
+        return os.environ.get("COPILOT_MODEL", "gpt-4o")
 
     @property
     def headers(self) -> dict[str, str]:
@@ -133,17 +157,34 @@ class Deepseek(Adapter):
         return "deepseek-chat"
 
 
-def main():
-    adapters: dict[str, Adapter] = {
-        "copilot": Copilot(),
-        "deepseek": Deepseek(),
-    }
+adapters: dict[str, Adapter] = {
+    "copilot": Copilot(),
+    "deepseek": Deepseek(),
+}
 
-    adapter_name = os.environ.get("HOWTO_ADAPTER", "copilot")
-    adapter = adapters[adapter_name]
+parser = ArgumentParser()
+parser.add_argument(
+    "--adapter",
+    type=str,
+    default=os.environ.get("LLM_ADAPTER", "copilot"),
+    choices=adapters.keys(),
+)
+parser.add_argument(
+    "--role",
+    type=str,
+    default="howto",
+    choices=prompts_lib.keys(),
+)
+
+
+def main():
+    args = parser.parse_args()
+
+    adapter = adapters[args.adapter]
+    system_prompt = prompts_lib[args.role]
 
     input = sys.stdin.read()
-    ans = adapter.howto(input)
+    ans = adapter.ask(input, system_prompt)
     print(ans)
 
 

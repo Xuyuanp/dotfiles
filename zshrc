@@ -188,7 +188,7 @@ function howto() {
     # trap SIGINT to handle Ctrl-C
     trap 'kill $spinner_pid 2>/dev/null' INT
 
-    local output=$(echo $input | howto-cli)
+    local output=$(echo $input | llm-cli)
 
     kill $spinner_pid 2>/dev/null
     wait
