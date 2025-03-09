@@ -4,7 +4,7 @@ return {
     {
         'CopilotC-Nvim/CopilotChat.nvim',
         branch = 'main',
-        cmd = { 'CopilotChat', 'Howto' },
+        cmd = { 'CopilotChat' },
         dependencies = {
             'zbirenbaum/copilot.lua',
             'nvim-lua/plenary.nvim',
@@ -44,6 +44,19 @@ return {
             require('dotvim.config.ai'):init()
         end,
         opts = {
+            adapters = {
+                copilot = function()
+                    return require('codecompanion.adapters').extend('copilot', {
+                        schema = {
+                            model = {
+                                default = function()
+                                    return vim.env.COPILOT_MODEL or 'gpt-4o'
+                                end,
+                            },
+                        },
+                    })
+                end,
+            },
             strategies = {
                 chat = {
                     roles = {
