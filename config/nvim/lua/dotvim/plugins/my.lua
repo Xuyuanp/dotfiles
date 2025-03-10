@@ -78,9 +78,9 @@ return {
                 'Yanil',
             }
             vim.g.scrollbar_highlight = {
-                head = 'Comment',
-                body = 'Comment',
-                tail = 'Comment',
+                head = 'ScrollbarHead',
+                body = 'ScrollbarBody',
+                tail = 'ScrollbarTail',
             }
             vim.g.scrollbar_shape = {
                 -- head = '⍋',

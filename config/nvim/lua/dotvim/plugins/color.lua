@@ -51,6 +51,10 @@ return {
                     LspSignatureActiveParameter = { underline = true, bold = true, italic = true },
 
                     TelescopeBorder = { bg = 'NONE' },
+
+                    ScrollbarHead = { fg = theme.syn.comment, bg = 'NONE', italic = false, bold = false },
+                    ScrollbarBody = { fg = theme.syn.comment, bg = 'NONE', italic = false, bold = false },
+                    ScrollbarTail = { fg = theme.syn.comment, bg = 'NONE', italic = false, bold = false },
                 }
             end,
         },
