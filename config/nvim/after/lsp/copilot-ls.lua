@@ -24,27 +24,25 @@ local methods = {
     textDocument_didFocus = 'textDocument/didFocus',
 }
 
----@param client vim.lsp.Client
----@param ctx lsp.HandlerContext
-local function sign_in(client, ctx)
+---@param client_id integer
+---@param bufnr integer
+local function sign_in(client_id, bufnr)
+    local client = vim.lsp.get_client_by_id(client_id)
+    if not client then
+        return
+    end
     for _, req in pairs(client.requests) do
         if req.type == 'pending' and req.method == methods.signIn then
             return
         end
     end
-    client:request(methods.signIn, vim.empty_dict(), nil, ctx.bufnr)
+    client:request(methods.signIn, vim.empty_dict(), nil, bufnr)
 end
 
 ---@type table<string, lsp.Handler>
 local handlers = {
     ---@param res {busy: boolean, kind: 'Normal'|'Error'|'Warning'|'Inactive', message: string}
     didChangeStatus = function(_err, res, ctx)
-        local __params_example = {
-            busy = false,
-            kind = 'Error',
-            message = 'You are not signed into GitHub. Please sign in to use Copilot.',
-        }
-
         if res.busy then
             return
         end
@@ -53,12 +51,9 @@ local handlers = {
             return
         end
 
-        if res.kind == 'Error' and res.message:find('not signed') then
-            local client = vim.lsp.get_client_by_id(ctx.client_id)
-            if not client then
-                return
-            end
-            sign_in(client, ctx)
+        -- message: You are not signed into GitHub. Please sign in to use Copilot.
+        if res.kind == 'Error' and res.message:find('not signed into') then
+            sign_in(ctx.client_id, ctx.bufnr)
             return
         end
 
@@ -108,8 +103,6 @@ Enter the code: %s]],
     end,
 }
 
-local version = vim.version()
-
 vim.api.nvim_create_autocmd('BufWinEnter', {
     group = vim.api.nvim_create_augroup('dotvim.lsp.copilot_ls', { clear = true }),
     callback = function(args)
@@ -121,6 +114,8 @@ vim.api.nvim_create_autocmd('BufWinEnter', {
         client:notify(methods.textDocument_didFocus, params)
     end,
 })
+
+local version = vim.version()
 
 ---@type vim.lsp.Config
 return {
