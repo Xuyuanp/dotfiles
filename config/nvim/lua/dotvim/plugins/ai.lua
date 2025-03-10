@@ -48,6 +48,7 @@ return {
             adapters = {
                 copilot = function()
                     return require('codecompanion.adapters').extend('copilot', {
+                        icon = '',
                         schema = {
                             model = {
                                 default = function()
@@ -61,7 +62,10 @@ return {
             strategies = {
                 chat = {
                     roles = {
-                        llm = ' Copilot',
+                        llm = function(adapter)
+                            local icon = adapter.icon and (adapter.icon .. ' ') or ''
+                            return 'CodeCompanion (' .. icon .. adapter.formatted_name .. ')'
+                        end,
                     },
                 },
             },
@@ -132,6 +136,42 @@ return {
 
                                 -- extra
                                 kind = 'Codeium',
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    },
+
+    {
+        'ravitemer/mcphub.nvim',
+        dependencies = {
+            'nvim-lua/plenary.nvim',
+        },
+        lazy = false,
+        build = 'npm install -g mcp-hub@latest',
+        opts = {
+            port = 3000,
+            config = vim.fn.expand('~/.mcpservers.json'),
+        },
+        specs = {
+            {
+                'olimorris/codecompanion.nvim',
+                optional = true,
+                opts = {
+                    strategies = {
+                        chat = {
+                            tools = {
+                                ['mcp'] = {
+                                    callback = function()
+                                        return require('mcphub.extensions.codecompanion')
+                                    end,
+                                    description = 'Call tools and resources from the MCP Servers',
+                                    opts = {
+                                        requires_approval = true,
+                                    },
+                                },
                             },
                         },
                     },
