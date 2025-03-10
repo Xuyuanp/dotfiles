@@ -3,7 +3,7 @@ local features = require('dotvim.features')
 return {
     {
         'CopilotC-Nvim/CopilotChat.nvim',
-        branch = 'main',
+        version = '*',
         cmd = { 'CopilotChat' },
         dependencies = {
             'zbirenbaum/copilot.lua',
@@ -18,6 +18,7 @@ return {
 
     {
         'olimorris/codecompanion.nvim',
+        version = '*',
         cmd = {
             'CodeCompanion',
             'CodeCompanionChat',
