@@ -1,8 +1,8 @@
 {
   "mcpServers": {
     "time": {
-      "command": "docker",
-      "args": ["run", "-i", "--rm", "mcp/time"]
+      "command": "uvx",
+      "args": ["mcp-server-time", "--local-timezone", "Asia/Shanghai"]
     },
     "git": {
       "args": ["mcp-server-git"],
