@@ -149,21 +149,24 @@ return {
         dependencies = {
             'nvim-lua/plenary.nvim',
         },
-        lazy = false,
+        cmd = { 'MCPHub' },
         build = 'npm install -g mcp-hub@latest',
         opts = {
             port = 3000,
-            config = vim.fn.expand('~/.mcpservers.json'),
+            config = vim.fn.expand('~/.config/mcp/mcpservers.json'),
         },
         specs = {
             {
                 'olimorris/codecompanion.nvim',
                 optional = true,
+                dependencies = {
+                    'ravitemer/mcphub.nvim',
+                },
                 opts = {
                     strategies = {
                         chat = {
                             tools = {
-                                ['mcp'] = {
+                                mcp = {
                                     callback = function()
                                         return require('mcphub.extensions.codecompanion')
                                     end,
