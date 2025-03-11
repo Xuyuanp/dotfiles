@@ -61,6 +61,7 @@
     ~/.config/zellij: config/zellij
     ~/.config/nvim: config/nvim
     ~/.config/neovide: config/neovide
+    ~/.config/mcp: config/mcp
     ~/.local/bin/osc52-yank: scripts/osc52-yank
     ~/.local/bin/spinner: scripts/spinner
     ~/.local/bin/llm-cli: scripts/llm-cli
