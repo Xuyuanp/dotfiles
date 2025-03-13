@@ -63,8 +63,15 @@ return {
                 chat = {
                     roles = {
                         llm = function(adapter)
-                            local icon = adapter.icon and (adapter.icon .. ' ') or ''
-                            return 'CodeCompanion (' .. icon .. adapter.formatted_name .. ')'
+                            local formatted = adapter.formatted_name
+                            if adapter.icon then
+                                formatted = adapter.icon .. ' ' .. formatted
+                            end
+                            local model = adapter.parameters.model and adapter.parameters.model()
+                            if model then
+                                formatted = formatted .. '/' .. model
+                            end
+                            return 'CodeCompanion (' .. formatted .. ')'
                         end,
                     },
                 },
