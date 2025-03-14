@@ -153,6 +153,7 @@ function M.setup()
         },
         pattern = {
             ['.*/templates/.*%.yaml'] = 'helm',
+            ['.*/zed/.+%.json'] = 'jsonc',
         },
     })
 
