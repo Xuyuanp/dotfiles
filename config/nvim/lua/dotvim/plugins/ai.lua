@@ -84,7 +84,7 @@ return {
                         height = 0.8,
                         width = 0.8,
                         border = 'rounded',
-                        relative = 'win',
+                        relative = 'editor',
                     },
                 },
             },
