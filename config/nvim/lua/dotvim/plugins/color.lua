@@ -49,12 +49,13 @@ return {
                     DapLogPoint = { fg = theme.diag.info },
 
                     LspSignatureActiveParameter = { underline = true, bold = true, italic = true },
+                    LspCodeLens = { fg = theme.ui.special },
 
                     TelescopeBorder = { bg = 'NONE' },
 
-                    ScrollbarHead = { fg = theme.syn.comment, bg = 'NONE', italic = false, bold = false },
-                    ScrollbarBody = { fg = theme.syn.comment, bg = 'NONE', italic = false, bold = false },
-                    ScrollbarTail = { fg = theme.syn.comment, bg = 'NONE', italic = false, bold = false },
+                    ScrollbarHead = { fg = theme.ui.nontext, bg = 'NONE', italic = false, bold = false },
+                    ScrollbarBody = { fg = theme.ui.nontext, bg = 'NONE', italic = false, bold = false },
+                    ScrollbarTail = { fg = theme.ui.nontext, bg = 'NONE', italic = false, bold = false },
                 }
             end,
         },
