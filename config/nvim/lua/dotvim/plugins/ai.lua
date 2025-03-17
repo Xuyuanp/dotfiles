@@ -42,7 +42,7 @@ return {
             vim.cmd('cabbrev ccc CodeCompanionChat')
             vim.cmd('cabbrev cca CodeCompanionActions')
 
-            require('dotvim.config.ai'):init()
+            require('dotvim.config.ai.codecompanion').init_progress()
         end,
         opts = {
             adapters = {
@@ -52,7 +52,7 @@ return {
                         schema = {
                             model = {
                                 default = function()
-                                    return vim.env.COPILOT_MODEL or 'gpt-4o'
+                                    return vim.env.COPILOT_MODEL or 'gpt-4o-2024-11-20'
                                 end,
                             },
                         },
@@ -63,14 +63,7 @@ return {
                 chat = {
                     roles = {
                         llm = function(adapter)
-                            local formatted = adapter.formatted_name
-                            if adapter.icon then
-                                formatted = adapter.icon .. ' ' .. formatted
-                            end
-                            local model = adapter.parameters.model and adapter.parameters.model()
-                            if model then
-                                formatted = formatted .. '/' .. model
-                            end
+                            local formatted = require('dotvim.config.ai.codecompanion').format_adapter(adapter)
                             return 'CodeCompanion (' .. formatted .. ')'
                         end,
                     },
