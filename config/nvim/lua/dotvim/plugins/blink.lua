@@ -30,7 +30,8 @@ local M = {
                 ghost_text = { enabled = true },
                 trigger = {
                     show_on_blocked_trigger_characters = function()
-                        if vim.bo.filetype == 'go' then
+                        local ft = vim.bo.filetype
+                        if ft == 'go' or ft == 'python' then
                             return { ':' }
                         end
 
