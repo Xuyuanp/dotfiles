@@ -12,7 +12,7 @@ end
 
 local langs = {
     gopls = {
-        filetypes = { 'go', 'gomod', 'gotmpl', 'helm' },
+        filetypes = { 'go', 'gomod', 'gotmpl' },
         settings = {
             gopls = {
                 usePlaceholders = false,
