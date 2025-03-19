@@ -153,7 +153,8 @@ function source:get_completions(ctx, callback)
     return gen_cancel(pending)
 end
 
-function source:execute(ctx, item, callback)
+function source:execute(ctx, item, callback, default)
+    default()
     local client = vim.lsp.get_client_by_id(item.client_id)
     if client and item.command then
         client:exec_cmd(item.command, { bufnr = ctx.bufnr }, function()
