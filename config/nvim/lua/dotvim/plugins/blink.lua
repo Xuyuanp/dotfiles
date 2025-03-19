@@ -13,7 +13,6 @@ local M = {
             completion = {
                 documentation = {
                     auto_show = true,
-                    window = { border = 'rounded' },
                 },
                 menu = {
                     draw = {
@@ -39,7 +38,7 @@ local M = {
                     end,
                 },
             },
-            signature = { enabled = true, window = { border = 'rounded' } },
+            signature = { enabled = true },
             cmdline = { enabled = false },
             sources = {
                 default = { 'lsp', 'path', 'snippets', 'buffer', 'inline' },

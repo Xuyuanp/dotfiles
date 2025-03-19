@@ -144,6 +144,8 @@ function M.setup()
 
     opt.winblend = features.transparent and 0 or 20
 
+    opt.winborder = 'rounded'
+
     vim.filetype.add({
         filename = {
             ['.envrc'] = 'sh',
@@ -168,7 +170,6 @@ function M.setup()
         },
         float = {
             source = true,
-            border = 'rounded',
         },
         virtual_text = true,
         jump = {

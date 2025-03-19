@@ -225,9 +225,6 @@ return {
                     changedelete = { text = '┃' },
                     untracked = { text = '┃' },
                 },
-                preview_config = {
-                    border = 'rounded',
-                },
                 current_line_blame = true,
                 current_line_blame_formatter = '@<author> / <abbrev_sha> <summary> / <author_time:%R>',
                 on_attach = function(bufnr)
@@ -401,7 +398,6 @@ return {
             end,
             preview = {
                 win_config = {
-                    border = 'rounded',
                     winblend = vim.o.winblend,
                 },
                 mappings = {

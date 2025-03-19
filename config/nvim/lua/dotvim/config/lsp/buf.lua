@@ -16,7 +16,6 @@ local function floating_opts()
     local max_width = math.ceil(vim.o.columns * 0.8) - 4
     local width = math.min(80, max_width)
     local default = {
-        border = 'rounded',
         width = width,
         max_width = max_width,
         title_pos = 'center',

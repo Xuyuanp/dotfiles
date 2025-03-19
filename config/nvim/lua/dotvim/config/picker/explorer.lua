@@ -69,7 +69,6 @@ local function git_diff(path)
     vim.wo[winnr].cursorline = true
     vim.wo[winnr].number = true
     vim.api.nvim_win_set_config(winnr, {
-        border = 'rounded',
         title = 'Diff Patch',
         title_pos = 'center',
     })

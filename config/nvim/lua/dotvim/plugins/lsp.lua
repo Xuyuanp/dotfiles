@@ -83,7 +83,6 @@ return {
             notification = {
                 window = {
                     winblend = vim.o.winblend,
-                    border = 'rounded',
                 },
             },
         },

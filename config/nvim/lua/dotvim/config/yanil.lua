@@ -31,7 +31,6 @@ local function git_diff(_tree, node)
     vim.wo[winnr].winhl = 'NormalFloat:'
     vim.wo[winnr].number = true
     vim.api.nvim_win_set_config(winnr, {
-        border = 'rounded',
         title = 'Diff Patch',
         title_pos = 'center',
     })
