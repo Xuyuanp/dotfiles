@@ -73,6 +73,19 @@ function M.setup()
         },
     }
     require('lazy').setup(plugins, opts)
+
+    vim.api.nvim_create_autocmd('User', {
+        group = vim.api.nvim_create_augroup('dotvim.lazy', { clear = true }),
+        pattern = 'VeryLazy',
+        callback = function(args)
+            vim.defer_fn(function()
+                vim.api.nvim_exec_autocmds('User', {
+                    pattern = 'SuperLazy',
+                    data = args.data,
+                })
+            end, 50)
+        end,
+    })
 end
 
 return M

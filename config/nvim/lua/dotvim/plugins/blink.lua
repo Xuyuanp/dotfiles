@@ -5,7 +5,7 @@ local M = {
             'rafamadriz/friendly-snippets',
         },
         version = '*',
-        event = { 'InsertEnter' },
+        event = { 'User SuperLazy' },
         ---@module 'blink.cmp'
         ---@type blink.cmp.Config
         opts = {
@@ -42,7 +42,7 @@ local M = {
             signature = { enabled = true, window = { border = 'rounded' } },
             cmdline = { enabled = false },
             sources = {
-                default = { 'lsp', 'path', 'snippets', 'buffer', 'inline' },
+                default = { 'lsp', 'path', 'snippets', 'buffer', 'inline', 'omni' },
                 per_filetype = {},
                 providers = {
                     lazydev = {
