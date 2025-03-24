@@ -16,6 +16,8 @@ end
 ---@type table<string, dotvim.util.ts.InjectionFormatter>
 local formatters = {
     json = cmd_formatter({ 'jq' }),
+    sql = cmd_formatter({ 'sqlformat', '--reindent', '--indent_columns', '--keywords=upper', '-' }),
+    yaml = cmd_formatter({ 'yq', '--no-colors' }),
 }
 
 ---@class dotvim.util.ts.Injection
