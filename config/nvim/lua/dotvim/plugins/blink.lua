@@ -15,6 +15,7 @@ local M = {
                     auto_show = true,
                 },
                 menu = {
+                    border = 'none',
                     draw = {
                         treesitter = { 'lsp', 'copilot', 'inline' },
                         padding = 1,
@@ -38,7 +39,7 @@ local M = {
                     end,
                 },
             },
-            signature = { enabled = true },
+            signature = { enabled = true, window = { border = 'rounded' } },
             cmdline = { enabled = false },
             sources = {
                 default = { 'lsp', 'path', 'snippets', 'buffer', 'inline' },
