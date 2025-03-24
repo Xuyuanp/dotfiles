@@ -35,6 +35,9 @@ return {
         cmd = 'Mason',
         opts = {
             PATH = 'append',
+            ui = {
+                border = 'rounded',
+            },
         },
     },
 
