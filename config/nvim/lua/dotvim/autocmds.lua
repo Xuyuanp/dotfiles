@@ -1,7 +1,7 @@
 local M = {}
 
 function M.setup()
-    local group_id = vim.api.nvim_create_augroup('dotvim_init', { clear = true })
+    local group_id = vim.api.nvim_create_augroup('dotvim.init', { clear = true })
 
     vim.api.nvim_create_autocmd({ 'TextYankPost' }, {
         group = group_id,

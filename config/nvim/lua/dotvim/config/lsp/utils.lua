@@ -1,5 +1,5 @@
 -- mostly copied from lazy vim
-local group_id = vim.api.nvim_create_augroup('dotvim_config_lsp_utils', { clear = true })
+local group_id = vim.api.nvim_create_augroup('dotvim.config.lsp.utils', { clear = true })
 
 local M = {}
 

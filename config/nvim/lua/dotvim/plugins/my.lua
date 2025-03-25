@@ -90,7 +90,7 @@ return {
                 tail = '┃',
             }
 
-            local group_id = vim.api.nvim_create_augroup('dotvim_scrollbar', { clear = true })
+            local group_id = vim.api.nvim_create_augroup('dotvim.scrollbar', { clear = true })
 
             vim.api.nvim_create_autocmd({ 'WinScrolled', 'WinResized', 'InsertLeave' }, {
                 group = group_id,

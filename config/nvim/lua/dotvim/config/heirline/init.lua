@@ -98,7 +98,7 @@ function M.setup()
         winbar = M.winbar(),
     })
 
-    local group_id = vim.api.nvim_create_augroup('dotvim_heirline', { clear = true })
+    local group_id = vim.api.nvim_create_augroup('dotvim.heirline', { clear = true })
     vim.api.nvim_create_autocmd('ColorScheme', {
         group = group_id,
         callback = function()
