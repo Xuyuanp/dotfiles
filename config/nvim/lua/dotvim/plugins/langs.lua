@@ -14,6 +14,11 @@ return {
         ft = { 'markdown' },
         opts = {
             file_types = { 'markdown' },
+            heading = {
+                position = 'inline',
+                icons = { ' ', ' ', ' ', ' ', ' ', ' ' },
+                right_pad = 1,
+            },
         },
         opts_extend = { 'file_types' },
         dependencies = { 'nvim-treesitter/nvim-treesitter' },

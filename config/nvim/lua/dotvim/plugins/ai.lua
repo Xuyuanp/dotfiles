@@ -58,14 +58,31 @@ return {
                         },
                     })
                 end,
+                openrouter = function()
+                    return require('codecompanion.adapters').extend('openai_compatible', {
+                        name = 'openrouter',
+                        formatted_name = 'OpenRouter',
+                        icon = '󰃻',
+                        env = {
+                            api_key = 'OPENROUTER_API_KEY',
+                            url = 'https://openrouter.ai/api',
+                        },
+                        schema = {
+                            model = {
+                                default = 'deepseek/deepseek-chat-v3-0324',
+                            },
+                        },
+                    })
+                end,
             },
             strategies = {
                 chat = {
                     roles = {
                         llm = function(adapter)
                             local formatted = require('dotvim.config.ai.codecompanion').format_adapter(adapter)
-                            return 'CodeCompanion (' .. formatted .. ')'
+                            return '**' .. formatted .. '**'
                         end,
+                        user = ' Me',
                     },
                 },
             },
@@ -78,6 +95,9 @@ return {
                         width = 0.8,
                         border = 'rounded',
                         relative = 'editor',
+                        opts = {
+                            number = false,
+                        },
                     },
                 },
             },
