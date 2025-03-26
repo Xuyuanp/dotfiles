@@ -61,7 +61,7 @@ function M.format_adapter(adapter)
     if adapter.icon then
         formatted = adapter.icon .. ' ' .. formatted
     end
-    local model = adapter.model or adapter.parameters.model
+    local model = adapter.model or adapter.parameters and adapter.parameters.model
     if model then
         if type(model) == 'function' then
             model = model()
