@@ -80,7 +80,7 @@ return {
                     roles = {
                         llm = function(adapter)
                             local formatted = require('dotvim.config.ai.codecompanion').format_adapter(adapter)
-                            return '**' .. formatted .. '**'
+                            return formatted
                         end,
                         user = ' Me',
                     },

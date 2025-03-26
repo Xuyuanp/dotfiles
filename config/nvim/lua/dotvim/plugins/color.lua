@@ -36,6 +36,8 @@ return {
                     Directory = { bold = true },
                     ['@comment.documentation'] = { link = 'SpecialComment' },
 
+                    ['@markup.heading'] = { bold = true, fg = theme.syn.fun },
+
                     CursorLine = { bg = theme.ui.bg_p1 },
                     Visual = { bg = theme.ui.bg_m1 },
 
