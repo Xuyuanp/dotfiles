@@ -84,6 +84,13 @@ return {
                         end,
                         user = ' Me',
                     },
+                    keymaps = {
+                        change_adapter = {
+                            modes = {
+                                n = '<A-m>',
+                            },
+                        },
+                    },
                 },
             },
             display = {
