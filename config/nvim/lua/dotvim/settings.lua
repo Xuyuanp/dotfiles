@@ -160,6 +160,7 @@ function M.setup()
     })
 
     vim.diagnostic.config({
+        severity_sort = true,
         signs = {
             text = {
                 [vim.diagnostic.severity.ERROR] = M.icons.diagnostic.error,
@@ -168,13 +169,7 @@ function M.setup()
                 [vim.diagnostic.severity.HINT] = M.icons.diagnostic.hint,
             },
         },
-        float = {
-            source = true,
-        },
-        virtual_text = true,
-        jump = {
-            float = true,
-        },
+        virtual_lines = true,
     })
 
     if vim.fn.executable('ghostty') then
