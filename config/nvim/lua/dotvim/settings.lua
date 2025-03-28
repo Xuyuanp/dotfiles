@@ -169,7 +169,8 @@ function M.setup()
                 [vim.diagnostic.severity.HINT] = M.icons.diagnostic.hint,
             },
         },
-        virtual_lines = true,
+        virtual_text = true,
+        jump = { float = true },
     })
 
     if vim.fn.executable('ghostty') then
