@@ -183,7 +183,9 @@ function M.setup()
             },
         },
         virtual_text = true,
-        jump = { float = true },
+        virtual_lines = {
+            current_line = true,
+        },
     })
 
     if vim.fn.executable('ghostty') then
