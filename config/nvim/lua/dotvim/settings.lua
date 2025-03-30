@@ -146,6 +146,19 @@ function M.setup()
 
     opt.winborder = 'rounded'
 
+    vim.opt.fillchars:append({
+        fold = ' ',
+        foldopen = '',
+        foldsep = ' ',
+        foldclose = '',
+    })
+    vim.o.foldcolumn = '0' -- disabled foldcolumn to avoid display the number of fold level
+    vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+    vim.o.foldlevelstart = 99
+    vim.o.foldmethod = 'expr'
+    vim.o.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+    vim.o.foldenable = true
+
     vim.filetype.add({
         filename = {
             ['.envrc'] = 'sh',

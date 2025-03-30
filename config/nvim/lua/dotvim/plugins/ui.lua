@@ -336,18 +336,6 @@ return {
         'kevinhwang91/nvim-ufo',
         dependencies = 'kevinhwang91/promise-async',
         event = 'VeryLazy',
-        init = function()
-            vim.opt.fillchars:append({
-                fold = ' ',
-                foldopen = '',
-                foldsep = ' ',
-                foldclose = '',
-            })
-            vim.o.foldcolumn = '0' -- disabled foldcolumn to avoid display the number of fold level
-            vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
-            vim.o.foldlevelstart = 99
-            vim.o.foldenable = true
-        end,
         keys = {
             {
                 ']z',
