@@ -117,8 +117,8 @@ return {
                         title = '{title} {live} {flags}',
                         title_pos = 'center',
                         { win = 'input', height = 1, border = 'bottom' },
-                        { win = 'list', height = 5, border = 'none' }, -- set height
-                        { win = 'preview', title = '{preview}', height = 0.4, border = 'top' },
+                        { win = 'list', border = 'none' },
+                        { win = 'preview', title = '{preview}', height = 0.8, border = 'top' },
                     },
                 },
             },
