@@ -39,7 +39,9 @@ local function git_diff(_tree, node)
     vim.bo[bufnr].filetype = 'diff'
     vim.bo[bufnr].bufhidden = 'wipe'
     vim.bo[bufnr].swapfile = false
+    vim.bo[bufnr].undolevels = -1
     vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, diff)
+    vim.bo[bufnr].undolevels = 1000
 
     -- idk why, but i have to set foldmethod later
     vim.defer_fn(function()
