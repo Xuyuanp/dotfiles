@@ -74,7 +74,7 @@ local langs = {
                         'assert',
                         'print',
                     },
-                    unusedLocalExclude = { '_*' },
+                    unusedLocalExclude = { '_*', 'self' },
                 },
                 runtime = {
                     version = 'LuaJIT',
