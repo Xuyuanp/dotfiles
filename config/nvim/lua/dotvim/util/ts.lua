@@ -72,6 +72,7 @@ local function parse_injections(bufnr)
 
     ---@param node TSNode
     ---@param metadata vim.treesitter.query.TSMetadata
+    ---@return dotvim.util.ts.Injection
     local function to_injection(_id, node, metadata)
         return {
             lang = metadata['injection.language'],
@@ -84,7 +85,7 @@ local function parse_injections(bufnr)
     return caps:filter(should_format):map(to_injection):fold({}, prepend)
 end
 
-function M.format_injections(bufnr)
+function M.format_injections(bufnr, transform)
     local injections = parse_injections(bufnr) or {}
 
     ---@param inj dotvim.util.ts.Injection
@@ -102,8 +103,13 @@ function M.format_injections(bufnr)
         end
 
         local lines = vim.split(formatted, '\n')
+        if transform then
+            inj, lines = transform(inj, lines)
+        end
+
         local start_row, start_col = inj.range[1], inj.range[2]
         local end_row, end_col = inj.range[3], inj.range[4]
+
         vim.api.nvim_buf_set_text(bufnr, start_row, start_col, end_row, end_col, lines)
     end
 

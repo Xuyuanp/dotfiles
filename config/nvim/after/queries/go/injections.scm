@@ -2,8 +2,8 @@
 
 (
  [
-  ; const foo = /* lang */ "..."
-  ; const foo = /* lang */ `...`
+  ; const foo = /* lang:name */ "..."
+  ; const foo = /* lang:name */ `...`
   (
    const_spec
    (comment) @_comment.lang .
@@ -14,8 +14,8 @@
              ]
             )
    )
-  ; foo := /* lang */ "..."
-  ; foo := /* lang */ `...`
+  ; foo := /* lang:name */ "..."
+  ; foo := /* lang:name */ `...`
   (
    short_var_declaration
    (comment) @_comment.lang .
@@ -26,8 +26,8 @@
              ]
             )
    )
-  ; var foo = /* lang */ "..."
-  ; var foo = /* lang */ `...`
+  ; var foo = /* lang:name */ "..."
+  ; var foo = /* lang:name */ `...`
   (
    var_spec
    (comment) @_comment.lang .
@@ -38,8 +38,8 @@
              ]
             )
    )
-  ; fn(/*lang*/ "...")
-  ; fn(/*lang*/ `...`)
+  ; fn(/* lang:name */ "...")
+  ; fn(/* lang:name */ `...`)
   (
    argument_list
    (comment) @_comment.lang .
@@ -48,8 +48,8 @@
     (raw_string_literal (raw_string_literal_content) @injection.content)
     ]
    )
-  ; []byte(/*lang*/ "...")
-  ; []byte(/*lang*/ `...`)
+  ; []byte(/* lang:name */ "...")
+  ; []byte(/* lang:name */ `...`)
   (
    type_conversion_expression
    (comment) @_comment.lang .
@@ -58,8 +58,8 @@
               (raw_string_literal (raw_string_literal_content) @injection.content)
               ]
    )
-  ; []Type{ /*lang*/ "..." }
-  ; []Type{ /*lang*/ `...` }
+  ; []Type{ /* lang:name */ "..." }
+  ; []Type{ /* lang:name */ `...` }
   (
    literal_value
    (comment) @_comment.lang .
@@ -70,8 +70,8 @@
       ]
      )
    )
-  ; map[Type]Type{ key: /*lang*/ "..." }
-  ; map[Type]Type{ key: /*lang*/ `...` }
+  ; map[Type]Type{ key: /* lang:name */ "..." }
+  ; map[Type]Type{ key: /* lang:name */ `...` }
   (
    keyed_element
    (comment) @_comment.lang .
