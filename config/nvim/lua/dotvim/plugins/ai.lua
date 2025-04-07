@@ -15,6 +15,13 @@ return {
             require('CopilotChat').setup(opts)
         end,
     },
+    {
+        'zbirenbaum/copilot.lua',
+        opts = {
+            suggestion = { enabled = false },
+            panel = { enabled = false },
+        },
+    },
 
     {
         'olimorris/codecompanion.nvim',
