@@ -132,4 +132,7 @@ return {
         },
     },
     handlers = handlers,
+    capabilities = {
+        workspace = { workspaceFolders = true },
+    },
 }
