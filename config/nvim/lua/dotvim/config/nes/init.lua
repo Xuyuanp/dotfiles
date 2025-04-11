@@ -50,7 +50,7 @@ Here is the piece of code I am currently editing in %s:
 Based on my most recent edits, what will I do next? Rewrite the code between <current-version> and </current-version> based on what I will do next. Do not skip any lines. Do not be lazy.
 ]]
 
----@class NesContext
+---@class nes.Context
 ---@field bufnr number
 ---@field cursor [integer, integer]
 ---@field original_code string
@@ -61,18 +61,29 @@ Based on my most recent edits, what will I do next? Rewrite the code between <cu
 local Context = {}
 Context.__index = Context
 
+---@return nes.Context
 function Context.new(bufnr)
+    local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(bufnr), ':')
+    local original_code = vim.fn.readfile(filename)
     local self = {
         bufnr = bufnr,
         cursor = vim.api.nvim_win_get_cursor(0),
-        original_code = vim.fn.readfile(vim.api.nvim_buf_get_name(bufnr)),
+        original_code = table.concat(
+            vim.iter(original_code)
+                :enumerate()
+                :map(function(i, line)
+                    return string.format('%d│%s', i, line)
+                end)
+                :totable(),
+            '\n'
+        ),
         edits = vim.diff(
-            vim.fn.readfile(vim.api.nvim_buf_get_name(bufnr)),
+            table.concat(original_code, '\n'),
             table.concat(vim.api.nvim_buf_get_lines(bufnr, 0, -1, false), '\n'),
             { algorithm = 'minimal' }
         ),
+        filename = filename,
         current_version = M.get_current_version(bufnr),
-        filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(bufnr), ':'),
         filetype = vim.bo[bufnr].filetype,
     }
     setmetatable(self, Context)
@@ -89,11 +100,13 @@ function Context:payload()
             {
                 role = 'user',
                 content = UserPromptTemplate:format(
+                    self.filename,
                     self.original_code,
+                    self.filename,
                     self.filename,
                     self.edits,
                     self.filename,
-                    self.filename,
+                    self.filetype,
                     self.current_version
                 ),
             },
@@ -111,12 +124,6 @@ function Context:payload()
             enabled = false,
         },
     }
-end
-
-function M.get_diff(bufnr)
-    local original = vim.fn.readfile(vim.api.nvim_buf_get_name(bufnr))
-    local current = table.concat(vim.api.nvim_buf_get_lines(bufnr, 0, -1, false), '\n')
-    return vim.diff(original, current, { algorithm = 'minimal' })
 end
 
 function M.get_current_version(bufnr)
@@ -137,55 +144,11 @@ function M.get_current_version(bufnr)
     return string.format('%s<|cursor|>%s', table.concat(before_cursor, '\n'), table.concat(after_cursor, '\n'))
 end
 
-function M.get_context(bufnr)
-    local fullpath = vim.api.nvim_buf_get_name(bufnr)
-    local filename = vim.fn.fnamemodify(fullpath, ':.')
-
-    local original = vim.fn.readfile(vim.api.nvim_buf_get_name(bufnr), '')
-    local current = table.concat(vim.api.nvim_buf_get_lines(bufnr, 0, -1, false), '\n')
-    local diff = vim.diff(table.concat(original, '\n'), current, { algorithm = 'minimal' })
-
-    local original_code = table.concat(
-        vim.iter(original)
-            :enumerate()
-            :map(function(i, line)
-                return string.format('%d│%s', i, line)
-            end)
-            :totable(),
-        '\n'
-    )
-    local current_version = M.get_current_version(bufnr)
-    return UserPromptTemplate:format(filename, original_code, filename, filename, diff, filename, vim.bo[bufnr].filetype, current_version),
-        current_version
-end
-
-function M.payload(bufnr)
-    local context, current_version = M.get_context(bufnr)
-    local payload = {
-        messages = {
-            {
-                role = 'system',
-                content = SystemPrompt,
-            },
-            {
-                role = 'user',
-                content = context,
-            },
-        },
-        model = 'copilot-nes-v',
-        temperature = 0,
-        top_p = 1,
-        prediction = {
-            type = 'content',
-            content = string.format('<next-version>\n```go\n%s\n```\n</next-version>', current_version),
-        },
-        n = 1,
-        stream = true,
-        snippy = {
-            enabled = false,
-        },
-    }
-    vim.system({ 'python', '/Users/pangxuyuan/.config/nvim/nes.py' }, {
+function M.get_suggestions(bufnr)
+    bufnr = bufnr and bufnr > 0 and bufnr or vim.api.nvim_get_current_buf()
+    local ctx = Context.new(bufnr)
+    local payload = ctx:payload()
+    vim.system({ 'python', '/Users/pangxuyuan/.config/nvim/scripts/nes.py' }, {
         stdin = vim.json.encode(payload),
         text = true,
     }, function(obj)
@@ -196,15 +159,16 @@ function M.payload(bufnr)
             vim.print('not found')
             return
         end
-        local old_version = string.format('<next-version>\n```go\n%s\n```\n</next-version>', current_version)
+        local old_version = payload.prediction.content:gsub('<|cursor|>', '')
+        next_version = next_version:gsub('<|cursor|>', '')
         vim.print(old_version)
-        vim.print('---')
         vim.print(next_version)
-        vim.print('---')
         print(vim.diff(old_version, next_version, {
             algorithm = 'minimal',
             ignore_cr_at_eol = true,
             ignore_whitespace_change_at_eol = true,
+            ignore_blank_lines = true,
+            ignore_whitespace = true,
         }))
     end)
 end
@@ -212,9 +176,9 @@ end
 function M.setup(opts)
     opts = opts or {}
     vim.keymap.set('i', '<A-i>', function()
-        require('dotvim.config.nes.gemini').get_suggestion()
+        -- require('dotvim.config.nes.gemini').get_suggestion()
         -- local bufnr = vim.api.nvim_get_current_buf()
-        -- M.payload(bufnr)
+        M.get_suggestions()
     end)
 end
 

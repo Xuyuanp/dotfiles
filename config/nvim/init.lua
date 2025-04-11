@@ -12,4 +12,4 @@ if vim.g.neovide then
     require('dotvim.neovide').setup()
 end
 
-require('dotvim.config.nes').setup()
+require('nes').setup()
