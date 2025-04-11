@@ -1,7 +1,10 @@
 vim.b.lsp_disable_auto_format = true
 
+local bufnr = vim.api.nvim_get_current_buf()
+
 vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
-    buffer = vim.api.nvim_get_current_buf(),
+    buffer = bufnr,
+    group = vim.api.nvim_create_augroup('dotvim.go.format.buf.' .. bufnr, { clear = true }),
     desc = 'format injections',
     callback = function(args)
         if vim.b.injection_format_disabled or vim.g.go_injection_format_disabled then
