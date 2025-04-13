@@ -101,19 +101,12 @@ function M.setup()
     }
     vim.lsp.config('*', default_config)
 
-    local native_setup = function(server_name)
-        local cfg = vim.tbl_deep_extend('force', require('lspconfig.configs.' .. server_name).default_config, langs[server_name] or {})
-        vim.lsp.config(server_name, cfg)
+    local setup = function(server_name)
+        if langs[server_name] then
+            vim.lsp.config(server_name, langs[server_name])
+        end
         vim.lsp.enable(server_name)
     end
-    local oldstyle_setup = function(server_name)
-        local lspconfig = require('lspconfig')
-        local cfg = vim.tbl_deep_extend('force', default_config, langs[server_name] or {})
-        lspconfig[server_name].setup(cfg)
-    end
-
-    local use_native = false
-    local setup = use_native and native_setup or oldstyle_setup
 
     require('mason-lspconfig').setup_handlers({
         setup,
