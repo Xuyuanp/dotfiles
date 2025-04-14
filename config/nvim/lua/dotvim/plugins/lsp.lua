@@ -1,14 +1,12 @@
 return {
     {
         'neovim/nvim-lspconfig',
-        event = { 'BufReadPost', 'BufNewFile' },
+        lazy = false,
         dependencies = {
             'folke/neoconf.nvim',
             'williamboman/mason-lspconfig.nvim',
         },
-        config = function()
-            require('dotvim.config.lsp').setup()
-        end,
+        config = false,
     },
 
     {
@@ -46,7 +44,14 @@ return {
         dependencies = {
             'williamboman/mason.nvim',
         },
-        opts = {},
+        opts = {
+            handlers = {
+                function(server_name)
+                    vim.lsp.enable(server_name, true)
+                end,
+                ['rust_analyzer'] = function() end,
+            },
+        },
     },
 
     {
