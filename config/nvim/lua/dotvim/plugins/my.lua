@@ -109,4 +109,10 @@ return {
             })
         end,
     },
+
+    {
+        'Xuyuanp/nes.nvim',
+        event = 'VeryLazy',
+        opts = {},
+    },
 }

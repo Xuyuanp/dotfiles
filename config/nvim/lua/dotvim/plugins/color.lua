@@ -58,6 +58,9 @@ return {
                     ScrollbarHead = { fg = theme.ui.nontext, bg = 'NONE', italic = false, bold = false },
                     ScrollbarBody = { fg = theme.ui.nontext, bg = 'NONE', italic = false, bold = false },
                     ScrollbarTail = { fg = theme.ui.nontext, bg = 'NONE', italic = false, bold = false },
+
+                    NesDelete = { bg = theme.diff.delete },
+                    NesAdd = { bg = theme.diff.add },
                 }
             end,
         },
