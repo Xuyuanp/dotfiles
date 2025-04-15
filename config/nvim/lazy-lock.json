@@ -42,7 +42,7 @@
   "neorg-interim-ls": { "branch": "main", "commit": "348cd121d8b872248e9b0e48e3611c54dfad83f0" },
   "neotest": { "branch": "master", "commit": "dddbe8fe358b05b2b7e54fe4faab50563171a76d" },
   "neotest-go": { "branch": "main", "commit": "92950ad7be2ca02a41abca5c6600ff6ffaf5b5d6" },
-  "nes.nvim": { "branch": "main", "commit": "267bdc61cfb2b361905ba8217d3728ff03bc56f8" },
+  "nes.nvim": { "branch": "main", "commit": "aa0db74158264c749faefa384b5dafe7683ee9b3" },
   "none-ls.nvim": { "branch": "main", "commit": "6377e77dae38015d0a8c24852530098f1d8a24f6" },
   "nui.nvim": { "branch": "main", "commit": "8d3bce9764e627b62b07424e0df77f680d47ffdb" },
   "nvim-autopairs": { "branch": "master", "commit": "2a406cdd8c373ae7fe378a9e062a5424472bd8d8" },
