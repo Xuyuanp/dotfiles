@@ -94,8 +94,9 @@ return {
         version = false, -- last release is way too old
         init = function()
             require('dotvim.config.lsp.utils').on_attach(function(client, _bufnr)
+                local settings = client.config.settings or { json = { schemas = {} } }
                 ---@diagnostic disable-next-line: undefined-field
-                local schemas = client.config.settings.json.schemas or {}
+                local schemas = settings.json.schemas
                 local new_schemas = require('schemastore').json.schemas()
                 vim.list_extend(schemas, new_schemas)
                 client:notify(vim.lsp.protocol.Methods.workspace_didChangeConfiguration, {
