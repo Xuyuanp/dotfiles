@@ -9,7 +9,7 @@ on:
 jobs:
   luacheck:
     name: LuaCheck
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v3
       - name: install luacheck
@@ -22,7 +22,7 @@ jobs:
           luacheck --no-color config/nvim/
   stylua:
     name: Stylua
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v3
       - uses: JohnnyMorganz/stylua-action@v4
