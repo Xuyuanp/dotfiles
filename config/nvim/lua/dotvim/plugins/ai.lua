@@ -256,4 +256,21 @@ When given a task:
             },
         },
     },
+
+    {
+        'copilotlsp-nvim/copilot-lsp',
+        lazy = false,
+        config = false,
+        init = function()
+            vim.g.copilot_nes_debounce = 400
+            vim.lsp.enable('copilot_ls')
+            vim.keymap.set('i', '<A-n>', function()
+                local _ = require('copilot-lsp.nes').apply_pending_nes() and require('copilot-lsp.nes').walk_cursor_end_edit()
+            end)
+            vim.keymap.set('i', '<A-i>', function()
+                local client = vim.lsp.get_clients({ name = 'copilot_ls' })[1]
+                require('copilot-lsp.nes').request_nes(client)
+            end)
+        end,
+    },
 }

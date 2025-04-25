@@ -20,8 +20,6 @@ function M.setup()
         capabilities = make_capabilities(),
     }
     vim.lsp.config('*', default_config)
-
-    vim.lsp.enable('copilot-ls')
 end
 
 return M

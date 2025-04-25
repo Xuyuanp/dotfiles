@@ -14,7 +14,7 @@ local TriggerKind = {
 
 local default_opts = {
     transform = function(item, _cmp_ctx, _lsp_ctx)
-        if item.client_name == 'copilot-ls' then
+        if item.client_name == 'copilot-ls' or item.client_name == 'copilot_ls' then
             item.kind_name = 'Copilot'
             item.kind_icon = ''
         end
