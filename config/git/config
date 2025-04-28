@@ -84,6 +84,9 @@
 [url "git@github.com:Xuyuanp"]
 	pushInsteadOf = https://github.com/Xuyuanp
 
+[url "git@github.com:copilotlsp-nvim"]
+	pushInsteadOf = https://github.com/copilotlsp-nvim
+
 [includeIf "hasconfig:remote.*.url:https://github.com/**"]
 path = ~/.dotfiles/config/git/github.config
 
