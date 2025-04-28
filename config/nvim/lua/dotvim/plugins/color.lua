@@ -61,6 +61,10 @@ return {
 
                     NesDelete = { bg = theme.diff.delete },
                     NesAdd = { bg = theme.diff.add },
+                    NesChange = { bg = theme.diff.change },
+                    CopilotLspNesDelete = { bg = theme.diff.delete },
+                    CopilotLspNesAdd = { bg = theme.diff.add },
+                    CopilotLspNesChange = { bg = theme.diff.change },
                 }
             end,
         },

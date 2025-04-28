@@ -112,28 +112,42 @@ return {
 
     {
         'Xuyuanp/nes.nvim',
-        event = 'VeryLazy',
-        dependencies = {
-            'nvim-lua/plenary.nvim',
+        lazy = false,
+        branch = 'feat/lsp-api',
+        config = function()
+            vim.lsp.enable('nes')
+
+            local function request_nes()
+                local client = vim.lsp.get_clients({ name = 'nes' })[1]
+                if not client then
+                    return
+                end
+                require('copilot-lsp.nes').request_nes(client)
+            end
+
+            local debounced_fn = require('copilot-lsp.util').debounce(request_nes, 500)
+            local group = vim.api.nvim_create_augroup('dotvim.nes.blink', { clear = true })
+            vim.api.nvim_create_autocmd({ 'TextChangedI' }, {
+                group = group,
+                desc = '[Nes] auto trigger',
+                callback = function()
+                    debounced_fn()
+                end,
+            })
+        end,
+        keys = {
+            {
+                '<A-i>',
+                function()
+                    local client = vim.lsp.get_clients({ name = 'nes' })[1]
+                    if not client then
+                        return
+                    end
+                    require('copilot-lsp.nes').request_nes(client)
+                end,
+                mode = 'i',
+                desc = '[Nes] get suggestion',
+            },
         },
-        opts = {},
-        -- keys = {
-        --     {
-        --         '<A-i>',
-        --         function()
-        --             require('nes').get_suggestion()
-        --         end,
-        --         mode = 'i',
-        --         desc = '[Nes] get suggestion',
-        --     },
-        --     {
-        --         '<A-n>',
-        --         function()
-        --             require('nes').apply_suggestion(0, { jump = true, trigger = true })
-        --         end,
-        --         mode = 'i',
-        --         desc = '[Nes] apply suggestion',
-        --     },
-        -- },
     },
 }
