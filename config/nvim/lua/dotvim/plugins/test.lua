@@ -1,5 +1,12 @@
 return {
     {
+        'echasnovski/mini.test',
+        version = '*',
+        lazy = false,
+        config = true,
+    },
+
+    {
         'nvim-neotest/neotest',
         dependencies = {
             'nvim-neotest/nvim-nio',
