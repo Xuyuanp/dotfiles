@@ -183,9 +183,6 @@ function M.setup()
             },
         },
         virtual_text = true,
-        virtual_lines = {
-            current_line = true,
-        },
     })
 
     if vim.fn.executable('ghostty') then

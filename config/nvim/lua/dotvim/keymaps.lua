@@ -59,15 +59,22 @@ local function setup()
     ---[[ diagnostic navigation
     local function diagnostic_jump(direction, severity)
         return function()
-            vim.diagnostic.jump({
+            local diag = vim.diagnostic.jump({
                 count = direction,
                 severity = severity,
             })
+            if not diag then
+                return
+            end
+
+            vim.diagnostic.show(diag.namespace, diag.bufnr, { diag }, { virtual_lines = { current_line = true } })
         end
     end
 
     local F, B = 1, -1
     local E, W = vim.diagnostic.severity.ERROR, vim.diagnostic.severity.WARN
+    set_keymap('n', ']d', diagnostic_jump(F), { desc = '[Diagnostic] jump to next diagnostic' })
+    set_keymap('n', '[d', diagnostic_jump(B), { desc = '[Diagnostic] jump to prev diagnostic' })
     set_keymap('n', ']e', diagnostic_jump(F, E), { desc = '[Diagnostic] jump to next error' })
     set_keymap('n', '[e', diagnostic_jump(B, E), { desc = '[Diagnostic] jump to prev error' })
     set_keymap('n', ']w', diagnostic_jump(F, W), { desc = '[Diagnostic] jump to next warning' })
