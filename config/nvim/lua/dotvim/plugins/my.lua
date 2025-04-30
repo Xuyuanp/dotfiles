@@ -118,11 +118,7 @@ return {
             vim.lsp.enable('nes')
 
             local function request_nes()
-                local client = vim.lsp.get_clients({ name = 'nes' })[1]
-                if not client then
-                    return
-                end
-                require('copilot-lsp.nes').request_nes(client)
+                require('copilot-lsp.nes').request_nes('nes')
             end
 
             local debounced_fn = require('copilot-lsp.util').debounce(request_nes, 500)
@@ -139,11 +135,12 @@ return {
             {
                 '<A-i>',
                 function()
-                    local client = vim.lsp.get_clients({ name = 'nes' })[1]
-                    if not client then
-                        return
-                    end
-                    require('copilot-lsp.nes').request_nes(client)
+                    require('nes').get_suggestion()
+                    -- local client = vim.lsp.get_clients({ name = 'nes' })[1]
+                    -- if not client then
+                    --     return
+                    -- end
+                    -- require('copilot-lsp.nes').request_nes(client)
                 end,
                 mode = 'i',
                 desc = '[Nes] get suggestion',

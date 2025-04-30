@@ -116,6 +116,7 @@ return {
                 },
             },
             opts = {
+                log_level = 'TRACE',
                 system_prompt = function(opts)
                     -- the default system prompt talks shit
                     local language = opts.language or 'English'
@@ -260,6 +261,7 @@ When given a task:
     {
         'copilotlsp-nvim/copilot-lsp',
         lazy = false,
+        branch = 'feat/support-inline-edit-display',
         config = false,
         init = function()
             vim.g.copilot_nes_debounce = 400
