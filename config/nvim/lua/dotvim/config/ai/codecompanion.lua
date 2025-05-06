@@ -40,6 +40,9 @@ function M.init_progress()
         pattern = 'CodeCompanionRequest*',
         group = group,
         callback = function(args)
+            if args.data.strategy == 'nes' then
+                return
+            end
             if args.match == 'CodeCompanionRequestStarted' then
                 local handle = create_progress_handle(args.data)
                 store_progress_handle(args.data.id, handle)
