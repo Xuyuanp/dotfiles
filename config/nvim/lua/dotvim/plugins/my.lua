@@ -115,13 +115,20 @@ return {
         lazy = false,
         branch = 'feat/lsp-api',
         config = function()
-            vim.lsp.enable('nes')
+            require('nes').setup({
+                provider = {
+                    name = 'codecompanion',
+                    codecompanion = {
+                        adapter = 'nes',
+                    },
+                },
+            })
 
             local function request_nes()
                 require('copilot-lsp.nes').request_nes('nes')
             end
 
-            local debounced_fn = require('copilot-lsp.util').debounce(request_nes, 500)
+            local debounced_fn = require('copilot-lsp.util').debounce(request_nes, 400)
             local group = vim.api.nvim_create_augroup('dotvim.nes.blink', { clear = true })
             vim.api.nvim_create_autocmd({ 'TextChangedI' }, {
                 group = group,
@@ -135,12 +142,7 @@ return {
             {
                 '<A-i>',
                 function()
-                    require('nes').get_suggestion()
-                    -- local client = vim.lsp.get_clients({ name = 'nes' })[1]
-                    -- if not client then
-                    --     return
-                    -- end
-                    -- require('copilot-lsp.nes').request_nes(client)
+                    require('copilot-lsp.nes').request_nes('nes')
                 end,
                 mode = 'i',
                 desc = '[Nes] get suggestion',

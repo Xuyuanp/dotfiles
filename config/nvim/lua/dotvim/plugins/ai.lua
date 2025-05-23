@@ -52,36 +52,6 @@ return {
             require('dotvim.config.ai.codecompanion').init_progress()
         end,
         opts = {
-            adapters = {
-                copilot = function()
-                    return require('codecompanion.adapters').extend('copilot', {
-                        icon = '',
-                        schema = {
-                            model = {
-                                default = function()
-                                    return vim.env.COPILOT_MODEL or 'gpt-4o-2024-11-20'
-                                end,
-                            },
-                        },
-                    })
-                end,
-                openrouter = function()
-                    return require('codecompanion.adapters').extend('openai_compatible', {
-                        name = 'openrouter',
-                        formatted_name = 'OpenRouter',
-                        icon = '󰃻',
-                        env = {
-                            api_key = 'OPENROUTER_API_KEY',
-                            url = 'https://openrouter.ai/api',
-                        },
-                        schema = {
-                            model = {
-                                default = 'deepseek/deepseek-chat-v3-0324',
-                            },
-                        },
-                    })
-                end,
-            },
             strategies = {
                 chat = {
                     roles = {
@@ -117,46 +87,61 @@ return {
             },
             opts = {
                 log_level = 'TRACE',
-                system_prompt = function(opts)
+                system_prompt = function(_opts)
                     -- the default system prompt talks shit
-                    local language = opts.language or 'English'
-                    return string.format(
-                        [[You are an AI programming assistant.
-
-Your core tasks include:
-- Answering general programming questions.
-- Reviewing the selected code in a Neovim buffer.
-- Generating unit tests for the selected code.
-- Proposing fixes for problems in the selected code.
-- Scaffolding code for a new workspace.
-- Finding relevant code to the user's query.
-- Proposing fixes for test failures.
-- Answering questions about Neovim.
-- Running tools.
-
-You must:
-- Follow the user's requirements carefully and to the letter.
-- Keep your answers short and impersonal, especially if the user's context is outside your core tasks.
-- Minimize additional prose unless clarification is needed.
-- Use Markdown formatting in your answers.
-- Include the programming language name at the start of each Markdown code block.
-- Avoid including line numbers in code blocks.
-- Avoid wrapping the whole response in triple backticks.
-- Only return code that's directly relevant to the task at hand. You may omit code that isn’t necessary for the solution.
-- Avoid using H1 and H2 headers in your responses.
-- Use actual line breaks in your responses; only use "\n" when you want a literal backslash followed by 'n'.
-- All non-code text responses must be written in the %s language indicated.
-
-When given a task:
-1. Think step-by-step and, unless the user requests otherwise or the task is very simple, describe your plan in detailed pseudocode.
-2. Output the final code in a single code block, ensuring that only relevant code is included.
-3. End your response with a short suggestion for the next user turn that directly supports continuing the conversation.
-4. Provide exactly one complete reply per conversation turn.]],
-                        language
-                    )
+                    -- local language = opts.language or 'English'
+                    return string.format([[You are a helpful AI programming assistant.]])
                 end,
             },
         },
+        config = function(_, opts)
+            opts = opts or {}
+
+            opts.adapters = vim.tbl_deep_extend('force', {
+                openrouter = require('codecompanion.adapters').extend('openai_compatible', {
+                    name = 'openrouter',
+                    formatted_name = 'OpenRouter',
+                    icon = '󰃻',
+                    env = {
+                        api_key = 'OPENROUTER_API_KEY',
+                        url = 'https://openrouter.ai/api',
+                    },
+                    schema = {
+                        model = {
+                            default = 'deepseek/deepseek-chat-v3-0324',
+                        },
+                    },
+                }),
+                copilot = require('codecompanion.adapters').extend('openai_compatible', {
+                    name = 'copilot',
+                    formatted_name = 'Copilot',
+                    icon = '',
+                    env = {
+                        api_key = 'OPENAI_API_KEY',
+                        url = 'http://localhost:8080/api',
+                    },
+                    schema = {
+                        model = {
+                            default = 'gpt-4.1',
+                        },
+                    },
+                }),
+                nes = require('codecompanion.adapters').extend('openai_compatible', {
+                    name = 'nes',
+                    formatted_name = 'Nes',
+                    env = {
+                        api_key = 'OPENAI_API_KEY',
+                        url = 'http://localhost:8080/api',
+                    },
+                    schema = {
+                        model = {
+                            default = 'gpt-4o-mini',
+                        },
+                    },
+                }),
+            }, opts.adapters or {})
+            require('codecompanion').setup(opts)
+        end,
         specs = {
             {
                 'saghen/blink.cmp',
