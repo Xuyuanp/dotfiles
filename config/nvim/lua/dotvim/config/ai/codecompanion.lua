@@ -66,6 +66,8 @@ function M.format_adapter(adapter)
     if model then
         if type(model) == 'function' then
             model = model()
+        elseif type(model) == 'table' then
+            model = model.name
         end
         formatted = formatted .. '@' .. model
     end
