@@ -246,7 +246,6 @@ return {
     {
         'copilotlsp-nvim/copilot-lsp',
         lazy = false,
-        branch = 'feat/support-inline-edit-display',
         config = false,
         init = function()
             vim.g.copilot_nes_debounce = 400

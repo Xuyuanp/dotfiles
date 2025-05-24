@@ -18,26 +18,6 @@ end
 
 function M.setup()
     vim.g.rustaceanvim = {
-        -- Plugin configuration
-        tools = {},
-        -- LSP configuration
-        server = {
-            default_settings = {
-                -- rust-analyzer language server configuration
-                ['rust-analyzer'] = {
-                    diagnostics = {
-                        enable = true,
-                        disabled = { 'unresolved-proc-macro' },
-                    },
-                    -- rust-analyzer.semanticHighlighting.strings.enable
-                    semanticHighlighting = {
-                        strings = {
-                            enable = false,
-                        },
-                    },
-                },
-            },
-        },
         -- DAP configuration
         dap = {
             adapter = require('rustaceanvim.config').get_codelldb_adapter(codelldb_path, liblldb_path),

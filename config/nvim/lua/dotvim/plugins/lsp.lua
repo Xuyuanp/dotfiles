@@ -30,6 +30,7 @@ return {
 
     {
         'williamboman/mason.nvim',
+        version = 'v1',
         cmd = 'Mason',
         opts = {
             PATH = 'append',
@@ -41,6 +42,7 @@ return {
 
     {
         'williamboman/mason-lspconfig.nvim',
+        version = 'v1',
         dependencies = {
             'williamboman/mason.nvim',
         },
@@ -132,7 +134,7 @@ return {
 
     {
         'mrcjkb/rustaceanvim',
-        version = '*',
+        version = '^6',
         dependencies = {
             {
                 'jay-babu/mason-nvim-dap.nvim',
