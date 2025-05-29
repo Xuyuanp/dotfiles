@@ -10,6 +10,23 @@ end
 
 local M = {}
 
+local backup = vim.lsp.util.convert_input_to_markdown_lines
+
+-- fuck microsoft. https://github.com/microsoft/pylance-release/discussions/6631
+---@diagnostic disable-next-line: duplicate-set-field
+vim.lsp.util.convert_input_to_markdown_lines = function(input, contents)
+    local extend = backup(input, contents)
+    for i, line in ipairs(extend) do
+        line = line:gsub('&nbsp;', ' ')
+        line = line:gsub('\\_', '_')
+        line = line:gsub('&gt;', '>')
+        line = line:gsub('&lt;', '<')
+        extend[i] = line
+    end
+
+    return extend
+end
+
 function M.setup()
     require('dotvim.config.lsp.buf').overwrite()
     require('dotvim.config.lsp.utils').setup()
