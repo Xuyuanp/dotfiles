@@ -35,7 +35,7 @@ function M.setup()
         callback = function()
             vim.keymap.set('n', '<leader>R', function()
                 vim.cmd.RustLsp('runnables')
-            end, { silent = true, remap = true, desc = '[rust] show runnables' })
+            end, { silent = true, remap = true, buffer = true, desc = '[rust] show runnables' })
         end,
     })
 end
