@@ -123,30 +123,6 @@ return {
                     },
                 },
             })
-
-            local function request_nes()
-                require('copilot-lsp.nes').request_nes('nes')
-            end
-
-            local debounced_fn = require('copilot-lsp.util').debounce(request_nes, 400)
-            local group = vim.api.nvim_create_augroup('dotvim.nes.blink', { clear = true })
-            vim.api.nvim_create_autocmd({ 'TextChangedI' }, {
-                group = group,
-                desc = '[Nes] auto trigger',
-                callback = function()
-                    debounced_fn()
-                end,
-            })
         end,
-        keys = {
-            {
-                '<A-i>',
-                function()
-                    require('copilot-lsp.nes').request_nes('nes')
-                end,
-                mode = 'i',
-                desc = '[Nes] get suggestion',
-            },
-        },
     },
 }

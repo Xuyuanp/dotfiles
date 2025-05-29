@@ -252,9 +252,37 @@ return {
             -- vim.lsp.enable('copilot_ls')
             vim.lsp.enable('copilot-ls') -- use my own copilot ls
 
-            vim.keymap.set('i', '<A-n>', function()
-                local _ = require('copilot-lsp.nes').apply_pending_nes() and require('copilot-lsp.nes').walk_cursor_end_edit()
-            end)
+            local function request_nes()
+                require('copilot-lsp.nes').request_nes('nes')
+            end
+
+            local debounced_fn = require('copilot-lsp.util').debounce(request_nes, 400)
+            local group = vim.api.nvim_create_augroup('dotvim.copilot-lsp.nes', { clear = true })
+            vim.api.nvim_create_autocmd({ 'TextChangedI' }, {
+                group = group,
+                desc = '[Nes] auto trigger',
+                callback = function()
+                    debounced_fn()
+                end,
+            })
         end,
+        keys = {
+            {
+                '<A-i>',
+                function()
+                    require('copilot-lsp.nes').request_nes('nes')
+                end,
+                mode = 'i',
+                desc = '[Nes] get suggestion',
+            },
+            {
+                '<A-n>',
+                function()
+                    local _ = require('copilot-lsp.nes').apply_pending_nes() and require('copilot-lsp.nes').walk_cursor_end_edit()
+                end,
+                mode = 'i',
+                desc = '[Nes] apply suggestion',
+            },
+        },
     },
 }
