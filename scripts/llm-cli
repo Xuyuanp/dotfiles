@@ -1,11 +1,9 @@
 #!/usr/bin/env python
-import json
 import os
 import sys
-from abc import ABC, abstractmethod
 from argparse import ArgumentParser
 
-import requests
+from openai import OpenAI
 
 os_name = "MacOS" if os.uname().sysname == "Darwin" else "Linux"
 
@@ -57,127 +55,7 @@ Craft the commit message focusing solely on the provided details, avoiding extra
 """,
 }
 
-
-class Adapter(ABC):
-    @property
-    @abstractmethod
-    def token(self) -> str:
-        pass
-
-    @property
-    @abstractmethod
-    def base_url(self) -> str:
-        pass
-
-    @property
-    @abstractmethod
-    def model(self) -> str:
-        pass
-
-    @property
-    def headers(self) -> dict[str, str]:
-        return {
-            "Authorization": f"Bearer {self.token}",
-            "Content-Type": "application/json",
-        }
-
-    def ask(self, input: str, system_prompt: str = "") -> str:
-        payload = {
-            "model": self.model,
-            "messages": [
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": input},
-            ],
-        }
-        try:
-            response = requests.post(
-                f"{self.base_url}/chat/completions",
-                headers=self.headers,
-                json=payload,
-            )
-            response.raise_for_status()
-            rsp = response.json()
-            return rsp["choices"][0]["message"]["content"]
-        except requests.exceptions.RequestException as e:
-            return f"An error occurred: {e}"
-
-
-class Copilot(Adapter):
-    _USER_AGENT = "vscode-chat/dev"
-    _OAUTH_TOKEN_URL = "https://api.github.com/copilot_internal/v2/token"
-
-    @property
-    def _oauth_token(self) -> str:
-        config_dir = os.environ.get(
-            "XDG_CONFIG_HOME", os.path.join(os.environ["HOME"], ".config")
-        )
-
-        with open(os.path.join(config_dir, "github-copilot/apps.json")) as f:
-            obj = json.load(f)
-            for key, value in obj.items():
-                if key.startswith("github.com:"):
-                    return value["oauth_token"]
-            raise RuntimeError("Could not find token")
-
-    @property
-    def token(self) -> str:
-        rsp = requests.get(
-            self._OAUTH_TOKEN_URL,
-            headers={
-                "Authorization": f"Bearer {self._oauth_token}",
-                "Accept": "application/json",
-                "User-Agent": self._USER_AGENT,
-            },
-        )
-        rsp.raise_for_status()
-        token = rsp.json()["token"]
-        return token
-
-    @property
-    def base_url(self) -> str:
-        return "https://api.githubcopilot.com"
-
-    @property
-    def model(self) -> str:
-        return os.environ.get("COPILOT_MODEL", "gpt-4o")
-
-    @property
-    def headers(self) -> dict[str, str]:
-        return {
-            "Authorization": f"Bearer {self.token}",
-            "Content-Type": "application/json",
-            "Copilot-Integration-Id": "vscode-chat",
-            "editor-version": "Neovim/0.10.0",
-            "User-Agent": self._USER_AGENT,
-        }
-
-
-class Deepseek(Adapter):
-    @property
-    def token(self) -> str:
-        return os.environ["DEEPSEEK_API_KEY"]
-
-    @property
-    def base_url(self) -> str:
-        return "https://api.deepseek.com"
-
-    @property
-    def model(self) -> str:
-        return "deepseek-chat"
-
-
-adapters: dict[str, Adapter] = {
-    "copilot": Copilot(),
-    "deepseek": Deepseek(),
-}
-
 parser = ArgumentParser()
-parser.add_argument(
-    "--adapter",
-    type=str,
-    default=os.environ.get("LLM_ADAPTER", "copilot"),
-    choices=adapters.keys(),
-)
 parser.add_argument(
     "--role",
     type=str,
@@ -189,12 +67,23 @@ parser.add_argument(
 def main():
     args = parser.parse_args()
 
-    adapter = adapters[args.adapter]
     system_prompt = prompts_lib[args.role]
-
     input = sys.stdin.read()
-    ans = adapter.ask(input, system_prompt)
-    print(ans)
+
+    client = OpenAI()
+    rsp = client.chat.completions.create(
+        model="gpt-4o",
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": input},
+        ],
+        stream=False,
+    )
+    ans = rsp.choices[0].message.content
+    if not ans:
+        print("sorry", file=sys.stderr)
+        return
+    print(ans.replace("\\", "\\\\"))
 
 
 if __name__ == "__main__":
