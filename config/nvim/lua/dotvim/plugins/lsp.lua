@@ -1,10 +1,8 @@
 return {
     {
         'neovim/nvim-lspconfig',
-        lazy = false,
         dependencies = {
             'folke/neoconf.nvim',
-            'williamboman/mason-lspconfig.nvim',
         },
         config = false,
     },
@@ -30,7 +28,7 @@ return {
 
     {
         'williamboman/mason.nvim',
-        version = 'v1',
+        version = 'v2',
         cmd = 'Mason',
         opts = {
             PATH = 'append',
@@ -42,16 +40,17 @@ return {
 
     {
         'williamboman/mason-lspconfig.nvim',
-        version = 'v1',
+        version = 'v2',
+        event = 'VeryLazy',
         dependencies = {
             'williamboman/mason.nvim',
+            'neovim/nvim-lspconfig',
         },
         opts = {
-            handlers = {
-                function(server_name)
-                    vim.lsp.enable(server_name, true)
-                end,
-                ['rust_analyzer'] = function() end,
+            automatic_enable = {
+                exclude = {
+                    'rust_analyzer',
+                },
             },
         },
     },
