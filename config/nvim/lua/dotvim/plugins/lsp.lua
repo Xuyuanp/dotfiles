@@ -1,6 +1,7 @@
 return {
     {
         'neovim/nvim-lspconfig',
+        lazy = false,
         dependencies = {
             'folke/neoconf.nvim',
         },
@@ -29,30 +30,23 @@ return {
     {
         'williamboman/mason.nvim',
         version = 'v2',
-        cmd = 'Mason',
+        lazy = false,
         opts = {
             PATH = 'append',
             ui = {
                 border = 'rounded',
             },
         },
-    },
+        config = function(_, opts)
+            require('mason').setup(opts)
 
-    {
-        'williamboman/mason-lspconfig.nvim',
-        version = 'v2',
-        event = 'VeryLazy',
-        dependencies = {
-            'williamboman/mason.nvim',
-            'neovim/nvim-lspconfig',
-        },
-        opts = {
-            automatic_enable = {
-                exclude = {
-                    'rust_analyzer',
-                },
-            },
-        },
+            for _, pkg in ipairs(require('mason-registry').get_installed_packages()) do
+                local ls_name = vim.tbl_get(pkg, 'spec', 'neovim', 'lspconfig')
+                if ls_name and ls_name ~= 'rust_analyzer' then
+                    vim.lsp.enable(ls_name)
+                end
+            end
+        end,
     },
 
     {
