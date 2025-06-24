@@ -10,7 +10,7 @@ return {
                 string = false,
                 keyword = false,
             },
-            staticcheck = true,
+            staticcheck = false,
             vulncheck = 'Imports',
             codelenses = {
                 gc_details = true,
