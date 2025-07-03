@@ -264,8 +264,11 @@ EOF
             echo ${tmp}
         )
     else
-        local choice=$(find "${tgo_path}" -maxdepth 1 -type d -exec basename {} \; | fzf) && \
-            (cd "${tgo_path}/${choice}" && \
+        local choice=$(find "${tgo_path}" -maxdepth 1 -type d -exec basename {} \; | fzf)
+        if [[ -z "${choice}" ]]; then
+            return
+        fi
+        (cd "${tgo_path}/${choice}" && \
             nvim -p main.go main_test.go)
     fi
 }
