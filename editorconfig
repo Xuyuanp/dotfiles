@@ -9,9 +9,15 @@ trim_trailing_whitespace = true
 [*.ex, *exs]
 indent_style = space
 indent_size = 2
+[*exs]
+indent_style = space
+indent_size = 2
 
 [*.scm]
 indent_size = 2
 
 [*.json]
+indent_size = 2
+
+[*.json5]
 indent_size = 2
