@@ -190,6 +190,8 @@ function M.setup()
             opt.rtp:append('/Applications/Ghostty.app/Contents/Resources/nvim/site')
         end
     end
+
+    vim.g.omni_sql_default_compl_type = 'syntax'
 end
 
 return M
