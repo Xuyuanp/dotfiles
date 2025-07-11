@@ -253,22 +253,8 @@ return {
         config = false,
         init = function()
             vim.g.copilot_nes_debounce = 400
-            -- vim.lsp.enable('copilot_ls')
-            vim.lsp.enable('copilot-ls') -- use my own copilot ls
-
-            local function request_nes()
-                require('copilot-lsp.nes').request_nes('nes')
-            end
-
-            local debounced_fn = require('copilot-lsp.util').debounce(request_nes, 400)
-            local group = vim.api.nvim_create_augroup('dotvim.copilot-lsp.nes', { clear = true })
-            vim.api.nvim_create_autocmd({ 'TextChangedI' }, {
-                group = group,
-                desc = '[Nes] auto trigger',
-                callback = function()
-                    debounced_fn()
-                end,
-            })
+            vim.lsp.enable('copilot_ls', false)
+            vim.lsp.enable('copilot-ls', true) -- use my own copilot ls
         end,
         keys = {
             {
