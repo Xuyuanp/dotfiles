@@ -118,7 +118,9 @@ return {
                     icon = '',
                     env = {
                         api_key = 'OPENAI_API_KEY',
-                        url = 'http://localhost:8080/api',
+                        url = vim.env.OPENAI_BASE_URL,
+                        chat_url = '/chat/completions',
+                        models_endpoint = '/models',
                     },
                     schema = {
                         model = {
@@ -131,7 +133,9 @@ return {
                     formatted_name = 'Nes',
                     env = {
                         api_key = 'OPENAI_API_KEY',
-                        url = 'http://localhost:8080/api',
+                        url = vim.env.OPENAI_BASE_URL,
+                        chat_url = '/chat/completions',
+                        models_endpoint = '/models',
                     },
                     schema = {
                         model = {
