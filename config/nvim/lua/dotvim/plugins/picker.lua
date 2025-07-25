@@ -19,11 +19,13 @@ return {
                 { key = 'r', source = 'resume' },
                 { key = 'f', source = 'files' },
                 { key = 'b', source = 'buffers' },
-                { key = 'g', source = 'grep' },
+                { key = 's', source = 'grep', desc = 'search' },
                 { key = 'e', source = 'explorer' },
                 { key = 'n', source = 'notifications' },
                 { key = 'h', source = 'help' },
                 { key = 'k', source = 'keymaps' },
+                { key = 'c', source = 'commands' },
+                { key = 'glf', source = 'git_log_file' },
             }
             return vim.iter(keys)
                 :map(function(k)
