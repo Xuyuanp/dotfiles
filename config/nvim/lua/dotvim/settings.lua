@@ -164,6 +164,8 @@ function M.setup()
     vim.filetype.add({
         filename = {
             ['.envrc'] = 'sh',
+            ['.helmignore'] = 'gitignore',
+            ['.dockerignore'] = 'gitignore',
         },
         extension = {
             ['tpl'] = 'helm',
