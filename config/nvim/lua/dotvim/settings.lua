@@ -159,6 +159,8 @@ function M.setup()
     vim.o.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
     vim.o.foldenable = true
 
+    vim.o.jumpoptions = 'stack'
+
     vim.filetype.add({
         filename = {
             ['.envrc'] = 'sh',
