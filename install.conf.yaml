@@ -65,6 +65,7 @@
     ~/.local/bin/osc52-yank: scripts/osc52-yank
     ~/.local/bin/spinner: scripts/spinner
     ~/.local/bin/llm-cli: scripts/llm-cli
+    ~/.local/bin/secret-decode: scripts/secret-decode
     ~/.editorconfig: editorconfig
 
     # for linux
