@@ -19,6 +19,9 @@
         "@modelcontextprotocol/server-filesystem",
         "/Users/pangxuyuan"
       ]
+    },
+    "context7": {
+      "url": "https://mcp.context7.com/mcp"
     }
   }
 }
