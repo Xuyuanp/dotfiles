@@ -98,51 +98,53 @@ return {
             opts = opts or {}
 
             opts.adapters = vim.tbl_deep_extend('force', {
-                openrouter = require('codecompanion.adapters').extend('openai_compatible', {
-                    name = 'openrouter',
-                    formatted_name = 'OpenRouter',
-                    icon = '󰃻',
-                    env = {
-                        api_key = 'OPENROUTER_API_KEY',
-                        url = 'https://openrouter.ai/api',
-                    },
-                    schema = {
-                        model = {
-                            default = 'deepseek/deepseek-chat-v3-0324',
+                http = {
+                    openrouter = require('codecompanion.adapters').extend('openai_compatible', {
+                        name = 'openrouter',
+                        formatted_name = 'OpenRouter',
+                        icon = '󰃻',
+                        env = {
+                            api_key = 'OPENROUTER_API_KEY',
+                            url = 'https://openrouter.ai/api',
                         },
-                    },
-                }),
-                copilot = require('codecompanion.adapters').extend('openai_compatible', {
-                    name = 'copilot',
-                    formatted_name = 'Copilot',
-                    icon = '',
-                    env = {
-                        api_key = 'OPENAI_API_KEY',
-                        url = vim.env.OPENAI_BASE_URL,
-                        chat_url = '/chat/completions',
-                        models_endpoint = '/models',
-                    },
-                    schema = {
-                        model = {
-                            default = 'gpt-4.1',
+                        schema = {
+                            model = {
+                                default = 'deepseek/deepseek-chat-v3-0324',
+                            },
                         },
-                    },
-                }),
-                nes = require('codecompanion.adapters').extend('openai_compatible', {
-                    name = 'nes',
-                    formatted_name = 'Nes',
-                    env = {
-                        api_key = 'OPENAI_API_KEY',
-                        url = vim.env.OPENAI_BASE_URL,
-                        chat_url = '/chat/completions',
-                        models_endpoint = '/models',
-                    },
-                    schema = {
-                        model = {
-                            default = 'gpt-4o-mini',
+                    }),
+                    copilot = require('codecompanion.adapters').extend('openai_compatible', {
+                        name = 'copilot',
+                        formatted_name = 'Copilot',
+                        icon = '',
+                        env = {
+                            api_key = 'OPENAI_API_KEY',
+                            url = vim.env.OPENAI_BASE_URL,
+                            chat_url = '/chat/completions',
+                            models_endpoint = '/models',
                         },
-                    },
-                }),
+                        schema = {
+                            model = {
+                                default = 'gpt-4.1',
+                            },
+                        },
+                    }),
+                    nes = require('codecompanion.adapters').extend('openai_compatible', {
+                        name = 'nes',
+                        formatted_name = 'Nes',
+                        env = {
+                            api_key = 'OPENAI_API_KEY',
+                            url = vim.env.OPENAI_BASE_URL,
+                            chat_url = '/chat/completions',
+                            models_endpoint = '/models',
+                        },
+                        schema = {
+                            model = {
+                                default = 'gpt-4o-mini',
+                            },
+                        },
+                    }),
+                },
             }, opts.adapters or {})
             require('codecompanion').setup(opts)
         end,
