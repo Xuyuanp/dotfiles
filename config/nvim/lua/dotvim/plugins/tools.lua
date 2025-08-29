@@ -171,7 +171,7 @@ return {
     },
 
     {
-        'echasnovski/mini.ai',
+        'nvim-mini/mini.ai',
         version = '*',
         lazy = false,
         opts = {},

@@ -2,11 +2,12 @@ local vim = vim
 
 return {
     {
+        'nvim-mini/mini.icons',
+        lazy = false,
+    },
+    {
         'mhinz/vim-startify',
         lazy = vim.fn.argc() > 0,
-        dependencies = {
-            'echasnovski/mini.icons',
-        },
         config = function()
             local vfn = vim.fn
 
@@ -45,9 +46,6 @@ return {
     {
         'akinsho/bufferline.nvim',
         version = 'v4',
-        dependencies = {
-            'echasnovski/mini.icons',
-        },
         event = { 'BufReadPost', 'BufNewFile' },
         ---@type bufferline.UserConfig
         opts = {
@@ -134,7 +132,6 @@ return {
     {
         'rebelot/heirline.nvim',
         dependencies = {
-            'echasnovski/mini.icons',
             'SmiteshP/nvim-navic',
         },
         event = 'UiEnter',
@@ -322,7 +319,7 @@ return {
     },
 
     {
-        'echasnovski/mini.icons',
+        'nvim-mini/mini.icons',
         version = '*',
         opts = {},
         config = function(_, opts)
