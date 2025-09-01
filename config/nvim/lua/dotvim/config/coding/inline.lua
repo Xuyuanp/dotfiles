@@ -14,14 +14,14 @@ local TriggerKind = {
 
 local default_opts = {
     transform = function(item, _cmp_ctx, _lsp_ctx)
-        if item.client_name == 'copilot-ls' or item.client_name == 'copilot_ls' then
+        if item.client_name == 'copilot' then
             item.kind_name = 'Copilot'
             item.kind_icon = ''
         end
         return item
     end,
     new_params = function(client, bufnr, params)
-        if client.name == 'copilot-ls' then
+        if client.name == 'copilot' then
             params.textDocument.version = vim.lsp.util.buf_versions[bufnr]
             params.formattingOptions = {
                 tabSize = vim.fn.shiftwidth(),

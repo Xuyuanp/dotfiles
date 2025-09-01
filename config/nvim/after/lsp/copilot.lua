@@ -9,13 +9,13 @@ local KindToLevel = {
 
 local function notify(msg, level, opts)
     opts = opts or {}
-    opts.title = 'copilot-ls'
+    opts.title = 'copilot'
     vim.notify(msg, level, opts)
 end
 
 local function notify_once(msg, level, opts)
     opts = opts or {}
-    opts.title = 'copilot-ls'
+    opts.title = 'copilot'
     vim.notify_once(msg, level, opts)
 end
 
@@ -81,6 +81,7 @@ local handlers = {
         end
 
         vim.fn.setreg('+', res.userCode)
+        vim.fn.setreg('*', res.userCode)
 
         vim.print(string.format(
             [[If browser does not open automatically, please visit: %s
@@ -89,50 +90,35 @@ Enter the code: %s]],
             res.userCode
         ))
 
-        client:exec_cmd(res.command, { bufnr = ctx.bufnr }, function(err, res)
-            if err then
-                notify('Failed to open browser: ' .. vim.inspect(err), vim.log.levels.WARN)
+        client:exec_cmd(res.command, { bufnr = ctx.bufnr }, function(cmd_err, cmd_res)
+            if cmd_err then
+                notify('Failed to open browser: ' .. vim.inspect(cmd_err), vim.log.levels.WARN)
                 return
             end
-            if res.status == 'OK' then
-                notify('Successfully signed in as: ' .. res.user, vim.log.levels.INFO)
+            if cmd_res.status == 'OK' then
+                notify('Successfully signed in as: ' .. cmd_res.user, vim.log.levels.INFO)
             else
-                notify('Failed to sign in: ' .. vim.inspect(res), vim.log.levels.ERROR)
+                notify('Failed to sign in: ' .. vim.inspect(cmd_res), vim.log.levels.ERROR)
             end
         end)
     end,
 }
 
-vim.api.nvim_create_autocmd('BufWinEnter', {
-    group = vim.api.nvim_create_augroup('dotvim.lsp.copilot_ls', { clear = true }),
-    callback = function(args)
-        local client = vim.lsp.get_clients({ bufnr = args.buf, name = 'copilot-ls' })[1]
-        if not client then
-            return
-        end
-        local params = vim.lsp.util.make_text_document_params(args.buf)
-        client:notify(methods.textDocument_didFocus, params)
-    end,
-})
-
-local version = vim.version()
-
 ---@type vim.lsp.Config
 return {
-    cmd = { 'copilot-language-server', '--stdio' },
-    root_dir = vim.fs.root(0, { '.git', 'lua/' }),
-    init_options = {
-        editorInfo = {
-            name = 'Neovim',
-            version = string.format('v%d.%d.%d', version.major, version.minor, version.patch),
-        },
-        editorPluginInfo = {
-            name = 'copilot-ls',
-            version = 'dev',
-        },
-    },
-    handlers = handlers,
+    root_markers = { '.git', 'lua/' },
     capabilities = {
         workspace = { workspaceFolders = true },
     },
+    handlers = handlers,
+    on_init = function(client)
+        local group = vim.api.nvim_create_augroup('dotvim.lsp.copilot', { clear = true })
+        vim.api.nvim_create_autocmd('BufWinEnter', {
+            group = group,
+            callback = function(args)
+                local params = vim.lsp.util.make_text_document_params(args.buf)
+                client:notify(methods.textDocument_didFocus, params)
+            end,
+        })
+    end,
 }

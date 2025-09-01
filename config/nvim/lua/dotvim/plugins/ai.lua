@@ -2,28 +2,6 @@ local features = require('dotvim.features')
 
 return {
     {
-        'CopilotC-Nvim/CopilotChat.nvim',
-        version = '*',
-        cmd = { 'CopilotChat' },
-        dependencies = {
-            'zbirenbaum/copilot.lua',
-            'nvim-lua/plenary.nvim',
-        },
-        build = 'make tiktoken', -- Only on MacOS or Linux
-        opts = {},
-        config = function(_, opts)
-            require('CopilotChat').setup(opts)
-        end,
-    },
-    {
-        'zbirenbaum/copilot.lua',
-        opts = {
-            suggestion = { enabled = false },
-            panel = { enabled = false },
-        },
-    },
-
-    {
         'olimorris/codecompanion.nvim',
         version = '*',
         cmd = {
@@ -257,7 +235,6 @@ return {
         init = function()
             vim.g.copilot_nes_debounce = 400
             vim.lsp.enable('copilot_ls', false)
-            vim.lsp.enable('copilot-ls', true) -- use my own copilot ls
         end,
         keys = {
             {

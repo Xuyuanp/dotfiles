@@ -1,5 +1,4 @@
 {
-  "CopilotChat.nvim": { "branch": "main", "commit": "ad2c759ea6db36bfefa9c7ecc7c706315564c9c0" },
   "Jenkinsfile-vim-syntax": { "branch": "master", "commit": "0d05729168ea44d60862f17cffa80024ab30bcc9" },
   "SchemaStore.nvim": { "branch": "main", "commit": "8e74c08998fd786239caba373344f4e4601e21fe" },
   "actions-preview.nvim": { "branch": "master", "commit": "36513ad213855d497b7dd3391a24d1d75d58e36f" },
@@ -13,7 +12,6 @@
   "codeium.nvim": { "branch": "main", "commit": "821b570b526dbb05b57aa4ded578b709a704a38a" },
   "colortils.nvim": { "branch": "main", "commit": "948d4eddbd20c3e9eac79368dc50c7929d4fb823" },
   "copilot-lsp": { "branch": "main", "commit": "041385ef92d45f0ede6df9bb8bbf3b87c7acfa81" },
-  "copilot.lua": { "branch": "master", "commit": "46a97dc0719064f39c39f880d91a2c2b18fb3d6c" },
   "crates.nvim": { "branch": "main", "commit": "ac9fa498a9edb96dc3056724ff69d5f40b898453" },
   "fidget.nvim": { "branch": "main", "commit": "b61e8af9b8b68ee0ec7da5fb7a8c203aae854f2e" },
   "flash.nvim": { "branch": "main", "commit": "3c942666f115e2811e959eabbdd361a025db8b63" },
