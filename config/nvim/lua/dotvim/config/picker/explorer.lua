@@ -11,7 +11,7 @@ local function get_siblings(picker, item)
         :totable()
 
     table.sort(siblings, function(a, b)
-        return a.sort < b.sort
+        return a.idx < b.idx
     end)
     return siblings
 end
@@ -19,8 +19,7 @@ end
 ---@param picker snacks.Picker
 ---@param file string
 local function goto_file(picker, file)
-    local state = require('snacks.picker.source.explorer').get_state(picker)
-    state:show(file)
+    require('snacks.explorer.actions').reveal(picker, file)
 end
 
 ---@param fn fun(siblings: snacks.picker.Item[], item: snacks.picker.Item): snacks.picker.Item
