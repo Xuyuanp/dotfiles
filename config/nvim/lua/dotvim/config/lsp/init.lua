@@ -33,6 +33,10 @@ function M.setup()
     require('dotvim.config.lsp.keymaps').setup()
     require('dotvim.config.lsp.autocmds').setup()
 
+    if vim.fn.has('nvim-0.12') then
+        vim.lsp.on_type_formatting.enable(true)
+    end
+
     local default_config = {
         capabilities = make_capabilities(),
     }
