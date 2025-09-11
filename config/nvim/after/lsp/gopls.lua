@@ -5,12 +5,9 @@ return {
             usePlaceholders = false,
             templateExtensions = { 'tpl', 'yaml' },
             experimentalPostfixCompletions = true,
+            gofumpt = true,
             semanticTokens = false,
-            semanticTokenTypes = {
-                string = false,
-                keyword = false,
-            },
-            staticcheck = false,
+            staticcheck = false, -- leave for golangci-lint
             vulncheck = 'Imports',
             codelenses = {
                 gc_details = true,
@@ -26,7 +23,7 @@ return {
                 unusedwrite = true,
                 unusedparams = true,
                 unusedvariable = true,
-                useany = true,
+                -- useany = true,
             },
             hints = {
                 assignVariableTypes = true,
