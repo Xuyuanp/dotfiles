@@ -14,7 +14,7 @@ local function dfs(node)
     if scopes[node_type] then
         local row_start, _, row_end = node:range()
         vim.api.nvim_buf_set_extmark(0, ns_id, row_end, 0, {
-            virt_text = { { string.format('end of %s: %d', scopes[node_type], row_start + 1), 'Comment' } },
+            virt_text = { { string.format('end of %s: %d', scopes[node_type], row_start + 1), '@comment.note' } },
         })
     end
     for child in node:iter_children() do
@@ -23,8 +23,8 @@ local function dfs(node)
 end
 
 local function hint_scopes(bufnr)
-    local parser = ts.get_parser(bufnr, 'helm')
-    if not parser then
+    local ok, parser = pcall(ts.get_parser, bufnr, 'helm')
+    if not ok or not parser then
         return
     end
     vim.api.nvim_buf_clear_namespace(0, ns_id, 0, -1)
@@ -47,3 +47,5 @@ vim.api.nvim_create_autocmd({ 'TextChangedI' }, {
         vim.api.nvim_buf_clear_namespace(0, ns_id, 0, -1)
     end,
 })
+
+hint_scopes(0)
