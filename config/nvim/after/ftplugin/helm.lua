@@ -49,3 +49,6 @@ vim.api.nvim_create_autocmd({ 'TextChangedI' }, {
 })
 
 hint_scopes(0)
+
+vim.bo.shiftwidth = 2
+vim.bo.tabstop = 2
