@@ -29,6 +29,7 @@ local M = {
                 },
                 ghost_text = { enabled = true },
                 trigger = {
+                    show_on_insert_on_trigger_character = false,
                     show_on_blocked_trigger_characters = function()
                         local ft = vim.bo.filetype
                         if ft == 'go' or ft == 'python' then
