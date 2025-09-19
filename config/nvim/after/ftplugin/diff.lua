@@ -22,6 +22,3 @@ end
 
 vim.keymap.set({ 'x', 'o' }, 'ih', M.hunk_text_object, { buffer = true, desc = 'inner hunk' })
 vim.keymap.set('n', '<leader>D', 'vihD', { buffer = true, desc = '[Diff] delete current hunk', remap = true })
-
-vim.wo.foldmethod = 'expr'
-vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
