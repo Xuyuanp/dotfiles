@@ -73,8 +73,29 @@ end
 function M.setup(opts)
     M.register_custom_directives()
 
-    local ts_configs = require('nvim-treesitter.configs')
-    ts_configs.setup(opts)
+    require('nvim-treesitter').setup(opts)
+
+    local installed = require('nvim-treesitter').get_installed('parsers')
+
+    vim.api.nvim_create_autocmd('FileType', {
+        group = vim.api.nvim_create_augroup('dotvim.treesitter', { clear = true }),
+        callback = function(ev)
+            local ft = ev.match
+            local lang = vim.treesitter.language.get_lang(ft)
+            if not lang then
+                return
+            end
+
+            if not vim.tbl_contains(installed, lang) then
+                return
+            end
+
+            pcall(vim.treesitter.start)
+            if ft ~= 'yaml' and ft ~= 'helm' then
+                vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+            end
+        end,
+    })
 end
 
 return M
