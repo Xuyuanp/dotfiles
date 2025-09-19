@@ -103,7 +103,7 @@ return {
                         },
                         schema = {
                             model = {
-                                default = 'gpt-5',
+                                default = 'gemini-2.5-pro',
                             },
                         },
                     }),
