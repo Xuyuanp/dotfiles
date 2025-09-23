@@ -54,6 +54,14 @@ function M.setup(opts)
         },
     }, neotest_ns)
 
+    vim.api.nvim_create_autocmd('FileType', {
+        pattern = 'neotest-*',
+        group = vim.api.nvim_create_augroup('dotvim.neotest', { clear = true }),
+        callback = function()
+            vim.keymap.set('n', 'q', '<cmd>close<cr>', { buffer = true, desc = 'Close window' })
+        end,
+    })
+
     local done = false
 
     vim.keymap.set({ 'n', 'i' }, '<A-t>', function()
