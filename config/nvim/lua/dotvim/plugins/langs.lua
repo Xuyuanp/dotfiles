@@ -19,11 +19,6 @@ return {
                 icons = { ' ', ' ', ' ', ' ', ' ', ' ' },
                 right_pad = 1,
             },
-            win_options = {
-                conceallevel = {
-                    rendered = 1,
-                },
-            },
         },
         opts_extend = { 'file_types' },
         dependencies = { 'nvim-treesitter/nvim-treesitter' },
