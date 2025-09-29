@@ -445,6 +445,7 @@ e6b6   nf-custom-chuck
 e6b0   nf-custom-common_lisp
 e61d   nf-custom-cpp
 e62f   nf-custom-crystal
+e6b8   nf-custom-css
 e612   nf-custom-default
 e62e   nf-custom-electron
 e62d   nf-custom-elixir
@@ -985,6 +986,18 @@ e8ed   nf-dev-yugabytedb
 e8ee   nf-dev-yunohost
 e778   nf-dev-zend
 e8ef   nf-dev-zig
+ee00   nf-extra-progress_empty_left
+ee01   nf-extra-progress_empty_mid
+ee02   nf-extra-progress_empty_right
+ee03   nf-extra-progress_full_left
+ee04   nf-extra-progress_full_mid
+ee05   nf-extra-progress_full_right
+ee06   nf-extra-progress_spinner_1
+ee07   nf-extra-progress_spinner_2
+ee08   nf-extra-progress_spinner_3
+ee09   nf-extra-progress_spinner_4
+ee0a   nf-extra-progress_spinner_5
+ee0b   nf-extra-progress_spinner_6
 f26e   nf-fa-500px
 f29b   nf-fa-accessible_icon
 f0b7   nf-fa-accusoft
