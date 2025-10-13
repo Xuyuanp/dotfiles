@@ -40,9 +40,11 @@ return {
         config = function(_, opts)
             require('mason').setup(opts)
 
+            local disabled = { 'rust_analyzer', 'stylua' }
+
             for _, pkg in ipairs(require('mason-registry').get_installed_packages()) do
                 local ls_name = vim.tbl_get(pkg, 'spec', 'neovim', 'lspconfig')
-                if ls_name and ls_name ~= 'rust_analyzer' then
+                if ls_name and not vim.tbl_contains(disabled, ls_name) then
                     vim.lsp.enable(ls_name)
                 end
             end
