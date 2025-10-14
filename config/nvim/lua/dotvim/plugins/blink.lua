@@ -111,17 +111,15 @@ local M = {
 
     {
         'saghen/blink.cmp',
+        dependencies = { { 'joelazar/blink-calc' } },
         optional = true,
-        dependencies = {
-            'hrsh7th/cmp-calc',
-        },
         opts = {
             sources = {
                 default = { 'calc' },
                 providers = {
                     calc = {
-                        name = 'calc',
-                        module = 'blink.compat.source',
+                        name = 'Calc',
+                        module = 'blink-calc',
                         score_offset = -1,
                     },
                 },
