@@ -43,7 +43,7 @@ function M.setup()
 
     vim.api.nvim_create_autocmd('FileType', {
         group = group_id,
-        pattern = { 'help', 'man', 'qf' },
+        pattern = { 'help', 'man', 'qf', 'nvim-undotree' },
         callback = function(args)
             vim.api.nvim_buf_set_keymap(args.buf, 'n', 'q', '<cmd>q<CR>', {
                 noremap = true,

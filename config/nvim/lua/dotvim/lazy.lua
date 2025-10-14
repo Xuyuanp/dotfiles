@@ -73,6 +73,7 @@ function M.setup()
         },
     }
     require('lazy').setup(plugins, opts)
+    vim.cmd([[packadd nvim.undotree]])
 
     vim.api.nvim_create_autocmd('User', {
         group = vim.api.nvim_create_augroup('dotvim.lazy', { clear = true }),
