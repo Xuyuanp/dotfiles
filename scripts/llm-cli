@@ -72,7 +72,7 @@ def main():
 
     client = OpenAI()
     rsp = client.chat.completions.create(
-        model="gpt-4o",
+        model=os.getenv("OPENAI_MODEL", "gpt-5"),
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": input},
