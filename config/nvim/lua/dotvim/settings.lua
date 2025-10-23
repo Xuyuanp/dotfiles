@@ -161,6 +161,8 @@ function M.setup()
 
     vim.o.jumpoptions = 'stack'
 
+    vim.o.exrc = true
+
     vim.filetype.add({
         filename = {
             ['.envrc'] = 'sh',
