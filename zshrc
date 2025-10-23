@@ -244,17 +244,14 @@ EOF
 package main_test
 
 import (
-	"os"
 	"testing"
 )
 
-func TestMain(m *testing.M) {
-	os.Exit(m.Run())
-}
-
 func BenchmarkMain(b *testing.B) {
 	b.ReportAllocs()
-	for n := 0; n < b.N; n++ {
+	b.ResetTimer()
+
+	for b.Loop() {
 
 	}
 }
