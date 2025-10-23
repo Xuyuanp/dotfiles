@@ -168,6 +168,7 @@ function M.setup()
             ['.envrc'] = 'sh',
             ['.helmignore'] = 'gitignore',
             ['.dockerignore'] = 'gitignore',
+            ['README'] = 'markdown',
         },
         extension = {
             ['tpl'] = 'helm',
