@@ -94,7 +94,13 @@ return {
                     copilot = require('codecompanion.adapters').extend('openai_compatible', {
                         name = 'copilot',
                         formatted_name = 'Copilot',
-                        icon = '',
+                        icon = function(adapter)
+                            local model_name = adapter.model and adapter.model.name or ''
+                            if vim.startswith(model_name, 'gemini') then
+                                return '󰫢'
+                            end
+                            return ''
+                        end,
                         env = {
                             api_key = 'OPENAI_API_KEY',
                             url = vim.env.OPENAI_BASE_URL,
