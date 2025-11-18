@@ -42,6 +42,7 @@
   "neotest": { "branch": "master", "commit": "7166dc36af2760a76479e021e0521e23f62165f1" },
   "neotest-golang": { "branch": "main", "commit": "122344b0a0a39a1f2ce27a662ce554252625dc1f" },
   "nes.nvim": { "branch": "feat/lsp-api", "commit": "2af18b753796975e9c1ae0a136c11bced7f483ab" },
+  "nomad": { "branch": "main", "commit": "f3d134228f3f83ce908f8beafa717957ae6db68c" },
   "none-ls.nvim": { "branch": "main", "commit": "5cf63841461b49989972d35bf886e076a1ab3649" },
   "nui.nvim": { "branch": "main", "commit": "de740991c12411b663994b2860f1a4fd0937c130" },
   "nvim-autopairs": { "branch": "master", "commit": "7a2c97cccd60abc559344042fefb1d5a85b3e33b" },
