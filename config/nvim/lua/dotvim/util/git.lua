@@ -48,4 +48,37 @@ function M.load_head(bufnr, root)
     load_head(bufnr, root)
 end
 
+function M.git_remote_link()
+    local system = function(cmd)
+        return vim.trim(vim.fn.system(cmd))
+    end
+    local root_dir = system({ 'git', 'rev-parse', '--show-toplevel' })
+    local branch = system({ 'git', 'rev-parse', '--abbrev-ref', 'HEAD' })
+    local url = system({ 'git', 'remote', 'get-url', 'origin' })
+    if url:match('^git@') then
+        url = url:gsub(':', '/')
+        url = url:gsub('^git@', 'https://')
+    end
+    local host = url:gsub('%.git$', '')
+    local file_path = vim.fn.expand('%:p'):sub(#root_dir + 2)
+    local line = vim.fn.line('.')
+    local link = string.format('%s/blob/%s/%s#L%d', host, branch, file_path, line)
+
+    local on_choice = function(choice)
+        if not choice then
+            return
+        end
+        if choice == 'Copy' then
+            vim.fn.setreg('+', link)
+            vim.fn.setreg('*', link)
+            vim.notify('Copied to clipboard: ' .. link, vim.log.levels.INFO)
+        elseif choice == 'Open' then
+            vim.ui.open(link)
+        end
+    end
+    vim.ui.select({ 'Open', 'Copy' }, {
+        prompt = link,
+    }, on_choice)
+end
+
 return M

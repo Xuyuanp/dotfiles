@@ -9,6 +9,7 @@ require('dotvim.lazy').setup()
 require('dotvim.autocmds').setup()
 require('dotvim.commands').setup()
 require('dotvim.config.lsp').setup()
+
 if vim.g.neovide then
     require('dotvim.neovide').setup()
 end

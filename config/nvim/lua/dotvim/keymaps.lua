@@ -90,6 +90,10 @@ local function setup()
     set_keymap('i', '<C-j>', snippets_switch(F, '<C-j>'), { desc = '[Snippets] jump forward' })
     set_keymap('i', '<C-k>', snippets_switch(B, '<C-k>'), { desc = '[Snippets] jump backward' })
     ---]]
+
+    set_keymap('n', '<leader>gl', function()
+        require('dotvim.util.git').git_remote_link()
+    end, { desc = '[Git] Remote Link' })
 end
 
 return {
