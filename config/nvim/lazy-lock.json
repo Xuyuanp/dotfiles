@@ -11,7 +11,7 @@
   "codecompanion.nvim": { "branch": "main", "commit": "683242e59393ce877906956abe3e540613d42275" },
   "codeium.nvim": { "branch": "main", "commit": "821b570b526dbb05b57aa4ded578b709a704a38a" },
   "colortils.nvim": { "branch": "main", "commit": "948d4eddbd20c3e9eac79368dc50c7929d4fb823" },
-  "copilot-lsp": { "branch": "main", "commit": "79899e9225505c569db297dec5d2f6c66ff2e7be" },
+  "copilot-lsp": { "branch": "main", "commit": "884034b23c3716d55b417984ad092dc2b011115b" },
   "crates.nvim": { "branch": "main", "commit": "ac9fa498a9edb96dc3056724ff69d5f40b898453" },
   "fidget.nvim": { "branch": "main", "commit": "b61e8af9b8b68ee0ec7da5fb7a8c203aae854f2e" },
   "flash.nvim": { "branch": "main", "commit": "2febce67ff9cf7638d2569d17c41af02c38401eb" },
@@ -82,6 +82,6 @@
   "vista.vim": { "branch": "master", "commit": "1e90efad6e32c4f7d16b1ca8f49bf63d0693802e" },
   "volt": { "branch": "main", "commit": "620de1321f275ec9d80028c68d1b88b409c0c8b1" },
   "which-key.nvim": { "branch": "main", "commit": "b4177e3eaf15fe5eb8357ebac2286d488be1ed00" },
-  "yanil": { "branch": "main", "commit": "43e0c75a9efac50f14aa57c7752955aebe40c832" },
+  "yanil": { "branch": "main", "commit": "1f9b667376cb479b5d9b7bbffdb7bbba507e32d3" },
   "zinit-vim-syntax": { "branch": "main", "commit": "6f3e6b55182b92141688331c101bc07616ab0d2b" }
 }
