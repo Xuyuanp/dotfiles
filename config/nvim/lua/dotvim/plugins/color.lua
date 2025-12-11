@@ -65,6 +65,9 @@ return {
                     CopilotLspNesDelete = { bg = theme.diff.delete },
                     CopilotLspNesAdd = { bg = theme.diff.add },
                     CopilotLspNesChange = { bg = theme.diff.change },
+
+                    ['@lsp.typemod.parameter.mutable.rust'] = { bold = true, italic = true, underline = true },
+                    ['@lsp.typemod.variable.mutable.rust'] = { bold = true, italic = true, underline = true },
                 }
             end,
         },
