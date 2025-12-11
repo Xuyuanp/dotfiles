@@ -53,8 +53,6 @@ return {
                     LspSignatureActiveParameter = { underline = true, bold = true, italic = true },
                     LspCodeLens = { fg = theme.ui.special },
 
-                    TelescopeBorder = { bg = 'NONE' },
-
                     ScrollbarHead = { fg = theme.ui.nontext, bg = 'NONE', italic = false, bold = false },
                     ScrollbarBody = { fg = theme.ui.nontext, bg = 'NONE', italic = false, bold = false },
                     ScrollbarTail = { fg = theme.ui.nontext, bg = 'NONE', italic = false, bold = false },
