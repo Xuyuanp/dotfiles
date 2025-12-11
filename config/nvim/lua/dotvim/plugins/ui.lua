@@ -277,6 +277,17 @@ return {
                     require('gitsigns').refresh()
                 end,
             })
+
+            vim.api.nvim_create_user_command('GitlabReview', function()
+                local mr = require('dotvim.util.git').gitlab_mr()
+                if not mr then
+                    return
+                end
+                local target_branch = mr.target_branch
+                require('gitsigns').change_base(target_branch, true)
+            end, {
+                desc = '[Gitsigns] Create Gitlab Merge Request Review',
+            })
         end,
     },
 

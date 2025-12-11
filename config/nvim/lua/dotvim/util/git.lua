@@ -48,10 +48,11 @@ function M.load_head(bufnr, root)
     load_head(bufnr, root)
 end
 
-function M.git_remote_link()
-    local system = function(cmd)
-        return vim.trim(vim.fn.system(cmd))
-    end
+local function system(cmd)
+    return vim.trim(vim.fn.system(cmd))
+end
+
+function M.remote_link()
     local root_dir = system({ 'git', 'rev-parse', '--show-toplevel' })
     local branch = system({ 'git', 'rev-parse', '--abbrev-ref', 'HEAD' })
     local url = system({ 'git', 'remote', 'get-url', 'origin' })
@@ -79,6 +80,16 @@ function M.git_remote_link()
     vim.ui.select({ 'Open', 'Copy' }, {
         prompt = link,
     }, on_choice)
+end
+
+function M.gitlab_mr()
+    local mr_data = system({ 'glab', 'mr', 'view', '-F', 'json' })
+    if vim.v.shell_error ~= 0 then
+        vim.notify('Failed to get MR data', vim.log.levels.WARN)
+        return
+    end
+    local mr = vim.json.decode(mr_data)
+    return mr
 end
 
 return M

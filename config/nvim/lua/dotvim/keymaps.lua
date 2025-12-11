@@ -92,7 +92,7 @@ local function setup()
     ---]]
 
     set_keymap('n', '<leader>gl', function()
-        require('dotvim.util.git').git_remote_link()
+        require('dotvim.util.git').remote_link()
     end, { desc = '[Git] Remote Link' })
 end
 
