@@ -94,6 +94,36 @@ local function setup()
     set_keymap('n', '<leader>gl', function()
         require('dotvim.util.git').remote_link()
     end, { desc = '[Git] Remote Link' })
+
+    local hover_timer = vim.uv.new_timer()
+    assert(hover_timer, 'Failed to create hover timer')
+    local on_hover = function()
+        local mouse_pos = vim.fn.getmousepos()
+        local winid = mouse_pos.winid
+        if winid == 0 then
+            return
+        end
+        local bufnr = vim.api.nvim_win_get_buf(winid)
+
+        vim.api.nvim_exec_autocmds({ 'User' }, {
+            pattern = 'MouseHover',
+            data = {
+                win = winid,
+                buf = bufnr,
+                mouse_pos = mouse_pos,
+            },
+        })
+    end
+    set_keymap({ 'i', 'n' }, '<MouseMove>', function()
+        hover_timer:start(800, 0, function()
+            hover_timer:stop()
+            vim.schedule(on_hover)
+        end)
+    end, {
+        noremap = true,
+        silent = true,
+        desc = 'Mouse move (no-op, for hover autocmd)',
+    })
 end
 
 return {

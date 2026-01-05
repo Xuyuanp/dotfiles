@@ -92,6 +92,29 @@ function M.setup()
             vim.w.prev_window = (not prev_is_floating) and prev_winnr or nil
         end,
     })
+
+    vim.api.nvim_create_autocmd('User', {
+        group = group_id,
+        pattern = 'MouseHover',
+        callback = function(args)
+            local win_info = vim.fn.getwininfo(args.data.win)[1]
+            ---@type vim.fn.getmousepos.ret
+            local mouse_pos = args.data.mouse_pos
+
+            -- skip if mouse is out of text area
+            if mouse_pos.wincol <= win_info.textoff then
+                return
+            end
+            if mouse_pos.winrow <= win_info.topline then
+                return
+            end
+            if mouse_pos.winrow > win_info.botline + 1 then
+                return
+            end
+
+            -- TODO
+        end,
+    })
 end
 
 return M

@@ -163,6 +163,8 @@ function M.setup()
 
     vim.o.exrc = true
 
+    vim.o.mousemoveevent = true
+
     vim.filetype.add({
         filename = {
             ['.envrc'] = 'sh',
