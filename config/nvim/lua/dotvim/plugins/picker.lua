@@ -15,16 +15,18 @@ return {
         keys = function()
             local prefix = '<leader>p'
             local keys = {
+                { key = 'b', source = 'buffers' },
+                { key = 'c', source = 'commands' },
+                { key = 'e', source = 'explorer' },
+                { key = 'f', source = 'files' },
+                { key = 'h', source = 'help' },
+                { key = 'j', source = 'jumps' },
+                { key = 'k', source = 'keymaps' },
+                { key = 'l', source = 'lines' },
+                { key = 'n', source = 'notifications' },
                 { key = 'p', source = 'pickers' },
                 { key = 'r', source = 'resume' },
-                { key = 'f', source = 'files' },
-                { key = 'b', source = 'buffers' },
                 { key = 's', source = 'grep', desc = 'search' },
-                { key = 'e', source = 'explorer' },
-                { key = 'n', source = 'notifications' },
-                { key = 'h', source = 'help' },
-                { key = 'k', source = 'keymaps' },
-                { key = 'c', source = 'commands' },
                 { key = 'glf', source = 'git_log_file' },
             }
             return vim.iter(keys)
