@@ -224,7 +224,7 @@ function cfm() {
 }
 
 function tgo() {
-    local tgo_path="${HOME}/.tmp/tgo"
+    local tgo_path="${HOME}/workspace/tgo"
     mkdir -p "${tgo_path}"
 
     # check if the first argument is exists
