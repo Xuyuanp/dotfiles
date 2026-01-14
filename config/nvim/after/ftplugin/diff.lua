@@ -22,3 +22,12 @@ end
 
 vim.keymap.set({ 'x', 'o' }, 'ih', M.hunk_text_object, { buffer = true, desc = 'inner hunk' })
 vim.keymap.set('n', '<leader>D', 'vihD', { buffer = true, desc = '[Diff] delete current hunk', remap = true })
+
+-- foldmethod would be updated by plugin ufo, so we need to set it again
+local winnr = vim.api.nvim_get_current_win()
+vim.defer_fn(function()
+    if not vim.api.nvim_win_is_valid(winnr) then
+        return
+    end
+    vim.wo[winnr].foldmethod = 'expr'
+end, 500)

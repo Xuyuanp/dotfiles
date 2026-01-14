@@ -43,13 +43,6 @@ local function git_diff(_tree, node)
     vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, diff)
     vim.bo[bufnr].undolevels = 1000
 
-    -- idk why, but i have to set foldmethod later
-    vim.defer_fn(function()
-        vim.api.nvim_win_call(winnr, function()
-            vim.wo.foldmethod = 'expr'
-        end)
-    end, 500)
-
     vim.api.nvim_buf_create_user_command(bufnr, 'Apply', function()
         require('yanil.git').apply_buf(bufnr)
     end, { desc = 'apply the patch in this buffer' })
