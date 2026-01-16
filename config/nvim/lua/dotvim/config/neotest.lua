@@ -64,7 +64,7 @@ function M.setup(opts)
 
     local done = false
 
-    vim.keymap.set({ 'n', 'i' }, '<A-t>', function()
+    vim.keymap.set({ 'n', 'i' }, '<leader>t', function()
         if not done then
             require('neotest').setup(opts)
             done = true

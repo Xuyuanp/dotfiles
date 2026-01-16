@@ -60,10 +60,25 @@ return {
         'Xuyuanp/floaterm.nvim',
         keys = {
             {
-                '<A-o>',
+                '<A-t>',
                 lazy_require('floaterm').toggle,
                 mode = { 'n', 't' },
                 desc = '[Floaterm] toggle',
+            },
+            {
+
+                '<A-o>',
+                function()
+                    require('floaterm').open({
+                        force_new = true,
+                        session = {
+                            name = 'opencode',
+                            cmd = { 'opencode' },
+                        },
+                    })
+                end,
+                mode = { 'n' },
+                desc = '[Floaterm] opencode',
             },
         },
         opts = {},
