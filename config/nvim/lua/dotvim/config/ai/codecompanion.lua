@@ -15,7 +15,7 @@ end
 local function create_progress_handle(event)
     local progress = require('fidget.progress')
     return progress.handle.create({
-        title = ' Requesting assistance (' .. event.strategy .. ')',
+        title = ' Requesting assistance (' .. event.interaction .. ')',
         message = 'Thinking...',
         lsp_client = {
             name = M.format_adapter(event.adapter),
