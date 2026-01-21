@@ -74,6 +74,7 @@ return {
                         session = {
                             name = 'opencode',
                             cmd = { 'opencode' },
+                            win_opts = { winblend = 0 },
                         },
                     })
                 end,
@@ -81,7 +82,11 @@ return {
                 desc = '[Floaterm] opencode',
             },
         },
-        opts = {},
+        opts = {
+            session = {
+                win_opts = { winblend = vim.o.winblend },
+            },
+        },
     },
 
     {
