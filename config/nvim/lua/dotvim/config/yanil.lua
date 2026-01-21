@@ -202,6 +202,12 @@ else
     end
 end
 
+local function watch_dir(dir, on_change)
+    local w = vim.uv.new_fs_event()
+    assert(w)
+    w:start(dir, {}, on_change)
+end
+
 function M.setup()
     yanil.setup()
 
@@ -283,6 +289,12 @@ function M.setup()
     end, {
         desc = '[Yanil] focus current file in tree',
     })
+
+    local update_tree = dotutil.debounce(function()
+        git.update(tree.cwd)
+        tree:force_refresh_tree()
+    end, 500)
+    watch_dir(vim.fn.getcwd(), update_tree)
 end
 
 return M

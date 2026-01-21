@@ -88,4 +88,19 @@ function M.new_cache_table(fn)
     })
 end
 
+---@param fn function
+---@param delay integer
+function M.debounce(fn, delay)
+    local timer = vim.uv.new_timer()
+    assert(timer)
+
+    return function(...)
+        local argv = vim.F.pack_len(...)
+        timer:start(delay, 0, function()
+            timer:stop()
+            vim.schedule_wrap(fn)(vim.F.unpack_len(argv))
+        end)
+    end
+end
+
 return M
