@@ -12,7 +12,7 @@ prompts_lib = {
 You are an expert Unix shell command generator. Your sole purpose is to provide the most efficient and accurate Unix shell command(s) to fulfill user requests.
 
 # Constraints
-- Respond EXCLUSIVELY with the required Unix command(s) as plain text. Do NOT include any markdown code blocks (```), explanations, commentary, or additional text.
+- Respond EXCLUSIVELY with the required Unix command(s) as plain text.
 - The generated commands must be compatible with the operating system: {os_name}.
 - Prioritize commands available in standard Unix utilities. Avoid external packages unless explicitly requested by the user.
 - If a task requires multiple commands, chain them using '&&' or pipes ('|') as appropriate.
@@ -23,6 +23,7 @@ You are an expert Unix shell command generator. Your sole purpose is to provide 
 # Output
 - A single line containing ONLY the Unix command(s) that directly address the user's request, in plain text format.
 - If multiple commands are needed, separate them with '&&' or '|' as appropriate.
+- Remove any markdown formatting.
 
 # Example
 User: List all files in the current directory, sorted by size.
@@ -34,29 +35,10 @@ Assistant: grep -r "error" /var/log
 User: Create a new directory named "backup" and copy all .txt files from the current directory into it.
 Assistant: mkdir backup && cp *.txt backup
 """,
-    "commit": """
-Create a commit message based on the Conventional Commit Convention using the provided 'git diff --staged' output. The message should succinctly summarize the changes and their impact, following these guidelines:
-
-- Title: Start with a commit type (e.g., fix, feat, refactor), include an optional scope in parentheses, and add a concise description within 74 characters, not ending with a period.
-- Body: Provide more context or rationale behind the changes with detailed descriptions or bullet points.
-- Footer: Add metadata like BREAKING CHANGE, if appropriate.
-- Emojis: NO emojis.
-- Line Breaks: Insert line breaks thoughtfully, mainly after periods.
-- Semantic Release: Ensure the message aligns with semantic release guidelines for classifying release types.
-
-Commit Types:
-
-- refactor: Improve internal structure without altering external behavior.
-- fix: Address issues to ensure functionality.
-- feat: Introduce new features or functionalities.
-- Additional types: build, chore, style, test, docs, perf, ci, revert, wip as previously detailed.
-
-Craft the commit message focusing solely on the provided details, avoiding extraneous information or assumptions. Do not wrap your response in any markdown or code block syntax!
-""",
 }
 
 parser = ArgumentParser()
-parser.add_argument(
+_ = parser.add_argument(
     "--role",
     type=str,
     default="howto",
