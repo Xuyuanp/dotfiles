@@ -47,7 +47,6 @@ zinit light jeffreytse/zsh-vi-mode
 zinit snippet OMZL::clipboard.zsh
 zinit snippet OMZL::completion.zsh
 zinit snippet OMZL::history.zsh
-zinit snippet OMZP::colored-man-pages
 zinit snippet OMZP::gitignore
 
 autoload -Uz compinit && compinit
@@ -155,10 +154,18 @@ alias genpass="date +%s | sha256sum | base64 | head -c 14"
 if _exists nvim; then
     export EDITOR=nvim
     export VISUAL=nvim
-    export MANPAGER="nvim +Man!"
     alias vim='nvim'
     alias vi='nvim'
 fi
+
+function man() {
+    if [ -t 1 ]; then
+        # Output is a terminal, use Neovim
+        MANPAGER='nvim +Man!' command man "$@"
+    else
+        MANPAGER='cat' command man "$@"
+    fi
+}
 
 unfunction _exists
 
