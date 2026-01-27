@@ -292,3 +292,17 @@ function mkcd() {
 function zsh-stats() {
   fc -l 1 | awk '{CMD[$2]++;count++;}END { for (a in CMD)print CMD[a] " " CMD[a]/count*100 "% " a;}' | grep -v "./" | column -c3 -s " " -t | sort -nr | nl | head -n25
 }
+
+function oc() {
+    # Find available port
+    local port=4096
+    while [ $port -lt 5096 ]; do
+        if ! lsof -i :$port >/dev/null 2>&1; then
+            break
+        fi
+        port=$((port + 1))
+    done
+
+    export OPENCODE_PORT=$port
+    opencode --port $port "$@"
+}
