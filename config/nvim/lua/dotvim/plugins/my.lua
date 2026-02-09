@@ -66,7 +66,6 @@ return {
                 desc = '[Floaterm] toggle',
             },
             {
-
                 '<A-o>',
                 function()
                     require('floaterm').open({
@@ -135,17 +134,17 @@ return {
         lazy = false,
         branch = 'feat/lsp-api',
         config = function()
-            require('nes').setup({
-                provider = {
-                    name = 'codecompanion',
-                    codecompanion = {
-                        adapter = 'nes',
-                    },
-                },
-            })
+            -- require('nes').setup({
+            --     provider = {
+            --         name = 'codecompanion',
+            --         codecompanion = {
+            --             adapter = 'nes',
+            --         },
+            --     },
+            -- })
 
             local function request_nes()
-                require('copilot-lsp.nes').request_nes('nes')
+                require('copilot-lsp.nes').request_nes('copilot')
             end
             local debounced_fn = require('copilot-lsp.util').debounce(request_nes, 400)
 

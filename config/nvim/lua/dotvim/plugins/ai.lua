@@ -240,13 +240,12 @@ return {
         config = false,
         init = function()
             vim.g.copilot_nes_debounce = 400
-            vim.lsp.enable('copilot_ls', false)
         end,
         keys = {
             {
                 '<A-i>',
                 function()
-                    require('copilot-lsp.nes').request_nes('nes')
+                    require('copilot-lsp.nes').request_nes('copilots')
                 end,
                 mode = 'i',
                 desc = '[Nes] get suggestion',
