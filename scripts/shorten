@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+# 1. Read input: Accept argument OR stdin
+if [ -n "$1" ]; then
+    INPUT_PATH="$1"
+else
+    # If no argument, read from stdin (allows piping)
+    INPUT_PATH=$(tmux display-message -p '#{session_path}')
+fi
+
+# Exit if input is empty
+[ -z "$INPUT_PATH" ] && exit 1
+
+# 2. Replace $HOME with ~
+# This uses bash parameter expansion to replace the start of string
+PATH_STR="${INPUT_PATH/#$HOME/\~}"
+
+# 3. Handle edge cases (Root or explicit Home)
+if [[ "$PATH_STR" == "/" || "$PATH_STR" == "~" ]]; then
+    echo "$PATH_STR"
+    exit 0
+fi
+
+# 4. Process the path
+IFS='/' read -ra PARTS <<< "$PATH_STR"
+RESULT=""
+NUM_PARTS=${#PARTS[@]}
+
+for (( i=0; i<NUM_PARTS; i++ )); do
+    PART="${PARTS[i]}"
+
+    # Handle the very first element
+    if [[ $i -eq 0 ]]; then
+        # If path starts with /, the first element is empty.
+        # We add the root slash and continue.
+        if [[ -z "$PART" ]]; then
+            RESULT="/"
+            continue
+        fi
+    fi
+
+    # Determine if this is the last element (the leaf)
+    if [[ $i -eq $((NUM_PARTS - 1)) ]]; then
+        # Last element: Keep full name
+        RESULT+="$PART"
+    else
+        # Intermediate element: Shorten
+        if [[ "$PART" == "~" ]]; then
+            RESULT+="~"
+        else
+            # Take the first character
+            RESULT+="${PART:0:1}"
+        fi
+        # Add separator
+        RESULT+="/"
+    fi
+done
+
+echo "$RESULT"

@@ -66,6 +66,7 @@
     ~/.local/bin/spinner: scripts/spinner
     ~/.local/bin/llm-cli: scripts/llm-cli
     ~/.local/bin/secret-decode: scripts/secret-decode
+    ~/.local/bin/shorten: scripts/shorten
     ~/.editorconfig: editorconfig
 
     # for linux

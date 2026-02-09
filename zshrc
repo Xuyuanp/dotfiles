@@ -105,7 +105,6 @@ _prepend_path "${PYENV_ROOT}/bin"
 _prepend_path "${HOME}/.krew/bin"
 _prepend_path "${HOME}/.wasme/bin"
 _prepend_path "${HOME}/.local/share/bob/nvim-bin"
-_prepend_path "${HOME}/.local/bin"
 _prepend_path "${GOPATH}/bin"
 export PATH
 
@@ -171,6 +170,9 @@ unfunction _exists
 
 # TMUX
 tmux-window-name() {
+    if [ -z $TMUX ]; then
+        return
+    fi
 	($TMUX_PLUGIN_MANAGER_PATH/tmux-window-name/scripts/rename_session_windows.py &)
 }
 
