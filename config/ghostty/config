@@ -17,11 +17,17 @@ theme = "Kanagawa Wave"
 
 mouse-shift-capture = true
 
+cursor-style = block
+
 background-opacity = 0.9
 background-blur-radius = 5
 
 window-save-state = always
 
 confirm-close-surface = false
+
+# See: https://sw.kovidgoyal.net/kitty/keyboard-protocol/
+keybind = alt+backspace=text:\x1b\x7f
+keybind = shift+enter=text:\n
 
 config-file = ?os.config
