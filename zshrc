@@ -37,10 +37,11 @@ export NVM_COMPLETION=true
 export NVM_SYMLINK_CURRENT="true"
 zinit wait lucid light-mode for lukechilds/zsh-nvm
 
-function zvm_config() {
-    ZVM_CURSOR_STYLE_ENABLED=false
-}
 zvm_after_init_commands+=('[ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh')
+zvm_config() {
+    ZVM_CURSOR_STYLE_ENABLED=true
+    ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLOCK
+}
 zinit ice depth=1
 zinit light jeffreytse/zsh-vi-mode
 
