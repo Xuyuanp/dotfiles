@@ -169,17 +169,6 @@ function man() {
 
 unfunction _exists
 
-# TMUX
-tmux-window-name() {
-    if [ -z $TMUX ]; then
-        return
-    fi
-	($TMUX_PLUGIN_MANAGER_PATH/tmux-window-name/scripts/rename_session_windows.py &)
-}
-
-add-zsh-hook chpwd tmux-window-name
-
-
 # ================================ functions ================================= #
 
 function howto() {
