@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+# Smart tmux window namer.
+# Usage: tmux-window-name <pane_pid>
+# Returns a meaningful name for the tmux window based on the running process.
+
+set -euo pipefail
+
+shell_pid="$1"
+curr_cmd="$2"
+
+# Interpreter commands — when matched, use the first meaningful argument instead
+# Patterns use regex: python3.12, node18, ruby3.1 etc. are all matched
+interpreters="node[0-9.]*|python[0-9.]*|ruby[0-9.]*|perl[0-9.]*|java|deno|bun|ts-node|npx"
+
+# Find the foreground child process of the shell
+child_pid=$(pgrep -P "$shell_pid" 2>/dev/null | head -1 || true)
+
+if [[ -z "$child_pid" ]]; then
+  echo $curr_cmd
+  exit 0
+fi
+
+# Get the full command line
+full_cmd=$(ps -o command= -p "$child_pid" 2>/dev/null || true)
+
+if [[ -z "$full_cmd" ]]; then
+  echo $curr_cmd
+  exit 0
+fi
+
+# Parse into an array
+read -ra args <<< "$full_cmd"
+
+# Get basename of the command
+cmd_basename=$(basename "${args[0]}")
+
+# Check if this is an interpreter
+if [[ "$cmd_basename" =~ ^($interpreters)$ ]] && [[ ${#args[@]} -ge 2 ]]; then
+  # Find the first non-flag argument (doesn't start with -)
+  # But keep -m style args for context (e.g. python -m pytest)
+  for (( i=1; i<${#args[@]}; i++ )); do
+    arg="${args[$i]}"
+    if [[ "$arg" == "-m" ]] && [[ $(( i + 1 )) -lt ${#args[@]} ]]; then
+      # python -m <module> → show "-m <module>"
+      echo "-m ${args[$((i + 1))]}"
+      exit 0
+    elif [[ "$arg" != -* ]]; then
+      # First non-flag argument — show its basename
+      echo "$(basename "$arg")"
+      exit 0
+    fi
+  done
+  # All args are flags, just show the command name
+  echo "$cmd_basename"
+else
+  echo "$cmd_basename"
+fi
