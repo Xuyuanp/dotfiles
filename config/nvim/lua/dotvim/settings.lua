@@ -167,6 +167,7 @@ function M.setup()
 
     vim.filetype.add({
         filename = {
+            ['.env'] = 'sh',
             ['.envrc'] = 'sh',
             ['.helmignore'] = 'gitignore',
             ['.dockerignore'] = 'gitignore',
@@ -178,6 +179,7 @@ function M.setup()
         pattern = {
             ['.*/templates/.*%.yaml'] = 'helm',
             ['.*/zed/.+%.json'] = 'jsonc',
+            ['%.env%..*'] = 'sh',
         },
     })
 
