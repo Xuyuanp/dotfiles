@@ -114,19 +114,18 @@ local function auto_format_on_save(client, bufnr)
             buffer = bufnr,
             desc = '[Lsp] format on save',
             callback = function(args)
-                local bufnr = args.buf
-                ---@param client LspClient client passed here supports textDocument_formatting
-                local filter = function(client)
-                    if client.name == 'null-ls' then
+                local buf = args.buf
+                local filter = function(c)
+                    if c.name == 'null-ls' then
                         return true
                     end
-                    if vim.b[bufnr].lsp_disable_auto_format then
+                    if vim.b[buf].lsp_disable_auto_format then
                         return false
                     end
                     return true
                 end
                 my_lsp.format({
-                    bufnr = bufnr,
+                    bufnr = buf,
                     async = false,
                     filter = filter,
                 })

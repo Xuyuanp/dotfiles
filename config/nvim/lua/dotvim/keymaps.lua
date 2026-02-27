@@ -84,7 +84,11 @@ local function setup()
     ---[[ snippets support
     local snippets_switch = function(direction, fallback)
         return function()
-            return vim.snippet.active({ direction = direction }) and vim.snippet.jump(direction) or fallback
+            if vim.snippet.active({ direction = direction }) then
+                vim.snippet.jump(direction)
+            else
+                vim.api.nvim_feedkeys(vim.keycode(fallback), 'n', false)
+            end
         end
     end
     set_keymap('i', '<C-j>', snippets_switch(F, '<C-j>'), { desc = '[Snippets] jump forward' })

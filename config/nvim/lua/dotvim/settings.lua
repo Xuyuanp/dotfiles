@@ -197,7 +197,7 @@ function M.setup()
     })
 
     if vim.fn.executable('ghostty') then
-        if vim.fn.has('mac') then
+        if vim.fn.has('mac') == 1 then
             opt.rtp:append('/Applications/Ghostty.app/Contents/Resources/nvim/site')
         end
     end

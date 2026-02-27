@@ -11,23 +11,23 @@ function buf.code_action(opts)
     end
 end
 
-do
-    local ok, picker = pcall(require, 'snacks.picker')
-    if ok then
-        -- stylua: ignore
-        local methods = {
-            references       = 'lsp_references',
-            implementation   = 'lsp_implementations',
-            definition       = 'lsp_definitions',
-            type_definition  = 'lsp_type_definitions',
-            declaration      = 'lsp_declarations',
-            document_symbol  = 'lsp_symbols',
-            workspace_symbol = 'lsp_workspace_symbols',
-        }
-        for method, source in pairs(methods) do
-            buf[method] = function()
-                picker.pick(source)
-            end
+-- stylua: ignore
+local picker_methods = {
+    references       = 'lsp_references',
+    implementation   = 'lsp_implementations',
+    definition       = 'lsp_definitions',
+    type_definition  = 'lsp_type_definitions',
+    declaration      = 'lsp_declarations',
+    document_symbol  = 'lsp_symbols',
+    workspace_symbol = 'lsp_workspace_symbols',
+}
+for method, source in pairs(picker_methods) do
+    buf[method] = function()
+        local ok, picker = pcall(require, 'snacks.picker')
+        if ok then
+            picker.pick(source)
+        else
+            vim.lsp.buf[method]()
         end
     end
 end

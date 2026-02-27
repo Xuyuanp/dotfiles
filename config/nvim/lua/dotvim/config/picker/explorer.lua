@@ -88,11 +88,11 @@ local function git_diff(path)
         if not lines or #lines == 0 or (#lines == 1 and lines[1] == '') then
             return
         end
-        if lines[-1] ~= ' ' then
+        if lines[#lines] ~= ' ' then
             table.insert(lines, ' ')
         end
         local patch = table.concat(lines, '\n')
-        local res = vim.system({ 'git', 'apply', '--cache' }, {
+        local res = vim.system({ 'git', 'apply', '--cached' }, {
             stdin = patch,
         }):wait()
         if res.code ~= 0 then
