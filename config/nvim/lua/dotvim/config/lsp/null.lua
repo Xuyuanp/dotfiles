@@ -8,7 +8,7 @@ function M.setup()
         sources = {
             null_ls.builtins.formatting.stylua,
             null_ls.builtins.formatting.prettierd.with({
-                disabled_filetypes = { 'yaml' },
+                filetypes = { 'graphql' },
             }), -- graphql
             null_ls.builtins.formatting.buf, -- proto
             null_ls.builtins.formatting.goimports, -- go
