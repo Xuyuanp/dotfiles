@@ -68,6 +68,11 @@ function M.register_custom_directives()
     for name, handler in pairs(custom_directives) do
         vim.treesitter.query.add_directive(name, handler, { force = true })
     end
+    vim.treesitter.query.add_predicate('is-mise?', function(_, _, bufnr, _)
+        local filepath = vim.api.nvim_buf_get_name(tonumber(bufnr) or 0)
+        local filename = vim.fn.fnamemodify(filepath, ':t')
+        return string.match(filename, '.*mise.*%.toml$') ~= nil
+    end, { force = true, all = false })
 end
 
 function M.setup(opts)
