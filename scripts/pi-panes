@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+# pi-panes: fzf-tmux picker for pi sessions running in tmux panes
+#
+# Lists all panes with @pi-session-running=1, shows session name, status,
+# and relative update time, sorted by most recently updated first.
+# Previews pane content and switches to the selected pane on Enter.
+#
+# Requires: tmux >= 3.0, fzf, fzf-tmux
+
+set -euo pipefail
+
+FORMAT=$'#{pane_id}\t#{session_name}:#{window_index}.#{pane_index}\t#{@pi-session-status}\t#{@pi-session-name}\t#{@pi-session-running}\t#{@pi-session-status-updated-at}'
+
+NOW=$(date +%s)
+
+raw=$(tmux list-panes -a -F "$FORMAT" 2>/dev/null \
+    | awk -F'\t' '$5 == "1"' \
+    | sort -t$'\t' -k6,6 -rn)
+
+if [[ -z "$raw" ]]; then
+    tmux display-message "No pi sessions found"
+    exit 0
+fi
+
+format_epoch() {
+    date -r "$1" +"%b %d %H:%M" 2>/dev/null \
+        || date -d "@$1" +"%b %d %H:%M" 2>/dev/null \
+        || echo "$1"
+}
+
+relative_time() {
+    local epoch=$1
+    if [[ -z "$epoch" || "$epoch" == "0" ]]; then
+        echo "-"
+        return
+    fi
+    local delta=$(( NOW - epoch ))
+    if (( delta < 60 )); then
+        echo "just now"
+    elif (( delta < 3600 )); then
+        echo "$(( delta / 60 ))m ago"
+    elif (( delta < 86400 )); then
+        echo "$(( delta / 3600 ))h ago"
+    else
+        format_epoch "$epoch"
+    fi
+}
+
+panes=""
+while IFS=$'\t' read -r pane_id location status name _running epoch; do
+    age=$(relative_time "$epoch")
+    line=$(printf '%s\t%-24s  %-10s  %-14s  %s' "$pane_id" "$location" "$status" "$age" "$name")
+    panes+="${line}"$'\n'
+done <<< "$raw"
+
+panes=${panes%$'\n'}
+
+selected=$(echo "$panes" \
+    | fzf-tmux -p 80%,80% \
+        --layout=reverse \
+        --delimiter=$'\t' \
+        --with-nth=2 \
+        --header=$'PANE                      STATUS      UPDATED         SESSION NAME\n' \
+        --preview='tmux capture-pane -e -p -t {1} 2>/dev/null' \
+        --preview-window='down:80%:follow' \
+        --preview-label='Preview' \
+        --ansi \
+    || true)
+
+[[ -z "$selected" ]] && exit 0
+
+pane_id=$(echo "$selected" | cut -f1)
+
+tmux switch-client -t "$pane_id" 2>/dev/null
+tmux select-pane -t "$pane_id" 2>/dev/null

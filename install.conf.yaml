@@ -67,6 +67,7 @@
     ~/.local/bin/llm-cli: scripts/llm-cli
     ~/.local/bin/secret-decode: scripts/secret-decode
     ~/.local/bin/shorten: scripts/shorten
+    ~/.local/bin/pi-panes: scripts/pi-panes
     ~/.editorconfig: editorconfig
 
     # for linux
