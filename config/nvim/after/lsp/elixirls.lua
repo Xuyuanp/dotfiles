@@ -1,6 +1,7 @@
 ---@type vim.lsp.Config
 return {
     cmd = { 'elixir-ls' },
+    ---@type lspconfig.settings.elixirls
     settings = {
         elixirLS = {
             dialyzerEnabled = true,

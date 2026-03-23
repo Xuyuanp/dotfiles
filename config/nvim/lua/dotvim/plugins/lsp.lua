@@ -22,6 +22,10 @@ return {
                 -- See the configuration section for more details
                 -- Load luvit types when the `vim.uv` word is found
                 { path = 'luvit-meta/library', words = { 'vim%.uv' } },
+                {
+                    path = vim.fs.joinpath(vim.fn.stdpath('data'), 'lazy', 'nvim-lspconfig/lua/lspconfig/types/lsp'),
+                    words = { 'lspconfig%.settings' },
+                },
             },
         },
     },
