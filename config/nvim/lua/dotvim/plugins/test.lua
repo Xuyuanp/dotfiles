@@ -43,7 +43,7 @@ return {
                 },
                 lang = {
                     go = {
-                        coverage_file = '.tmp/coverage.txt',
+                        coverage_file = '.tmp/coverage.out',
                     },
                 },
             })
