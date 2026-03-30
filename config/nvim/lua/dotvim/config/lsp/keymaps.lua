@@ -9,7 +9,7 @@ local keymaps = {
     -- grn = { 'rename',           desc = 'rename',                 },
     -- gds = { 'document_symbol',  desc = 'show document symbols',  },
     -- gra = { 'code_action',      desc = 'code action',            },
-    gtd = { 'type_definition',  desc = 'goto type definition',   },
+    -- gtd = { 'type_definition',  desc = 'goto type definition',   }, -- use built-in grt
     gk  = { 'signature_help',   desc = 'show signature help',    },
     gd  = { 'definition',       desc = 'goto definition',        },
     gD  = { 'declaration',      desc = 'goto declaration',       },

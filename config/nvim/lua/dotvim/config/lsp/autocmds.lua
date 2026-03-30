@@ -60,26 +60,6 @@ end
 
 ---@param client LspClient
 ---@param bufnr number
-local function codelens_auto_refresh(client, bufnr)
-    client = client
-    local lsp_autocmds = vim.b[bufnr].lsp_autocmds or {}
-    lsp_autocmds.codelens = lsp_autocmds.codelens
-        or vim.api.nvim_create_autocmd({ 'BufEnter', 'InsertLeave', 'BufWritePost', 'CursorHold' }, {
-            buffer = bufnr,
-            desc = '[Lsp] codelens refresh',
-            callback = function()
-                vim.lsp.codelens.refresh({ bufnr = bufnr })
-            end,
-        })
-    vim.b[bufnr].lsp_autocmds = lsp_autocmds
-
-    vim.schedule(function()
-        vim.lsp.codelens.refresh({ bufnr = bufnr })
-    end)
-end
-
----@param client LspClient
----@param bufnr number
 local function auto_document_highlight(client, bufnr)
     if client.name == 'rust_analyzer' then
         -- leave it to rustaceanvim
@@ -149,11 +129,6 @@ local autocmds = {
         smart_inlayhint,
         method = LspMethods.textDocument_inlayHint,
         desc = 'toggle inlay hint',
-    },
-    {
-        codelens_auto_refresh,
-        method = LspMethods.textDocument_codeLens,
-        desc = 'auto refresh codelens',
     },
     {
         auto_document_highlight,

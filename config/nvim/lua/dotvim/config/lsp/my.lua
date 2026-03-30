@@ -5,10 +5,11 @@ function M.codelens()
     local bufnr = vim.api.nvim_get_current_buf()
     local winnr = vim.api.nvim_get_current_win()
     local row, col = unpack(vim.api.nvim_win_get_cursor(winnr))
-    local lenses = vim.lsp.codelens.get(bufnr)
+    local lnum = row - 1 -- convert to 0-indexed to match LSP range
+    local lenses = vim.lsp.codelens.get({ bufnr = bufnr })
 
-    lenses = vim.tbl_filter(function(lense)
-        return lense.range.start.line < row
+    lenses = vim.tbl_filter(function(item)
+        return item.lens.range.start.line <= lnum
     end, lenses)
 
     if #lenses == 0 then
@@ -17,10 +18,11 @@ function M.codelens()
     end
 
     table.sort(lenses, function(a, b)
-        return a.range.start.line > b.range.start.line
+        return a.lens.range.start.line > b.lens.range.start.line
     end)
 
-    vim.api.nvim_win_set_cursor(winnr, { lenses[1].range.start.line + 1, lenses[1].range.start.character })
+    local nearest = lenses[1].lens
+    vim.api.nvim_win_set_cursor(winnr, { nearest.range.start.line + 1, nearest.range.start.character })
     vim.lsp.codelens.run()
     vim.api.nvim_win_set_cursor(winnr, { row, col }) -- restore cursor
 end
