@@ -23,8 +23,8 @@ local function dfs(node)
 end
 
 local function hint_scopes(bufnr)
-    local ok, parser = pcall(ts.get_parser, bufnr, 'helm')
-    if not ok or not parser then
+    local parser = ts.get_parser(bufnr, 'helm')
+    if not parser then
         return
     end
     vim.api.nvim_buf_clear_namespace(0, ns_id, 0, -1)

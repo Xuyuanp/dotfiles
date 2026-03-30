@@ -33,6 +33,21 @@ function M.setup()
         command = 'checktime',
     })
 
+    local function set_kubebuilder_highlights()
+        vim.api.nvim_set_hl(0, '@kubebuilder.go', { link = 'Keyword' })
+        for _, name in ipairs({ 'rbac', 'object', 'subresource', 'webhook', 'default', 'validation', 'example' }) do
+            vim.api.nvim_set_hl(0, '@kubebuilder.' .. name .. '.go', { link = 'Structure' })
+        end
+    end
+
+    set_kubebuilder_highlights()
+
+    vim.api.nvim_create_autocmd('ColorScheme', {
+        group = group_id,
+        desc = 'kubebuilder treesitter highlights',
+        callback = set_kubebuilder_highlights,
+    })
+
     vim.api.nvim_create_autocmd('UIEnter', {
         group = group_id,
         desc = 'setup keymaps',

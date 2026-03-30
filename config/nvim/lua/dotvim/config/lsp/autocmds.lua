@@ -139,7 +139,7 @@ end
 local function disable_semantic_token_for_helm(client, bufnr)
     if vim.bo[bufnr].filetype == 'helm' then
         vim.defer_fn(function()
-            vim.lsp.semantic_tokens.stop(bufnr, client.id)
+            vim.lsp.semantic_tokens.enable(false, { bufnr = bufnr })
         end, 100)
     end
 end

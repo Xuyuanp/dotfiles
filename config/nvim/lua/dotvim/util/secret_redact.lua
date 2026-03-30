@@ -56,7 +56,7 @@ local function collect_sensitive_ranges(buf)
 
     local ranges = {}
     for _, tree in ipairs(parser:parse() or {}) do
-        for _, match in query:iter_matches(tree:root(), buf, 0, -1, { all = true }) do
+        for _, match in query:iter_matches(tree:root(), buf, 0, -1) do
             local name_nodes, value_nodes = match[1], match[2]
             if not name_nodes or not value_nodes then
                 goto continue

@@ -2,29 +2,34 @@ local M = {}
 
 ---@type table<string, fun(match: table<integer,TSNode[]>, pattern: integer, source: integer|string, predicate: any[], metadata: vim.treesitter.query.TSMetadata)>
 local custom_directives = {
-    ['absoffset!'] = function(_match, _, _, pred, metadata)
+    ['absoffset!'] = function(match, _, source, pred, metadata)
         local capture_id = pred[2]
-        if not metadata[capture_id] then
+        local nodes = match[capture_id]
+        if not nodes or #nodes == 0 then
             return
         end
 
-        local range = metadata[capture_id].range
-        if not range then
-            return
+        if not metadata[capture_id] then
+            metadata[capture_id] = {}
         end
+
+        -- get_range applies offset! adjustments (0.12+: reads .offset; <0.12: reads .range)
+        -- returns Range6: {start_row, start_col, start_byte, end_row, end_col, end_byte}
+        local range = vim.treesitter.get_range(nodes[1], source, metadata[capture_id])
+
         local start_row_offset = pred[3] or 0
         local start_col_offset = pred[4] or 0
         local end_row_offset = pred[5] or 0
         local end_col_offset = pred[6] or 0
 
-        range[1] = range[1] + start_row_offset
-        range[2] = range[2] + start_col_offset -- offset from start of row
-        range[3] = range[1] + end_row_offset
-        range[4] = range[2] + end_col_offset -- offset from start of col
+        local sr = range[1] + start_row_offset
+        local sc = range[2] + start_col_offset
+        local er = sr + end_row_offset
+        local ec = sc + end_col_offset
 
         -- If this produces an invalid range, we just skip it.
-        if range[1] < range[3] or (range[1] == range[3] and range[2] <= range[4]) then
-            metadata[capture_id].range = range
+        if sr < er or (sr == er and sc <= ec) then
+            metadata[capture_id].range = { sr, sc, range[3], er, ec, range[6] }
         end
     end,
     ['set-ref!'] = function(_match, _, _, pred, metadata)
