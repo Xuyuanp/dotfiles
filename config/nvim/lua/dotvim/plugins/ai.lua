@@ -245,7 +245,7 @@ return {
             {
                 '<A-i>',
                 function()
-                    require('copilot-lsp.nes').request_nes('copilots')
+                    require('copilot-lsp.nes').request_nes('copilot')
                 end,
                 mode = 'i',
                 desc = '[Nes] get suggestion',
