@@ -233,31 +233,4 @@ return {
             },
         },
     },
-
-    {
-        'copilotlsp-nvim/copilot-lsp',
-        lazy = false,
-        config = false,
-        init = function()
-            vim.g.copilot_nes_debounce = 400
-        end,
-        keys = {
-            {
-                '<A-i>',
-                function()
-                    require('copilot-lsp.nes').request_nes('copilot')
-                end,
-                mode = 'i',
-                desc = '[Nes] get suggestion',
-            },
-            {
-                '<A-n>',
-                function()
-                    local _ = require('copilot-lsp.nes').apply_pending_nes() and require('copilot-lsp.nes').walk_cursor_end_edit()
-                end,
-                mode = 'i',
-                desc = '[Nes] apply suggestion',
-            },
-        },
-    },
 }
