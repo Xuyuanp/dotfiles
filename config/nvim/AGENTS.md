@@ -2,27 +2,68 @@
 
 This project is a neovim config written in lua. It is designed to be modular and easily customizable.
 
-You are **[Folke Lemaitre](https://github.com/folke)**, the God of neovim plugins. You have been hired to maintain this config and add new features to it.
+## Directory structure
 
-You NEVER make mistakes.
+```
+.
+├── after/
+│   ├── ftplugin/       # Filetype-specific settings
+│   ├── lsp/            # Per-server LSP configs (vim.lsp.config)
+│   └── queries/        # Custom treesitter queries
+├── indent/             # Custom indent rules
+├── lua/dotvim/
+│   ├── config/         # Core config modules
+│   ├── plugins/        # Plugin specs (lazy.nvim)
+│   ├── util/           # Shared utilities
+│   ├── autocmds.lua    # Autocommands
+│   ├── commands.lua    # User commands
+│   ├── features.lua    # Feature flags
+│   ├── keymaps.lua     # Key mappings
+│   ├── lazy.lua        # lazy.nvim bootstrap
+│   ├── mini.lua        # mini.nvim setup
+│   ├── neovide.lua     # Neovide-specific config
+│   └── settings.lua    # vim.o / vim.g options
+├── snippets/           # VSCode-format snippets
+├── scripts/            # Dev/helper scripts
+├── tests/              # Tests
+└── init.lua            # Entry point
+```
 
 ## Rules
 
 - Commit to main branch is ok.
+- All Lua functions and types MUST have LuaCATS type annotations.
 
-## Boundary Rules
+## Looking up Neovim APIs
 
-Every boundary (environment, version) requires verification before proceeding.
+### `:help` docs
 
-### Environment boundary
+Dump the help buffer to a temp file, then use `rg` and `read` to navigate:
 
-When verifying behavior in nvim via tmux, reproduce the user's actual workflow
-step by step. Never collapse multiple steps into one command if ordering has
-observable effects (e.g. plugin lazy-loading depends on BufRead/BufEnter firing
-before checkhealth runs).
+```bash
+nvim --clean --headless -c 'help <topic>' -c "w! $(mktemp /tmp/nvim-help-XXXXXX.txt)" -c 'qa'
+```
 
-### Version boundary
+- Use `rg` to search within the file, `read` with `offset`/`limit` to paginate
+- Each invocation creates a unique file, so multiple topics can be cross-referenced
+- Always use `--clean` to avoid plugin interference
 
-When modifying code to adapt to a new nvim version, read `:help` for every
-external API the code touches before making changes. The existing code is a
-claim about the old version, not a fact about the new one.
+### Lua source in `$VIMRUNTIME`
+
+When unsure about a Neovim Lua API (signatures, behavior, implementation),
+search the source files in `$VIMRUNTIME` directly.
+
+Resolve the runtime path:
+
+```bash
+nvim --headless -c 'echo $VIMRUNTIME' -c 'qa' 2>&1
+```
+
+Then search the Lua sources:
+
+```bash
+rg 'pattern' <VIMRUNTIME>/lua
+```
+
+This is the authoritative source for built-in Lua modules (`vim.net`, `vim.lsp`,
+`vim.treesitter`, etc.) and is more reliable than guessing from memory.
