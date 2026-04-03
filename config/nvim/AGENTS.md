@@ -32,7 +32,8 @@ This project is a neovim config written in lua. It is designed to be modular and
 ## Rules
 
 - Commit to main branch is ok.
-- All Lua functions and types MUST have LuaCATS type annotations.
+- All Lua functions and types must have LuaCATS type annotations.
+- Commit messages must always use scope `nvim`, e.g. `feat(nvim): ...`.
 
 ## Looking up Neovim APIs
 
