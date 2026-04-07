@@ -42,7 +42,7 @@ This project is a neovim config written in lua. It is designed to be modular and
 Dump the help buffer to a temp file, then use `rg` and `read` to navigate:
 
 ```bash
-nvim --clean --headless -c 'help <topic>' -c "w! $(mktemp /tmp/nvim-help-XXXXXX.txt)" -c 'qa'
+nvim --clean --headless -c 'help <topic>' -c "w! $(mktemp /tmp/nvim-help-XXXXXX)" -c 'qa'
 ```
 
 - Use `rg` to search within the file, `read` with `offset`/`limit` to paginate
