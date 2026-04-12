@@ -2,16 +2,7 @@ return {
     {
         'neovim/nvim-lspconfig',
         lazy = false,
-        dependencies = {
-            'folke/neoconf.nvim',
-        },
         config = false,
-    },
-
-    {
-        'folke/neoconf.nvim',
-        cmd = 'Neoconf',
-        opts = {},
     },
 
     {

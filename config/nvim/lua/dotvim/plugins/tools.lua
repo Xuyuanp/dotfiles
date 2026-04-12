@@ -78,21 +78,6 @@ return {
     },
 
     {
-        'voldikss/vim-translator',
-        cmd = {
-            'Translate',
-            'TranslateH',
-            'TranslateL',
-            'TranslateR',
-            'TranslateW',
-            'TranslateX',
-        },
-        init = function()
-            vim.g.translator_history_enable = true
-        end,
-    },
-
-    {
         'jbyuki/venn.nvim',
         keys = {
             { '<Leader>vb', ':<C-e>VBox<CR>', mode = 'v', desc = '[Venn] draw vbox' },

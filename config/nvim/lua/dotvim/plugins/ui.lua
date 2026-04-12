@@ -27,14 +27,6 @@ return {
         end,
     },
 
-    {
-        'liuchengxu/vista.vim',
-        keys = { { '<C-t>', ':Vista!!<CR>', mode = 'n', desc = '[Vista] toggle' } },
-        config = function()
-            vim.g.vista_default_executive = 'nvim_lsp'
-        end,
-    },
-
     -- {
     --     'norcalli/nvim-colorizer.lua',
     --     event = { 'BufReadPost', 'BufNewFile' },
@@ -60,7 +52,6 @@ return {
                 show_buffer_close_icons = false,
                 offsets = {
                     { filetype = 'Yanil', text = 'File Explorer', text_align = 'left' },
-                    { filetype = 'vista_kind', text = 'Vista', text_align = 'right' },
                 },
             },
             highlights = {
@@ -445,20 +436,4 @@ return {
         end,
     },
 
-    {
-        'nvchad/menu',
-        dependencies = {
-            'nvchad/volt',
-        },
-        keys = {
-            {
-                '<A-m>',
-                function()
-                    require('menu').open('default', { mouse = false, border = true })
-                end,
-                mode = 'n',
-                desc = 'Menu',
-            },
-        },
-    },
 }

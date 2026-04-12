@@ -5,11 +5,6 @@ return {
     },
 
     {
-        'martinda/Jenkinsfile-vim-syntax',
-        ft = 'Jenkinsfile',
-    },
-
-    {
         'MeanderingProgrammer/render-markdown.nvim',
         ft = { 'markdown' },
         opts = {

@@ -93,7 +93,6 @@ return {
         init = function()
             vim.g.scrollbar_excluded_filetypes = {
                 'nerdtree',
-                'vista_kind',
                 'Yanil',
             }
             vim.g.scrollbar_highlight = {
