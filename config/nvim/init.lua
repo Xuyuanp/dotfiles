@@ -1,4 +1,4 @@
-local min_version = '0.11'
+local min_version = '0.12'
 if not vim.fn.has('nvim-' .. min_version) then
     vim.notify('require nvim >= ' .. min_version, vim.log.levels.WARN)
     return
