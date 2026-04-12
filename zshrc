@@ -285,6 +285,19 @@ function zsh-stats() {
   fc -l 1 | awk '{CMD[$2]++;count++;}END { for (a in CMD)print CMD[a] " " CMD[a]/count*100 "% " a;}' | grep -v "./" | column -c3 -s " " -t | sort -nr | nl | head -n25
 }
 
+function tm() {
+    local name=${1:-${PWD##*/}}
+    name=${name//./_}
+    if ! tmux has-session -t "=$name" 2>/dev/null; then
+        tmux new-session -d -s "$name"
+    fi
+    if [[ -n $TMUX ]]; then
+        tmux switch-client -t "=$name"
+    else
+        tmux attach-session -t "=$name"
+    fi
+}
+
 function oc() {
     # Find available port
     local port=4096
