@@ -27,14 +27,6 @@ return {
         end,
     },
 
-    -- {
-    --     'norcalli/nvim-colorizer.lua',
-    --     event = { 'BufReadPost', 'BufNewFile' },
-    --     config = function()
-    --         require('colorizer').setup()
-    --     end,
-    -- },
-
     {
         'akinsho/bufferline.nvim',
         version = 'v4',
@@ -153,7 +145,7 @@ return {
                 desc = '[Spectre] search current word in file',
             },
         },
-        dependencies = { 'nvim-lua/plenary.nvim', 'nvim-lua/popup.nvim' },
+        dependencies = { 'nvim-lua/plenary.nvim' },
         config = function()
             require('spectre').setup({})
 
@@ -435,5 +427,4 @@ return {
             }
         end,
     },
-
 }

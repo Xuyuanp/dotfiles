@@ -138,14 +138,6 @@ return {
     },
 
     {
-        'max397574/colortils.nvim',
-        cmd = 'Colortils',
-        config = function()
-            require('colortils').setup({})
-        end,
-    },
-
-    {
         'keaising/im-select.nvim',
         cond = vim.fn.has('mac') == 1,
         commit = '6425bea', -- lock to a specific commit
@@ -159,19 +151,6 @@ return {
         'nvim-mini/mini.ai',
         version = '*',
         lazy = false,
-        opts = {},
-    },
-
-    {
-        'nomad/nomad',
-        version = '*',
-        cmd = { 'Mad' },
-        build = function()
-            ---@type nomad.neovim.build
-            local build = require('nomad.neovim.build')
-
-            build.builders.download_prebuilt():build(build.contexts.lazy())
-        end,
         opts = {},
     },
 }
