@@ -420,7 +420,7 @@ T['setup()']['sets SecretRedacted highlight'] = function()
     sr.setup(buf)
 
     local hl = vim.api.nvim_get_hl(0, { name = 'SecretRedacted' })
-    eq(hl.link, 'Comment')
+    eq(hl.link, 'SpecialComment')
 
     delete_buf(buf)
 end
