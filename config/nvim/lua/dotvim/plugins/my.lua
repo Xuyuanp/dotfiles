@@ -90,8 +90,7 @@ return {
 
     {
         'Xuyuanp/review.nvim',
-        cmd = { 'Review' },
-        config = false,
+        config = function() end,
         lazy = false,
     },
 
