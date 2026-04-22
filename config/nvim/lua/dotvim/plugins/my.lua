@@ -89,6 +89,13 @@ return {
     },
 
     {
+        'Xuyuanp/review.nvim',
+        cmd = { 'Review' },
+        config = false,
+        lazy = false,
+    },
+
+    {
         'Xuyuanp/scrollbar.nvim',
         init = function()
             vim.g.scrollbar_excluded_filetypes = {
