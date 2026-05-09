@@ -191,6 +191,12 @@ return {
     },
 
     {
+        'dlyongemallo/diffview.nvim',
+        version = '*',
+        lazy = false,
+    },
+
+    {
         'lewis6991/gitsigns.nvim',
         version = '*',
         event = { 'BufReadPost', 'BufNewFile' },
