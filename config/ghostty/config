@@ -15,7 +15,7 @@ font-feature = liga
 
 theme = "Kanagawa Wave"
 
-mouse-shift-capture = true
+# mouse-shift-capture = true
 
 cursor-style = block
 
