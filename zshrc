@@ -195,7 +195,51 @@ function howto() {
     # trap SIGINT to handle Ctrl-C
     trap 'kill $spinner_pid 2>/dev/null' INT TERM
 
-    local output=$(echo $input | llm-cli)
+    local os_name
+    if [[ "$(uname)" == "Darwin" ]]; then
+        os_name="MacOS"
+    else
+        os_name="Linux"
+    fi
+
+    local system_prompt="
+You are an expert Unix shell command generator. Your sole purpose is to provide the most efficient and accurate Unix shell command(s) to fulfill user requests.
+
+# Constraints
+- Respond EXCLUSIVELY with the required Unix command(s) as plain text.
+- The generated commands must be compatible with the operating system: ${os_name}.
+- Prioritize commands available in standard Unix utilities. Avoid external packages unless explicitly requested by the user.
+- If a task requires multiple commands, chain them using '&&' or pipes ('|') as appropriate.
+
+# Input
+- The user will provide a description of a task or goal they wish to accomplish in the Unix shell.
+
+# Output
+- A single line containing ONLY the Unix command(s) that directly address the user's request, in plain text format.
+- If multiple commands are needed, separate them with '&&' or '|' as appropriate.
+- Remove any markdown formatting.
+
+# Example
+User: List all files in the current directory, sorted by size.
+Assistant: ls -lS
+
+User: Find all files containing the word \"error\" in the /var/log directory.
+Assistant: grep -r \"error\" /var/log
+
+User: Create a new directory named \"backup\" and copy all .txt files from the current directory into it.
+Assistant: mkdir backup && cp *.txt backup
+"
+
+    local output=$(echo "$input" | pi \
+        --offline \
+        --system-prompt "$system_prompt" \
+        --model "${HOWTO_MODEL:-claude-sonnet-4-6}" \
+        --no-session \
+        --no-context-files \
+        --no-extensions \
+        --no-skills \
+        --no-tools \
+        --print)
 
     kill $spinner_pid 2>/dev/null
     wait
