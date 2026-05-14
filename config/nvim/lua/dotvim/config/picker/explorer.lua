@@ -59,50 +59,7 @@ function actions.next(siblings, item)
 end
 
 local function git_diff(path)
-    local diff = vim.fn.systemlist({ 'git', 'diff', '--patch', '--no-color', '--diff-algorithm=default', path })
-    if not diff then
-        return
-    end
-
-    local winnr, bufnr = require('dotvim.util').open_floating_window()
-    vim.wo[winnr].cursorline = true
-    vim.wo[winnr].number = true
-    vim.api.nvim_win_set_config(winnr, {
-        title = 'Diff Patch',
-        title_pos = 'center',
-    })
-
-    -- content
-    vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, diff)
-    vim.bo[bufnr].filetype = 'diff'
-
-    -- idk why, but i have to set foldmethod later
-    vim.defer_fn(function()
-        vim.api.nvim_win_call(winnr, function()
-            vim.wo.foldmethod = 'expr'
-        end)
-    end, 500)
-
-    vim.api.nvim_buf_create_user_command(bufnr, 'Apply', function()
-        local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
-        if not lines or #lines == 0 or (#lines == 1 and lines[1] == '') then
-            return
-        end
-        if lines[#lines] ~= ' ' then
-            table.insert(lines, ' ')
-        end
-        local patch = table.concat(lines, '\n')
-        local res = vim.system({ 'git', 'apply', '--cached' }, {
-            stdin = patch,
-        }):wait()
-        if res.code ~= 0 then
-            vim.notify(string.format('git apply failed: %s', res.stderr or res.stdout or 'unknown'), vim.log.levels.ERROR)
-        end
-
-        vim.api.nvim_buf_delete(bufnr, { force = true })
-    end, { desc = 'apply the patch in this buffer' })
-
-    vim.keymap.set('n', '<leader>a', '<cmd>Apply<CR>', { buffer = bufnr })
+    require('dotvim.util.git').show_diff(path)
 end
 
 M.actions = {

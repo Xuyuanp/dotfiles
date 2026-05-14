@@ -152,4 +152,71 @@ function M.diff(path)
     return lines
 end
 
+--- Open a floating window showing the diff for `path`, with an :Apply command
+--- that stages the (possibly edited) patch via `git apply --cached`.
+---@param path string absolute file or directory path
+---@param opts? { on_apply?: fun() }
+function M.show_diff(path, opts)
+    opts = opts or {}
+
+    local diff = M.diff(path)
+    if not diff then
+        return
+    end
+
+    local dotutil = require('dotvim.util')
+    local winnr, bufnr = dotutil.open_floating_window()
+    vim.wo[winnr].cursorline = true
+    vim.wo[winnr].winhl = 'NormalFloat:'
+    vim.wo[winnr].number = true
+    vim.api.nvim_win_set_config(winnr, {
+        title = 'Diff Patch',
+        title_pos = 'center',
+    })
+
+    -- content
+    vim.bo[bufnr].filetype = 'diff'
+    vim.bo[bufnr].bufhidden = 'wipe'
+    vim.bo[bufnr].swapfile = false
+    vim.bo[bufnr].undolevels = -1
+    vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, diff)
+    vim.bo[bufnr].undolevels = 1000
+
+    vim.api.nvim_buf_create_user_command(bufnr, 'Apply', function()
+        local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+        if not lines or #lines == 0 or (#lines == 1 and lines[1] == '') then
+            vim.cmd('q')
+            return
+        end
+        -- Ensure trailing newline: git apply expects POSIX text input.
+        -- concat(['a','b'], '\n') = "a\nb" but concat(['a','b',''], '\n') = "a\nb\n"
+        if lines[#lines] ~= '' then
+            table.insert(lines, '')
+        end
+        local patch = table.concat(lines, '\n')
+
+        local root = M.root(path)
+        if not root then
+            vim.notify('Not in a git repository', vim.log.levels.WARN)
+            return
+        end
+
+        local res = vim.system({ 'git', '-C', root, 'apply', '--cached' }, { stdin = patch }):wait()
+        if res.code ~= 0 then
+            vim.notify(
+                string.format('git apply failed: %s', res.stderr or 'unknown'),
+                vim.log.levels.ERROR
+            )
+            return
+        end
+
+        vim.cmd('q')
+        if opts.on_apply then
+            opts.on_apply()
+        end
+    end, { desc = 'apply the patch in this buffer' })
+
+    vim.keymap.set('n', '<leader>a', '<cmd>Apply<CR>', { buffer = bufnr })
+end
+
 return M
