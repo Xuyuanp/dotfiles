@@ -92,4 +92,64 @@ function M.gitlab_mr()
     return mr
 end
 
+---@param path string absolute file or directory path
+---@return string|nil repo_root absolute path to the git repository root containing `path`, or nil if `path` is not inside a git repo / does not exist
+function M.root(path)
+    local stat = vim.uv.fs_stat(path)
+    if not stat then
+        return nil
+    end
+
+    -- For a directory, start the discovery inside it; for a file, use its
+    -- containing directory. Taking :h unconditionally is wrong when `path`
+    -- is itself a directory (especially the repo root), because the parent
+    -- may sit outside any git repository.
+    local git_cwd = stat.type == 'directory' and path or vim.fn.fnamemodify(path, ':h')
+    local root_res = vim.system({ 'git', '-C', git_cwd, 'rev-parse', '--show-toplevel' }):wait()
+    if root_res.code ~= 0 then
+        return nil
+    end
+    return vim.trim(root_res.stdout)
+end
+
+---@param path string absolute file or directory path
+---@return string[]|nil diff lines, including tracked changes and untracked files under path
+function M.diff(path)
+    local root = M.root(path)
+    if not root then
+        return
+    end
+
+    local lines = {}
+
+    -- Tracked changes under path (empty if path only contains untracked files)
+    vim.list_extend(
+        lines,
+        vim.fn.systemlist({
+            'git', '-C', root, 'diff', '--patch', '--no-color', '--diff-algorithm=default', path,
+        })
+    )
+
+    -- Untracked (non-ignored) files under path -- each rendered as a new-file diff
+    local untracked = vim.fn.systemlist({
+        'git', '-C', root, 'ls-files', '--others', '--exclude-standard', path,
+    })
+    for _, rel in ipairs(untracked) do
+        if rel ~= '' then
+            vim.list_extend(
+                lines,
+                vim.fn.systemlist({
+                    'git', '-C', root, 'diff', '--no-index', '--patch', '--no-color', '/dev/null', rel,
+                })
+            )
+        end
+    end
+
+    if #lines == 0 then
+        return
+    end
+
+    return lines
+end
+
 return M

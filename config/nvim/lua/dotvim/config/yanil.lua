@@ -21,7 +21,7 @@ local M = {}
 
 ---@diagnostic disable-next-line: unused-local
 local function git_diff(_tree, node)
-    local diff = git.diff(node)
+    local diff = require('dotvim.util.git').diff(node.abs_path)
     if not diff then
         return
     end
@@ -44,7 +44,38 @@ local function git_diff(_tree, node)
     vim.bo[bufnr].undolevels = 1000
 
     vim.api.nvim_buf_create_user_command(bufnr, 'Apply', function()
-        require('yanil.git').apply_buf(bufnr)
+        local path = node.abs_path
+
+        local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+        if not lines or #lines == 0 or (#lines == 1 and lines[1] == '') then
+            vim.cmd('q')
+            return
+        end
+        if lines[#lines] ~= '' then
+            table.insert(lines, '')
+        end
+        local patch = table.concat(lines, '\n')
+
+        -- Resolve repo root via the shared helper so directory nodes (notably
+        -- the repo root itself) do not fall back to a :h that sits outside
+        -- any git repository.
+        local root = require('dotvim.util.git').root(path)
+        if not root then
+            vim.notify('Not in a git repository', vim.log.levels.WARN)
+            return
+        end
+
+        local res = vim.system({ 'git', '-C', root, 'apply', '--cached' }, { stdin = patch }):wait()
+        if res.code ~= 0 then
+            vim.notify(
+                string.format('git apply failed: %s', res.stderr or 'unknown'),
+                vim.log.levels.ERROR
+            )
+            return
+        end
+
+        vim.cmd('q')
+        require('yanil.git').update()
     end, { desc = 'apply the patch in this buffer' })
 
     vim.keymap.set('n', '<leader>a', '<cmd>Apply<CR>', { buffer = bufnr })
