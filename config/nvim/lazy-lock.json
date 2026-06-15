@@ -8,7 +8,7 @@
   "cellular-automaton.nvim": { "branch": "main", "commit": "1606e9d5d04ff254023c3f3c62842d065708d6d3" },
   "cmp-tmux": { "branch": "main", "commit": "95b1b921802e6f60627b3e76afb9380fddd87f9a" },
   "crates.nvim": { "branch": "main", "commit": "694357861ec9ebf12475ddcdd04ea45a0923c32d" },
-  "diffview.nvim": { "branch": "main", "commit": "bff9d65b6e60b4cdcfc739cbd7f4eec57aac5315" },
+  "diffview-plus.nvim": { "branch": "main", "commit": "bff9d65b6e60b4cdcfc739cbd7f4eec57aac5315" },
   "fidget.nvim": { "branch": "main", "commit": "b61e8af9b8b68ee0ec7da5fb7a8c203aae854f2e" },
   "flash.nvim": { "branch": "main", "commit": "fcea7ff883235d9024dc41e638f164a450c14ca2" },
   "floaterm.nvim": { "branch": "main", "commit": "b14c9bdba1f2f0c22adaed4350e5fe2835e71b00" },
