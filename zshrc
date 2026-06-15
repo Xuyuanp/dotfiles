@@ -233,7 +233,7 @@ Assistant: mkdir backup && cp *.txt backup
     local output=$(echo "$input" | pi \
         --offline \
         --system-prompt "$system_prompt" \
-        --model "${HOWTO_MODEL:-claude-sonnet-4-6}" \
+        --model "${HOWTO_MODEL:-deepseek/deepseek-v4-flash}" \
         --no-session \
         --no-context-files \
         --no-extensions \
