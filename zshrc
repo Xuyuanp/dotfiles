@@ -88,6 +88,9 @@ export GPG_TTY=$TTY
 
 export GOPATH=${HOME}/go
 
+export RUSTUP_DIST_SERVER="https://rsproxy.cn"
+export RUSTUP_UPDATE_ROOT="https://rsproxy.cn/rustup"
+
 function _prepend_path() {
     if [[ -d "$1" ]] && [[ ":${PATH}:" != *":$1:"* ]]; then
         PATH="${1}${PATH:+":$PATH"}"
@@ -169,6 +172,19 @@ function man() {
 
 unfunction _exists
 
+# ================================= options ================================== #
+# auto-cd if the command is a directory and can't be executed as a normal command.
+setopt auto_cd
+
+# have pushd with no arguments act like `pushd $home'.
+setopt pushd_to_home
+
+# do not print the directory stack after pushd or popd.
+setopt pushd_silent
+
+# don't push multiple copies of the same directory onto the directory stack.
+setopt pushd_ignore_dups
+
 # ================================ functions ================================= #
 
 function howto() {
@@ -245,33 +261,6 @@ Assistant: mkdir backup && cp *.txt backup
     wait
 
     print -z "$output"
-}
-
-# commit for me
-function cfm() {
-    # suppressing '[job_id] pid' output
-    setopt LOCAL_OPTIONS NO_MONITOR NO_NOTIFY
-    spinner --style dots --suffix " Generating commit message..." &
-    local spinner_pid=$!
-
-    # trap SIGINT to handle Ctrl-C
-    trap 'kill $spinner_pid 2>/dev/null' INT TERM
-
-    local commit_msg
-    if ! commit_msg=$(git diff --staged | llm-cli --role=commit 2>&1); then
-        # Stop the spinning animation by killing its process
-        kill $spinner_pid
-        wait $spinner_pid 2>/dev/null  # Wait for the process to terminate and suppress error messages
-
-      echo ''
-      echo "Failed to generate the commit message: ${commit_msg}"
-      echo "Set SKIP_LLM_GITHOOK=1 to skip this hook"
-      exit 1
-    fi
-
-    kill $spinner_pid
-    wait $spinner_pid 2>/dev/null
-    git commit -e -m "${commit_msg}" $@
 }
 
 function tgo() {
@@ -354,4 +343,8 @@ function oc() {
 
     export OPENCODE_PORT=$port
     opencode --port $port "$@"
+}
+
+function clash_proxy() {
+    export https_proxy=http://127.0.0.1:7897 http_proxy=http://127.0.0.1:7897 all_proxy=socks5://127.0.0.1:7897
 }
