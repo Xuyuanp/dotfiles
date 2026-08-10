@@ -1,237 +1,201 @@
-tap "anomalyco/tap"
-tap "argoproj/tap"
-tap "charmbracelet/tap"
-tap "d12frosted/emacs-plus"
+tap "antoniorodr/memo"
 tap "daipeihust/tap"
-tap "farion1231/ccswitch"
-tap "fluxcd/tap"
-tap "hashicorp/tap"
-tap "hivemq/mqtt-cli"
-tap "homebrew/bundle"
-tap "homebrew/core"
-tap "homebrew/services"
 tap "itouuuuuuuuu/tap"
-tap "neurosnap/tap"
-tap "stanmarek/tap"
+tap "parallel-web/tap"
 tap "steipete/tap"
-tap "vectordotdev/brew"
 tap "vjeantet/tap"
-tap "ymtdzzz/tap"
-brew "node"
-brew "agent-browser"
-brew "aliyun-cli"
-brew "protobuf"
-brew "argocd"
-brew "asciinema"
+# Code searching, linting, rewriting
 brew "ast-grep"
+# Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
+# Toolchain of the web
 brew "biome"
-brew "bison"
+# Open source, extensible AI agent that goes beyond code suggestions
+brew "block-goose-cli"
+# Version manager for neovim
 brew "bob"
+# Yet another cross-platform graphical process/system monitor
 brew "bottom"
+# New way of working with Protocol Buffers
 brew "buf"
-brew "buildkit"
-brew "glib"
-brew "cargo-binstall"
-brew "cargo-features-manager"
-brew "cargo-nextest"
+# Statistics utility to count lines of code
 brew "cloc"
-brew "cmake"
-brew "cmake-docs"
-brew "go"
-brew "cobra-cli"
+# GNU File, Shell, and Text utilities
 brew "coreutils"
-brew "cowsay"
+# Power of curl, ease of use of httpie
 brew "curlie"
-brew "devcontainer"
+# TIFF library and utilities
+brew "libtiff"
+# Good-lookin' diffs with diff-highlight and more
 brew "diff-so-fancy"
+# Diff that understands syntax
 brew "difftastic"
+# Load/unload environment variables based on $PWD
 brew "direnv"
+# Terminal visual disk space navigator
 brew "diskonaut"
-brew "docker-completion"
-brew "elixir"
-brew "etcd"
-brew "expat"
+# Modern, maintained replacement for ls
 brew "eza"
-brew "fastfetch"
+# Simple, fast and user-friendly alternative to find
 brew "fd"
-brew "ffmpeg"
-brew "fpp"
+# Command-line fuzzy finder written in Go
 brew "fzf"
+# GNU awk utility
 brew "gawk"
+# GitHub command-line tool
 brew "gh"
-brew "ghcup"
-brew "git"
-brew "git-cliff"
+# Syntax-highlighting pager for git and diff output
 brew "git-delta"
-brew "git-lfs"
-brew "gitlab-ci-local"
-brew "gitleaks"
-brew "gitoxide"
-brew "glab"
-brew "gnu-sed"
-brew "gnu-tar"
-brew "gnupg"
-brew "gofumpt"
+# Open source programming language to build simple/reliable/efficient software
+brew "go"
+# Go formatter that additionally inserts import statements
 brew "goimports"
+# Fast linters runner for Go
 brew "golangci-lint"
-brew "harfbuzz"
-brew "graphviz"
-brew "grpcurl"
-brew "harlequin"
+# Language server for the Go language
+brew "gopls"
+# Post-modern modal text editor
 brew "helix"
-brew "helm"
+# Agent multiplexer that lives in your terminal
+brew "herdr", restart_service: :changed
+# Improved top (interactive process viewer)
 brew "htop"
-brew "imagemagick"
+# Lightweight and flexible command-line JSON processor
 brew "jq"
-brew "jwt-cli"
-brew "k3d"
-brew "k9s"
+# SIMD-accelerated C++ JSON parser
+brew "simdjson"
+# AI coding agent for your terminal
 brew "kimi-code"
-brew "kind"
-brew "kn"
-brew "kubernetes-cli"
-brew "krew"
-brew "kubectx"
-brew "kubernetes-cli@1.31"
-brew "kubeseal"
-brew "lazygit"
+# Fast and powerful Git hooks manager for any type of projects
 brew "lefthook"
-brew "libzip"
-brew "lua"
-brew "lua-language-server"
+# LLM inference in C/C++
+brew "llama.cpp"
+# Interpreted, interactive, object-oriented programming language
+brew "python@3.14"
+# Tool for linting and static analysis of Lua code
 brew "luacheck"
-brew "luarocks"
+# Utility for directing compilation
 brew "make"
-brew "openjdk"
-brew "maven"
-brew "mercurial"
+# Polyglot runtime manager (asdf rust clone)
 brew "mise"
-brew "neofetch"
-brew "nerdfix"
-brew "nvm"
-brew "opa"
+# Search tool like grep and The Silver Searcher
 brew "ripgrep"
+# AI coding agent, built for the terminal
 brew "opencode"
-brew "operator-sdk"
-brew "pinentry-mac"
-brew "pkgconf"
-brew "playwright-cli"
+# Fast, disk space efficient package manager
 brew "pnpm"
-brew "podman"
+# Framework for managing multi-language pre-commit hooks
 brew "pre-commit"
+# Code formatter for JavaScript, CSS, JSON, GraphQL, Markdown, YAML
 brew "prettier"
+# Show ps output as a tree
 brew "pstree"
+# Python version management
 brew "pyenv"
+# Pyenv plugin to manage virtualenv
 brew "pyenv-virtualenv"
-brew "qemu"
-brew "ralph-orchestrator"
-brew "rancher-cli"
+# File browser
 brew "ranger"
+# CLI proxy to minimize LLM token consumption
 brew "rtk"
+# Extremely fast Python linter, written in Rust
+brew "ruff"
+# Safe, concurrent, practical language
+brew "rust"
+# Rust toolchain installer
 brew "rustup"
-brew "s3cmd"
+# Rich git commit graph in your terminal
 brew "serie"
-brew "siege"
-brew "skopeo"
-brew "sqlparse"
-brew "stress"
+# Opinionated Lua code formatter
 brew "stylua"
+# Multi-modal AI tool to extract and summarize content
 brew "summarize"
-brew "tectonic"
-brew "tektoncd-cli"
-brew "telnet"
+# Easiest, most secure way to use WireGuard and 2FA
+brew "tailscale"
+# Send macOS User Notifications from the command-line
 brew "terminal-notifier"
+# Code-search similar to ack
 brew "the_silver_searcher"
+# Text interface for Git repositories
 brew "tig"
+# Simplified and community-driven man pages
 brew "tldr"
+# Terminal multiplexer
 brew "tmux"
-brew "tmux-mem-cpu-load"
+# Command-line translator using Google Translate and more
 brew "translate-shell"
+# Display directories as trees (with optional color/HTML output)
 brew "tree"
+# Parser generator tool
 brew "tree-sitter-cli"
+# URL extractor/launcher
 brew "urlview"
+# Extremely fast Python package installer and resolver, written in Rust
 brew "uv"
-brew "vegeta"
-brew "vimpager"
-brew "vint"
-brew "w3m"
+# Executes a program periodically, showing output fullscreen
 brew "watch"
+# Internet file retriever
 brew "wget"
+# Why is this running?
 brew "witr"
+# HTTP benchmarking tool
 brew "wrk"
+# Extensible command-line tool to format YAML files
 brew "yamlfmt"
+# Process YAML, JSON, XML, CSV and properties documents from the CLI
 brew "yq"
+# Pluggable terminal workspace, with terminal multiplexer as the base feature
 brew "zellij"
-brew "zig"
+# Shell extension to navigate your filesystem faster
 brew "zoxide"
-brew "argoproj/tap/kubectl-argo-rollouts"
-brew "daipeihust/tap/im-select"
-brew "fluxcd/tap/flux"
-brew "hashicorp/tap/vault"
-brew "hivemq/mqtt-cli/mqtt-cli"
-brew "neurosnap/tap/zmx"
-brew "steipete/tap/mcporter"
-brew "vectordotdev/brew/vector"
-brew "vjeantet/tap/alerter"
-brew "ymtdzzz/tap/otel-tui"
-cask "android-studio"
-cask "antigravity"
-cask "beekeeper-studio"
-cask "blender"
-cask "block-goose"
-cask "chatbox"
-cask "cherry-studio"
+# UNIX shell (command interpreter)
+brew "zsh"
+# Additional completion definitions for zsh
+brew "zsh-completions"
+# CLI app to manage your Apple Notes and Apple reminders
+brew "antoniorodr/memo/memo", trusted: true
+# Switch your input method through terminal
+brew "daipeihust/tap/im-select", trusted: true
+# Model Context Protocol runtime and CLI generator
+brew "steipete/tap/mcporter", trusted: true
+# Fast CLI for Apple Reminders
+brew "steipete/tap/remindctl", trusted: true
+# macOS notification CLI — send native notifications and capture user interactions
+brew "vjeantet/tap/alerter", trusted: true
+# Configuration manager for AI coding agents
+cask "cc-switch"
+# Another Mihomo GUI based on Flutter
+cask "clash-mi"
+# Continuation of Clash Verge - A Clash Meta GUI based on Tauri
 cask "clash-verge-rev"
-cask "claude"
-cask "cmux"
+# OpenAI's coding agent that runs in your terminal
 cask "codex"
+# OpenAI's Codex desktop app for managing coding agents
 cask "codex-app"
-cask "conductor"
-cask "copilot-cli"
-cask "cursor"
-cask "dbeaver-community"
-cask "deepchat"
-cask "dingtalk"
+# Voice and text chat software
 cask "discord"
-cask "font-blex-mono-nerd-font"
-cask "font-caskaydia-cove-nerd-font"
-cask "font-commit-mono-nerd-font"
-cask "font-fira-code-nerd-font"
-cask "font-fira-mono-nerd-font"
-cask "font-geist-mono-nerd-font"
-cask "font-iosevka-nerd-font"
-cask "font-jetbrains-mono-nerd-font"
-cask "font-maple-mono"
-cask "font-meslo-lg-nerd-font"
-cask "font-monaspace"
+# App to build and share containerised applications and microservices
+cask "docker-desktop"
 cask "font-monaspice-nerd-font"
-cask "font-victor-mono-nerd-font"
-cask "font-zed-mono-nerd-font"
+# Terminal emulator that uses platform-native UI and GPU acceleration
 cask "ghostty"
-cask "google-drive"
-cask "jetbrains-toolbox"
-cask "karabiner-elements"
-cask "kitty"
-cask "linear"
-cask "linearmouse"
-cask "meld"
-cask "mqttx"
-cask "neteasemusic"
-cask "opencode-desktop"
-cask "openmtp"
-cask "postman"
-cask "proxyman"
-cask "qqmusic"
-cask "rancher"
+# Open-source cross-platform alternative to AirDrop
+cask "localsend"
+# CLI for the Parallel API - search, extract, research, and enrich data
+cask "parallel-web/tap/parallel-cli", trusted: true
+# Control your tools with a few keystrokes
 cask "raycast"
-cask "scroll-reverser"
-cask "spotify"
+# System monitor for the menu bar
 cask "stats"
-cask "steipete/tap/trimmy"
-cask "visual-studio-code"
-cask "warp"
-cask "wezterm"
+# Video game digital distribution service
+cask "steam"
+# Editor for .tldr files
+cask "tldraw"
+# Multiplayer code editor
 cask "zed"
-cask "zerotier-one"
-cask "itouuuuuuuuu/tap/zmk-battery-bar"
+# Menu bar app that displays battery levels from ZMK split keyboards via BLE
+cask "itouuuuuuuuu/tap/zmk-battery-bar", trusted: true
+cargo "cargo-binstall"
+cargo "cargo-shuttle"
+npm "@earendil-works/pi-coding-agent"
+npm "corepack"
