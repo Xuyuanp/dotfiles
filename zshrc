@@ -239,7 +239,7 @@ Assistant: mkdir backup && cp *.txt backup
     local output=$(echo "$input" | pi \
         --offline \
         --system-prompt "$system_prompt" \
-        --model "${HOWTO_MODEL:-deepseek/deepseek-v4-flash}" \
+        --model "${HOWTO_MODEL:-opencode-go/deepseek-v4-flash}" \
         --no-session \
         --no-context-files \
         --no-extensions \
@@ -336,5 +336,5 @@ function oc() {
 }
 
 function clash_proxy() {
-    export https_proxy=http://127.0.0.1:7897 http_proxy=http://127.0.0.1:7897 all_proxy=socks5://127.0.0.1:7897
+    export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890
 }
