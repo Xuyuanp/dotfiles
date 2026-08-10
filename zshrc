@@ -33,10 +33,6 @@ zinit light zdharma-continuum/fast-syntax-highlighting
 zinit light hlissner/zsh-autopair
 zinit light zsh-users/zsh-completions
 
-export NVM_COMPLETION=true
-export NVM_SYMLINK_CURRENT="true"
-zinit wait lucid light-mode for lukechilds/zsh-nvm
-
 zvm_after_init_commands+=('[ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh')
 zvm_config() {
     ZVM_CURSOR_STYLE_ENABLED=true
@@ -104,12 +100,11 @@ function _append_path() {
 }
 
 _prepend_path "${HOME}/.cargo/bin"
-export PYENV_ROOT="$HOME/.pyenv"
-_prepend_path "${PYENV_ROOT}/bin"
 _prepend_path "${HOME}/.krew/bin"
 _prepend_path "${HOME}/.wasme/bin"
 _prepend_path "${HOME}/.local/share/bob/nvim-bin"
 _prepend_path "${GOPATH}/bin"
+_prepend_path "${HOME}/.local/bin"
 export PATH
 
 unfunction _prepend_path
@@ -117,12 +112,6 @@ unfunction _append_path
 
 # python
 [ -f ~/.startup.py ] && export PYTHONSTARTUP=${HOME}/.startup.py
-
-if [[ -d "${PYENV_ROOT}" ]]; then
-    eval "$(pyenv init -)"
-    eval "$(pyenv init --path)"
-    eval "$(pyenv virtualenv-init -)"
-fi
 
 # ================================ aliases ================================= #
 function _exists() { (( $+commands[$1])) }
@@ -144,6 +133,7 @@ _exists docker  && alias dis='docker images | sort -k7 -h'
 _exists neovide && alias vide='neovide'
 _exists zoxide  && eval "$(zoxide init zsh)"
 _exists fzf     && [ ! -f $HOME/.fzf.zsh ] && fzf --zsh > ~/.fzf.zsh
+_exists mise    && eval "$(mise activate zsh)"
 
 alias ll='ls -l'
 alias llh='ls -lh'

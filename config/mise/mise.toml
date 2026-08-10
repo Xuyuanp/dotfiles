@@ -1,0 +1,3 @@
+[tools]
+node = "v24"
+python = "3.14"
