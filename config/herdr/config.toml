@@ -1,0 +1,29 @@
+onboarding = false
+
+[ui]
+copy_on_select = false
+pane_gaps = false
+show_agent_labels_on_pane_borders = true
+
+[ui.toast]
+delivery = "system"
+delay_seconds = 1
+
+[ui.toast.herdr]
+position = "top-right"
+
+[theme]
+name = "kanagawa"
+auto_switch = false
+
+[experimental]
+switch_ascii_input_source_in_prefix = true
+pane_history = true
+
+[keys]
+prefix = "ctrl+a"
+split_vertical = "prefix+ctrl+v"
+split_horizontal = "prefix+ctrl+s"
+
+[worktrees]
+directory = "~/.local/share/herdr/worktrees"

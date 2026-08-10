@@ -62,6 +62,10 @@
     ~/.config/nvim: config/nvim
     ~/.config/neovide: config/neovide
     ~/.config/mcp: config/mcp
+    # link only config.toml; herdr keeps runtime state (logs, sockets) in the same dir
+    ~/.config/herdr/config.toml:
+      path: config/herdr/config.toml
+      force: true
     ~/.local/bin/osc52-yank: scripts/osc52-yank
     ~/.local/bin/spinner: scripts/spinner
     ~/.local/bin/llm-cli: scripts/llm-cli
