@@ -12,8 +12,6 @@ brew "bat"
 brew "biome"
 # Open source, extensible AI agent that goes beyond code suggestions
 brew "block-goose-cli"
-# Version manager for neovim
-brew "bob"
 # Yet another cross-platform graphical process/system monitor
 brew "bottom"
 # New way of working with Protocol Buffers
@@ -90,10 +88,6 @@ brew "pre-commit"
 brew "prettier"
 # Show ps output as a tree
 brew "pstree"
-# Python version management
-brew "pyenv"
-# Pyenv plugin to manage virtualenv
-brew "pyenv-virtualenv"
 # File browser
 brew "ranger"
 # CLI proxy to minimize LLM token consumption

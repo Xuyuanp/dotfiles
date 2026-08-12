@@ -62,6 +62,9 @@
     ~/.config/nvim: config/nvim
     ~/.config/neovide: config/neovide
     ~/.config/mcp: config/mcp
+    ~/.config/mise/config.toml:
+      path: config/mise/mise.toml
+      force: true
     # link only config.toml; herdr keeps runtime state (logs, sockets) in the same dir
     ~/.config/herdr/config.toml:
       path: config/herdr/config.toml

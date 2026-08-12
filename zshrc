@@ -69,46 +69,12 @@ bindkey '^\' accept-and-hold
 [ -f ~/.shared_profile.zsh ] && source ~/.shared_profile.zsh
 
 # ================================ envs ================================= #
-export PIP_INDEX_URL=https://mirrors.aliyun.com/pypi/simple
-export PIPENV_PYPI_MIRROR=${PIP_INDEX_URL}
-
-export NVM_NODEJS_ORG_MIRROR=https://npmmirror.com/mirrors/node/
-
-export BAT_THEME='kanagawa'
-
-export LC_ALL=en_US.UTF-8
-export LANG=en_US.UTF-8
+# env vars and PATH moved to mise: ~/.config/mise/config.toml [env] section
+# (source: dotfiles config/mise/mise.toml)
 
 # https://github.com/romkatv/powerlevel10k/issues/524
+# GPG_TTY needs the zsh $TTY variable, so it must stay here
 export GPG_TTY=$TTY
-
-export GOPATH=${HOME}/go
-
-export RUSTUP_DIST_SERVER="https://rsproxy.cn"
-export RUSTUP_UPDATE_ROOT="https://rsproxy.cn/rustup"
-
-function _prepend_path() {
-    if [[ -d "$1" ]] && [[ ":${PATH}:" != *":$1:"* ]]; then
-        PATH="${1}${PATH:+":$PATH"}"
-    fi
-}
-
-function _append_path() {
-    if [[ -d "$1" ]] && [[ ":${PATH}:" != *":$1:"* ]]; then
-        PATH="${PATH:+"$PATH:"}$1"
-    fi
-}
-
-_prepend_path "${HOME}/.cargo/bin"
-_prepend_path "${HOME}/.krew/bin"
-_prepend_path "${HOME}/.wasme/bin"
-_prepend_path "${HOME}/.local/share/bob/nvim-bin"
-_prepend_path "${GOPATH}/bin"
-_prepend_path "${HOME}/.local/bin"
-export PATH
-
-unfunction _prepend_path
-unfunction _append_path
 
 # python
 [ -f ~/.startup.py ] && export PYTHONSTARTUP=${HOME}/.startup.py
