@@ -28,11 +28,6 @@ source "${ZINIT_HOME}/zinit.zsh"
 zinit ice depth=1
 zinit light romkatv/powerlevel10k
 
-zinit light zsh-users/zsh-autosuggestions
-zinit light zdharma-continuum/fast-syntax-highlighting
-zinit light hlissner/zsh-autopair
-zinit light zsh-users/zsh-completions
-
 zvm_after_init_commands+=('[ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh')
 zvm_config() {
     ZVM_CURSOR_STYLE_ENABLED=true
@@ -41,13 +36,25 @@ zvm_config() {
 zinit ice depth=1
 zinit light jeffreytse/zsh-vi-mode
 
+zinit light hlissner/zsh-autopair
 zinit snippet OMZL::clipboard.zsh
 zinit snippet OMZL::completion.zsh
 zinit snippet OMZL::history.zsh
 zinit snippet OMZP::gitignore
 
-autoload -Uz compinit && compinit
+zinit light zsh-users/zsh-completions
+
+autoload -Uz compinit
+if [[ ! -f ~/.zcompdump ]] || [[ ~/.zcompdump -ot ~/.zshrc ]]; then
+    compinit -i -d ~/.zcompdump
+else
+    compinit -C -i -d ~/.zcompdump
+fi
+
 zinit light Aloxaf/fzf-tab
+
+zinit light zsh-users/zsh-autosuggestions
+zinit light zdharma-continuum/fast-syntax-highlighting
 # disable sort when completing `git checkout`
 zstyle ':completion:*:git-checkout:*' sort false
 # set list-colors to enable filename colorizing
