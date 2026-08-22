@@ -5,6 +5,13 @@ copy_on_select = false
 pane_gaps = false
 show_agent_labels_on_pane_borders = true
 
+sidebar_collapsed_mode = "hidden"
+tab_bar_right = [
+  { type = "command", command = "$HOME/.config/herdr/status.sh", interval_seconds = 1, timeout_seconds = 2 },
+]
+tab_bar_right_separator = " "
+
+
 [ui.toast]
 delivery = "system"
 delay_seconds = 1

@@ -65,9 +65,12 @@
     ~/.config/mise/config.toml:
       path: config/mise/mise.toml
       force: true
-    # link only config.toml; herdr keeps runtime state (logs, sockets) in the same dir
+    # link only config.toml + status.sh; herdr keeps runtime state (logs, sockets) in the same dir
     ~/.config/herdr/config.toml:
       path: config/herdr/config.toml
+      force: true
+    ~/.config/herdr/status.sh:
+      path: config/herdr/status.sh
       force: true
     ~/.local/bin/osc52-yank: scripts/osc52-yank
     ~/.local/bin/spinner: scripts/spinner
