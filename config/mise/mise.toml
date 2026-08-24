@@ -3,7 +3,7 @@ erlang = "latest"
 node = "24"
 python = "3.14"
 elixir = "latest"
-neovim = "stable"
+neovim = "0.12.5"
 
 [env]
 # moved from zshrc so the same env applies in every shell (zsh, bash, fish)
@@ -27,6 +27,7 @@ HOMEBREW_NO_ASK = "1"
 
 PI_ANSWER_MODEL_PROVIDER = "llama.cpp"
 PI_ANSWER_MODEL_NAME = "gemma-4-E2B-it-Q4_0"
+PI_EXPERIMENTAL = "1"
 
 PYTHON_BUILD_MIRROR_URL = "https://registry.npmmirror.com/-/binary/python"
 PYTHON_BUILD_MIRROR_URL_SKIP_CHECKSUM = "1"
