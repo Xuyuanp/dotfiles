@@ -32,6 +32,7 @@ zvm_after_init_commands+=('[ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh')
 zvm_config() {
     ZVM_CURSOR_STYLE_ENABLED=true
     ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLOCK
+    ZVM_VI_EDITOR=nvim
 }
 zinit ice depth=1
 zinit light jeffreytse/zsh-vi-mode
@@ -45,7 +46,7 @@ zinit snippet OMZP::gitignore
 zinit light zsh-users/zsh-completions
 
 autoload -Uz compinit
-if [[ ! -f ~/.zcompdump ]] || [[ ~/.zcompdump -ot ~/.zshrc ]]; then
+if [[ ! -f ~/.zcompdump ]] || [[ ~/.zcompdump -ot ~/.zshrc ]] || [[ ~/.zcompdump -ot "${ZINIT_HOME:h}/plugins" ]]; then
     compinit -i -d ~/.zcompdump
 else
     compinit -C -i -d ~/.zcompdump
@@ -61,8 +62,8 @@ zstyle ':completion:*:git-checkout:*' sort false
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 # force zsh not to show completion menu, which allows fzf-tab to capture the unambiguous prefix
 zstyle ':completion:*' menu no
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza --icons --git -l --color=always $realpath'
-zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'eza --icons --git -l --color=always $realpath'
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza --icons --git -l --color=always "$realpath"'
+zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'eza --icons --git -l --color=always "$realpath"'
 
 # ================================ zinit end ================================= #
 
@@ -105,7 +106,14 @@ _exists direnv  && export DIRENV_LOG_FORMAT='' && eval "$(direnv hook zsh)"
 _exists docker  && alias dis='docker images | sort -k7 -h'
 _exists neovide && alias vide='neovide'
 _exists zoxide  && eval "$(zoxide init zsh)"
-_exists fzf     && [ ! -f $HOME/.fzf.zsh ] && fzf --zsh > ~/.fzf.zsh
+_exists fzf && {
+    local fzf_bin="$(command -v fzf)"
+    if [[ ! -f $HOME/.fzf.zsh ]] || [[ $HOME/.fzf.zsh -ot $fzf_bin ]]; then
+        local fzf_tmp="$(mktemp)"
+        fzf --zsh > "$fzf_tmp" && mv "$fzf_tmp" $HOME/.fzf.zsh
+        rm -f "$fzf_tmp"
+    fi
+}
 _exists mise    && eval "$(mise activate zsh)"
 
 alias ll='ls -l'
@@ -222,6 +230,7 @@ Assistant: mkdir backup && cp *.txt backup
 
     kill $spinner_pid 2>/dev/null
     wait
+    trap - INT TERM
 
     print -z "$output"
 }
@@ -309,5 +318,6 @@ function oc() {
 }
 
 function clash_proxy() {
-    export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890
+    export http_proxy=http://127.0.0.1:7890 https_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890
+    export HTTP_PROXY=$http_proxy HTTPS_PROXY=$https_proxy ALL_PROXY=$all_proxy
 }
