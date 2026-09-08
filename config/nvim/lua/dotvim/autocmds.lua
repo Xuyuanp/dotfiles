@@ -8,7 +8,11 @@ function M.setup()
         desc = 'Highlight text yanked',
         pattern = { '*' },
         callback = function()
-            vim.highlight.on_yank({ timeout = 500 })
+            if vim.fn.has('nvim-0.13') == 1 then
+                vim.hl.hl_op({ higroup = 'Visual', timeout = 500 })
+            else
+                vim.highlight.on_yank({ timeout = 500 })
+            end
         end,
     })
 
