@@ -1,6 +1,6 @@
 local M = {}
 
-local a = require('dotvim.util.async')
+local async = vim.async
 local icons = require('dotvim.settings').icons.git
 
 local choices = {
@@ -18,9 +18,20 @@ local choices = {
     },
 }
 
----@param bufnr number
----@param root? string
-local load_head = a.wrap(function(bufnr, root)
+--- Await `git <args>` and return the resulting process object.
+--- @param args string[]
+--- @param opts? table
+--- @return vim.SystemCompleted
+local function system_async(args, opts)
+    local res = select(1, async.await(3, vim.system, args, opts or {}))
+    --- @cast res vim.SystemCompleted
+    return res
+end
+
+--- @param bufnr number
+--- @param root? string
+--- @return string|nil The git head (icon + name), or nil if not found.
+local function do_load_head(bufnr, root)
     for _, choice in ipairs(choices) do
         local args = { 'git' }
         if root then
@@ -28,24 +39,26 @@ local load_head = a.wrap(function(bufnr, root)
         end
         vim.list_extend(args, choice.args)
 
-        local res = a.system(args, { text = true }).await()
+        local res = system_async(args, { text = true })
         if res.code == 0 then
-            local head = vim.trim(res.stdout)
-            vim.b[bufnr].dotvim_git_head = choice.icon .. ' ' .. head
+            local head = choice.icon .. ' ' .. vim.trim(res.stdout)
+            vim.b[bufnr].dotvim_git_head = head
 
-            a.schedule().await()
+            -- Hop to the main loop before firing autocmds.
+            async.await(vim.schedule)
             vim.api.nvim_exec_autocmds('User', {
                 pattern = 'DotVimGitHeadUpdate',
                 data = { bufnr = bufnr, head = head, icon = choice.icon },
             })
-            return
+            return head
         end
     end
-end)
+    return nil
+end
 
 function M.load_head(bufnr, root)
     bufnr = bufnr or vim.api.nvim_get_current_buf()
-    load_head(bufnr, root)
+    async.run(do_load_head, bufnr, root):raise_on_error()
 end
 
 local function system(cmd)
