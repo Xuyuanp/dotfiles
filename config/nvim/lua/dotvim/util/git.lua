@@ -126,20 +126,41 @@ function M.diff(path)
     vim.list_extend(
         lines,
         vim.fn.systemlist({
-            'git', '-C', root, 'diff', '--patch', '--no-color', '--diff-algorithm=default', path,
+            'git',
+            '-C',
+            root,
+            'diff',
+            '--patch',
+            '--no-color',
+            '--diff-algorithm=default',
+            path,
         })
     )
 
     -- Untracked (non-ignored) files under path -- each rendered as a new-file diff
     local untracked = vim.fn.systemlist({
-        'git', '-C', root, 'ls-files', '--others', '--exclude-standard', path,
+        'git',
+        '-C',
+        root,
+        'ls-files',
+        '--others',
+        '--exclude-standard',
+        path,
     })
     for _, rel in ipairs(untracked) do
         if rel ~= '' then
             vim.list_extend(
                 lines,
                 vim.fn.systemlist({
-                    'git', '-C', root, 'diff', '--no-index', '--patch', '--no-color', '/dev/null', rel,
+                    'git',
+                    '-C',
+                    root,
+                    'diff',
+                    '--no-index',
+                    '--patch',
+                    '--no-color',
+                    '/dev/null',
+                    rel,
                 })
             )
         end
@@ -203,10 +224,7 @@ function M.show_diff(path, opts)
 
         local res = vim.system({ 'git', '-C', root, 'apply', '--cached' }, { stdin = patch }):wait()
         if res.code ~= 0 then
-            vim.notify(
-                string.format('git apply failed: %s', res.stderr or 'unknown'),
-                vim.log.levels.ERROR
-            )
+            vim.notify(string.format('git apply failed: %s', res.stderr or 'unknown'), vim.log.levels.ERROR)
             return
         end
 
