@@ -1,10 +1,3 @@
-[ -f ~/.zshrc.before ] && source ~/.zshrc.before
-
-if [[ $FORCE_TMUX == '1' ]] && [[ ! -v TMUX ]] && [[ ! -v NVIM ]]; then
-    tmux attach || tmux
-    exit 0
-fi
-
 if [ $(uname) = 'Darwin' ]; then
     if ! [ -x "$(command -v brew)" ]; then
         bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
