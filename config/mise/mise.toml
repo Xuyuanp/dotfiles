@@ -3,7 +3,8 @@ erlang = "latest"
 node = "24"
 python = "3.14"
 elixir = "latest"
-neovim = "0.12.5"
+neovim = "nightly"
+bun = "latest"
 
 [env]
 # moved from zshrc so the same env applies in every shell (zsh, bash, fish)
