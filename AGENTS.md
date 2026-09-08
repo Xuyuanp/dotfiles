@@ -32,8 +32,8 @@ re-running `./install` (only changes to the link map or setup steps require it).
 Lint runs in CI (`.github/workflows/lint.yml`) and via pre-commit; both are scoped to `config/nvim/`:
 
 - **luacheck** — config in `.luacheckrc` (Lua 5.1 + nvim globals).
-- **stylua** — config in `stylua.toml` and `config/nvim/stylua.toml` (4-space indent,
-  150 col, single quotes).
+- **stylua** — config in `config/nvim/stylua.toml` (4-space indent, 150 col,
+  single quotes).
 - Run pre-commit hooks locally: `pre-commit run --all-files`.
 
 ## Neovim config (`config/nvim/`)

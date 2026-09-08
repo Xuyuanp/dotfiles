@@ -28,5 +28,5 @@ jobs:
       - uses: JohnnyMorganz/stylua-action@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          version: v0.20.0
-          args: --color always --check config/nvim/lua/
+          version: v2.5.2
+          args: --color always --check --config-path config/nvim/stylua.toml config/nvim/

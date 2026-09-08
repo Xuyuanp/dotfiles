@@ -14,6 +14,10 @@ repos:
   hooks:
   - id: luacheck
 - repo: https://github.com/JohnnyMorganz/StyLua
-  rev: v0.13.1
+  rev: v2.5.2
   hooks:
-  - id: stylua-system
+  - id: stylua-github
+    files: ^config/nvim/.*\.lua$
+    args:
+    - --config-path
+    - config/nvim/stylua.toml
